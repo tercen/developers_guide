@@ -1,0 +1,9 @@
+# Known issues
+
+The beta version of Tercen has the following known issues and limitations:
+
+* In the Tercen applibrary, the apps currently do not use the category concept
+
+These issues are solved in the final version scheduled to go live after summer.
+
+<center>![](images/alpha2beta.png)</center>

@@ -1,0 +1,14 @@
+# Building an operator app
+
+
+* decide which existing operator to clone
+* clone an operator
+* modify an operator
+* run it locally until satified
+* add some tests
+* add some doc
+* push it a git repository
+* modify the app-library repository (publish)
+* install it into Tercen from app-library
+* test it on data
+* notify the community it exists

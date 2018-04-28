@@ -1,0 +1,27 @@
+# Introduction
+
+So you want to build an app.  It is important to releaize there are two main types of apps:
+* operator app
+* workflow app
+
+An each has its own building process. Workflow are build with Tercen while operators are build using a variety of programming languages.
+
+An operator app perfroms a simple spectific computational function, examples:
+* log function
+* scale function
+* addition
+* substration
+
+A workflow app performs higher level analysis, examples
+
+* quality control analysis
+* two group comparision analysis
+* enrichment analysis
+
+A workflow app is very much a modular workflow, while an operator app is aimed at one computation step.
+
+An operator is written using a varity of programming languages (R, Python, Rust). The code is put on github for the app library to find. 
+Currently Tercen supports R in our beta version but our we aim to quickly cover the other languages during our final release.
+
+
+<center>![](images/crabs_data.png)</center>

@@ -1,0 +1,7 @@
+targetFolder <- "../src/6_Repository"
+innoConfigFile<-"../src/6_Repository.iss"
+
+
+source("gatherFiles.R")
+
+source("runInno.R")

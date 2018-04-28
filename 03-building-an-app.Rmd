@@ -1,0 +1,9 @@
+# Building a workflow app
+
+
+* create a workflow
+* save it as an workflow app
+* test it on data
+* notify the community it exists
+
+<center>![](images/crabs_data.png)</center>
