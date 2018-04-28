@@ -1,9 +1,12 @@
 # Building a workflow app
 
+The process steps for building a workflow app is:
 
 * create a workflow
 * save it as an workflow app
 * test it on data
 * notify the community it exists
+
+The building steps are performed in Tercen.
 
 <center>![](images/goldfish.png)</center>

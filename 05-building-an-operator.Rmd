@@ -1,5 +1,6 @@
 # Building an operator app
 
+The process steps for building a operator app is:
 
 * decide which existing operator to clone
 * clone an operator
@@ -12,5 +13,7 @@
 * install it into Tercen from app-library
 * test it on data
 * notify the community it exists
+
+The building and deployment steps are performed in your development environment (e.g. RStudio) and Github.
 
 <center>![](images/goldfish.png)</center>
