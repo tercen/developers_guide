@@ -6,4 +6,6 @@ Here are some ideas:
 * Read the online [__Tercen Book__](https://tercen.github.io/tercen-book/)
 * Give feedback on __Tercen__ by sending an email to `info@tercen.com`
 * Contact us for a one-2-one session
+
+
 <center>![](images/stairs.png)</center>

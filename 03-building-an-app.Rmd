@@ -6,4 +6,4 @@
 * test it on data
 * notify the community it exists
 
-<center>![](images/crabs_data.png)</center>
+<center>![](images/goldfish.png)</center>

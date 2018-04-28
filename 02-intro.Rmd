@@ -24,4 +24,4 @@ An operator is written using a varity of programming languages (R, Python, Rust)
 Currently Tercen supports R in our beta version but our we aim to quickly cover the other languages during our final release.
 
 
-<center>![](images/crabs_data.png)</center>
+<center>![](images/goldfish.png)</center>
