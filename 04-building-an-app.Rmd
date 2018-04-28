@@ -1,0 +1,16 @@
+# Building a workflow app
+
+The process for building a worklows app is:
+
+* Create a workflow
+* Insert Wizard step (optional)
+* Replace the initial Table step with Input step
+* Add a final Output step
+* Save it as an app
+* Test it in a workflow with data
+* Notify the community
+
+All the building and deployment processes are performed in Tercen.
+
+
+<center>![](images/goldfish.png)</center>

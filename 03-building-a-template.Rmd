@@ -1,0 +1,13 @@
+# Building a template app
+
+The process for building a template app is:
+
+* Create a workflow
+* Save it as an workflow app
+* Set as template
+* Test it on data
+* Notify the community
+
+All the building and deployment steps are performed in Tercen.
+
+<center>![](images/goldfish.png)</center>

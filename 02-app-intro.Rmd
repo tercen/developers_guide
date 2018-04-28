@@ -1,13 +1,17 @@
 # Apps types
 
-So you want to build an app. The question is which type of Tercen app would like to build. There are two main types of apps:
+So you want to build an app and which type of Tercen app would like to build is the first question to ask.
+There are three main types of apps:
 
-* operator app
-* workflow app
+* Operator app
+* Workflow app
+* Template app
 
-Each has its own building process. Workflow are build with Tercen while operators are build using a variety of programming languages.
+Deciding on which to build is determined by what you would like the app to achieve.
 
-Deciding on which to build is determine by what you would like to achieve.
+Each has its own building process. Workflows and Template apps are built and deployed with Tercen while operators are built using a variety of programming languages.
+
+
 
 An operator app perfroms a simple spectific computational function, examples:
 

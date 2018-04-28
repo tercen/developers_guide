@@ -1,6 +1,6 @@
-This is start guide for Tercen
+This is an app builders guide for Tercen
 
-The online web form is found at:
+The online web version is found at:
 
-(https://tercen.github.io/starters-guide2/)
+(https://tercen.github.io/appbuilders-guide/)
 
