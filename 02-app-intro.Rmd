@@ -15,20 +15,20 @@ Each has its own building process. Workflows and Template apps are built and dep
 A workflow app performs higher level analysis, examples
 
 * quality control analysis
-* two group comparision analysis
+* two group comparison analysis
 * enrichment analysis
 
 A workflow app is very much a modular workflow, while an operator app is aimed for a single computational step.
 
 
-An operator app perfroms a simple spectific computational function, examples:
+An operator app performs a simple specific computational function, examples:
 
 * log function
 * scale function
 * addition
-* substration
+* subtraction
 
-An operator app is written using a varity of programming languages (R, Python, Rust). The code is put on github for the app library to find. 
+An operator app is written using a variety of programming languages (R, Python, Rust). The code is put on git hub for the app library to find. 
 Currently Tercen supports R in our beta version but our we aim to quickly cover the other languages during our final release.
 
 

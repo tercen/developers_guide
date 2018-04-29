@@ -1,6 +1,6 @@
 # Building a workflow app
 
-The process for building a worklows app is:
+The process for building a workflows app is:
 
 * Create a workflow
 * Insert Wizard step (optional)

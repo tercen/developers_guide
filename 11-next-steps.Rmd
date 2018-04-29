@@ -1,7 +1,7 @@
 # Next steps
 Here are some ideas:
 
-* Try to code for different operators using the ``teRcen`` R package, Note when using RStudio it will autocomplete when you type the methods on the tercen client and tercen query object.
+* Try to code for different operators using the ``teRcen`` R package, Note when using R Studio it will auto-complete when you type the methods on the Tercen client and tercen query object.
 * Give feedback on this app builder's guide by creating an [issue](https://github.com/tercen/appbuilders-guide/issues)
 * Read the online [__Tercen Book__](https://tercen.github.io/tercen-book/)
 * Give feedback on __Tercen__ by sending an email to `info@tercen.com`

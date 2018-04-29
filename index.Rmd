@@ -13,12 +13,12 @@ description: "This is a app builder's guide to Tercen"
 
 # Introduction {-}
 
-This guide outlines how to design, develope and share apps for __Tercen__.
+This guide outlines how to design, develop and share apps for __Tercen__.
  
 <center>![](images/tercen-app-guide.png)</center>
 
 * __Why read this guide?__ :
-Your curious or wish to build an app for Tercen then this is the guiide.
+Your curious or wish to build an app for Tercen then this is the guide.
 
 * __Acknowledgement__:
 I would like to thank all the users for their feedback. It has helped us improve Tercen.

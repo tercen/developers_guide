@@ -5,7 +5,7 @@ The process steps for building a operator app is:
 * decide which existing operator to clone
 * clone an operator
 * modify an operator
-* run it locally until satified
+* run it locally until satisfied
 * add some tests
 * add some doc
 * push it a git repository
@@ -14,6 +14,6 @@ The process steps for building a operator app is:
 * test it on data
 * notify the community it exists
 
-The building and deployment steps are performed in your development environment (e.g. RStudio) and Github.
+The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.
 
 <center>![](images/goldfish.png)</center>
