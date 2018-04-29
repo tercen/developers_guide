@@ -2,8 +2,8 @@
 
 The process for building a template app is:
 
+* Design
 * Create a workflow
-* Save it as an workflow app
 * Set as template
 * Test it on data
 * Notify the community

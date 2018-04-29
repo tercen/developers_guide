@@ -2,18 +2,24 @@
 
 The process steps for building a operator app is:
 
-* decide which existing operator to clone
-* clone an operator
-* modify an operator
-* run it locally until satisfied
-* add some tests
-* add some doc
-* push it a git repository
-* modify the app-library repository (publish)
-* install it into Tercen from app-library
-* test it on data
-* notify the community it exists
+* Design
+* Decide which existing operator to clone from Tercen app-library
+* Clone an existing operator
+* Re-init the git
+* Remove packrat
+* Modify the operator
+* Run it locally until satisfied
+* Add some tests
+* Modify and Add some doc
+* Init packrat
+* Push it a git repository
+* Modify the app-library repository (publish)
+* Install it into Tercen from app-library
+* Test it on data
+* Notify the community it exists
 
 The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.
+
+All the operators apps are version controlled.
 
 <center>![](images/goldfish.png)</center>

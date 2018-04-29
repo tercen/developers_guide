@@ -2,6 +2,7 @@
 
 The process for building a workflows app is:
 
+* Design
 * Create a workflow
 * Insert Wizard step (optional)
 * Replace the initial Table step with Input step
