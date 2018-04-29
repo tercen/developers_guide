@@ -1,24 +1,16 @@
 # Apps types
 
-So you want to build an app and which type of Tercen app would like to build is the first question to ask.
-There are three main types of apps:
+So you want to build an app, or just plain curious. First question is which type of Tercen app would like to build.
 
-* Operator app
-* Workflow app
+There are three main types of Tercen apps:
+
 * Template app
+* Workflow app
+* Operator app
 
-Deciding on which to build is determined by what you would like the app to achieve.
+Deciding on which to build is determined by what you would like the app to achieve. The first two do not need programming experience, the last does.
 
 Each has its own building process. Workflows and Template apps are built and deployed with Tercen while operators are built using a variety of programming languages.
-
-
-
-An operator app perfroms a simple spectific computational function, examples:
-
-* log function
-* scale function
-* addition
-* substration
 
 A workflow app performs higher level analysis, examples
 
@@ -28,7 +20,15 @@ A workflow app performs higher level analysis, examples
 
 A workflow app is very much a modular workflow, while an operator app is aimed for a single computational step.
 
-An operator is written using a varity of programming languages (R, Python, Rust). The code is put on github for the app library to find. 
+
+An operator app perfroms a simple spectific computational function, examples:
+
+* log function
+* scale function
+* addition
+* substration
+
+An operator app is written using a varity of programming languages (R, Python, Rust). The code is put on github for the app library to find. 
 Currently Tercen supports R in our beta version but our we aim to quickly cover the other languages during our final release.
 
 

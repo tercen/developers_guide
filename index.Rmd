@@ -11,14 +11,14 @@ github-repo: tercen/appbuilders-guide
 description: "This is a app builder's guide to Tercen"
 ---
 
-# Introduction
+# Introduction {-}
 
 This guide outlines how to design, develope and share apps for __Tercen__.
  
 <center>![](images/tercen-app-guide.png)</center>
 
 * __Why read this guide?__ :
-If you would like to create an app for Tercen then this is the guide.  
+Your curious or wish to build an app for Tercen then this is the guiide.
 
 * __Acknowledgement__:
 I would like to thank all the users for their feedback. It has helped us improve Tercen.
