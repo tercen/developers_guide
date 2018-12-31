@@ -1,0 +1,21 @@
+# Example, building an operator
+
+Here we show a simple example in how to create an R operator.
+
+## Design {-}
+
+## Clone {-}
+
+## Reset the versioning and packrat {-}
+
+## Code {-}
+
+## Test locally {-}
+
+## Document {-}
+
+## Init packrat {-}
+
+## Create and push repository {-}
+
+## Notify community {-}

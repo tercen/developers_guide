@@ -1,0 +1,22 @@
+# Setting up the environment
+
+if you wish to develop __operators__ then you require to have a programming development environment.
+If you are a regular programmer then you already have your environment.
+
+For __templates__ and __workflow apps__ you do not need a development environment as Tercen contains all the features required to build them.
+
+## Setting up R {-}
+
+* install R
+* install an IDE (e.g. R Studio)
+* install the tercen r package
+
+You are ready to go.
+
+## Setting up Python, for example {-}
+
+* install Python
+* install your favorite IDE
+* access Tercen via the API
+
+<center>![](images/goldfish.png)</center>

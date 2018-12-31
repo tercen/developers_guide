@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="building-an-operator-app.html">
+<link rel="prev" href="tercen-app-library.html">
 <link rel="next" href="next-steps.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -72,14 +72,37 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
-<li class="chapter" data-level="2" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>2</b> Building a template app</a></li>
-<li class="chapter" data-level="3" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>3</b> Building a workflow app</a></li>
-<li class="chapter" data-level="4" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html"><i class="fa fa-check"></i><b>4</b> Building an operator app</a></li>
-<li class="chapter" data-level="5" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>5</b> Known issues</a></li>
-<li class="chapter" data-level="6" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>6</b> Next steps</a></li>
-<li class="chapter" data-level="7" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>7</b> Glossary</a></li>
+<li class="chapter" data-level="2" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html"><i class="fa fa-check"></i><b>2</b> Setting up the environment</a><ul>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-r"><i class="fa fa-check"></i>Setting up R</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-python-for-example"><i class="fa fa-check"></i>Setting up Python, for example</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
+<li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>4</b> Building a workflow app</a><ul>
+<li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html"><i class="fa fa-check"></i><b>5</b> Building an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#notify-the-community-2"><i class="fa fa-check"></i>Notify the community</a></li>
+<li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#r-packrat"><i class="fa fa-check"></i>R packrat</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html"><i class="fa fa-check"></i><b>6</b> Example, building an operator</a><ul>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#design"><i class="fa fa-check"></i>Design</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#clone"><i class="fa fa-check"></i>Clone</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#reset-the-versioning-and-packrat"><i class="fa fa-check"></i>Reset the versioning and packrat</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#code"><i class="fa fa-check"></i>Code</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#test-locally"><i class="fa fa-check"></i>Test locally</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#document"><i class="fa fa-check"></i>Document</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#init-packrat"><i class="fa fa-check"></i>Init packrat</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#create-and-push-repository"><i class="fa fa-check"></i>Create and push repository</a></li>
+<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#notify-community"><i class="fa fa-check"></i>Notify community</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>7</b> Tercen app library</a></li>
+<li class="chapter" data-level="8" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>8</b> Known issues</a></li>
+<li class="chapter" data-level="9" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>9</b> Next steps</a></li>
+<li class="chapter" data-level="10" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>10</b> Glossary</a></li>
 </ul>
 
       </nav>
@@ -98,7 +121,7 @@
 
             <section class="normal" id="section-">
 <div id="known-issues" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Known issues</h1>
+<h1><span class="header-section-number">Chapter 8</span> Known issues</h1>
 <p>The beta version of Tercen has the following known issues and limitations:</p>
 <ul>
 <li>In the Tercen applibrary, the apps currently do not use the category concept</li>
@@ -114,7 +137,7 @@
           </div>
         </div>
       </div>
-<a href="building-an-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tercen-app-library.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="next-steps.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -133,10 +156,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",

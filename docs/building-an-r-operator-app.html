@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="apps-types.html">
+<link rel="prev" href="building-a-workflow-app.html">
+<link rel="next" href="example-building-an-operator.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -120,42 +120,48 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">App builder’s guide to Tercen</h1>
-<h4 class="author"><em>Tercen support document</em></h4>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>This guide outlines how to design, develop and share apps for <strong>Tercen</strong>.</p>
-<center>
-<img src="images/tercen-app-guide.png" />
-</center>
+<div id="building-an-r-operator-app" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Building an R operator app</h1>
+<p>The process steps for building a <strong>operator app</strong> using R:</p>
 <ul>
-<li><p><strong>Why read this guide?</strong> :
-Your curious or wish to build an app for Tercen then this is the guide.</p></li>
-<li><p><strong>Acknowledgement</strong>:
-I would like to thank all the users for their feedback. It has helped us improve Tercen.</p></li>
-<li><p><strong>Feedback</strong>:
-If you wish to give feedback then please do not hesitate to create an entry in the <a href="https://github.com/tercen/appbuilders-guide/issues">issue tracker</a>.</p></li>
-<li><p><strong>Motivation</strong>:<br />
-Tercen promotes collaboration for data analysis. Not everyone can code or even wants to, but everyone should benefit from the explosion of data and code currently taking place.
-Tercen allows non programmers (e.g. biologists) to explore their data and allows programmers (e.g. bioinformaticians) to upload their code (or web-apps) for the biologist to use. By offering this services we believe biologist get empowered and can claim back control of their data. The bioinformatician gets liberated from the operational details and day to day analysis demands from the biologist. This is summed up with the phrase:</p></li>
+<li>Design the <strong>operator</strong></li>
+<li>Decide which existing operator to clone from Tercen <strong>app-library</strong></li>
+<li>Clone an existing <strong>operator</strong> from the Tercen github</li>
+<li>Re-init the git</li>
+<li>Remove packrat</li>
+<li>Modify the code for <strong>operator</strong></li>
+<li>Run it locally until satisfied</li>
+<li>Add some tests</li>
+<li>Add documentation</li>
+<li>Init the R packrat</li>
+<li>Create and push to a git repository</li>
+<li>Install it into Tercen from <strong>app-library</strong></li>
+<li>Test it on data</li>
+<li>Notify the community it exists (see below)</li>
 </ul>
-<blockquote>
-<p>Tercen <strong>empowers</strong> the biologist and <strong>liberates</strong> the bioinformatician.</p>
-</blockquote>
+<p>The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.</p>
+<p>All the operators apps are version controlled.</p>
+<p>All <strong>operator apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
+<div id="notify-the-community-2" class="section level2 unnumbered">
+<h2>Notify the community</h2>
+<p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
+</div>
+<div id="r-packrat" class="section level2 unnumbered">
+<h2>R packrat</h2>
+<p>For operators in R, the t</p>
 <center>
-<img src="images/stairs.png" />
+<img src="images/goldfish.png" />
 </center>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="apps-types.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="building-a-workflow-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="example-building-an-operator.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

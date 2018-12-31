@@ -11,7 +11,7 @@ github-repo: tercen/appbuilders-guide
 description: "This is a app builder's guide to Tercen"
 ---
 
-# Introduction {-}
+# Preface {-}
 
 This guide outlines how to design, develop and share apps for __Tercen__.
  

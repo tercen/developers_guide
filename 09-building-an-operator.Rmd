@@ -1,0 +1,36 @@
+# Building an R operator app
+
+The process steps for building a __operator app__ using R:
+
+* Design the __operator__
+* Decide which existing operator to clone from Tercen __app-library__
+* Clone an existing __operator__ from the Tercen github
+* Re-init the git
+* Remove packrat
+* Modify the code for __operator__
+* Run it locally until satisfied
+* Add some tests
+* Add documentation
+* Init the R packrat
+* Create and push to a git repository
+* Install it into Tercen from __app-library__
+* Test it on data
+* Notify the community it exists (see below)
+
+The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.
+
+All the operators apps are version controlled.
+
+All __operator apps__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
+
+
+## Notify the community {-}
+
+Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__  git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+
+## R packrat {-}
+
+For operators in R, the t
+
+
+<center>![](images/goldfish.png)</center>

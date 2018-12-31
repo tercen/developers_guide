@@ -1,0 +1,19 @@
+# Building a template app
+
+The process for building a __template app__ is:
+
+* Design the __template__
+* Create a workflow in Tercen
+* Set the properties of the workflow to __template__
+* Test it on input data
+* Notify the community of its existence (see below)
+
+All the building and deployment steps are performed in Tercen.
+
+All __template apps__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
+
+## Notify the community {-}
+
+Currently, we ask you to send an email to info@tercen.com containing the description and link to the workflow git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building a web entry point for researchers to browse all the apps offered by the community.
+
+<center>![](images/goldfish.png)</center>

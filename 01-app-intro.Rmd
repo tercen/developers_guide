@@ -1,0 +1,27 @@
+# Apps types
+
+So you want to build an app, or just plain curious. The first question to ask oneself is which type of Tercen app would you like to build. There are three main types:
+
+* __Template app__
+* __Workflow app__
+* __Operator app__
+
+A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto, etc.) chooses one of the workflows expressed as a list of __template apps__. A __template app__ therefore represents the highest level app because it defines a set of many steps in sequence to achieve the complete analysis. There would be a __template app__ for each of the high-level workflow (e.g. RNA-seq, flow cyto, etc.).
+
+A researcher wanting a specific statistical process (e.g. quality control, two group analysis, or enrichment analysis, etc.) chooses from a list of __workflow apps__. A __workflow app__ therefore represents the second highest level app because it defines a focused set of steps and visuals to achieve one particular statistical objective.
+
+A researcher wanting a specific operator function (e.g. scale, log, multiplication, addition and subtraction, etc.) chooses from a list of __operator apps__. An __Operator app__ therefore represents a single computational step.
+
+In summary a research wishing a full end-to-end workflow chooses a __template app__, a specific data process chooses a __workflow app__, a specific computation chooses an __operator app__.
+
+Once an app is built, it may be added to the __app-library__ where it can be accessed by researchers.
+
+Deciding on which to build is determined by what you would like the app to achieve. The first two, __template__ and __workflow__, do not need programming experience, the __operator__ does. 
+
+Each has its own building process. __Workflows__ and __template apps__ are built and deployed within Tercen while an __operator app__ is written using any number of programming languages (R, Python, Rust, etc.). The code is put on git hub for the __app library__ to find. 
+Currently Tercen has made a convenient R package for working with the Tercen API, we aim to quickly cover the other languages during our final release.
+
+The building of each app is explained in the following chapters.
+
+
+<center>![](images/goldfish.png)</center>
