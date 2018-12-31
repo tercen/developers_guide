@@ -23,14 +23,12 @@ All the operators apps are version controlled.
 
 All __operator apps__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
 
-
 ## Notify the community {-}
 
 Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__  git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
 
 ## R packrat {-}
 
-For operators in R, the t
-
+For operators in R, the (packrat)[https://rstudio.github.io/packrat/] system is used to manage package versions.
 
 <center>![](images/goldfish.png)</center>
