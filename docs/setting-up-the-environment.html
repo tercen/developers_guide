@@ -76,6 +76,7 @@
 <li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
 <li class="chapter" data-level="2" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html"><i class="fa fa-check"></i><b>2</b> Setting up the environment</a><ul>
 <li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-r"><i class="fa fa-check"></i>Setting up R</a></li>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#rprofile-definition"><i class="fa fa-check"></i><b>2.1</b> .RProfile definition</a></li>
 <li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-python-for-example"><i class="fa fa-check"></i>Setting up Python, for example</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
@@ -85,6 +86,7 @@
 <li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html"><i class="fa fa-check"></i><b>5</b> Building an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#creating-an-operator-app"><i class="fa fa-check"></i>Creating an operator app</a></li>
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#notify-the-community-2"><i class="fa fa-check"></i>Notify the community</a></li>
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#r-packrat"><i class="fa fa-check"></i>R packrat</a></li>
 </ul></li>
@@ -129,10 +131,19 @@ If you are a regular programmer then you already have your environment.</p>
 <h2>Setting up R</h2>
 <ul>
 <li>install R</li>
+<li>modify your .RProfile, this is optional</li>
 <li>install an IDE (e.g. R Studio)</li>
 <li>install the tercen r package</li>
 </ul>
 <p>You are ready to go.</p>
+</div>
+<div id="rprofile-definition" class="section level2">
+<h2><span class="header-section-number">2.1</span> .RProfile definition</h2>
+<p><strong>Content of <code>.Rprofile:</code> file in your home directory</strong></p>
+<pre><code>options(&quot;tercen.serviceUri&quot;=&quot;http://127.0.0.1:5400/api/v1/&quot;)
+options(&quot;tercen.username&quot;=&quot;XXXX&quot;)
+options(&quot;tercen.password&quot;=&quot;YYYY&quot;)</code></pre>
+<p>where <code>XXXX</code> and <code>YYYY</code> are the appropriate username and password of the developer.</p>
 </div>
 <div id="setting-up-python-for-example" class="section level2 unnumbered">
 <h2>Setting up Python, for example</h2>

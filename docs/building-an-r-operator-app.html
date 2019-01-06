@@ -76,6 +76,7 @@
 <li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
 <li class="chapter" data-level="2" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html"><i class="fa fa-check"></i><b>2</b> Setting up the environment</a><ul>
 <li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-r"><i class="fa fa-check"></i>Setting up R</a></li>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#rprofile-definition"><i class="fa fa-check"></i><b>2.1</b> .RProfile definition</a></li>
 <li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-python-for-example"><i class="fa fa-check"></i>Setting up Python, for example</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
@@ -85,6 +86,7 @@
 <li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html"><i class="fa fa-check"></i><b>5</b> Building an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#creating-an-operator-app"><i class="fa fa-check"></i>Creating an operator app</a></li>
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#notify-the-community-2"><i class="fa fa-check"></i>Notify the community</a></li>
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#r-packrat"><i class="fa fa-check"></i>R packrat</a></li>
 </ul></li>
@@ -122,6 +124,63 @@
             <section class="normal" id="section-">
 <div id="building-an-r-operator-app" class="section level1">
 <h1><span class="header-section-number">Chapter 5</span> Building an R operator app</h1>
+<div id="creating-an-operator-app" class="section level2 unnumbered">
+<h2>Creating an operator app</h2>
+<p>Tercen allows programmers to easily build new operators from the comfort of their favorite interactive development environment (IDE). From the IDE it is possible to access all Tercen features. The ability to access the input data (from Tercen) and returning results (to Tercen) is essential.</p>
+<p>The ability to create a new Tercen operator requires basic programming skills.</p>
+<p>Here is a development process to create an <strong>operator app</strong>:</p>
+<p><strong>Design the operator</strong>:</p>
+<p><strong>Creating the project</strong>:</p>
+<ul>
+<li>Open R Studio and create an empty project and init the git</li>
+<li>Copy four files into project, you can find them in any operator in tercen github.
+<ul>
+<li><code>operator.json</code></li>
+<li><code>main.R</code></li>
+<li><code>README.md</code></li>
+<li><code>.gitignore</code></li>
+</ul></li>
+<li>Modify appropriately each of the files</li>
+<li>Create the <code>workspace.R</code> file by:
+<ul>
+<li>Copy <code>main.R</code> and rename to <code>workspace.R</code> file</li>
+<li>Add the following lines to <code>workspace.R</code> file:</li>
+</ul>
+<pre><code>source(&#39;~/.Rprofile&#39;)
+options(&quot;tercen.workflowId&quot;= &quot;76a4dcffd551802fd23d42bd862e8300&quot;)
+options(&quot;tercen.stepId&quot;= &quot;3-2&quot;)</code></pre>
+The values indicated above are examples. The real values come from the next section.</li>
+</ul>
+<p><strong>Writing and testing the operator app</strong>:</p>
+<ul>
+<li>Develop and test the <strong>operator app</strong> within the <code>workspace.R</code> file</li>
+<li>Determine the input data for the <strong>operator app</strong>
+<ul>
+<li>Start Tercen</li>
+<li>Use the browser to go to <a href="http://127.0.0.1:5400" class="uri">http://127.0.0.1:5400</a></li>
+<li>Login</li>
+<li>Go to the workflow which contains the data</li>
+<li>Add a <strong>data step</strong></li>
+<li>Configure a project view in cross-tab window of the <strong>data step</strong></li>
+<li>Record the <strong>stepId</strong> and <strong>workflowId</strong> of this <strong>data step</strong></li>
+<li>Get data using the tercen api <code>tercen::ctx$select</code></li>
+<li>Execute the <strong>operator app</strong> locally</li>
+<li>Push results back to Tercen using the tercen API <code>tercen::ctx$save</code></li>
+</ul></li>
+</ul>
+<p>The actions above may happen multiple times as you develop your operator. Once the <strong>operator app</strong> is finalized then proceed:</p>
+<p><strong>Deploy the operator</strong>:</p>
+<ul>
+<li>Modify <code>workshop.R</code> and copy it to <code>main.R</code></li>
+<li>Run <code>packrat::init</code>
+This can always re-init packrat by performing the following
+<ul>
+<li>Remove the <code>packrat</code> folder in the Rstudio project folder</li>
+<li>Remove the <code>.Rprofile</code> file in the project folder</li>
+<li>Run <code>packrat::init</code> again</li>
+</ul></li>
+<li>upload to github in a public repository, let call it the operator git repo.</li>
+</ul>
 <p>The process steps for building a <strong>operator app</strong> using R:</p>
 <ul>
 <li>Design the <strong>operator</strong></li>
@@ -142,13 +201,14 @@
 <p>The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.</p>
 <p>All the operators apps are version controlled.</p>
 <p>All <strong>operator apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
+</div>
 <div id="notify-the-community-2" class="section level2 unnumbered">
 <h2>Notify the community</h2>
 <p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
 </div>
 <div id="r-packrat" class="section level2 unnumbered">
 <h2>R packrat</h2>
-<p>For operators in R, the t</p>
+<p>R operators require packages, especially the same version of packages you used when you developed. This package environment is managed by (<code>packrat</code>[<a href="https://rstudio.github.io/packrat/" class="uri">https://rstudio.github.io/packrat/</a>] system is used to manage package versions.. The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science.</p>
 <center>
 <img src="images/goldfish.png" />
 </center>

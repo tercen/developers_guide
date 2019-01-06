@@ -8,10 +8,22 @@ For __templates__ and __workflow apps__ you do not need a development environmen
 ## Setting up R {-}
 
 * install R
+* modify your .RProfile, this is optional
 * install an IDE (e.g. R Studio)
 * install the tercen r package
 
 You are ready to go.
+
+## .RProfile definition
+
+__Content of `.Rprofile:` file in your home directory__ 
+```
+options("tercen.serviceUri"="http://127.0.0.1:5400/api/v1/")
+options("tercen.username"="XXXX")
+options("tercen.password"="YYYY")
+```
+where `XXXX` and `YYYY` are the appropriate username and password of the developer.
+
 
 ## Setting up Python, for example {-}
 
