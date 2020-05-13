@@ -5,7 +5,7 @@ If you are a regular programmer then you already have your environment.
 
 For __templates__ and __workflow apps__ you do not need a development environment as Tercen contains all the features required to build them.
 
-## Setting up R {-}
+## Setting up R
 
 * install R
 * modify your .RProfile, this is optional
