@@ -7,7 +7,7 @@ For __templates__ and __workflow apps__ you do not need a development environmen
 
 ## Installing tercen-studio {-}
 
-Install [docker-compose](https://docs.docker.com/compose/install/) for Linux or Windows or Mac.
+Install [docker-compose](https://docs.docker.com/compose/install/) for Linux or Windows or Mac. 
 
 ### Windows {-}
 
