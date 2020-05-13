@@ -1,5 +1,7 @@
 # Building an R operator app
+
 ## Creating an operator app {-}
+
 Tercen allows programmers to easily build new operators from the comfort of their favorite interactive development environment (IDE). From the IDE it is possible to access all Tercen features. The ability to access the input data (from Tercen) and returning results (to Tercen) is essential.  
 
 The ability to create a new Tercen operator requires basic programming skills.
