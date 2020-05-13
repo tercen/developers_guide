@@ -5,12 +5,17 @@ If you are a regular programmer then you already have your environment.
 
 For __templates__ and __workflow apps__ you do not need a development environment as Tercen contains all the features required to build them.
 
+<<<<<<< HEAD
 Run Tercen using Docker.
+=======
+## Setting up R {-}
+>>>>>>> 5384c43f48014c95bdb32242b536c728ac076482
 
 ## Installing tercen-studio {-}
 
 Install [docker-compose](https://docs.docker.com/compose/install/) for Linux or Windows or Mac.
 
+<<<<<<< HEAD
 ### Windows {-}
 
 First, install [Docker-Desktop for Windows](https://docs.docker.com/docker-for-windows/install/).
@@ -77,6 +82,9 @@ docker-compose up -d
 ```
 
 ## Configuration of .RProfile {-}
+=======
+## .RProfile definition {-}
+>>>>>>> 5384c43f48014c95bdb32242b536c728ac076482
 
 __Content of `.Rprofile:` file in your home directory__ 
 ```
