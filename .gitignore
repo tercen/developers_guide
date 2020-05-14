@@ -7,3 +7,4 @@ _bookdown_files
 rsconnect
 _book.7z
 _book.zip
+packrat/lib*/
