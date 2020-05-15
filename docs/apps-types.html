@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>App builder’s guide to Tercen</title>
-  <meta name="description" content="This is a app builder’s guide to Tercen">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Apps types | App builder’s guide to Tercen</title>
+  <meta name="description" content="This is a app builder’s guide to Tercen" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 1 Apps types | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -17,28 +16,32 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 1 Apps types | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
 
-<meta name="author" content="Tercen support document">
+<meta name="author" content="Tercen support document" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="setting-up-the-environment.html">
+<link rel="prev" href="index.html"/>
+<link rel="next" href="setting-up-the-environment.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -58,6 +61,68 @@
 </script>
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -75,9 +140,13 @@
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
 <li class="chapter" data-level="2" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html"><i class="fa fa-check"></i><b>2</b> Setting up the environment</a><ul>
-<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-r"><i class="fa fa-check"></i>Setting up R</a></li>
-<li class="chapter" data-level="2.1" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#rprofile-definition"><i class="fa fa-check"></i><b>2.1</b> .RProfile definition</a></li>
-<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-python-for-example"><i class="fa fa-check"></i>Setting up Python, for example</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#installing-tercen-studio"><i class="fa fa-check"></i>Installing tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#starting-tercen-studio"><i class="fa fa-check"></i>Starting tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#updating-tercen-studio"><i class="fa fa-check"></i>Updating tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#configuration-of-.rprofile"><i class="fa fa-check"></i>Configuration of .RProfile</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#uninstallation-of-tercen-studio"><i class="fa fa-check"></i>Uninstallation of tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#building-tercen-studio"><i class="fa fa-check"></i>Building tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-the-environment.html"><a href="setting-up-the-environment.html#setting-up-a-python-environment"><i class="fa fa-check"></i>Setting up a Python environment</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
 <li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
@@ -90,16 +159,12 @@
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#notify-the-community-2"><i class="fa fa-check"></i>Notify the community</a></li>
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#r-packrat"><i class="fa fa-check"></i>R packrat</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html"><i class="fa fa-check"></i><b>6</b> Example, building an operator</a><ul>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#design"><i class="fa fa-check"></i>Design</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#clone"><i class="fa fa-check"></i>Clone</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#reset-the-versioning-and-packrat"><i class="fa fa-check"></i>Reset the versioning and packrat</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#code"><i class="fa fa-check"></i>Code</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#test-locally"><i class="fa fa-check"></i>Test locally</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#document"><i class="fa fa-check"></i>Document</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#init-packrat"><i class="fa fa-check"></i>Init packrat</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#create-and-push-repository"><i class="fa fa-check"></i>Create and push repository</a></li>
-<li class="chapter" data-level="" data-path="example-building-an-operator.html"><a href="example-building-an-operator.html#notify-community"><i class="fa fa-check"></i>Notify community</a></li>
+<li class="chapter" data-level="6" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html"><i class="fa fa-check"></i><b>6</b> Walkthrough example: building the lm operator</a><ul>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#coding-the-operator"><i class="fa fa-check"></i>Coding the operator</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#testing-the-operator-locally"><i class="fa fa-check"></i>Testing the operator locally</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#documenting"><i class="fa fa-check"></i>Documenting</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#deploying-the-operator"><i class="fa fa-check"></i>Deploying the operator</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>7</b> Tercen app library</a></li>
 <li class="chapter" data-level="8" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>8</b> Known issues</a></li>
@@ -155,11 +220,13 @@ Currently Tercen has made a convenient R package for working with the Tercen API
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -167,12 +234,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -180,6 +246,14 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

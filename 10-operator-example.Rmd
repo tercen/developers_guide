@@ -1,21 +1,95 @@
-# Example, building an operator
+# Walkthrough example: building the lm operator
 
-Here we show a simple example in how to create an R operator.
+Here we will learn through a concrete example how to create an R operator to perform a linear regression.
 
-## Design {-}
+## Setting up the project {-}
 
-## Clone {-}
+**1. Designing the operator**
 
-## Reset the versioning and packrat {-}
+The first step is to define our input projection and outut relation. Remember: "Table in, Table out!"
 
-## Code {-}
+Here we want to perform the linear regression of y against x in a cell. Our input is simple.
 
-## Test locally {-}
+As a starting point, we will output the interecept and the slope of the model.
 
-## Document {-}
+**2. Cloning the template repository**
 
-## Init packrat {-}
+Get the template from GitHub.
+In RStudio server, File > New project > Version control.
+URL: https://github.com/tercen/templateR_operator
 
-## Create and push repository {-}
+Then, I have a new project at the root of my working directory.
 
-## Notify community {-}
+**3. Resetting versioning and packrat**
+
+Rename the files.
+Reset the versioning and packrat.
+
+## Coding the operator {-}
+
+Coming soon.
+
+* How an operator looks like
+
+* Code description
+
+```r
+library(tercen)
+library(dplyr)
+
+do.lm <- function(df) {
+  
+  out <- data.frame(
+    .ri = df$.ri[1],
+    .ci = df$.ci[1],
+    intercept = NaN,
+    slope = NaN,
+    fit.y = rep(NaN, 2),
+    fit.x = rep(NaN, 2)
+  )
+  
+  mod <- try(lm(.y ~ .x, data = df))
+  
+  if(!inherits(mod, 'try-error')) {
+    out$intercept <- mod$coefficients[1]
+    out$slope <- mod$coefficients[2]
+    out$fit.y <- range(mod$fitted.values)
+    out$fit.x <- range(df$.x)
+  }
+  return(out)
+  
+}
+
+(ctx <- tercenCtx())  %>% 
+  select(.x, .y, .ri, .ci) %>% 
+  group_by(.ri, .ci) %>%
+  do(do.lm(.)) %>%
+  ctx$addNamespace() %>%
+  ctx$save()
+```
+
+## Testing the operator locally {-}
+
+Coming soon.
+
+## Documenting {-}
+
+Edit the README.md to describe the operator design and usage.
+
+## Deploying the operator {-}
+
+**main.R**
+
+Coming soon.
+
+**Init packrat**
+
+Coming soon.
+
+**Create and push repository**
+
+Coming soon.
+
+**Notify community**
+
+Coming soon.

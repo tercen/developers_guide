@@ -5,16 +5,76 @@ If you are a regular programmer then you already have your environment.
 
 For __templates__ and __workflow apps__ you do not need a development environment as Tercen contains all the features required to build them.
 
-## Setting up R {-}
+## Installing tercen-studio {-}
 
-* install R
-* modify your .RProfile, this is optional
-* install an IDE (e.g. R Studio)
-* install the tercen r package
+Install [docker-compose](https://docs.docker.com/compose/install/) for Linux or Windows or Mac. 
 
-You are ready to go.
+**For Windows:**
 
-## .RProfile definition
+First, install [Docker-Desktop for Windows](https://docs.docker.com/docker-for-windows/install/).
+
+**Important**: Make sure the _Enable Hyper-V Windows Features_ option is selected on the Configuration page.
+
+Then, you can start Docker Desktop and get tercen-studio.
+
+Clone the following repository
+```bash
+git clone https://github.com/tercen/tercen_studio.git
+cd tercen_studio
+```
+
+Activate shared drives
+
+* right click on the running docker service and select "settings" > "shared drives"
+
+* share the folder tercen_studio 
+
+
+**For Mac:**
+
+Coming soon.
+
+**For Linux:**
+
+Coming soon.
+
+## Starting tercen-studio {-}
+
+Then you can start tercen by running:
+
+```bash
+docker-compose up -d
+```
+
+You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402).
+
+* _Username_: admin
+
+* _Password_: admin
+
+You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8787/).
+ 
+* _Username_: rstudio
+
+* _Password_: tercen
+
+Now you're all set!
+
+## Updating tercen-studio {-}
+
+You can update tercen-studio by running:
+
+```bash
+# stop tercen_studio
+docker-compose down        
+# get tercen_studio latest version           
+git pull
+docker-compose pull
+# start tercen_studio
+docker-compose up -d
+```
+
+## Configuration of .RProfile {-}
 
 __Content of `.Rprofile:` file in your home directory__ 
 ```
@@ -25,10 +85,30 @@ options("tercen.password"="YYYY")
 where `XXXX` and `YYYY` are the appropriate username and password of the developer.
 
 
-## Setting up Python, for example {-}
+## Uninstallation of tercen-studio {-}
 
-* install Python
-* install your favorite IDE
-* access Tercen via the API
+```bash
+docker-compose down
+# check tercen docker volumes names
+docker volume ls
+# delete tercen docker volumes
+docker volume rm tercen_studio_couchdb-data
+docker volume rm tercen_studio_tercen-data
+docker volume rm tercen_studio_tercen-studio-data
+docker volume rm tercen_studio_tercen-studio-renv
+```
+
+## Building tercen-studio {-}
+
+```bash
+cd docker
+docker build -t tercen/tercen_studio:0.9.2.9 .
+docker history --no-trunc tercen_studio:0.9.2.9
+docker push tercen/tercen_studio:0.9.2.9
+```
+
+## Setting up a Python environment {-}
+
+Coming soon.
 
 <center>![](images/goldfish.png)</center>
