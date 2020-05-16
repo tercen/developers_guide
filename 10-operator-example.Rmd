@@ -4,43 +4,84 @@ Here we will learn through a concrete example how to create an R operator to per
 
 ## Designing the operator {-}
 
-The first step is to define our input projection and output relation. Remember that each operator works on table:
+The first step is to define our input projection and output relation. Remember that each operator works on tables:
 
 > "Table in, table out!"
 
-Here we want to perform the linear regression of y against x in per cell. Our input is simple.
+Here we want to perform the linear regression of y against x in per cell. Our input is simple. In this example, we will output the intercept and the slope of the model.
 
-* x axis
-* y axis
-* row ID
-* column ID
-
-As a starting point, we will output the interecept and the slope of the model.
-
-* 
+<center><img src="./images/R_operator_example_MODEL.png" width=500></img></center>
 
 ## Setting up the project {-}
 
 Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen and RStudio run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/).
 
-**1. Cloning the template repository**
+**1. Set up the tercen input projection**
 
-Get the template from GitHub.
-In RStudio server, File > New project > Version control.
-URL: https://github.com/tercen/templateR_operator
+**2. Clone the template repository into RStudio**
 
-Then, I have a new project at the root of my working directory.
+Create a new repository with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the template repository.
 
-**2. Resetting versioning and packrat**
+<center><img src="./images/R_operator_example_SETUP2.png" width=1000></img></center>
+
+You will then be able to create your own repository base don this template. Give it an explicit name (here, `lm_operator`).
+
+Now that the repository is initiated in your GitHub account, go back to RStudio Server. Create a new project by clicking on File > New project > Version control. You will be asked the URL of the repository, put the newly created one.
+
+
+Includes:
+
+* `main.R`
+
+* `workspace.R`
+
+* `doc`
+
+**3. Set up the workspace**
+
+* Start Tercen and use your browser to go to http://127.0.0.1:5400
+
+* Login
+
+* Go to the workflow which contains the data
+
+* Add a data step
+
+* Configure a project view in cross-tab window of the data step
+
+```r
+options("tercen.workflowId" = "wwww")
+options("tercen.stepId"     = "dddd")
+```
 
 Rename the files.
-Reset the versioning and packrat.
+
+**3. Reset and configure versioning**
+
+In the terminal, run:
+
+```bash
+git remote -v
+```
+
+You can see that, as we imported the template from a GitHub repository, the.
+We need to reset this configuration in order to push the operator we will create to the repository of our choice.
+
 
 ## Coding and testing the operator locally {-}
 
-Coming soon.
 
-* How an operator looks like
+**Testing locally**
+
+Tercen up and running with data step and appropriate input configured.
+
+* Record the stepId and workflowId of this data step
+    
+* Get data using the tercen api tercen::ctx$select
+
+* Execute the operator app locally
+
+* Push results back to Tercen using the tercen API tercen::ctx$save
 
 * Code description
 
@@ -105,17 +146,16 @@ The `lm` operator performs a linear regression in Tercen.
 
 **Usage**
 
-Input projection|.
----|---
+Input projection|
+:--|:--
 `y-axis`| measurement value
 `x-axis`| explanatory value
 
-Output relations|.
----|---
-`intercept`| numeric, p-value calculated per cell
-`slope`| numeric, p-value calculated per cell
-`fit.x`| numeric, lowest and highest x values
-`fit.y`| numeric, lowest and highest predicted y values
+Output relations|
+:--|:--
+`intercept`| numeric, intercept of the linear regression, per cell
+`slope`| numeric, slope of the linear regression, per cell
+
 
 **Details**
 
@@ -130,26 +170,17 @@ See [Linear regression on Wikipedia](https://en.wikipedia.org/wiki/Linear_regres
 
 [anova](https://github.com/tercen/anova_operator)
 
+## Preparing some unit testing
 
-## Deploying the operator {-}
+It's always good to prepare some tests to be ran for example during Tercen updates.
 
-**main.R**
+* subdirectory `test`
 
-Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file, ignoring the local stuff.
+* input file
 
-**Init renv**
+* expected output file
 
-The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
-
-```r
-renv::init()
-```
-
-This will initiate a project-local environment with a private R library in the `renv` subdirectory.
-
-**Unit test**
-
-Coming soon.
+* `json` file describing the test
 
 ```r
 # Simulate tercen input based on the CO2 dataset 
@@ -167,10 +198,31 @@ write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
 write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
 ```
 
-**Create and push repository**
 
-Coming soon.
 
-**Notify community**
+## Deploying the operator {-}
+
+**1. Copy the code to the main.R script**
+
+Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file, ignoring the local stuff.
+
+**2. Initiate renv**
+
+The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
+
+```r
+renv::init()
+```
+
+This will initiate a project-local environment with a private R library in the `renv` subdirectory.
+
+**3. Push it to your GitHub repository**
+
+Once everything is ready, you can push the modifications to your GitHub repository.
+
+**4. Notify community**
 
 Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__ git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+
+
+<center>![](images/goldfish.png)</center>
