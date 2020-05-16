@@ -160,10 +160,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="building-an-r-operator-app.html"><a href="building-an-r-operator-app.html#r-packrat"><i class="fa fa-check"></i>R packrat</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html"><i class="fa fa-check"></i><b>6</b> Walkthrough example: building the lm operator</a><ul>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#designing-the-operator"><i class="fa fa-check"></i>Designing the operator</a></li>
 <li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
-<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#coding-the-operator"><i class="fa fa-check"></i>Coding the operator</a></li>
-<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#testing-the-operator-locally"><i class="fa fa-check"></i>Testing the operator locally</a></li>
-<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#documenting"><i class="fa fa-check"></i>Documenting</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#coding-and-testing-the-operator-locally"><i class="fa fa-check"></i>Coding and testing the operator locally</a></li>
+<li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#documenting-the-operator"><i class="fa fa-check"></i>Documenting the operator</a></li>
 <li class="chapter" data-level="" data-path="walkthrough-example-building-the-lm-operator.html"><a href="walkthrough-example-building-the-lm-operator.html#deploying-the-operator"><i class="fa fa-check"></i>Deploying the operator</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>7</b> Tercen app library</a></li>
@@ -190,75 +190,168 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="walkthrough-example-building-the-lm-operator" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Walkthrough example: building the lm operator</h1>
 <p>Here we will learn through a concrete example how to create an R operator to perform a linear regression.</p>
+<div id="designing-the-operator" class="section level2 unnumbered">
+<h2>Designing the operator</h2>
+<p>The first step is to define our input projection and output relation. Remember that each operator works on table:</p>
+<blockquote>
+<p>“Table in, table out!”</p>
+</blockquote>
+<p>Here we want to perform the linear regression of y against x in per cell. Our input is simple.</p>
+<ul>
+<li>x axis</li>
+<li>y axis</li>
+<li>row ID</li>
+<li>column ID</li>
+</ul>
+<p>As a starting point, we will output the interecept and the slope of the model.</p>
+<ul>
+<li></li>
+</ul>
+</div>
 <div id="setting-up-the-project" class="section level2 unnumbered">
 <h2>Setting up the project</h2>
-<p><strong>1. Designing the operator</strong></p>
-<p>The first step is to define our input projection and outut relation. Remember: “Table in, Table out!”</p>
-<p>Here we want to perform the linear regression of y against x in a cell. Our input is simple.</p>
-<p>As a starting point, we will output the interecept and the slope of the model.</p>
-<p><strong>2. Cloning the template repository</strong></p>
+<p><strong>1. Cloning the template repository</strong></p>
 <p>Get the template from GitHub.
 In RStudio server, File &gt; New project &gt; Version control.
 URL: <a href="https://github.com/tercen/templateR_operator" class="uri">https://github.com/tercen/templateR_operator</a></p>
 <p>Then, I have a new project at the root of my working directory.</p>
-<p><strong>3. Resetting versioning and packrat</strong></p>
+<p><strong>2. Resetting versioning and packrat</strong></p>
 <p>Rename the files.
 Reset the versioning and packrat.</p>
 </div>
-<div id="coding-the-operator" class="section level2 unnumbered">
-<h2>Coding the operator</h2>
+<div id="coding-and-testing-the-operator-locally" class="section level2 unnumbered">
+<h2>Coding and testing the operator locally</h2>
 <p>Coming soon.</p>
 <ul>
 <li><p>How an operator looks like</p></li>
 <li><p>Code description</p></li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(tercen)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb8-3" title="3"></a>
-<a class="sourceLine" id="cb8-4" title="4">do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
-<a class="sourceLine" id="cb8-5" title="5">  </a>
-<a class="sourceLine" id="cb8-6" title="6">  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb8-7" title="7">    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb8-8" title="8">    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb8-9" title="9">    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</a>
-<a class="sourceLine" id="cb8-10" title="10">    <span class="dt">slope =</span> <span class="ot">NaN</span>,</a>
-<a class="sourceLine" id="cb8-11" title="11">    <span class="dt">fit.y =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb8-12" title="12">    <span class="dt">fit.x =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb8-13" title="13">  )</a>
-<a class="sourceLine" id="cb8-14" title="14">  </a>
-<a class="sourceLine" id="cb8-15" title="15">  mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df))</a>
-<a class="sourceLine" id="cb8-16" title="16">  </a>
-<a class="sourceLine" id="cb8-17" title="17">  <span class="cf">if</span>(<span class="op">!</span><span class="kw">inherits</span>(mod, <span class="st">&#39;try-error&#39;</span>)) {</a>
-<a class="sourceLine" id="cb8-18" title="18">    out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb8-19" title="19">    out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb8-20" title="20">    out<span class="op">$</span>fit.y &lt;-<span class="st"> </span><span class="kw">range</span>(mod<span class="op">$</span>fitted.values)</a>
-<a class="sourceLine" id="cb8-21" title="21">    out<span class="op">$</span>fit.x &lt;-<span class="st"> </span><span class="kw">range</span>(df<span class="op">$</span>.x)</a>
-<a class="sourceLine" id="cb8-22" title="22">  }</a>
-<a class="sourceLine" id="cb8-23" title="23">  <span class="kw">return</span>(out)</a>
-<a class="sourceLine" id="cb8-24" title="24">  </a>
-<a class="sourceLine" id="cb8-25" title="25">}</a>
-<a class="sourceLine" id="cb8-26" title="26"></a>
-<a class="sourceLine" id="cb8-27" title="27">(ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>())  <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-28" title="28"><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-29" title="29"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-30" title="30"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-31" title="31"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-32" title="32"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tercen)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4">do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb1-5" title="5">  </a>
+<a class="sourceLine" id="cb1-6" title="6">  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb1-7" title="7">    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb1-9" title="9">    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</a>
+<a class="sourceLine" id="cb1-10" title="10">    <span class="dt">slope =</span> <span class="ot">NaN</span>,</a>
+<a class="sourceLine" id="cb1-11" title="11">    <span class="dt">fit.y =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="dt">fit.x =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb1-13" title="13">  )</a>
+<a class="sourceLine" id="cb1-14" title="14">  </a>
+<a class="sourceLine" id="cb1-15" title="15">  mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df))</a>
+<a class="sourceLine" id="cb1-16" title="16">  </a>
+<a class="sourceLine" id="cb1-17" title="17">  <span class="cf">if</span>(<span class="op">!</span><span class="kw">inherits</span>(mod, <span class="st">&#39;try-error&#39;</span>)) {</a>
+<a class="sourceLine" id="cb1-18" title="18">    out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb1-19" title="19">    out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb1-20" title="20">    out<span class="op">$</span>fit.y &lt;-<span class="st"> </span><span class="kw">range</span>(mod<span class="op">$</span>fitted.values)</a>
+<a class="sourceLine" id="cb1-21" title="21">    out<span class="op">$</span>fit.x &lt;-<span class="st"> </span><span class="kw">range</span>(df<span class="op">$</span>.x)</a>
+<a class="sourceLine" id="cb1-22" title="22">  }</a>
+<a class="sourceLine" id="cb1-23" title="23">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb1-24" title="24">  </a>
+<a class="sourceLine" id="cb1-25" title="25">}</a>
+<a class="sourceLine" id="cb1-26" title="26"></a>
+<a class="sourceLine" id="cb1-27" title="27">(ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>())  <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-28" title="28"><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-29" title="29"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-30" title="30"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-31" title="31"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-32" title="32"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()</a></code></pre></div>
+<p>Implementing the following sanity checks is recommended when creating an operator:</p>
+<ul>
+<li><p>check the presence of expected inputs (here, x and y axes)</p></li>
+<li><p>add a try function to test the main function implemented (here, <code>lm</code>)</p></li>
+</ul>
+<p><strong>Test in tercen</strong></p>
 </div>
-<div id="testing-the-operator-locally" class="section level2 unnumbered">
-<h2>Testing the operator locally</h2>
-<p>Coming soon.</p>
-</div>
-<div id="documenting" class="section level2 unnumbered">
-<h2>Documenting</h2>
-<p>Edit the README.md to describe the operator design and usage.</p>
+<div id="documenting-the-operator" class="section level2 unnumbered">
+<h2>Documenting the operator</h2>
+<p>Edit the README.md to describe the operator design and usage. The documentation should contain:</p>
+<ul>
+<li><p>A <strong>general description</strong> of the operator</p></li>
+<li><p>A description of the <strong>input projections</strong></p></li>
+<li><p>A description of the <strong>output relations</strong></p></li>
+</ul>
+<p>For example, here is how the <code>lm</code> operator documentation looks:</p>
+<p><strong>Description</strong></p>
+<p>The <code>lm</code> operator performs a linear regression in Tercen.</p>
+<p><strong>Usage</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Input projection</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>y-axis</code></td>
+<td>measurement value</td>
+</tr>
+<tr class="even">
+<td><code>x-axis</code></td>
+<td>explanatory value</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Output relations</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>intercept</code></td>
+<td>numeric, p-value calculated per cell</td>
+</tr>
+<tr class="even">
+<td><code>slope</code></td>
+<td>numeric, p-value calculated per cell</td>
+</tr>
+<tr class="odd">
+<td><code>fit.x</code></td>
+<td>numeric, lowest and highest x values</td>
+</tr>
+<tr class="even">
+<td><code>fit.y</code></td>
+<td>numeric, lowest and highest predicted y values</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Details</strong></p>
+<p>The <code>lm</code> operator performs a linear regression on each cell.</p>
+<p><strong>References</strong></p>
+<p>See <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear regression on Wikipedia</a> and
+<code>lm</code> <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">R function documentation</a>.</p>
+<p><strong>See Also</strong></p>
+<p><a href="https://github.com/tercen/anova_operator">anova</a></p>
 </div>
 <div id="deploying-the-operator" class="section level2 unnumbered">
 <h2>Deploying the operator</h2>
 <p><strong>main.R</strong></p>
+<p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file, ignoring the local stuff.</p>
+<p><strong>Init renv</strong></p>
+<p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">renv<span class="op">::</span><span class="kw">init</span>()</a></code></pre></div>
+<p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
+<p><strong>Unit test</strong></p>
 <p>Coming soon.</p>
-<p><strong>Init packrat</strong></p>
-<p>Coming soon.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Simulate tercen input based on the CO2 dataset </span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># with an x and y-axis, rows and columns</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">data</span>(CO2)</a>
+<a class="sourceLine" id="cb3-4" title="4">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">.x =</span> CO2<span class="op">$</span>conc, <span class="dt">.y =</span> CO2<span class="op">$</span>uptake, <span class="dt">.ri =</span> CO2<span class="op">$</span>Plant, <span class="dt">.ci =</span> CO2<span class="op">$</span>Treatment)</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co"># Run the do.lm() function to generate the expected output</span></a>
+<a class="sourceLine" id="cb3-7" title="7">out &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(.ci, .ri, .x, .y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.))</a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co"># write input and expected output in the test subdirectory</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">write.csv</span>(CO2, <span class="dt">file=</span><span class="st">&quot;./test/CO2.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="kw">write.csv</span>(out, <span class="dt">file=</span><span class="st">&quot;./test/output.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p><strong>Create and push repository</strong></p>
 <p>Coming soon.</p>
 <p><strong>Notify community</strong></p>

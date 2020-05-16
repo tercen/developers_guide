@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 Building an R operator app | App builder’s guide to Tercen</title>
+  <title>Chapter 6 Building an R operator app: walkthrough example | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 Building an R operator app | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 6 Building an R operator app: walkthrough example | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Building an R operator app | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 6 Building an R operator app: walkthrough example | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="building-a-workflow-app.html"/>
-<link rel="next" href="building-an-r-operator-app-walkthrough-example.html"/>
+<link rel="prev" href="building-an-r-operator-app.html"/>
+<link rel="next" href="tercen-app-library.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -187,96 +187,176 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="building-an-r-operator-app" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Building an R operator app</h1>
-<div id="creating-an-operator-app" class="section level2 unnumbered">
-<h2>Creating an operator app</h2>
-<p>Tercen allows programmers to easily build new operators from the comfort of their favorite interactive development environment (IDE). From the IDE it is possible to access all Tercen features. The ability to access the input data (from Tercen) and returning results (to Tercen) is essential.</p>
-<p>The ability to create a new Tercen operator requires basic programming skills.</p>
-<p>Here is a development process to create an <strong>operator app</strong>:</p>
-<p><strong>Design the operator</strong>:</p>
-<p><strong>Creating the project</strong>:</p>
+<div id="building-an-r-operator-app-walkthrough-example" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Building an R operator app: walkthrough example</h1>
+<p>Here we will learn through a concrete example how to create an R operator to perform a linear regression.</p>
+<div id="designing-the-operator" class="section level2 unnumbered">
+<h2>Designing the operator</h2>
+<p>The first step is to define our input projection and output relation. Remember that each operator works on table:</p>
+<blockquote>
+<p>“Table in, table out!”</p>
+</blockquote>
+<p>Here we want to perform the linear regression of y against x in per cell. Our input is simple.</p>
 <ul>
-<li>Open R Studio and create an empty project and init the git</li>
-<li>Copy four files into project, you can find them in any operator in tercen github.
-<ul>
-<li><code>operator.json</code></li>
-<li><code>main.R</code></li>
-<li><code>README.md</code></li>
-<li><code>.gitignore</code></li>
-</ul></li>
-<li>Modify appropriately each of the files</li>
-<li>Create the <code>workspace.R</code> file by:
-<ul>
-<li>Copy <code>main.R</code> and rename to <code>workspace.R</code> file</li>
-<li>Add the following lines to <code>workspace.R</code> file:</li>
+<li>x axis</li>
+<li>y axis</li>
+<li>row ID</li>
+<li>column ID</li>
 </ul>
-<pre><code>source(&#39;~/.Rprofile&#39;)
-options(&quot;tercen.workflowId&quot;= &quot;76a4dcffd551802fd23d42bd862e8300&quot;)
-options(&quot;tercen.stepId&quot;= &quot;3-2&quot;)</code></pre>
-The values indicated above are examples. The real values come from the next section.</li>
+<p>As a starting point, we will output the interecept and the slope of the model.</p>
+<ul>
+<li></li>
 </ul>
-<p><strong>Writing and testing the operator app</strong>:</p>
-<ul>
-<li>Develop and test the <strong>operator app</strong> within the <code>workspace.R</code> file</li>
-<li>Determine the input data for the <strong>operator app</strong>
-<ul>
-<li>Start Tercen</li>
-<li>Use the browser to go to <a href="http://127.0.0.1:5400" class="uri">http://127.0.0.1:5400</a></li>
-<li>Login</li>
-<li>Go to the workflow which contains the data</li>
-<li>Add a <strong>data step</strong></li>
-<li>Configure a project view in cross-tab window of the <strong>data step</strong></li>
-<li>Record the <strong>stepId</strong> and <strong>workflowId</strong> of this <strong>data step</strong></li>
-<li>Get data using the tercen api <code>tercen::ctx$select</code></li>
-<li>Execute the <strong>operator app</strong> locally</li>
-<li>Push results back to Tercen using the tercen API <code>tercen::ctx$save</code></li>
-</ul></li>
-</ul>
-<p>The actions above may happen multiple times as you develop your operator. Once the <strong>operator app</strong> is finalized then proceed:</p>
-<p><strong>Deploy the operator</strong>:</p>
-<ul>
-<li>Modify <code>workshop.R</code> and copy it to <code>main.R</code></li>
-<li>Run <code>packrat::init</code>
-This can always re-init packrat by performing the following
-<ul>
-<li>Remove the <code>packrat</code> folder in the Rstudio project folder</li>
-<li>Remove the <code>.Rprofile</code> file in the project folder</li>
-<li>Run <code>packrat::init</code> again</li>
-</ul></li>
-<li>upload to github in a public repository, let call it the operator git repo.</li>
-</ul>
-<p>The process steps for building a <strong>operator app</strong> using R:</p>
-<ul>
-<li>Design the <strong>operator</strong></li>
-<li>Decide which existing operator to clone from Tercen <strong>app-library</strong></li>
-<li>Clone an existing <strong>operator</strong> from the Tercen github</li>
-<li>Re-init the git</li>
-<li>Remove packrat</li>
-<li>Modify the code for <strong>operator</strong></li>
-<li>Run it locally until satisfied</li>
-<li>Add some tests</li>
-<li>Add documentation</li>
-<li>Init the R packrat</li>
-<li>Create and push to a git repository</li>
-<li>Install it into Tercen from <strong>app-library</strong></li>
-<li>Test it on data</li>
-<li>Notify the community it exists (see below)</li>
-</ul>
-<p>The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.</p>
-<p>All the operators apps are version controlled.</p>
-<p>All <strong>operator apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
 </div>
-<div id="notify-the-community-2" class="section level2 unnumbered">
-<h2>Notify the community</h2>
+<div id="setting-up-the-project" class="section level2 unnumbered">
+<h2>Setting up the project</h2>
+<p>Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen and RStudio run locally (respectively on <a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a> and <a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>).</p>
+<p><strong>1. Cloning the template repository</strong></p>
+<p>Get the template from GitHub.
+In RStudio server, File &gt; New project &gt; Version control.
+URL: <a href="https://github.com/tercen/templateR_operator" class="uri">https://github.com/tercen/templateR_operator</a></p>
+<p>Then, I have a new project at the root of my working directory.</p>
+<p><strong>2. Resetting versioning and packrat</strong></p>
+<p>Rename the files.
+Reset the versioning and packrat.</p>
+</div>
+<div id="coding-and-testing-the-operator-locally" class="section level2 unnumbered">
+<h2>Coding and testing the operator locally</h2>
+<p>Coming soon.</p>
+<ul>
+<li><p>How an operator looks like</p></li>
+<li><p>Code description</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(tercen)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4">do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb8-5" title="5">  </a>
+<a class="sourceLine" id="cb8-6" title="6">  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb8-7" title="7">    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb8-8" title="8">    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb8-9" title="9">    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</a>
+<a class="sourceLine" id="cb8-10" title="10">    <span class="dt">slope =</span> <span class="ot">NaN</span>,</a>
+<a class="sourceLine" id="cb8-11" title="11">    <span class="dt">fit.y =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb8-12" title="12">    <span class="dt">fit.x =</span> <span class="kw">rep</span>(<span class="ot">NaN</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb8-13" title="13">  )</a>
+<a class="sourceLine" id="cb8-14" title="14">  </a>
+<a class="sourceLine" id="cb8-15" title="15">  mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df))</a>
+<a class="sourceLine" id="cb8-16" title="16">  </a>
+<a class="sourceLine" id="cb8-17" title="17">  <span class="cf">if</span>(<span class="op">!</span><span class="kw">inherits</span>(mod, <span class="st">&#39;try-error&#39;</span>)) {</a>
+<a class="sourceLine" id="cb8-18" title="18">    out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb8-19" title="19">    out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb8-20" title="20">    out<span class="op">$</span>fit.y &lt;-<span class="st"> </span><span class="kw">range</span>(mod<span class="op">$</span>fitted.values)</a>
+<a class="sourceLine" id="cb8-21" title="21">    out<span class="op">$</span>fit.x &lt;-<span class="st"> </span><span class="kw">range</span>(df<span class="op">$</span>.x)</a>
+<a class="sourceLine" id="cb8-22" title="22">  }</a>
+<a class="sourceLine" id="cb8-23" title="23">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb8-24" title="24">  </a>
+<a class="sourceLine" id="cb8-25" title="25">}</a>
+<a class="sourceLine" id="cb8-26" title="26"></a>
+<a class="sourceLine" id="cb8-27" title="27">(ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>())  <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-28" title="28"><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-29" title="29"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-30" title="30"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-31" title="31"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-32" title="32"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()</a></code></pre></div>
+<p>Implementing the following sanity checks is recommended when creating an operator:</p>
+<ul>
+<li><p>check the presence of expected inputs (here, x and y axes)</p></li>
+<li><p>add a try function to test the main function implemented (here, <code>lm</code>)</p></li>
+</ul>
+<p><strong>Test in tercen</strong></p>
+</div>
+<div id="documenting-the-operator" class="section level2 unnumbered">
+<h2>Documenting the operator</h2>
+<p>Edit the README.md to describe the operator design and usage. The documentation should contain:</p>
+<ul>
+<li><p>A <strong>general description</strong> of the operator</p></li>
+<li><p>A description of the <strong>input projections</strong></p></li>
+<li><p>A description of the <strong>output relations</strong></p></li>
+</ul>
+<p>For example, here is how the <code>lm</code> operator documentation looks:</p>
+<p><strong>Description</strong></p>
+<p>The <code>lm</code> operator performs a linear regression in Tercen.</p>
+<p><strong>Usage</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Input projection</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>y-axis</code></td>
+<td>measurement value</td>
+</tr>
+<tr class="even">
+<td><code>x-axis</code></td>
+<td>explanatory value</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Output relations</th>
+<th>.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>intercept</code></td>
+<td>numeric, p-value calculated per cell</td>
+</tr>
+<tr class="even">
+<td><code>slope</code></td>
+<td>numeric, p-value calculated per cell</td>
+</tr>
+<tr class="odd">
+<td><code>fit.x</code></td>
+<td>numeric, lowest and highest x values</td>
+</tr>
+<tr class="even">
+<td><code>fit.y</code></td>
+<td>numeric, lowest and highest predicted y values</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Details</strong></p>
+<p>The <code>lm</code> operator performs a linear regression on each cell.</p>
+<p><strong>References</strong></p>
+<p>See <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear regression on Wikipedia</a> and
+<code>lm</code> <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">R function documentation</a>.</p>
+<p><strong>See Also</strong></p>
+<p><a href="https://github.com/tercen/anova_operator">anova</a></p>
+</div>
+<div id="deploying-the-operator" class="section level2 unnumbered">
+<h2>Deploying the operator</h2>
+<p><strong>main.R</strong></p>
+<p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file, ignoring the local stuff.</p>
+<p><strong>Init renv</strong></p>
+<p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">renv<span class="op">::</span><span class="kw">init</span>()</a></code></pre></div>
+<p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
+<p><strong>Unit test</strong></p>
+<p>Coming soon.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># Simulate tercen input based on the CO2 dataset </span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co"># with an x and y-axis, rows and columns</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="kw">data</span>(CO2)</a>
+<a class="sourceLine" id="cb10-4" title="4">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">.x =</span> CO2<span class="op">$</span>conc, <span class="dt">.y =</span> CO2<span class="op">$</span>uptake, <span class="dt">.ri =</span> CO2<span class="op">$</span>Plant, <span class="dt">.ci =</span> CO2<span class="op">$</span>Treatment)</a>
+<a class="sourceLine" id="cb10-5" title="5"></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co"># Run the do.lm() function to generate the expected output</span></a>
+<a class="sourceLine" id="cb10-7" title="7">out &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(.ci, .ri, .x, .y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.))</a>
+<a class="sourceLine" id="cb10-10" title="10"></a>
+<a class="sourceLine" id="cb10-11" title="11"><span class="co"># write input and expected output in the test subdirectory</span></a>
+<a class="sourceLine" id="cb10-12" title="12"><span class="kw">write.csv</span>(CO2, <span class="dt">file=</span><span class="st">&quot;./test/CO2.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb10-13" title="13"><span class="kw">write.csv</span>(out, <span class="dt">file=</span><span class="st">&quot;./test/output.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p><strong>Create and push repository</strong></p>
+<p>Coming soon.</p>
+<p><strong>Notify community</strong></p>
 <p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
-</div>
-<div id="r-packrat" class="section level2 unnumbered">
-<h2>R packrat</h2>
-<p>R operators require packages, especially the same version of packages you used when you developed. This package environment is managed by (<code>packrat</code>[<a href="https://rstudio.github.io/packrat/" class="uri">https://rstudio.github.io/packrat/</a>] system is used to manage package versions.. The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science.</p>
-<center>
-<img src="images/goldfish.png" />
-</center>
 
 </div>
 </div>
@@ -285,8 +365,8 @@ This can always re-init packrat by performing the following
           </div>
         </div>
       </div>
-<a href="building-a-workflow-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="building-an-r-operator-app-walkthrough-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="building-an-r-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tercen-app-library.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

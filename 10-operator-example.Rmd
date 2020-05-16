@@ -1,18 +1,29 @@
-# Walkthrough example: building the lm operator
+# Building an R operator app: walkthrough example
 
 Here we will learn through a concrete example how to create an R operator to perform a linear regression.
 
-## Setting up the project {-}
+## Designing the operator {-}
 
-**1. Designing the operator**
+The first step is to define our input projection and output relation. Remember that each operator works on table:
 
-The first step is to define our input projection and outut relation. Remember: "Table in, Table out!"
+> "Table in, table out!"
 
-Here we want to perform the linear regression of y against x in a cell. Our input is simple.
+Here we want to perform the linear regression of y against x in per cell. Our input is simple.
+
+* x axis
+* y axis
+* row ID
+* column ID
 
 As a starting point, we will output the interecept and the slope of the model.
 
-**2. Cloning the template repository**
+* 
+
+## Setting up the project {-}
+
+Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen and RStudio run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/).
+
+**1. Cloning the template repository**
 
 Get the template from GitHub.
 In RStudio server, File > New project > Version control.
@@ -20,12 +31,12 @@ URL: https://github.com/tercen/templateR_operator
 
 Then, I have a new project at the root of my working directory.
 
-**3. Resetting versioning and packrat**
+**2. Resetting versioning and packrat**
 
 Rename the files.
 Reset the versioning and packrat.
 
-## Coding the operator {-}
+## Coding and testing the operator locally {-}
 
 Coming soon.
 
@@ -68,23 +79,93 @@ do.lm <- function(df) {
   ctx$save()
 ```
 
-## Testing the operator locally {-}
+Implementing the following sanity checks is recommended when creating an operator:
 
-Coming soon.
+* check the presence of expected inputs (here, x and y axes)
 
-## Documenting {-}
+* add a try function to test the main function implemented (here, `lm`)
 
-Edit the README.md to describe the operator design and usage.
+**Test in tercen**
+
+## Documenting the operator {-}
+
+Edit the README.md to describe the operator design and usage. The documentation should contain:
+
+* A __general description__ of the operator
+
+* A description of the __input projections__
+
+* A description of the __output relations__
+
+For example, here is how the `lm` operator documentation looks:
+
+**Description**
+
+The `lm` operator performs a linear regression in Tercen.
+
+**Usage**
+
+Input projection|.
+---|---
+`y-axis`| measurement value
+`x-axis`| explanatory value
+
+Output relations|.
+---|---
+`intercept`| numeric, p-value calculated per cell
+`slope`| numeric, p-value calculated per cell
+`fit.x`| numeric, lowest and highest x values
+`fit.y`| numeric, lowest and highest predicted y values
+
+**Details**
+
+The `lm` operator performs a linear regression on each cell.
+
+**References**
+
+See [Linear regression on Wikipedia](https://en.wikipedia.org/wiki/Linear_regression) and
+`lm` [R function documentation](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm).
+
+**See Also**
+
+[anova](https://github.com/tercen/anova_operator)
+
 
 ## Deploying the operator {-}
 
 **main.R**
 
+Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file, ignoring the local stuff.
+
+**Init renv**
+
+The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
+
+```r
+renv::init()
+```
+
+This will initiate a project-local environment with a private R library in the `renv` subdirectory.
+
+**Unit test**
+
 Coming soon.
 
-**Init packrat**
+```r
+# Simulate tercen input based on the CO2 dataset 
+# with an x and y-axis, rows and columns
+data(CO2)
+df <- data.frame(.x = CO2$conc, .y = CO2$uptake, .ri = CO2$Plant, .ci = CO2$Treatment)
 
-Coming soon.
+# Run the do.lm() function to generate the expected output
+out <- df %>% select(.ci, .ri, .x, .y) %>%
+  group_by(.ri, .ci) %>%
+  do(do.lm(.))
+
+# write input and expected output in the test subdirectory
+write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
+write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
+```
 
 **Create and push repository**
 
@@ -92,4 +173,4 @@ Coming soon.
 
 **Notify community**
 
-Coming soon.
+Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__ git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
