@@ -18,6 +18,12 @@ Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen
 
 **1. Set up the tercen input projection**
 
+We will use khan data.
+
+* Pariwise projection of measurement in different tissues
+
+* Look at the URL: (/w/WORKFLOWID/ds/DATASTEPID). It contains unique workflow and data step identififiers. These identifiers will be used in RStudio to communicate with this data step.
+
 **2. Clone the template repository into RStudio**
 
 Create a new repository with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the template repository.
