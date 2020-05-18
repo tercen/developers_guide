@@ -16,127 +16,90 @@ Here we want to perform the linear regression of the values __projected on the y
 
 Make sure that `tercen-studio` is properly set up and that both `Tercen` and `RStudio` run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/). Otherwise, please refer to __Chapter 2__.
 
-**1. Set up the tercen input projection**
+**1. Create a GitHub repository from a template**
 
-In this example, We will use the khan dataset (available on https://github.com/tercen/khan_data).
-
-* Pariwise projection of measurement in different tissues
-
-* Look at the URL: (/w/WORKFLOWID/ds/DATASTEPID). It contains unique workflow and data step identififiers. These identifiers will be used in RStudio to communicate with this data step.
-
-**2. Clone the template repository into RStudio**
-
-Create a new repository with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the template repository.
+__Create a new GitHub repository__ with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the Tercen template repository.
 
 <center><img src="./images/R_operator_example_SETUP2.png" width=1000></img></center>
 
-You will then be able to create your own repository base don this template. Give it an explicit name (here, `lm_operator`).
+Then you can create your own repository based on this template. Choose an explicit name (here, `lm_operator`).
 
-Now that the repository is initiated in your GitHub account, go back to RStudio Server. Create a new project by clicking on File > New project > Version control. You will be asked the URL of the repository, put the newly created one.
+Now that the repository is initiated in your GitHub account, __go back to RStudio Server__ (http://127.0.0.1:8787/). __Create a new project__ by clicking on File > New project > Version control > Git. 
+
+You will be asked the URL of the repository (put the newly created one) and a name for the project. Now, your local project should include the skeleton:
+
+* `main.R`: main operator script
+
+* `workspace.R`: local testing script
+
+* `operator.json`: operator metadata
+
+* `README_template.md`: operator documentation template
+
+* `doc` directory: includes a `dev_commands.md` file, which contains useful development command lines.
 
 
-Includes:
+**2. Set up the Tercen input projection**
 
-* `main.R`
+In this example, We will use the khan dataset (available on https://github.com/tercen/khan_data). First, we start Tercen locally (http://127.0.0.1:5402) and set up a pairwise projection of the measurement in different tissues. The data step of interest should look as follow:
 
-* `workspace.R`
+<center><img src="./images/R_operator_example_DATASTEP.png" width=700></img></center>
 
-* `doc`
-
-**3. Set up the workspace**
-
-* Start Tercen and use your browser to go to http://127.0.0.1:5400
-
-* Login
-
-* Go to the workflow which contains the data
-
-* Add a data step
-
-* Configure a project view in cross-tab window of the data step
-
-```r
-options("tercen.workflowId" = "wwww")
-options("tercen.stepId"     = "dddd")
-```
-
-Rename the files.
-
-**3. Reset and configure versioning**
-
-In the terminal, run:
-
-```bash
-git remote -v
-```
-
-You can see that, as we imported the template from a GitHub repository, the.
-We need to reset this configuration in order to push the operator we will create to the repository of our choice.
-
+Note that the data step URL includes this pattern: `/w/WORKFLOWID/ds/DATASTEPID`, where `WORKFLOWID` and `DATASTEPID` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.
 
 ## Coding and testing the operator locally {-}
 
+Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:
 
-**Testing locally**
+* Open `workspace.R`
 
-Tercen up and running with data step and appropriate input configured.
-
-* Record the stepId and workflowId of this data step
-    
-* Get data using the tercen api tercen::ctx$select
-
-* Execute the operator app locally
-
-* Push results back to Tercen using the tercen API tercen::ctx$save
-
-* Code description
+* Replace the data step and workflow IDs taken from the Tercen data step URL in `workspace.R`:
 
 ```r
 library(tercen)
 library(dplyr)
 
+options("tercen.workflowId" = "WORKFLOWID")
+options("tercen.stepId"     = "DATASTEPID")
+```
+
+* Code your operator. Here, we implement a function `do.lm()` that performs a linear regression on the input data frame and return the slope and intercept of the model.
+
+```r
 do.lm <- function(df) {
-  
   out <- data.frame(
     .ri = df$.ri[1],
     .ci = df$.ci[1],
     intercept = NaN,
-    slope = NaN,
-    fit.y = rep(NaN, 2),
-    fit.x = rep(NaN, 2)
+    slope = NaN
   )
-  
   mod <- try(lm(.y ~ .x, data = df))
-  
   if(!inherits(mod, 'try-error')) {
     out$intercept <- mod$coefficients[1]
     out$slope <- mod$coefficients[2]
-    out$fit.y <- range(mod$fitted.values)
-    out$fit.x <- range(df$.x)
   }
   return(out)
-  
 }
 
-(ctx <- tercenCtx())  %>% 
-  select(.x, .y, .ri, .ci) %>% 
-  group_by(.ri, .ci) %>%
-  do(do.lm(.)) %>%
-  ctx$addNamespace() %>%
-  ctx$save()
+ctx <- tercenCtx()  %>%          # Get data from the data step
+  select(.x, .y, .ri, .ci) %>%   # select variables of interest
+  group_by(.ri, .ci) %>%         # group by row and column ("per cell")
+  do(do.lm(.)) %>%               # do the linear model
+  ctx$addNamespace() %>%         # add namespace
+  ctx$save()                     # push results back to Tercen using the API
 ```
 
-Implementing the following sanity checks is recommended when creating an operator:
+* __Execute the code__ and __check the results__ in Tercen
 
-* check the presence of expected inputs (here, x and y axes)
+Note that we recommend to implement the following __sanity checks__ when creating an operator:
 
-* add a try function to test the main function implemented (here, `lm`)
+* check the presence of __expected inputs__ (here, x and y axes)
 
-**Test in tercen**
+* use the __`try()` function__ to test the main function implemented (here, `lm()`)
 
 ## Documenting the operator {-}
 
-Edit the README.md to describe the operator design and usage. The documentation should contain:
+Edit the `README.md` to describe the operator design and usage. The documentation should contain:
 
 * A __general description__ of the operator
 
@@ -168,17 +131,17 @@ Output relations|
 The `lm` operator performs a linear regression on each cell and returns the slope and intercept of the model.
 
 
-## Preparing some unit testing
+## Preparing some unit testing {-}
 
 It's always good to prepare some unit tests that could be ran when a new version of Tercen is released.
 
-To include a test, you need to create a subdirectory called `test` in your project directory. It must include:
+To include a test, you need to __create a `test` subdirectory__ in your project directory. It must include:
 
-* a test input file
+* a test __input file__
 
-* an expected output file
+* an expected __output file__
 
-* a `json` file containing information about the test
+* a __`JSON` file__ containing information about the test
 
 For example, a test for our `lm` operator can be created as follow:
 
@@ -197,7 +160,7 @@ out <- df %>% select(.ci, .ri, .x, .y) %>%
 write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
 write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
 ```
-Now that we have our input and ouput files, we can create the `JSON` file that shall include the following information:
+Now that we have our input and ouput files, we can __create the `JSON` file__ that shall include the following information:
 
 ```json
 {
