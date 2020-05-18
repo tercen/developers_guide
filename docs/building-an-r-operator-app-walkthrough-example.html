@@ -190,22 +190,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="building-an-r-operator-app-walkthrough-example" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Building an R operator app: walkthrough example</h1>
-<p>Here we will learn through a concrete example how to create an R operator to perform a linear regression.</p>
+<p>Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a <strong>linear regression</strong> on our input data and returning the slope and intercept of the model.</p>
 <div id="designing-the-operator" class="section level2 unnumbered">
 <h2>Designing the operator</h2>
-<p>The first step is to define our input projection and output relation. Remember that each operator works on tables:</p>
+<p>The first step is to define our <strong>input projection</strong> and <strong>output relation</strong>. In Tercen, each operator shall take as input a table and return a table. Remember:</p>
 <blockquote>
-<p>“Table in, table out!”</p>
+<p>“<strong>Table in, table out!</strong>”</p>
 </blockquote>
-<p>Here we want to perform the linear regression of y against x in per cell. Our input is simple. In this example, we will output the intercept and the slope of the model.</p>
+<p>Here we want to perform the linear regression of the values <strong>projected on the y axis</strong> against the values <strong>projected on the x axis</strong>, <strong>per cell</strong>. In this example, we will output only the intercept and the slope of the model, <strong>per cell</strong>. The operator model can be seen as follow:</p>
 <center>
 <img src="images/R_operator_example_MODEL.png" width=500></img>
 </center>
 </div>
 <div id="setting-up-the-project" class="section level2 unnumbered">
 <h2>Setting up the project</h2>
-<p>Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen and RStudio run locally (respectively on <a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a> and <a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>).</p>
+<p>Make sure that <code>tercen-studio</code> is properly set up and that both <code>Tercen</code> and <code>RStudio</code> run locally (respectively on <a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a> and <a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>). Otherwise, please refer to <strong>Chapter 2</strong>.</p>
 <p><strong>1. Set up the tercen input projection</strong></p>
+<p>In this example, We will use the khan dataset (available on <a href="https://github.com/tercen/khan_data" class="uri">https://github.com/tercen/khan_data</a>).</p>
+<ul>
+<li><p>Pariwise projection of measurement in different tissues</p></li>
+<li><p>Look at the URL: (/w/WORKFLOWID/ds/DATASTEPID). It contains unique workflow and data step identififiers. These identifiers will be used in RStudio to communicate with this data step.</p></li>
+</ul>
 <p><strong>2. Clone the template repository into RStudio</strong></p>
 <p>Create a new repository with your own account based on the Tercen R operator template (<a href="https://github.com/tercen/templateR_operator" class="uri">https://github.com/tercen/templateR_operator</a>). Click on the green button <strong>Use this template</strong> in the template repository.</p>
 <center>
@@ -335,28 +340,24 @@ We need to reset this configuration in order to push the operator we will create
 </tbody>
 </table>
 <p><strong>Details</strong></p>
-<p>The <code>lm</code> operator performs a linear regression on each cell.</p>
-<p><strong>References</strong></p>
-<p>See <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear regression on Wikipedia</a> and
-<code>lm</code> <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">R function documentation</a>.</p>
-<p><strong>See Also</strong></p>
-<p><a href="https://github.com/tercen/anova_operator">anova</a></p>
+<p>The <code>lm</code> operator performs a linear regression on each cell and returns the slope and intercept of the model.</p>
 </div>
 <div id="preparing-some-unit-testing" class="section level2">
 <h2><span class="header-section-number">6.1</span> Preparing some unit testing</h2>
-<p>It’s always good to prepare some tests to be ran for example during Tercen updates.</p>
+<p>It’s always good to prepare some unit tests that could be ran when a new version of Tercen is released.</p>
+<p>To include a test, you need to create a subdirectory called <code>test</code> in your project directory. It must include:</p>
 <ul>
-<li><p>subdirectory <code>test</code></p></li>
-<li><p>input file</p></li>
-<li><p>expected output file</p></li>
-<li><p><code>json</code> file describing the test</p></li>
+<li><p>a test input file</p></li>
+<li><p>an expected output file</p></li>
+<li><p>a <code>json</code> file containing information about the test</p></li>
 </ul>
+<p>For example, a test for our <code>lm</code> operator can be created as follow:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># Simulate tercen input based on the CO2 dataset </span></a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="co"># with an x and y-axis, rows and columns</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="kw">data</span>(CO2)</a>
 <a class="sourceLine" id="cb11-4" title="4">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">.x =</span> CO2<span class="op">$</span>conc, <span class="dt">.y =</span> CO2<span class="op">$</span>uptake, <span class="dt">.ri =</span> CO2<span class="op">$</span>Plant, <span class="dt">.ci =</span> CO2<span class="op">$</span>Treatment)</a>
 <a class="sourceLine" id="cb11-5" title="5"></a>
-<a class="sourceLine" id="cb11-6" title="6"><span class="co"># Run the do.lm() function to generate the expected output</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co"># Run the do.lm() function created above to generate the expected output</span></a>
 <a class="sourceLine" id="cb11-7" title="7">out &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(.ci, .ri, .x, .y) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-8" title="8"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-9" title="9"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.))</a>
@@ -364,17 +365,40 @@ We need to reset this configuration in order to push the operator we will create
 <a class="sourceLine" id="cb11-11" title="11"><span class="co"># write input and expected output in the test subdirectory</span></a>
 <a class="sourceLine" id="cb11-12" title="12"><span class="kw">write.csv</span>(CO2, <span class="dt">file=</span><span class="st">&quot;./test/CO2.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb11-13" title="13"><span class="kw">write.csv</span>(out, <span class="dt">file=</span><span class="st">&quot;./test/output.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Now that we have our input and ouput files, we can create the <code>JSON</code> file that shall include the following information:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb12-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb12-2" title="2">  <span class="dt">&quot;kind&quot;</span><span class="fu">:</span> <span class="st">&quot;OperatorUnitTest&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-3" title="3">  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;testlm1&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-4" title="4">  <span class="dt">&quot;namespace&quot;</span><span class="fu">:</span> <span class="st">&quot;test&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-5" title="5">  <span class="dt">&quot;inputDataUri&quot;</span><span class="fu">:</span> <span class="st">&quot;CO2.csv&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-6" title="6">  <span class="dt">&quot;outputDataUri&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;output.csv&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-7" title="7">  <span class="dt">&quot;columns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Treatment&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-8" title="8">  <span class="dt">&quot;rows&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Plant&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-9" title="9">  <span class="dt">&quot;colors&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-10" title="10">  <span class="dt">&quot;labels&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-11" title="11">  <span class="dt">&quot;yAxis&quot;</span><span class="fu">:</span> <span class="st">&quot;uptake&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-12" title="12">  <span class="dt">&quot;xAxis&quot;</span><span class="fu">:</span> <span class="st">&quot;conc&quot;</span></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="fu">}</span></a></code></pre></div>
+<p>The <code>name</code> attribute is free. Input and output test files names must be assigned to the <code>inputDataUri</code> and <code>inputDataUri</code>, respectively. Variable names of the input file must be assigned to the <code>columns</code>, <code>rows</code>, <code>colors</code>, <code>labels</code>, <code>yAxis</code>, <code>xAxis</code> attributes. In our case, <code>colors</code> and <code>labels</code> are left empty as they are not part of our input.</p>
 </div>
 <div id="deploying-the-operator" class="section level2 unnumbered">
 <h2>Deploying the operator</h2>
 <p><strong>1. Copy the code to the main.R script</strong></p>
-<p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file, ignoring the local stuff.</p>
+<p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file.</p>
+<p>Make sure not to include the <code>options()</code> calls that are only needed during the local development step:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># The following lines shall not be included into main.R:</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;wwww&quot;</span>)</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;dddd&quot;</span>)</a>
+<a class="sourceLine" id="cb13-4" title="4"></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="kw">getOption</span>(<span class="st">&quot;tercen.workflowId&quot;</span>)</a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="kw">getOption</span>(<span class="st">&quot;tercen.stepId&quot;</span>)</a></code></pre></div>
 <p><strong>2. Initiate renv</strong></p>
 <p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">renv<span class="op">::</span><span class="kw">init</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">renv<span class="op">::</span><span class="kw">init</span>()</a></code></pre></div>
 <p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
 <p><strong>3. Push it to your GitHub repository</strong></p>
-<p>Once everything is ready, you can push the modifications to your GitHub repository.</p>
+<p>Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.</p>
+<p>If you want to install it directly from <code>Tercen</code>, you will need to <a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">create a release in GitHub</a>.</p>
 <p><strong>4. Notify community</strong></p>
 <p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
 <center>

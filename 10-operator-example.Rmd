@@ -1,24 +1,24 @@
 # Building an R operator app: walkthrough example
 
-Here we will learn through a concrete example how to create an R operator to perform a linear regression.
+Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
 
 ## Designing the operator {-}
 
-The first step is to define our input projection and output relation. Remember that each operator works on tables:
+The first step is to define our __input projection__ and __output relation__. In Tercen, each operator shall take as input a table and return a table. Remember:
 
-> "Table in, table out!"
+> "__Table in, table out!__"
 
-Here we want to perform the linear regression of y against x in per cell. Our input is simple. In this example, we will output the intercept and the slope of the model.
+Here we want to perform the linear regression of the values __projected on the y axis__ against the values __projected on the x axis__, __per cell__. In this example, we will output only the intercept and the slope of the model, __per cell__. The operator model can be seen as follow: 
 
 <center><img src="./images/R_operator_example_MODEL.png" width=500></img></center>
 
 ## Setting up the project {-}
 
-Make sure that tercen-studio is properly set up (Chapter 2) and that both Tercen and RStudio run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/).
+Make sure that `tercen-studio` is properly set up and that both `Tercen` and `RStudio` run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/). Otherwise, please refer to __Chapter 2__.
 
 **1. Set up the tercen input projection**
 
-We will use khan data.
+In this example, We will use the khan dataset (available on https://github.com/tercen/khan_data).
 
 * Pariwise projection of measurement in different tissues
 
@@ -165,28 +165,22 @@ Output relations|
 
 **Details**
 
-The `lm` operator performs a linear regression on each cell.
+The `lm` operator performs a linear regression on each cell and returns the slope and intercept of the model.
 
-**References**
-
-See [Linear regression on Wikipedia](https://en.wikipedia.org/wiki/Linear_regression) and
-`lm` [R function documentation](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm).
-
-**See Also**
-
-[anova](https://github.com/tercen/anova_operator)
 
 ## Preparing some unit testing
 
-It's always good to prepare some tests to be ran for example during Tercen updates.
+It's always good to prepare some unit tests that could be ran when a new version of Tercen is released.
 
-* subdirectory `test`
+To include a test, you need to create a subdirectory called `test` in your project directory. It must include:
 
-* input file
+* a test input file
 
-* expected output file
+* an expected output file
 
-* `json` file describing the test
+* a `json` file containing information about the test
+
+For example, a test for our `lm` operator can be created as follow:
 
 ```r
 # Simulate tercen input based on the CO2 dataset 
@@ -194,7 +188,7 @@ It's always good to prepare some tests to be ran for example during Tercen updat
 data(CO2)
 df <- data.frame(.x = CO2$conc, .y = CO2$uptake, .ri = CO2$Plant, .ci = CO2$Treatment)
 
-# Run the do.lm() function to generate the expected output
+# Run the do.lm() function created above to generate the expected output
 out <- df %>% select(.ci, .ri, .x, .y) %>%
   group_by(.ri, .ci) %>%
   do(do.lm(.))
@@ -203,14 +197,41 @@ out <- df %>% select(.ci, .ri, .x, .y) %>%
 write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
 write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
 ```
+Now that we have our input and ouput files, we can create the `JSON` file that shall include the following information:
 
-
+```json
+{
+  "kind": "OperatorUnitTest",
+  "name": "testlm1",
+  "namespace": "test",
+  "inputDataUri": "CO2.csv",
+  "outputDataUri": ["output.csv"],
+  "columns": ["Treatment"],
+  "rows": ["Plant"],
+  "colors": [],
+  "labels": [],
+  "yAxis": "uptake",
+  "xAxis": "conc"
+}
+```
+The `name` attribute is free. Input and output test files names must be assigned to the `inputDataUri` and `inputDataUri`, respectively. Variable names of the input file must be assigned to the `columns`, `rows`, `colors`, `labels`, `yAxis`, `xAxis` attributes. In our case,  `colors` and `labels` are left empty as they are not part of our input.
 
 ## Deploying the operator {-}
 
 **1. Copy the code to the main.R script**
 
-Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file, ignoring the local stuff.
+Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file.
+
+Make sure not to include the `options()` calls that are only needed during the local development step:
+
+```r
+# The following lines shall not be included into main.R:
+options("tercen.workflowId" = "wwww")
+options("tercen.stepId"     = "dddd")
+
+getOption("tercen.workflowId")
+getOption("tercen.stepId")
+```
 
 **2. Initiate renv**
 
@@ -224,7 +245,9 @@ This will initiate a project-local environment with a private R library in the `
 
 **3. Push it to your GitHub repository**
 
-Once everything is ready, you can push the modifications to your GitHub repository.
+Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.
+
+If you want to install it directly from `Tercen`, you will need to [create a release in GitHub](https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
 
 **4. Notify community**
 
