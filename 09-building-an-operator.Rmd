@@ -1,6 +1,6 @@
-# Building an R operator app
+# Building an operator app
 
-## Creating an operator app {-}
+## Designing the operator {-}
 
 Tercen allows programmers to easily build new operators from the comfort of their favorite interactive development environment (IDE). From the IDE it is possible to access all Tercen features. The ability to access the input data (from Tercen) and returning results (to Tercen) is essential.  
 
@@ -9,6 +9,9 @@ The ability to create a new Tercen operator requires basic programming skills.
 Here is a development process to create an __operator app__:
 
 __Design the operator__:
+
+
+## Coding the operator {-}
 
 __Creating the project__:
 
@@ -68,7 +71,7 @@ The process steps for building a __operator app__ using R:
 * Run it locally until satisfied
 * Add some tests
 * Add documentation
-* Init the R packrat
+* Init renv
 * Create and push to a git repository
 * Install it into Tercen from __app-library__
 * Test it on data
@@ -83,10 +86,5 @@ All __operator apps__ who are on a git repository are installable, only the git 
 ## Notify the community {-}
 
 Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__  git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
-
-## R packrat {-}
-
-R operators require packages, especially the same version of packages you used when you developed. This package environment is managed by (`packrat`[https://rstudio.github.io/packrat/] system is used to manage package versions.. The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science.
-
 
 <center>![](images/goldfish.png)</center>
