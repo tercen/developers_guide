@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Tercen app library | App builder’s guide to Tercen</title>
+  <title>Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Tercen app library | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Tercen app library | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="building-an-r-operator-app-walkthrough-example.html"/>
-<link rel="next" href="known-issues.html"/>
+<link rel="prev" href="building-a-workflow-app.html"/>
+<link rel="next" href="building-an-r-operator-app-walkthrough-example.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -191,29 +191,129 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="tercen-app-library" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Tercen app library</h1>
-<p>The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it.</p>
-<p>Anyone can request an app be added to the Tercen <strong>app library</strong>.</p>
-<p>Here are the steps for adding it to Tercen <strong>app library</strong>:</p>
-<ul>
-<li>Notify Tercen support (<a href="mailto:info@tercen.om" class="email">info@tercen.om</a>) regarding your wish to add it to <strong>app-library</strong></li>
-<li>Tercen support tests the app</li>
-<li>Tercen support modifies the <strong>app-library</strong> repository (publish)</li>
-<li>Tercen support send email to indicate it is available</li>
-</ul>
+<div id="building-an-operator-app-general-procedure" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Building an operator app: general procedure</h1>
+<p>Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a <strong>linear regression</strong> on our input data and returning the slope and intercept of the model.</p>
+<div id="designing-the-operator" class="section level2 unnumbered">
+<h2>Designing the operator</h2>
+<p>The first step is to define our <strong>input projection</strong> and <strong>output relation</strong>. In Tercen, each operator shall take as input a table and return a table. Remember:</p>
+<blockquote>
+<p>“<strong>Table in, table out!</strong>”</p>
+</blockquote>
+<p>The <strong>operator model</strong> can be seen as follow:</p>
 <center>
-<img src="images/alpha2beta.png" />
+<img src="images/R_operator_example_MODEL.png" width=500></img>
+</center>
+</div>
+<div id="setting-up-the-project" class="section level2 unnumbered">
+<h2>Setting up the project</h2>
+<p>Make sure that <code>tercen-studio</code> is properly set up and that both <code>Tercen</code> and <code>RStudio</code> run locally (respectively on <a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a> and <a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>). Otherwise, please refer to <strong>Chapter 2</strong>.</p>
+<p><strong>1. Create a GitHub repository from a template</strong></p>
+<p><strong>Create a new GitHub repository</strong> with your own account based on the Tercen R operator template (<a href="https://github.com/tercen/templateR_operator" class="uri">https://github.com/tercen/templateR_operator</a>). Click on the green button <strong>Use this template</strong> in the Tercen template repository.</p>
+<center>
+<img src="images/R_operator_example_SETUP2.png" width=1000></img>
+</center>
+<p>Then you can create your own repository based on this template. Choose an explicit name.</p>
+<p>Now that the repository is initiated in your GitHub account, <strong>go back to RStudio Server</strong> (<a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>). <strong>Create a new project</strong> by clicking on File &gt; New project &gt; Version control &gt; Git.</p>
+<p>You will be asked the URL of the repository (put the newly created one) and a name for the project. Now, your local project should include the skeleton:</p>
+<ul>
+<li><p><code>main.R</code>: main operator script</p></li>
+<li><p><code>workspace.R</code>: local testing script</p></li>
+<li><p><code>operator.json</code>: operator metadata</p></li>
+<li><p><code>README_template.md</code>: operator documentation template</p></li>
+<li><p><code>doc</code> directory: includes a <code>dev_commands.md</code> file, which contains useful development command lines.</p></li>
+</ul>
+<p><strong>2. Set up the Tercen input projection</strong></p>
+<p>First, start Tercen locally (<a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a>) and set up the desired projection with a data step.</p>
+<p>Note that the data step URL includes this pattern: <code>/w/WORKFLOWID/ds/DATASTEPID</code>, where <code>WORKFLOWID</code> and <code>DATASTEPID</code> are <strong>unique workflow and data step identifiers</strong>, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.</p>
+</div>
+<div id="coding-and-testing-the-operator-locally" class="section level2 unnumbered">
+<h2>Coding and testing the operator locally</h2>
+<p>Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:</p>
+<ul>
+<li><p>Open <code>workspace.R</code></p></li>
+<li><p>Replace the data step and workflow IDs taken from the Tercen data step URL in <code>workspace.R</code>:</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">library</span>(tercen)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;WORKFLOWID&quot;</span>)</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;DATASTEPID&quot;</span>)</a></code></pre></div>
+<ul>
+<li>Code your operator.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">do.task &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb4-2" title="2">  <span class="co"># Code performing your task</span></a>
+<a class="sourceLine" id="cb4-3" title="3">}</a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5">ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>()  <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># Get data from the data step</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># select variables of interest</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># group by row and column (&quot;per cell&quot;)</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.task</span>(.)) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># do the task</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># add namespace</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()                     <span class="co"># push results back to Tercen using the API</span></a></code></pre></div>
+<ul>
+<li><strong>Execute the code</strong> and <strong>check the results</strong> in Tercen</li>
+</ul>
+<p>Note that we recommend to implement the following <strong>sanity checks</strong> when creating an operator:</p>
+<ul>
+<li><p>check the presence of <strong>expected inputs</strong></p></li>
+<li><p>use the <strong><code>try()</code> function</strong> to test the main function implemented (here, <code>lm()</code>)</p></li>
+</ul>
+</div>
+<div id="documenting-the-operator" class="section level2 unnumbered">
+<h2>Documenting the operator</h2>
+<p>Edit the <code>README.md</code> to describe the operator design and usage. The documentation should contain:</p>
+<ul>
+<li><p>A <strong>general description</strong> of the operator</p></li>
+<li><p>A description of the <strong>input projections</strong></p></li>
+<li><p>A description of the <strong>output relations</strong></p></li>
+</ul>
+</div>
+<div id="preparing-some-unit-testing" class="section level2 unnumbered">
+<h2>Preparing some unit testing</h2>
+<p>It’s always good to prepare some unit tests that could be ran when a new version of Tercen is released.</p>
+<p>To include a test, you need to <strong>create a <code>test</code> subdirectory</strong> in your project directory. It must include:</p>
+<ul>
+<li><p>a test <strong>input file</strong></p></li>
+<li><p>an expected <strong>output file</strong></p></li>
+<li><p>a <strong><code>JSON</code> file</strong> containing information about the test</p></li>
+</ul>
+</div>
+<div id="deploying-the-operator" class="section level2 unnumbered">
+<h2>Deploying the operator</h2>
+<p><strong>1. Copy the code to the main.R script</strong></p>
+<p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file.</p>
+<p>Make sure not to include the <code>options()</code> calls that are only needed during the local development step:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># The following lines shall not be included into main.R:</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;wwww&quot;</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;dddd&quot;</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4"></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="kw">getOption</span>(<span class="st">&quot;tercen.workflowId&quot;</span>)</a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="kw">getOption</span>(<span class="st">&quot;tercen.stepId&quot;</span>)</a></code></pre></div>
+<p><strong>2. Initiate renv</strong></p>
+<p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">renv<span class="op">::</span><span class="kw">init</span>()</a></code></pre></div>
+<p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
+<p><strong>3. Push it to your GitHub repository</strong></p>
+<p>Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.</p>
+<p>If you want to install it directly from <code>Tercen</code>, you will need to <a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">create a release in GitHub</a>. All the operators apps are version controlled.</p>
+<p>All <strong>operator apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
+<p><strong>4. Notify community</strong></p>
+<p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
+<center>
+<img src="images/goldfish.png" />
 </center>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="building-an-r-operator-app-walkthrough-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="known-issues.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="building-a-workflow-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="building-an-r-operator-app-walkthrough-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

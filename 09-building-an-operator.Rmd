@@ -1,90 +1,150 @@
-# Building an operator app
+# Building an operator app: general procedure
+
+Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
 
 ## Designing the operator {-}
 
-Tercen allows programmers to easily build new operators from the comfort of their favorite interactive development environment (IDE). From the IDE it is possible to access all Tercen features. The ability to access the input data (from Tercen) and returning results (to Tercen) is essential.  
+The first step is to define our __input projection__ and __output relation__. In Tercen, each operator shall take as input a table and return a table. Remember:
 
-The ability to create a new Tercen operator requires basic programming skills.
+> "__Table in, table out!__"
 
-Here is a development process to create an __operator app__:
+The **operator model** can be seen as follow: 
 
-__Design the operator__:
+<center><img src="./images/R_operator_example_MODEL.png" width=500></img></center>
+
+## Setting up the project {-}
+
+Make sure that `tercen-studio` is properly set up and that both `Tercen` and `RStudio` run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/). Otherwise, please refer to __Chapter 2__.
+
+**1. Create a GitHub repository from a template**
+
+__Create a new GitHub repository__ with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the Tercen template repository.
+
+<center><img src="./images/R_operator_example_SETUP2.png" width=1000></img></center>
+
+Then you can create your own repository based on this template. Choose an explicit name.
+
+Now that the repository is initiated in your GitHub account, __go back to RStudio Server__ (http://127.0.0.1:8787/). __Create a new project__ by clicking on File > New project > Version control > Git. 
+
+You will be asked the URL of the repository (put the newly created one) and a name for the project. Now, your local project should include the skeleton:
+
+* `main.R`: main operator script
+
+* `workspace.R`: local testing script
+
+* `operator.json`: operator metadata
+
+* `README_template.md`: operator documentation template
+
+* `doc` directory: includes a `dev_commands.md` file, which contains useful development command lines.
 
 
-## Coding the operator {-}
+**2. Set up the Tercen input projection**
 
-__Creating the project__:
+First, start Tercen locally (http://127.0.0.1:5402) and set up the desired projection with a data step.
 
-* Open R Studio and create an empty project and init the git
-* Copy four files into project, you can find them in any operator in tercen github.
-    + `operator.json`
-    + `main.R`
-    + `README.md`
-    + `.gitignore`
-* Modify appropriately each of the files 
-* Create  the `workspace.R` file by:
-    + Copy `main.R` and rename to `workspace.R` file
-    + Add the following lines to `workspace.R` file:
+Note that the data step URL includes this pattern: `/w/WORKFLOWID/ds/DATASTEPID`, where `WORKFLOWID` and `DATASTEPID` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.
+
+## Coding and testing the operator locally {-}
+
+Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:
+
+* Open `workspace.R`
+
+* Replace the data step and workflow IDs taken from the Tercen data step URL in `workspace.R`:
+
+```r
+library(tercen)
+library(dplyr)
+
+options("tercen.workflowId" = "WORKFLOWID")
+options("tercen.stepId"     = "DATASTEPID")
 ```
-source('~/.Rprofile')
-options("tercen.workflowId"= "76a4dcffd551802fd23d42bd862e8300")
-options("tercen.stepId"= "3-2")
+
+* Code your operator.
+
+```r
+do.task <- function(df) {
+  # Code performing your task
+}
+
+ctx <- tercenCtx()  %>%          # Get data from the data step
+  select(.x, .y, .ri, .ci) %>%   # select variables of interest
+  group_by(.ri, .ci) %>%         # group by row and column ("per cell")
+  do(do.task(.)) %>%             # do the task
+  ctx$addNamespace() %>%         # add namespace
+  ctx$save()                     # push results back to Tercen using the API
 ```
-The values indicated above are examples. The real values come from the next section.
 
-__Writing and testing the operator app__:
+* __Execute the code__ and __check the results__ in Tercen
 
-* Develop and test the __operator app__ within the `workspace.R` file
-* Determine the input data for the __operator app__
-    + Start Tercen
-    + Use the browser to go to http://127.0.0.1:5400
-    + Login
-    + Go to the workflow which contains the data
-    + Add a __data step__
-    + Configure a project view in cross-tab window of the __data step__
-    + Record the __stepId__ and __workflowId__ of this __data step__
-    + Get data using the tercen api `tercen::ctx$select`
-    + Execute the __operator app__ locally 
-    + Push results back to Tercen using the tercen API `tercen::ctx$save`
-  
-The actions above may happen multiple times as you develop your operator. Once the __operator app__ is finalized then proceed:
+Note that we recommend to implement the following __sanity checks__ when creating an operator:
 
-__Deploy the operator__:
+* check the presence of __expected inputs__ 
 
-* Modify `workshop.R` and copy it to `main.R` 
-* Run `packrat::init`
-This can always re-init packrat by performing the following
-    + Remove the `packrat` folder in the Rstudio project folder
-    + Remove the `.Rprofile` file in the project folder
-    + Run `packrat::init` again
-* upload to github in a public repository, let call it the operator git repo.
+* use the __`try()` function__ to test the main function implemented (here, `lm()`)
+
+## Documenting the operator {-}
+
+Edit the `README.md` to describe the operator design and usage. The documentation should contain:
+
+* A __general description__ of the operator
+
+* A description of the __input projections__
+
+* A description of the __output relations__
+
+## Preparing some unit testing {-}
+
+It's always good to prepare some unit tests that could be ran when a new version of Tercen is released.
+
+To include a test, you need to __create a `test` subdirectory__ in your project directory. It must include:
+
+* a test __input file__
+
+* an expected __output file__
+
+* a __`JSON` file__ containing information about the test
 
 
-The process steps for building a __operator app__ using R:
+## Deploying the operator {-}
 
-* Design the __operator__
-* Decide which existing operator to clone from Tercen __app-library__
-* Clone an existing __operator__ from the Tercen github
-* Re-init the git
-* Remove packrat
-* Modify the code for __operator__
-* Run it locally until satisfied
-* Add some tests
-* Add documentation
-* Init renv
-* Create and push to a git repository
-* Install it into Tercen from __app-library__
-* Test it on data
-* Notify the community it exists (see below)
+**1. Copy the code to the main.R script**
 
-The building and deployment steps are performed in your development environment (e.g. R Studio) and Git hub.
+Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file.
 
-All the operators apps are version controlled.
+Make sure not to include the `options()` calls that are only needed during the local development step:
+
+```r
+# The following lines shall not be included into main.R:
+options("tercen.workflowId" = "wwww")
+options("tercen.stepId"     = "dddd")
+
+getOption("tercen.workflowId")
+getOption("tercen.stepId")
+```
+
+**2. Initiate renv**
+
+The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
+
+```r
+renv::init()
+```
+
+This will initiate a project-local environment with a private R library in the `renv` subdirectory.
+
+**3. Push it to your GitHub repository**
+
+Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.
+
+If you want to install it directly from `Tercen`, you will need to [create a release in GitHub](https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository). All the operators apps are version controlled.
 
 All __operator apps__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
 
-## Notify the community {-}
+**4. Notify community**
 
-Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__  git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+Currently, we ask you to send an email to info@tercen.com containing the description and link to the __operators app__ git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+
 
 <center>![](images/goldfish.png)</center>

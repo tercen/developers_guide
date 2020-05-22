@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Tercen app library | App builder’s guide to Tercen</title>
+  <title>Chapter 11 Appendix | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Tercen app library | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 11 Appendix | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Tercen app library | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 11 Appendix | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="building-an-r-operator-app-walkthrough-example.html"/>
-<link rel="next" href="known-issues.html"/>
+<link rel="prev" href="glossary.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -191,29 +191,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="tercen-app-library" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Tercen app library</h1>
-<p>The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it.</p>
-<p>Anyone can request an app be added to the Tercen <strong>app library</strong>.</p>
-<p>Here are the steps for adding it to Tercen <strong>app library</strong>:</p>
-<ul>
-<li>Notify Tercen support (<a href="mailto:info@tercen.om" class="email">info@tercen.om</a>) regarding your wish to add it to <strong>app-library</strong></li>
-<li>Tercen support tests the app</li>
-<li>Tercen support modifies the <strong>app-library</strong> repository (publish)</li>
-<li>Tercen support send email to indicate it is available</li>
-</ul>
-<center>
-<img src="images/alpha2beta.png" />
-</center>
+<div id="appendix" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Appendix</h1>
+<div id="updating-tercen-studio" class="section level2 unnumbered">
+<h2>Updating tercen-studio</h2>
+<p>You can <strong>update tercen-studio</strong> by running:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># stop tercen_studio</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="ex">docker-compose</span> down        </a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co"># get tercen_studio latest version           </span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="fu">git</span> pull</a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="ex">docker-compose</span> pull</a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co"># start tercen_studio</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="ex">docker-compose</span> up -d</a></code></pre></div>
+</div>
+<div id="uninstallation-of-tercen-studio" class="section level2 unnumbered">
+<h2>Uninstallation of tercen-studio</h2>
+<p>To <strong>uninstall tercen-studio</strong>, you need to run:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" title="1"><span class="ex">docker-compose</span> down</a>
+<a class="sourceLine" id="cb14-2" title="2"></a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="co"># check tercen docker volumes names</span></a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="ex">docker</span> volume ls</a>
+<a class="sourceLine" id="cb14-5" title="5"></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="co"># delete tercen docker volumes</span></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="ex">docker</span> volume rm tercen_studio_couchdb-data</a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="ex">docker</span> volume rm tercen_studio_tercen-data</a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="ex">docker</span> volume rm tercen_studio_tercen-studio-data</a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="ex">docker</span> volume rm tercen_studio_tercen-studio-renv</a></code></pre></div>
+</div>
+<div id="building-tercen-studio" class="section level2 unnumbered">
+<h2>Building tercen-studio</h2>
+<p>If you need to <strong>build tercen-studio</strong>, run the following code:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" title="1"><span class="bu">cd</span> docker</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="ex">docker</span> build -t tercen/tercen_studio:0.9.2.9 .</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="ex">docker</span> history --no-trunc tercen_studio:0.9.2.9</a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="ex">docker</span> push tercen/tercen_studio:0.9.2.9</a></code></pre></div>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="building-an-r-operator-app-walkthrough-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="known-issues.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="glossary.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
