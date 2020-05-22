@@ -1,4 +1,4 @@
-# Setting up the environment
+# Setting up tercen-studio
 
 If you wish to develop __operators__ then you require to have a programming development environment.
 

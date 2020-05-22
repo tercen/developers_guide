@@ -2,7 +2,7 @@
 
 Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
 
-## Designing the operator {-}
+## Design the operator {-}
 
 The first step is to define our __input projection__ and __output relation__. In Tercen, each operator shall take as input a table and return a table. Remember:
 
@@ -10,42 +10,27 @@ The first step is to define our __input projection__ and __output relation__. In
 
 The **operator model** can be seen as follow: 
 
-<center><img src="./images/R_operator_example_MODEL.png" width=500></img></center>
+<center><img src="./images/operator_MODEL.png" width=500></img></center>
 
-## Setting up the project {-}
+## Set up a project from a template {-}
 
 Make sure that `tercen-studio` is properly set up and that both `Tercen` and `RStudio` run locally (respectively on http://127.0.0.1:5402 and http://127.0.0.1:8787/). Otherwise, please refer to __Chapter 2__.
 
 **1. Create a GitHub repository from a template**
 
-__Create a new GitHub repository__ with your own account based on the Tercen R operator template (https://github.com/tercen/templateR_operator). Click on the green button __Use this template__ in the Tercen template repository.
+* __Create a new GitHub repository__ with your own account based on a Tercen operator template that you can find on GitHub (https://github.com/tercen/).
 
-<center><img src="./images/R_operator_example_SETUP2.png" width=1000></img></center>
+* Then you can create your own repository based on this template. Choose an explicit name.
 
-Then you can create your own repository based on this template. Choose an explicit name.
-
-Now that the repository is initiated in your GitHub account, __go back to RStudio Server__ (http://127.0.0.1:8787/). __Create a new project__ by clicking on File > New project > Version control > Git. 
-
-You will be asked the URL of the repository (put the newly created one) and a name for the project. Now, your local project should include the skeleton:
-
-* `main.R`: main operator script
-
-* `workspace.R`: local testing script
-
-* `operator.json`: operator metadata
-
-* `README_template.md`: operator documentation template
-
-* `doc` directory: includes a `dev_commands.md` file, which contains useful development command lines.
-
+* Now that the repository is initiated in your GitHub account, you can work on it locally, using tercen-studio for example.
 
 **2. Set up the Tercen input projection**
 
-First, start Tercen locally (http://127.0.0.1:5402) and set up the desired projection with a data step.
+* First, start Tercen locally and set up the desired projection with a data step.
 
-Note that the data step URL includes this pattern: `/w/WORKFLOWID/ds/DATASTEPID`, where `WORKFLOWID` and `DATASTEPID` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.
+* Note that the data step URL includes this pattern: `/w/WORKFLOWID/ds/DATASTEPID`, where `WORKFLOWID` and `DATASTEPID` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step to get data from this data step.
 
-## Coding and testing the operator locally {-}
+## Code and test locally {-}
 
 Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:
 
@@ -53,28 +38,7 @@ Now that our RStudio project and Tercen projection are set up, we can code and t
 
 * Replace the data step and workflow IDs taken from the Tercen data step URL in `workspace.R`:
 
-```r
-library(tercen)
-library(dplyr)
-
-options("tercen.workflowId" = "WORKFLOWID")
-options("tercen.stepId"     = "DATASTEPID")
-```
-
 * Code your operator.
-
-```r
-do.task <- function(df) {
-  # Code performing your task
-}
-
-ctx <- tercenCtx()  %>%          # Get data from the data step
-  select(.x, .y, .ri, .ci) %>%   # select variables of interest
-  group_by(.ri, .ci) %>%         # group by row and column ("per cell")
-  do(do.task(.)) %>%             # do the task
-  ctx$addNamespace() %>%         # add namespace
-  ctx$save()                     # push results back to Tercen using the API
-```
 
 * __Execute the code__ and __check the results__ in Tercen
 
@@ -84,7 +48,10 @@ Note that we recommend to implement the following __sanity checks__ when creatin
 
 * use the __`try()` function__ to test the main function implemented (here, `lm()`)
 
-## Documenting the operator {-}
+
+## Deploy! {-}
+
+**Document the operator**
 
 Edit the `README.md` to describe the operator design and usage. The documentation should contain:
 
@@ -94,7 +61,7 @@ Edit the `README.md` to describe the operator design and usage. The documentatio
 
 * A description of the __output relations__
 
-## Preparing some unit testing {-}
+**Prepare some unit testing**
 
 It's always good to prepare some unit tests that could be ran when a new version of Tercen is released.
 
@@ -106,35 +73,13 @@ To include a test, you need to __create a `test` subdirectory__ in your project 
 
 * a __`JSON` file__ containing information about the test
 
-
-## Deploying the operator {-}
-
-**1. Copy the code to the main.R script**
-
-Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file.
-
-Make sure not to include the `options()` calls that are only needed during the local development step:
-
-```r
-# The following lines shall not be included into main.R:
-options("tercen.workflowId" = "wwww")
-options("tercen.stepId"     = "dddd")
-
-getOption("tercen.workflowId")
-getOption("tercen.stepId")
-```
-
-**2. Initiate renv**
+**Initiate package version control**
 
 The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
 
-```r
-renv::init()
-```
-
 This will initiate a project-local environment with a private R library in the `renv` subdirectory.
 
-**3. Push it to your GitHub repository**
+**Push it to your GitHub repository**
 
 Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.
 
