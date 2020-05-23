@@ -1,6 +1,6 @@
 # Deploying an R operator app: walkthrough example
 
-Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
+Now that we have a working R operator for Tercen, we want to deploy it! We will now document, prepare tests and release our __linear regression__ operator.
 
 ## Documenting the operator {-}
 
@@ -30,14 +30,13 @@ Output relations|
 `intercept`| numeric, intercept of the linear regression, per cell
 `slope`| numeric, slope of the linear regression, per cell
 
-
 **Details**
 
 The `lm` operator performs a linear regression on each cell and returns the slope and intercept of the model.
 
-## Preparing some unit testing {-}
+## Preparing operator testing {-}
 
-It's always good to prepare some unit tests that could be ran when a new version of Tercen is released.
+It's always good to prepare some tests that could be ran when a new version of Tercen is released.
 
 To include a test, you need to __create a `test` subdirectory__ in your project directory. It must include:
 
@@ -64,6 +63,7 @@ out <- df %>% select(.ci, .ri, .x, .y) %>%
 write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
 write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
 ```
+
 Now that we have our input and ouput files, we can __create the `JSON` file__ that shall include the following information:
 
 ```json
@@ -83,7 +83,7 @@ Now that we have our input and ouput files, we can __create the `JSON` file__ th
 ```
 The `name` attribute is free. Input and output test files names must be assigned to the `inputDataUri` and `inputDataUri`, respectively. Variable names of the input file must be assigned to the `columns`, `rows`, `colors`, `labels`, `yAxis`, `xAxis` attributes. In our case,  `colors` and `labels` are left empty as they are not part of our input.
 
-## Deploying the operator {-}
+## Deploy! {-}
 
 **1. Copy the code to the main.R script**
 
