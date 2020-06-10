@@ -1,4 +1,4 @@
-# Deploying an R operator app: walkthrough example
+# Deploying an R operator app
 
 Now that we have a working R operator for Tercen, we want to deploy it! We will now document, prepare tests and release our __linear regression__ operator.
 
@@ -34,54 +34,6 @@ Output relations|
 
 The `lm` operator performs a linear regression on each cell and returns the slope and intercept of the model.
 
-## Preparing operator testing {-}
-
-It's always good to prepare some tests that could be ran when a new version of Tercen is released.
-
-To include a test, you need to __create a `test` subdirectory__ in your project directory. It must include:
-
-* a test __input file__
-
-* an expected __output file__
-
-* a __`JSON` file__ containing information about the test
-
-For example, a test for our `lm` operator can be created as follow:
-
-```r
-# Simulate tercen input based on the CO2 dataset 
-# with an x and y-axis, rows and columns
-data(CO2)
-df <- data.frame(.x = CO2$conc, .y = CO2$uptake, .ri = CO2$Plant, .ci = CO2$Treatment)
-
-# Run the do.lm() function created above to generate the expected output
-out <- df %>% select(.ci, .ri, .x, .y) %>%
-  group_by(.ri, .ci) %>%
-  do(do.lm(.))
-
-# write input and expected output in the test subdirectory
-write.csv(CO2, file="./test/CO2.csv", row.names = FALSE, quote = FALSE)
-write.csv(out, file="./test/output.csv", row.names = FALSE, quote = FALSE)
-```
-
-Now that we have our input and ouput files, we can __create the `JSON` file__ that shall include the following information:
-
-```json
-{
-  "kind": "OperatorUnitTest",
-  "name": "testlm1",
-  "namespace": "test",
-  "inputDataUri": "CO2.csv",
-  "outputDataUri": ["output.csv"],
-  "columns": ["Treatment"],
-  "rows": ["Plant"],
-  "colors": [],
-  "labels": [],
-  "yAxis": "uptake",
-  "xAxis": "conc"
-}
-```
-The `name` attribute is free. Input and output test files names must be assigned to the `inputDataUri` and `inputDataUri`, respectively. Variable names of the input file must be assigned to the `columns`, `rows`, `colors`, `labels`, `yAxis`, `xAxis` attributes. In our case,  `colors` and `labels` are left empty as they are not part of our input.
 
 ## Deploy! {-}
 

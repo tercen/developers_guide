@@ -73,11 +73,12 @@ do.lm <- function(df) {
     intercept = NaN,
     slope = NaN
   )
-  mod <- try(lm(.y ~ .x, data = df))
-  if(!inherits(mod, 'try-error')) {
-    out$intercept <- mod$coefficients[1]
-    out$slope <- mod$coefficients[2]
-  }
+  
+  mod <- lm(.y ~ .x, data = df)
+  
+  out$intercept <- mod$coefficients[1]
+  out$slope <- mod$coefficients[2]
+  
   return(out)
 }
 

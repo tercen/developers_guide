@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Setting up Tercen Studio | App builder’s guide to Tercen</title>
+  <title>Chapter 9 Creating a docker operator app | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Setting up Tercen Studio | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 9 Creating a docker operator app | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Setting up Tercen Studio | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 9 Creating a docker operator app | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="apps-types.html"/>
-<link rel="next" href="building-a-template-app.html"/>
+<link rel="prev" href="improving-an-r-operator-app.html"/>
+<link rel="next" href="tercen-app-library.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -200,45 +200,100 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="setting-up-tercen-studio" class="section level1">
-<h1><span class="header-section-number">Chapter 2</span> Setting up Tercen Studio</h1>
-<p>If you wish to develop <strong>operators</strong> then you require to have a programming development environment.</p>
-<p>If you are a regular programmer then you already have your environment.</p>
-<p>For <strong>templates</strong> and <strong>workflow apps</strong> you do not need a development environment as Tercen contains all the features required to build them.</p>
-<div id="installing-tercen-studio" class="section level2 unnumbered">
-<h2>Installing Tercen Studio</h2>
-<p><strong>1. Install docker-compose</strong></p>
-<p>First you need to install <a href="https://docs.docker.com/compose/install/">docker-compose</a>.</p>
-<p><strong>For Windows:</strong></p>
-<p>If you use Windows, you can install <a href="https://docs.docker.com/docker-for-windows/install/">Docker-Desktop for Windows</a> that includes <code>docker-compose</code>.</p>
-<p><strong>Important</strong>: Make sure the <em>Enable Hyper-V Windows Features</em> option is selected on the Configuration page.</p>
-<p>Then, you need to activate shared drives:</p>
-<ul>
-<li><p>Right click on the running docker service and select “Settings” &gt; “Shared drives”</p></li>
-<li><p>Share the <code>tercen_studio</code> folder</p></li>
-</ul>
-<p><strong>For Mac and Linux:</strong></p>
-<p>Check out <a href="https://docs.docker.com/compose/install/">how to install docker-compose</a> on Mac or Linux.</p>
-<p><strong>2. Clone tercen-studio repository</strong></p>
-<p>Then, <strong>get tercen-studio</strong> by cloning the following repository:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">git</span> clone https://github.com/tercen/tercen_studio.git</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="bu">cd</span> tercen_studio</a></code></pre></div>
+<div id="creating-a-docker-operator-app" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Creating a docker operator app</h1>
+<p>Some R packages require additional system libraries that might not be installed in the Tercen environment. We can install them locally, but a problem persists:</p>
+<p><strong>How to tell Tercen to install these dependencies when installing an operator?</strong></p>
+<p>A solution is to create a <strong>docker container</strong> with our environment. If you are not familiar with Docker, it is highly recommended that you read the <a href="https://docs.docker.com/get-started/">Get started with Docker guide</a>.</p>
+<div id="create-the-r-operator-in-tercen-studio" class="section level2 unnumbered">
+<h2>Create the R operator in Tercen Studio</h2>
+<p>As an example, we will use the <a href="https://github.com/tercen/shiny_worldmap_operator">worldmap Tercen operator</a>. It requires the R package <code>sf</code>, commonly used to plot maps. This package requires an external system dependency, <code>GDAL</code>, depending itself on <code>UDUNIT2</code>.</p>
+<p>You will not be able to install this R package if you don’t have these dependencies installed on the system. To install the package in Tercen Studio, we simply need to run this command in the terminal:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y libudunits2-dev libgdal-dev</a></code></pre></div>
+<p>Once the operator is running locally, we can prepare the docker operator.</p>
 </div>
-<div id="starting-tercen-studio" class="section level2 unnumbered">
-<h2>Starting Tercen Studio</h2>
-<p>Once <code>docker-compose</code> is installed and the <code>tercen-studio</code> repository cloned, you can <strong>start tercen</strong> by running:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">docker-compose</span> up -d</a></code></pre></div>
-<p>You can run <strong>Tercen</strong> by going to <a href="http://127.0.0.1:5402">http://127.0.0.1:5402</a>.</p>
+<div id="create-the-docker-operator" class="section level2 unnumbered">
+<h2>Create the docker operator</h2>
+<p>First, create a second GitHub repository that will hold the code used to build the image:</p>
 <ul>
-<li><p><em>Username</em>: admin</p></li>
-<li><p><em>Password</em>: admin</p></li>
+<li><p>A template for a Shiny Docker operator can be found here: <a href="https://github.com/tercen/shiny_docker_operator" class="uri">https://github.com/tercen/shiny_docker_operator</a></p></li>
+<li><p>The worldmap docker operator can be found here: <a href="https://github.com/tercen/shiny_worldmap_docker_operator" class="uri">https://github.com/tercen/shiny_worldmap_docker_operator</a></p></li>
 </ul>
-<p>You can run <strong>RStudio</strong> by going to <a href="http://127.0.0.1:8787/">http://127.0.0.1:8787/</a>.</p>
+<p>It contains different files:</p>
 <ul>
-<li><p><em>Username</em>: rstudio</p></li>
-<li><p><em>Password</em>: tercen</p></li>
+<li><p><code>Dockerfile</code>: instructions to build the Docker container</p></li>
+<li><p><code>README.md</code>: to document the operator</p></li>
+<li><p><code>operator.json</code>:</p></li>
+<li><p><code>start.R</code>: internal, should not be modified.</p></li>
 </ul>
-<p>Now you’re all set!</p>
+<p>For the worldmap operator, the <code>Dockerfile</code> look like this:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">FROM</span> tercen/dartrusttidy:1.0.7</a>
+<a class="sourceLine" id="cb14-2" title="2"></a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="kw">USER</span> root</a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="kw">WORKDIR</span> /operator</a>
+<a class="sourceLine" id="cb14-5" title="5"></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="kw">RUN</span> apt-get update</a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="kw">RUN</span> apt-get install -y libudunits2-dev</a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="kw">RUN</span> apt-get update</a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="kw">RUN</span> apt-get install -y libgdal-dev</a>
+<a class="sourceLine" id="cb14-10" title="10"></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="kw">RUN</span> git clone https://github.com/tercen/shiny_worldmap_operator.git</a>
+<a class="sourceLine" id="cb14-12" title="12"></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="kw">WORKDIR</span> /operator/shiny_worldmap_operator</a>
+<a class="sourceLine" id="cb14-14" title="14"></a>
+<a class="sourceLine" id="cb14-15" title="15"><span class="kw">RUN</span> echo 0.0.5 &amp;&amp; git pull</a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="kw">RUN</span> git checkout 0.0.5</a>
+<a class="sourceLine" id="cb14-17" title="17"></a>
+<a class="sourceLine" id="cb14-18" title="18"><span class="kw">RUN</span> R -e <span class="st">&quot;renv::restore(confirm=FALSE)&quot;</span></a>
+<a class="sourceLine" id="cb14-19" title="19"></a>
+<a class="sourceLine" id="cb14-20" title="20"><span class="kw">ENV</span> TERCEN_SERVICE_URI https://tercen.com</a>
+<a class="sourceLine" id="cb14-21" title="21"></a>
+<a class="sourceLine" id="cb14-22" title="22"><span class="kw">COPY</span> start.R /start.R</a>
+<a class="sourceLine" id="cb14-23" title="23"></a>
+<a class="sourceLine" id="cb14-24" title="24"><span class="kw">ENTRYPOINT</span> [ <span class="st">&quot;R&quot;</span>,<span class="st">&quot;--no-save&quot;</span>,<span class="st">&quot;--no-restore&quot;</span>,<span class="st">&quot;--no-environ&quot;</span>,<span class="st">&quot;--slave&quot;</span>,<span class="st">&quot;-f&quot;</span>,<span class="st">&quot;/start.R&quot;</span>]</a></code></pre></div>
+<p>From the template, we need to:</p>
+<ul>
+<li><p>indicate the git repository containing the R operator (here, <code>https://github.com/tercen/shiny_worldmap_operator.git</code>)</p></li>
+<li><p>modify the working directory (<code>/operator/shiny_worldmap_operator</code>, based on the GitHub repository name)</p></li>
+<li><p>modify the tag (here, <code>0.0.5</code>)</p></li>
+<li><p>add the commands to install our dependencies:</p></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">RUN</span> apt-get update</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">RUN</span> apt-get install -y libudunits2-dev</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw">RUN</span> apt-get update</a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="kw">RUN</span> apt-get install -y libgdal-dev</a></code></pre></div>
+<p>Finally, we need to modify the <code>operator.json</code> docker operator file.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb16-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb16-2" title="2">  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Worldmap&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-3" title="3">  <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Shiny world map representation&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-4" title="4">  <span class="dt">&quot;tags&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;map&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-5" title="5">  <span class="dt">&quot;authors&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;tercen&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-6" title="6">  <span class="dt">&quot;urls&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;https://github.com/tercen/shiny_worldmap_docker_operator&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-7" title="7">  <span class="dt">&quot;container&quot;</span><span class="fu">:</span> <span class="st">&quot;agouy/worldmap:0.0.5&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb16-8" title="8">  <span class="dt">&quot;isWebApp&quot;</span><span class="fu">:</span> <span class="kw">true</span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="fu">}</span></a></code></pre></div>
+<p>Pay attention to the two following lines:</p>
+<ul>
+<li><p><code>"container": "agouy/worldmap:0.0.5"</code> is used to indicate the account, name and tag of the docker container,</p></li>
+<li><p><code>"isWebApp": true</code> as we are handling a Shiny app.</p></li>
+</ul>
+</div>
+<div id="build-and-push-docker-image" class="section level2 unnumbered">
+<h2>Build and push docker image</h2>
+<ul>
+<li><p>If you do not already have one, create an account on Docker Hub.</p></li>
+<li><p>Install Docker on your machine: <a href="https://docs.docker.com/engine/install/">How to install Docker</a></p></li>
+<li><p>Login to Docker Hub using the <code>docker login</code> command and your credentials. [Refer to the docker login docs for a complete reference]</p></li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb17-1" title="1"><span class="ex">docker</span> login --username=YOURUSERNAME --password=YOURPASSWORD</a></code></pre></div>
+<ul>
+<li>Build your image with the <code>docker build</code> command (with ACCOUNT your account name, REPO your image name and TAG your tag)</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb18-1" title="1"><span class="ex">docker</span> build -t <span class="va">$ACCOUNT</span>/<span class="va">$REPO</span>:<span class="va">$TAG</span> .</a></code></pre></div>
+<ul>
+<li>Finally, push the image to your hub.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb19-1" title="1"><span class="fu">sudo</span> docker push <span class="va">$ACCOUNT</span>/<span class="va">$REPO</span>:<span class="va">$TAG</span></a></code></pre></div>
 <center>
 <img src="images/goldfish.png" />
 </center>
@@ -250,8 +305,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="apps-types.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="building-a-template-app.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="improving-an-r-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tercen-app-library.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

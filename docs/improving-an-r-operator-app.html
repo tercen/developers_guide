@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Improving an R operator app | App builder’s guide to Tercen</title>
+  <meta name="description" content="This is a app builder’s guide to Tercen" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Improving an R operator app | App builder’s guide to Tercen" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a app builder’s guide to Tercen" />
+  <meta name="github-repo" content="tercen/appbuilders-guide" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Improving an R operator app | App builder’s guide to Tercen" />
+  
+  <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
+  
+
+<meta name="author" content="Tercen support document" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="deploying-an-r-operator-app.html"/>
+<link rel="next" href="creating-a-docker-operator-app.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105575395-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
+<li class="chapter" data-level="2" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>2</b> Setting up Tercen Studio</a><ul>
+<li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#installing-tercen-studio"><i class="fa fa-check"></i>Installing Tercen Studio</a></li>
+<li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#starting-tercen-studio"><i class="fa fa-check"></i>Starting Tercen Studio</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
+<li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>4</b> Building a workflow app</a><ul>
+<li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html"><i class="fa fa-check"></i><b>5</b> Building an operator app: general procedure</a><ul>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#design-the-operator"><i class="fa fa-check"></i>Design the operator</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#set-up-a-project-from-a-template"><i class="fa fa-check"></i>Set up a project from a template</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#code-and-test-locally"><i class="fa fa-check"></i>Code and test locally</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#deploy"><i class="fa fa-check"></i>Deploy!</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html"><i class="fa fa-check"></i><b>6</b> Creating an R operator app: walkthrough example</a><ul>
+<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#designing-the-operator"><i class="fa fa-check"></i>Designing the operator</a></li>
+<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
+<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#coding-and-testing-the-operator-locally"><i class="fa fa-check"></i>Coding and testing the operator locally</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html"><i class="fa fa-check"></i><b>7</b> Deploying an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#documenting-the-operator"><i class="fa fa-check"></i>Documenting the operator</a></li>
+<li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#deploy-1"><i class="fa fa-check"></i>Deploy!</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html"><i class="fa fa-check"></i><b>8</b> Improving an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#error-catching"><i class="fa fa-check"></i>Error catching</a></li>
+<li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#adding-properties"><i class="fa fa-check"></i>Adding properties</a></li>
+<li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#preparing-operator-testing"><i class="fa fa-check"></i>Preparing operator testing</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>9</b> Creating a docker operator app</a><ul>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-in-tercen-studio"><i class="fa fa-check"></i>Create the R operator in Tercen Studio</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>10</b> Tercen app library</a></li>
+<li class="chapter" data-level="11" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>11</b> Known issues</a></li>
+<li class="chapter" data-level="12" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>12</b> Next steps</a></li>
+<li class="chapter" data-level="13" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>13</b> Glossary</a></li>
+<li class="chapter" data-level="14" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>14</b> Appendix</a><ul>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#updating-tercen-studio"><i class="fa fa-check"></i>Updating tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#uninstallation-of-tercen-studio"><i class="fa fa-check"></i>Uninstallation of tercen-studio</a></li>
+<li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#building-tercen-studio"><i class="fa fa-check"></i>Building tercen-studio</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">App builder’s guide to Tercen</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="improving-an-r-operator-app" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> Improving an R operator app</h1>
+<p>Now that we have deployed our R operator for Tercen, we can always improve it! In this chapter we will see how to catch errors, add input parameters (<em>properties</em>), and prepare testing for our <strong>linear regression</strong> operator.</p>
+<div id="error-catching" class="section level2 unnumbered">
+<h2>Error catching</h2>
+<p><strong>1. Check the presence of input projection</strong></p>
+<p>For the <code>lm_operator</code>, we can check if both <em>x</em> and <em>y</em> axes have been set in the projection, and return an error message to help the user. We can do that using the <code>try()</code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>()</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="cf">if</span>(<span class="kw">inherits</span>(<span class="kw">try</span>(ctx<span class="op">$</span><span class="kw">select</span>(<span class="st">&quot;.x&quot;</span>)), <span class="st">&#39;try-error&#39;</span>)) <span class="kw">stop</span>(<span class="st">&quot;x axis is missing.&quot;</span>)</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="cf">if</span>(<span class="kw">inherits</span>(<span class="kw">try</span>(ctx<span class="op">$</span><span class="kw">select</span>(<span class="st">&quot;.y&quot;</span>)), <span class="st">&#39;try-error&#39;</span>)) <span class="kw">stop</span>(<span class="st">&quot;y axis is missing.&quot;</span>)</a></code></pre></div>
+<p><strong>2. Catch errors in key processes</strong></p>
+<p>We can also use the <code>try()</code> function to catch potential errors in key processes of our operator. In our example, we can for example catch error occuring while running the <code>lm()</code> function. Then, we return coefficients only if the model ran successfully. Otherwise, <code>NaN</code> are returned.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</a>
+<a class="sourceLine" id="cb8-2" title="2">  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb8-3" title="3">    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb8-4" title="4">    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb8-5" title="5">    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</a>
+<a class="sourceLine" id="cb8-6" title="6">    <span class="dt">slope =</span> <span class="ot">NaN</span></a>
+<a class="sourceLine" id="cb8-7" title="7">  )</a>
+<a class="sourceLine" id="cb8-8" title="8">  mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df))    <span class="co"># try-catch</span></a>
+<a class="sourceLine" id="cb8-9" title="9">  <span class="cf">if</span>(<span class="op">!</span><span class="kw">inherits</span>(mod, <span class="st">&#39;try-error&#39;</span>)) {     <span class="co"># get coefficients if lm ran succesfully</span></a>
+<a class="sourceLine" id="cb8-10" title="10">    out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb8-11" title="11">    out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb8-12" title="12">  }</a>
+<a class="sourceLine" id="cb8-13" title="13">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb8-14" title="14">}</a></code></pre></div>
+</div>
+<div id="adding-properties" class="section level2 unnumbered">
+<h2>Adding properties</h2>
+<p>Tercen operators can take input parameters (called <em>properties</em>). They can be of different types (boolean, enumerated, numeric).</p>
+<p>As an example, let’s see how to add a property to the <code>lm_operator</code>. We will add a parameter to decide whether to omit the intercept in the model or not.</p>
+<p><strong>1. Modify the operator’s JSON file to add properties.</strong></p>
+<p>For each property, we have to set values to different attributes:</p>
+<ul>
+<li><p><code>kind</code>: property kind (<code>BooleanProperty</code>, <code>DoubleProperty</code>, or <code>EnumeratedProperty</code>)</p></li>
+<li><p><code>name</code>: name that will be displayed in Tercen</p></li>
+<li><p><code>defaultValue</code>: default value taken by the property</p></li>
+<li><p><code>description</code>: description to be displayed in Tercen</p></li>
+</ul>
+<p>In our case, the JSON file looks now like this:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">{</a>
+<a class="sourceLine" id="cb9-2" title="2">  <span class="st">&quot;name&quot;</span><span class="op">:</span><span class="st"> &quot;Linear regression&quot;</span>,</a>
+<a class="sourceLine" id="cb9-3" title="3">  <span class="st">&quot;description&quot;</span><span class="op">:</span><span class="st"> &quot;Returns the intercept and slope of a linear regression in a cell&quot;</span>,</a>
+<a class="sourceLine" id="cb9-4" title="4">  <span class="st">&quot;tags&quot;</span><span class="op">:</span><span class="st"> </span>[<span class="st">&quot;linear model&quot;</span>],</a>
+<a class="sourceLine" id="cb9-5" title="5">  <span class="st">&quot;authors&quot;</span><span class="op">:</span><span class="st"> </span>[<span class="st">&quot;tercen&quot;</span>],</a>
+<a class="sourceLine" id="cb9-6" title="6">  <span class="st">&quot;urls&quot;</span><span class="op">:</span><span class="st"> </span>[<span class="st">&quot;https://github.com/agouy/lm_operator&quot;</span>],</a>
+<a class="sourceLine" id="cb9-7" title="7">  <span class="st">&quot;properties&quot;</span><span class="op">:</span><span class="st"> </span>[</a>
+<a class="sourceLine" id="cb9-8" title="8">  {</a>
+<a class="sourceLine" id="cb9-9" title="9">    <span class="st">&quot;kind&quot;</span><span class="op">:</span><span class="st"> &quot;BooleanProperty&quot;</span>,</a>
+<a class="sourceLine" id="cb9-10" title="10">    <span class="st">&quot;name&quot;</span><span class="op">:</span><span class="st"> &quot;intercept.omit&quot;</span>,</a>
+<a class="sourceLine" id="cb9-11" title="11">    <span class="st">&quot;defaultValue&quot;</span><span class="op">:</span><span class="st"> </span>false,</a>
+<a class="sourceLine" id="cb9-12" title="12">    <span class="st">&quot;description&quot;</span><span class="op">:</span><span class="st"> &quot;A logical value indicating whether the intercept should be omitted in the model.&quot;</span></a>
+<a class="sourceLine" id="cb9-13" title="13">  }</a>
+<a class="sourceLine" id="cb9-14" title="14">  ]</a>
+<a class="sourceLine" id="cb9-15" title="15">}</a></code></pre></div>
+<p><strong>2. Use the property in the R code</strong></p>
+<p>This property can be called in the R operator code as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">  intercept.omit &lt;-<span class="st"> </span><span class="kw">as.logical</span>(ctx<span class="op">$</span><span class="kw">op.value</span>(<span class="st">&#39;intercept.omit&#39;</span>))</a>
+<a class="sourceLine" id="cb10-2" title="2">  <span class="cf">if</span>(intercept.omit) {</a>
+<a class="sourceLine" id="cb10-3" title="3">    mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> df))</a>
+<a class="sourceLine" id="cb10-4" title="4">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb10-5" title="5">    mod &lt;-<span class="st"> </span><span class="kw">try</span>(<span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df))</a>
+<a class="sourceLine" id="cb10-6" title="6">  }</a></code></pre></div>
+</div>
+<div id="preparing-operator-testing" class="section level2 unnumbered">
+<h2>Preparing operator testing</h2>
+<p>It’s always good to prepare some tests that could be ran when a new version of Tercen is released.</p>
+<p>To include a test, you need to <strong>create a <code>test</code> subdirectory</strong> in your project directory. It must include:</p>
+<ul>
+<li><p>a test <strong>input file</strong></p></li>
+<li><p>an expected <strong>output file</strong></p></li>
+<li><p>a <strong><code>JSON</code> file</strong> containing information about the test</p></li>
+</ul>
+<p>For example, a test for our <code>lm</code> operator can be created as follow:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># Simulate tercen input based on the CO2 dataset </span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co"># with an x and y-axis, rows and columns</span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="kw">data</span>(CO2)</a>
+<a class="sourceLine" id="cb11-4" title="4">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">.x =</span> CO2<span class="op">$</span>conc, <span class="dt">.y =</span> CO2<span class="op">$</span>uptake, <span class="dt">.ri =</span> CO2<span class="op">$</span>Plant, <span class="dt">.ci =</span> CO2<span class="op">$</span>Treatment)</a>
+<a class="sourceLine" id="cb11-5" title="5"></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co"># Run the do.lm() function created above to generate the expected output</span></a>
+<a class="sourceLine" id="cb11-7" title="7">out &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(.ci, .ri, .x, .y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.))</a>
+<a class="sourceLine" id="cb11-10" title="10"></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co"># write input and expected output in the test subdirectory</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="kw">write.csv</span>(CO2, <span class="dt">file=</span><span class="st">&quot;./test/CO2.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="kw">write.csv</span>(out, <span class="dt">file=</span><span class="st">&quot;./test/output.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Now that we have our input and ouput files, we can <strong>create the <code>JSON</code> file</strong> that shall include the following information:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb12-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb12-2" title="2">  <span class="dt">&quot;kind&quot;</span><span class="fu">:</span> <span class="st">&quot;OperatorUnitTest&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-3" title="3">  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;testlm1&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-4" title="4">  <span class="dt">&quot;namespace&quot;</span><span class="fu">:</span> <span class="st">&quot;test&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-5" title="5">  <span class="dt">&quot;inputDataUri&quot;</span><span class="fu">:</span> <span class="st">&quot;CO2.csv&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-6" title="6">  <span class="dt">&quot;outputDataUri&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;output.csv&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-7" title="7">  <span class="dt">&quot;columns&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Treatment&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-8" title="8">  <span class="dt">&quot;rows&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;Plant&quot;</span><span class="ot">]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-9" title="9">  <span class="dt">&quot;colors&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-10" title="10">  <span class="dt">&quot;labels&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-11" title="11">  <span class="dt">&quot;yAxis&quot;</span><span class="fu">:</span> <span class="st">&quot;uptake&quot;</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb12-12" title="12">  <span class="dt">&quot;xAxis&quot;</span><span class="fu">:</span> <span class="st">&quot;conc&quot;</span></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="fu">}</span></a></code></pre></div>
+<p>The <code>name</code> attribute is free. Input and output test files names must be assigned to the <code>inputDataUri</code> and <code>inputDataUri</code>, respectively. Variable names of the input file must be assigned to the <code>columns</code>, <code>rows</code>, <code>colors</code>, <code>labels</code>, <code>yAxis</code>, <code>xAxis</code> attributes. In our case, <code>colors</code> and <code>labels</code> are left empty as they are not part of our input.</p>
+<center>
+<img src="images/goldfish.png" />
+</center>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="deploying-an-r-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="creating-a-docker-operator-app.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

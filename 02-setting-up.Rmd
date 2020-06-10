@@ -1,4 +1,4 @@
-# Setting up tercen-studio
+# Setting up Tercen Studio
 
 If you wish to develop __operators__ then you require to have a programming development environment.
 
@@ -6,7 +6,7 @@ If you are a regular programmer then you already have your environment.
 
 For __templates__ and __workflow apps__ you do not need a development environment as Tercen contains all the features required to build them.
 
-## Installing tercen-studio {-}
+## Installing Tercen Studio {-}
 
 **1. Install docker-compose**
 
@@ -37,7 +37,7 @@ git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
 ```
 
-## Starting tercen-studio {-}
+## Starting Tercen Studio {-}
 
 Once `docker-compose` is installed and the `tercen-studio` repository cloned, you can __start tercen__ by running:
 
