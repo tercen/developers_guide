@@ -205,14 +205,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="glossary" class="section level1">
 <h1><span class="header-section-number">Chapter 13</span> Glossary</h1>
-<p><strong>Measurement</strong>: A numerical variable</p>
-<p><strong>Observation</strong>: An observation is the factor name given to a value (measurement), at a particular period, of a particular variable.</p>
-<p><strong>Variable</strong>: A variable is a characteristic of a unit being observed that may assume more than one of a set of values to which a numerical measure or a category from a classification can be assigned (e.g. income, age, weight, etc., and “occupation”, “industry”, “disease”, etc</p>
-<p><strong>Table</strong>:</p>
-<p><strong>Cross-tab window</strong>:</p>
-<p><strong>Projection</strong>:</p>
-<p><strong>Long format</strong>:</p>
-<p><strong>Wide format</strong>:</p>
+<p>_Measurement__: A numerical variable</p>
+<p><strong>Observation</strong>: An observation is the factor name given to a value (measurement), at a particular moment in time, of a particular variable.</p>
+<p><strong>Variable</strong>: A variable is a characteristic of a unit being observed that may assume more than one of a set of values to which a numerical measure or a category from a classification can be assigned (e.g. income, age, weight, etc., and “occupation”, “industry”, “disease”, etc.</p>
+<p><strong>Cross-tab window</strong>:
+A Tercen interface window to define a projection view (i.e. what is on the: row, col, y-axis, x-axis, color, label).</p>
+<p><strong>Projection</strong>:
+A projection is defined using the <strong>cross-tab window</strong>.</p>
+<p><strong>Long format</strong>:
+A format where every row is a measurement.</p>
+<p><strong>Wide format</strong>:
+A format where every column is a variable.</p>
+<p><strong>App</strong>:
+A plug-in to Tercen. It can be an <strong>operator</strong>, <strong>step</strong>, <strong>workflow app</strong>, or <strong>workflow</strong>.</p>
+<p><strong>App library</strong>:
+A repository of Tercen <strong>apps</strong>. There are many repository locations, (e.g. github, team library).</p>
+<p><strong>Workflow</strong>:
+A sequence of <strong>steps</strong> or <strong>apps</strong> to achieve an analysis pipeline.</p>
+<p><strong>Workflow app</strong>:
+A small workflow composed of <strong>steps</strong>, visuals and <strong>operators</strong>. Typically it achieves one task, e.g. PCA app. The PCA app is composed of one result visual and one computation and one data wrangling step.</p>
+<p><strong>Step</strong>:
+A single step allows for a visual <strong>projection</strong> and optionally a computation using an <strong>operator</strong>.</p>
+<p><strong>Operator</strong>:
+An operator computes on data supplied to it by the <strong>projection</strong> view defined using the <strong>cross-tab window</strong>.</p>
 <center>
 <img src="images/goldfish.png" />
 </center>
