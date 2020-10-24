@@ -11,4 +11,4 @@ Here are the steps for adding it to Tercen __app library__:
 * Tercen support modifies the __app-library__ repository (publish)
 * Tercen support send email to indicate it is available
 
-<center>![](images/alpha2beta.png)</center>
+<center>![](images/apps.png)</center>
