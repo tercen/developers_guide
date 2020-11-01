@@ -38,7 +38,7 @@ some examples:
 +    `boxplot_shiny_operator`, it is using R shiny
 +    `worldmap_shiny_docker_operator`, it is using R shiny and docker
 
-Please make sure the git repo description outline the a brief functional description of the operator.
+Please make sure the git repo description outlines a brief functional description of the operator. e.g. `calculates a median`
 
 
 <center>![](images/goldfish.png)</center>
