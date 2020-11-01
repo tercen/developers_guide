@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Building a workflow app | App builder’s guide to Tercen</title>
+  <title>Chapter 10 Naming and tagging guidelines | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Building a workflow app | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 10 Naming and tagging guidelines | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Building a workflow app | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 10 Naming and tagging guidelines | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="building-a-template-app.html"/>
-<link rel="next" href="building-an-operator-app-general-procedure.html"/>
+<link rel="prev" href="creating-a-docker-operator-app.html"/>
+<link rel="next" href="tercen-app-library.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -177,8 +177,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="naming-guidelines.html"><a href="naming-guidelines.html"><i class="fa fa-check"></i><b>10</b> Naming guidelines</a><ul>
-<li class="chapter" data-level="" data-path="naming-guidelines.html"><a href="naming-guidelines.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
+<li class="chapter" data-level="10" data-path="naming-and-tagging-guidelines.html"><a href="naming-and-tagging-guidelines.html"><i class="fa fa-check"></i><b>10</b> Naming and tagging guidelines</a><ul>
+<li class="chapter" data-level="" data-path="naming-and-tagging-guidelines.html"><a href="naming-and-tagging-guidelines.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>11</b> Tercen app library</a></li>
 <li class="chapter" data-level="12" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>12</b> Known issues</a></li>
@@ -206,25 +206,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="building-a-workflow-app" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Building a workflow app</h1>
-<p>The process for building a workflows app is:</p>
+<div id="naming-and-tagging-guidelines" class="section level1">
+<h1><span class="header-section-number">Chapter 10</span> Naming and tagging guidelines</h1>
+<p>The art of naming is fundamental to programming and here are some guidelines to help</p>
+<div id="operator-naming-guidelines" class="section level2 unnumbered">
+<h2>Operator naming guidelines</h2>
+<p>Here are the guidelines for naming an operator (i.e. a github repo)</p>
+<p>The recommended structure of an operator name is:</p>
+<p><code>function_package_shiny_docker_operator</code></p>
+<p>It is essentially a list of parts separated by an underscore.</p>
+<p>Where <code>function</code> and <code>operator</code> is always indicated and the rest depends on the operator context.</p>
+<p><br />
+</p>
+<p>A breakdown of the different parts are:</p>
+<p><code>function</code> is the function name, usually from R function name</p>
+<p><code>package</code> is the package or module name</p>
+<p><code>shiny</code> is if the operator is uses R shiny</p>
+<p><code>docker</code> is if the operator uses a docker</p>
+<p><code>operator</code> is if is an operator</p>
+<p><br />
+</p>
+<p>some examples:</p>
 <ul>
-<li>Design the <strong>workflow app</strong></li>
-<li>Create a <strong>workflow app</strong> in Tercen</li>
-<li>Insert Wizard step (optional)</li>
-<li>Replace the initial Table step with Input step</li>
-<li>Add a final Output step</li>
-<li>Save it</li>
-<li>Go to the properties and set it as an app</li>
-<li>Test it in a workflow with data</li>
-<li>Notify the community of its existence (see below)</li>
+<li><code>median_operator</code></li>
+<li><code>som_flowsom_operator</code> , here the <code>som</code> is from the R package <code>flowsom</code></li>
+<li><code>boxplot_shiny_operator</code>, it is using R shiny</li>
+<li><code>worldmap_shiny_docker_operator</code>, it is using R shiny and docker</li>
 </ul>
-<p>All the building and deployment processes are performed in Tercen.</p>
-<p>All <strong>workflow apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
-<div id="notify-the-community" class="section level2 unnumbered">
-<h2>Notify the community</h2>
-<p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the workflow app git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
+<p>Please make sure the git repo description outline the a brief functional description of the operator.</p>
 <center>
 <img src="images/goldfish.png" />
 </center>
@@ -236,8 +245,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="building-a-template-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="building-an-operator-app-general-procedure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="creating-a-docker-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tercen-app-library.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

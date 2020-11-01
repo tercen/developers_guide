@@ -1,6 +1,5 @@
 # Creating a docker operator app
 
-
 Some R packages require additional system libraries that might not be installed in the Tercen environment. We can install them locally, but a problem persists:
 
 **How to tell Tercen to install these dependencies when installing an operator?**

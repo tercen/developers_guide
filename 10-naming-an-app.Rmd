@@ -1,0 +1,44 @@
+# Naming guidelines
+
+The art of naming is fundamental to programming and here are some guidelines to help
+
+## Operator naming guidelines {-}
+
+Here are the guidelines for naming an operator (i.e. a github repo)
+
+The recommended structure of an operator name is:
+
+`function_package_shiny_docker_operator`
+
+It is essentially a list of parts separated by an underscore.
+
+Where `function` and `operator` is always indicated and the rest depends on the operator context.
+
+\
+
+A breakdown of the different parts are:
+
+`function` is the function name, usually from R function name
+
+`package` is the package or module name
+
+`shiny`  is if the operator is uses R shiny
+
+`docker` is if the operator uses a docker
+
+`operator` is if is an operator
+
+\
+
+
+some examples:
+
++    `median_operator`
++    `som_flowsom_operator` , here the `som` is from the R package `flowsom`
++    `boxplot_shiny_operator`, it is using R shiny
++    `worldmap_shiny_docker_operator`, it is using R shiny and docker
+
+Please make sure the git repo description outline the a brief functional description of the operator.
+
+
+<center>![](images/goldfish.png)</center>
