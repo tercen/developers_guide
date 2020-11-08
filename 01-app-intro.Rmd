@@ -10,7 +10,7 @@ A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto,
 
 A researcher wanting a specific statistical process (e.g. quality control, two group analysis, or enrichment analysis, etc.) chooses from a list of __workflow apps__. A __workflow app__ therefore represents the second highest level app because it defines a focused set of steps and visuals to achieve one particular statistical objective.
 
-A researcher wanting a specific operator function (e.g. scale, log, multiplication, addition and subtraction, etc.) chooses from a list of __operator apps__. An __Operator app__ therefore represents a single computational step.
+A researcher wanting a specific operator function (e.g. scale, log, multiplication, addition and subtraction, etc.) chooses from a list of __operator apps__. An __Operator app__ therefore represents a single computational step. It is a typically a single R or Python function.
 
 In summary a research wishing a full end-to-end workflow chooses a __template app__, a specific data process chooses a __workflow app__, a specific computation chooses an __operator app__.
 
@@ -19,7 +19,7 @@ Once an app is built, it may be added to the __app-library__ where it can be acc
 Deciding on which to build is determined by what you would like the app to achieve. The first two, __template__ and __workflow__, do not need programming experience, the __operator__ does. 
 
 Each has its own building process. __Workflows__ and __template apps__ are built and deployed within Tercen while an __operator app__ is written using any number of programming languages (R, Python, Rust, etc.). The code is put on git hub for the __app library__ to find. 
-Currently Tercen has made a convenient R package for working with the Tercen API, we aim to quickly cover the other languages during our final release.
+Currently Tercen has made a convenient R package for working with the Tercen API, we aim to quickly cater for the other programming languages (Python, Matlab etc.) during our final release.
 
 The building of each app is explained in the following chapters.
 
