@@ -216,12 +216,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto, etc.) chooses one of the workflows expressed as a list of <strong>template apps</strong>. A <strong>template app</strong> therefore represents the highest level app because it defines a set of many steps in sequence to achieve the complete analysis. There would be a <strong>template app</strong> for each of the high-level workflow (e.g. RNA-seq, flow cyto, etc.).</p>
 <p>A researcher wanting a specific statistical process (e.g. quality control, two group analysis, or enrichment analysis, etc.) chooses from a list of <strong>workflow apps</strong>. A <strong>workflow app</strong> therefore represents the second highest level app because it defines a focused set of steps and visuals to achieve one particular statistical objective.</p>
-<p>A researcher wanting a specific operator function (e.g. scale, log, multiplication, addition and subtraction, etc.) chooses from a list of <strong>operator apps</strong>. An <strong>Operator app</strong> therefore represents a single computational step.</p>
+<p>A researcher wanting a specific operator function (e.g. scale, log, multiplication, addition and subtraction, etc.) chooses from a list of <strong>operator apps</strong>. An <strong>Operator app</strong> therefore represents a single computational step. It is a typically a single R or Python function.</p>
 <p>In summary a research wishing a full end-to-end workflow chooses a <strong>template app</strong>, a specific data process chooses a <strong>workflow app</strong>, a specific computation chooses an <strong>operator app</strong>.</p>
 <p>Once an app is built, it may be added to the <strong>app-library</strong> where it can be accessed by researchers.</p>
 <p>Deciding on which to build is determined by what you would like the app to achieve. The first two, <strong>template</strong> and <strong>workflow</strong>, do not need programming experience, the <strong>operator</strong> does.</p>
 <p>Each has its own building process. <strong>Workflows</strong> and <strong>template apps</strong> are built and deployed within Tercen while an <strong>operator app</strong> is written using any number of programming languages (R, Python, Rust, etc.). The code is put on git hub for the <strong>app library</strong> to find.
-Currently Tercen has made a convenient R package for working with the Tercen API, we aim to quickly cover the other languages during our final release.</p>
+Currently Tercen has made a convenient R package for working with the Tercen API, we aim to quickly cater for the other programming languages (Python, Matlab etc.) during our final release.</p>
 <p>The building of each app is explained in the following chapters.</p>
 <center>
 <img src="images/goldfish.png" />
