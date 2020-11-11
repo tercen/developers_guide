@@ -18,11 +18,6 @@ If you use Windows, you can install [Docker-Desktop for Windows](https://docs.do
 
 **Important**: Make sure the _Enable Hyper-V Windows Features_ option is selected on the Configuration page.
 
-Then, you need to activate shared drives:
-
-* Right click on the running docker service and select "Settings" > "Shared drives"
-
-* Share the `tercen_studio` folder 
 
 **For Mac and Linux:**
 
