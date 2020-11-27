@@ -1,0 +1,14 @@
+# Welcome
+
+Discover all the incredible capabilities of our platform so that you can build useful and exciting apps directly on top of Tercen with ease - whether you're public apps, or you're building for your own team's private apps.
+
+
+See what others have built on Tercen, chat with developers in our Community, and explore our documentation to get a sense of what you can do.
+
+* Checkout [Tercen Github](https://github.com/tercen) for some apps
+* Checkout [Tercen Explore](https://tercen.com/explore) section to see some projects using cool apps.
+
+The building of apps is explained in the following chapters.
+
+
+<center>![](images/goldfish.png)</center>

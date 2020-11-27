@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen</title>
+  <title>Chapter 7 Building an operator app: general procedure | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 7 Building an operator app: general procedure | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Building an operator app: general procedure | App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 7 Building an operator app: general procedure | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="building-a-workflow-app.html"/>
-<link rel="next" href="creating-an-r-operator-app-walkthrough-example.html"/>
+<link rel="next" href="tutorial-dev-of-an-r-operator-app.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,6 +50,8 @@
 
 
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -141,50 +143,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>1</b> Apps types</a></li>
-<li class="chapter" data-level="2" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>2</b> Setting up Tercen Studio</a><ul>
+<li class="chapter" data-level="1" data-path="welcome.html"><a href="welcome.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="guidelines.html"><a href="guidelines.html"><i class="fa fa-check"></i><b>2</b> Guidelines</a><ul>
+<li class="chapter" data-level="" data-path="guidelines.html"><a href="guidelines.html#legal-text"><i class="fa fa-check"></i>Legal text</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>3</b> Apps types</a><ul>
+<li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#template-app"><i class="fa fa-check"></i>Template app</a></li>
+<li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#workflow-app"><i class="fa fa-check"></i>Workflow app</a></li>
+<li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#operator-app"><i class="fa fa-check"></i>Operator app</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>4</b> Setting up Tercen Studio</a><ul>
 <li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#installing-tercen-studio"><i class="fa fa-check"></i>Installing Tercen Studio</a></li>
 <li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#starting-tercen-studio"><i class="fa fa-check"></i>Starting Tercen Studio</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>3</b> Building a template app</a><ul>
+<li class="chapter" data-level="5" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>5</b> Building a template app</a><ul>
 <li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>4</b> Building a workflow app</a><ul>
-<li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
+<li class="chapter" data-level="6" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>6</b> Building a workflow app</a><ul>
+<li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html"><i class="fa fa-check"></i><b>5</b> Building an operator app: general procedure</a><ul>
+<li class="chapter" data-level="7" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html"><i class="fa fa-check"></i><b>7</b> Building an operator app: general procedure</a><ul>
 <li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#design-the-operator"><i class="fa fa-check"></i>Design the operator</a></li>
-<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#set-up-a-project-from-a-template"><i class="fa fa-check"></i>Set up a project from a template</a></li>
-<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#code-and-test-locally"><i class="fa fa-check"></i>Code and test locally</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#set-up-a-project-using-a-template"><i class="fa fa-check"></i>Set up a project using a template</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#setup-the-input-data"><i class="fa fa-check"></i>Setup the input data</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#connecting-to-tercen"><i class="fa fa-check"></i>Connecting to tercen</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#managing-input-parameters"><i class="fa fa-check"></i>Managing input parameters</a></li>
+<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#managing-r-packages"><i class="fa fa-check"></i>Managing R packages</a></li>
 <li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#deploy"><i class="fa fa-check"></i>Deploy!</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html"><i class="fa fa-check"></i><b>6</b> Creating an R operator app: walkthrough example</a><ul>
-<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#designing-the-operator"><i class="fa fa-check"></i>Designing the operator</a></li>
-<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
-<li class="chapter" data-level="" data-path="creating-an-r-operator-app-walkthrough-example.html"><a href="creating-an-r-operator-app-walkthrough-example.html#coding-and-testing-the-operator-locally"><i class="fa fa-check"></i>Coding and testing the operator locally</a></li>
+<li class="chapter" data-level="8" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html"><i class="fa fa-check"></i><b>8</b> Tutorial: Dev of an R operator app</a><ul>
+<li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#designing-the-operator"><i class="fa fa-check"></i>Designing the operator</a></li>
+<li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
+<li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#develope-the-operator-locally"><i class="fa fa-check"></i>Develope the operator locally</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html"><i class="fa fa-check"></i><b>7</b> Deploying an R operator app</a><ul>
+<li class="chapter" data-level="9" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html"><i class="fa fa-check"></i><b>9</b> Deploying an R operator app</a><ul>
 <li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#documenting-the-operator"><i class="fa fa-check"></i>Documenting the operator</a></li>
-<li class="chapter" data-level="" data-path="building-an-operator-app-general-procedure.html"><a href="building-an-operator-app-general-procedure.html#deploy"><i class="fa fa-check"></i>Deploy!</a></li>
+<li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#deploy-1"><i class="fa fa-check"></i>Deploy!</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html"><i class="fa fa-check"></i><b>8</b> Improving an R operator app</a><ul>
+<li class="chapter" data-level="10" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html"><i class="fa fa-check"></i><b>10</b> Improving an R operator app</a><ul>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#error-catching"><i class="fa fa-check"></i>Error catching</a></li>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#adding-properties"><i class="fa fa-check"></i>Adding properties</a></li>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#preparing-operator-testing"><i class="fa fa-check"></i>Preparing operator testing</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>9</b> Creating a docker operator app</a><ul>
+<li class="chapter" data-level="11" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>11</b> Creating a docker operator app</a><ul>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-in-tercen-studio"><i class="fa fa-check"></i>Create the R operator in Tercen Studio</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="naming-guidelines.html"><a href="naming-guidelines.html"><i class="fa fa-check"></i><b>10</b> Naming guidelines</a><ul>
+<li class="chapter" data-level="12" data-path="naming-guidelines.html"><a href="naming-guidelines.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
 <li class="chapter" data-level="" data-path="naming-guidelines.html"><a href="naming-guidelines.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>11</b> Tercen app library</a></li>
-<li class="chapter" data-level="12" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>12</b> Known issues</a></li>
-<li class="chapter" data-level="13" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>13</b> Next steps</a></li>
-<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
-<li class="chapter" data-level="15" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>15</b> Appendix</a><ul>
+<li class="chapter" data-level="13" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>13</b> Tercen app library</a></li>
+<li class="chapter" data-level="14" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>14</b> Known issues</a></li>
+<li class="chapter" data-level="15" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>15</b> Next steps</a></li>
+<li class="chapter" data-level="16" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>16</b> Glossary</a></li>
+<li class="chapter" data-level="17" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>17</b> Appendix</a><ul>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#updating-tercen-studio"><i class="fa fa-check"></i>Updating tercen-studio</a></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#uninstallation-of-tercen-studio"><i class="fa fa-check"></i>Uninstallation of tercen-studio</a></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#building-tercen-studio"><i class="fa fa-check"></i>Building tercen-studio</a></li>
@@ -207,8 +220,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="building-an-operator-app-general-procedure" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Building an operator app: general procedure</h1>
+<h1><span class="header-section-number">Chapter 7</span> Building an operator app: general procedure</h1>
 <p>Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a <strong>linear regression</strong> on our input data and returning the slope and intercept of the model.</p>
+<ul>
+<li>Design the operator</li>
+<li>Setup the github repository</li>
+<li>Setup the input projection</li>
+<li>Connecting to tercen</li>
+<li>Testing</li>
+<li>Managing input parameters</li>
+<li>Managing R packages</li>
+<li>Deploy</li>
+</ul>
 <div id="design-the-operator" class="section level2 unnumbered">
 <h2>Design the operator</h2>
 <p>The first step is to define our <strong>input projection</strong> and <strong>output relation</strong>. In Tercen, each operator shall take as input a table and return a table. Remember:</p>
@@ -220,27 +243,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <img src="images/operator_MODEL.png" width=500></img>
 </center>
 </div>
-<div id="set-up-a-project-from-a-template" class="section level2 unnumbered">
-<h2>Set up a project from a template</h2>
-<p><strong>1. Create a GitHub repository from a template</strong></p>
+<div id="set-up-a-project-using-a-template" class="section level2 unnumbered">
+<h2>Set up a project using a template</h2>
+<p><strong>Create a GitHub repository from a template</strong></p>
 <ul>
 <li><p><strong>Create a new GitHub repository</strong> with your own account based on a Tercen operator template that you can find on GitHub (<a href="https://github.com/tercen/" class="uri">https://github.com/tercen/</a>).</p></li>
 <li><p>Then you can create your own repository based on this template. Choose an explicit name.</p></li>
 <li><p>Now that the repository is initiated in your GitHub account, you can work on it locally, using tercen-studio for example.</p></li>
 </ul>
-<p><strong>2. Set up the Tercen input projection</strong></p>
+</div>
+<div id="setup-the-input-data" class="section level2 unnumbered">
+<h2>Setup the input data</h2>
+<p>This can be in the local instance of Tercen or the cloud instance.</p>
 <ul>
 <li><p>Start Tercen locally and set up the desired projection with a data step.</p></li>
-<li><p>Note that the data step URL includes this pattern: <code>/w/WORKFLOWID/ds/DATASTEPID</code>, where <code>WORKFLOWID</code> and <code>DATASTEPID</code> are <strong>unique workflow and data step identifiers</strong>, respectively. These identifiers will be used in the next step to get data from this data step.</p></li>
+<li><p>Note that the data step URL includes this pattern: <code>/w/workflowId/ds/stepId</code>, where <code>workflowId</code> and <code>stepId</code> are <strong>unique workflow and data step identifiers</strong>, respectively. These identifiers will be used in the next step to get data from this data step.</p></li>
 </ul>
 </div>
-<div id="code-and-test-locally" class="section level2 unnumbered">
-<h2>Code and test locally</h2>
+<div id="connecting-to-tercen" class="section level2 unnumbered">
+<h2>Connecting to tercen</h2>
 <p>Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally.</p>
+<p>If you wish to test with the local version of Tercen, then you do not require to set the <code>tercen.service</code> system variable.</p>
 <ul>
-<li><p>Using <code>tercen-studio</code>, code your operator</p></li>
-<li><p><strong>Execute the code</strong> and <strong>check the results</strong> in Tercen using the data step and workflow IDs taken from the Tercen data step URL</p></li>
+<li>Load some data up in the</li>
+<li>Each data step has a <code>workflowId</code> and a <code>stepId</code></li>
 </ul>
+<pre><code>options(&quot;tercen.workflowId&quot;= &quot;8a8845f6a5eeff27ce33fd382444de88&quot;)
+options(&quot;tercen.stepId&quot;= &quot;5191724b-3963-4e34-af58-7977cc61e5b1&quot;)</code></pre>
+<p><strong>Connecting to tercen cloud</strong></p>
+<p>To connect to a data step in the tercen cloud</p>
+<pre><code>options(&quot;tercen.workflowId&quot;= &quot;8a8845f6a5eeff27ce33fd382444de88&quot;)
+options(&quot;tercen.stepId&quot;= &quot;5191724b-3963-4e34-af58-7977cc61e5b1&quot;)</code></pre>
+<pre><code>options(&quot;tercen.serviceUri&quot;= &quot;https://tercen.com/api/v1/&quot;)
+options(&quot;tercen.username&quot;= &quot;uuuu&quot;)
+options(&quot;tercen.password&quot;= &quot;pppp&quot;)</code></pre>
+</div>
+<div id="managing-input-parameters" class="section level2 unnumbered">
+<h2>Managing input parameters</h2>
+</div>
+<div id="managing-r-packages" class="section level2 unnumbered">
+<h2>Managing R packages</h2>
 </div>
 <div id="deploy" class="section level2 unnumbered">
 <h2>Deploy!</h2>
@@ -266,7 +308,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.</p>
 <p>If you want to install it directly from <code>Tercen</code>, you will need to <a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">create a release in GitHub</a>. All the operators apps are version controlled.</p>
 <p>All <strong>operator apps</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
-<p><strong>4. Notify community</strong></p>
+<p><strong>Notify community</strong></p>
 <p>Currently, we ask you to send an email to <a href="mailto:info@tercen.com" class="email">info@tercen.com</a> containing the description and link to the <strong>operators app</strong> git repository, Tercen support will manually test it and add it to the <strong>app-library</strong> and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.</p>
 <center>
 <img src="images/goldfish.png" />
@@ -280,7 +322,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="building-a-workflow-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="creating-an-r-operator-app-walkthrough-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="tutorial-dev-of-an-r-operator-app.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

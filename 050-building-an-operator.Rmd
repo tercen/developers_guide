@@ -1,11 +1,13 @@
-# Building an operator app: general procedure
+# Building an operator app
 
-Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
+Here we will learn through a general approach to create an R operator for Tercen. A more detailed and concreate example is outlined in the next chapter where a linear regression operator is built from scratch, in the form of a tutorial.
+
+Building an operator requires the following sequential steps: 
 
 * Design the operator
 * Setup the github repository
 * Setup the input projection
-* Connecting to tercen
+* Connecting to Tercen
 * Testing 
 * Managing input parameters
 * Managing R packages
@@ -18,11 +20,28 @@ The first step is to define our __input projection__ and __output relation__. In
 
 > "__Table in, table out!__"
 
-The **operator model** can be seen as follow: 
+The concept of an input project and an output relation helps in defining your operator.
 
-<center><img src="./images/operator_MODEL.png" width=500></img></center>
 
-## Set up a project using a template {-}
+
+The __input project__ is the project in the data step which is used to use the operator. For example what is on the `y-axis`, `x-axis`, `row`, `col`, `color`, `label`. This input project determines what is the structure of the data which is given to the operator.
+
+
+The __output relation__ is the relation of the calculated output to the input values. For example:
+
+* Is the relation per Cell?
+* Is the relation per Col or Row? 
+* Is the relation for All the data?
+
+
+__Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a mean per row/col (i.e. per cell), this would be a per cell relationship. Excel, for example, is always calculating per cell relationships.
+
+__Per Col__ example: Let's say the operator used a project with `row` and `col` and the operator performed a clustering on the columns, this would be a column relationship.
+
+__for All__ data example: Let's say the operator used a project with `row` and `col` and the operator calculated a total mean of all the data, this would be an all data relationship.
+
+
+## Set up a GitHub project {-}
 
 **Create a GitHub repository from a template**
 
@@ -30,15 +49,15 @@ The **operator model** can be seen as follow:
 
 * Then you can create your own repository based on this template. Choose an explicit name.
 
-* Now that the repository is initiated in your GitHub account, you can work on it locally, using tercen-studio for example.
+* Now that the repository is initialized in your GitHub account, you can work on it locally, using tercen-studio for example.
 
 ## Setup the input data {-}
 
-This can be in the local instance of Tercen or the cloud instance.
+This can be in the local or a cloud instance of Tercen.
 
-* Start Tercen locally and set up the desired projection with a data step.
-
-* Note that the data step URL includes this pattern: `/w/workflowId/ds/stepId`, where `workflowId` and `stepId` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step to get data from this data step.
+* Login to Tercen (either local or cloud)
+* Prepare your data by defining a __cross-tab__ projection using a __data step__.
+* Note that the project in the data step has URL with this pattern: `/w/workflowId/ds/stepId`, where `workflowId` and `stepId` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step to get data from this data step.
 
 ## Connecting to tercen {-}
 
@@ -47,31 +66,44 @@ Now that our RStudio project and Tercen projection are set up, we can code and t
 If you wish to test with the local version of Tercen, then you do not require to set the `tercen.service` system variable. 
 
 * Load some data up in the 
-* Each data step has a `workflowId` and a `stepId`
+* Each data step has a unique`workflowId` and a `stepId` combination.
 
 ```
 options("tercen.workflowId"= "8a8845f6a5eeff27ce33fd382444de88")
 options("tercen.stepId"= "5191724b-3963-4e34-af58-7977cc61e5b1")
 ```
 
-**Connecting to tercen cloud**
+___Connecting to tercen cloud___
 
-To connect to a data step in the tercen cloud
+Additional system variable are required in order to connect to a data step in the tercen cloud.
 
-```
-options("tercen.workflowId"= "8a8845f6a5eeff27ce33fd382444de88")
-options("tercen.stepId"= "5191724b-3963-4e34-af58-7977cc61e5b1")
-```
 ```
 options("tercen.serviceUri"= "https://tercen.com/api/v1/")
 options("tercen.username"= "uuuu")
 options("tercen.password"= "pppp")
 ```
 
+Where `uuuu` is the username and `pppp` is the password, these are specific to your username and password.
+
+
 ## Managing input parameters {-}
+
+The operator has a file called `operator.json` these define the parameters which the user can set when using your operator.
+
+Before deploying, please think what parameters are required and modify this file.
 
 
 ## Managing R packages {-}
+
+The operator manages its packages using the `renv` system.
+To generate this use:
+
+
+`renv::init()` 
+
+
+
+Before deployment.
 
 
 
