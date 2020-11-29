@@ -1,12 +1,17 @@
-# Naming guidelines
+# Naming guidelines {#naming}
 
 The art of naming is fundamental to programming and here are some guidelines to help
 
-## Operator naming guidelines {-}
+## Operator naming guidelines {-} 
 
-Here are the guidelines for naming an operator (i.e. a github repo)
+Here are some examples of naming operators
 
-The recommended structure of an operator name is:
++    `median_operator`
++    `som_flowsom_operator` , here the `som` is from the R package `flowsom`
++    `boxplot_shiny_operator`, it is using R shiny
++    `worldmap_shiny_docker_operator`, it is using R shiny and docker
+
+These examples follow naming guidelines, the recommended structure of an operator name is:
 
 `function_package_shiny_docker_operator`
 
@@ -31,12 +36,7 @@ A breakdown of the different parts are:
 \
 
 
-some examples:
 
-+    `median_operator`
-+    `som_flowsom_operator` , here the `som` is from the R package `flowsom`
-+    `boxplot_shiny_operator`, it is using R shiny
-+    `worldmap_shiny_docker_operator`, it is using R shiny and docker
 
 Please make sure the git repo description outlines a brief functional description of the operator. e.g. `calculates a median`
 

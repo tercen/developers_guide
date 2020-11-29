@@ -190,8 +190,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="naming-guidelines.html"><a href="naming-guidelines.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
-<li class="chapter" data-level="" data-path="naming-guidelines.html"><a href="naming-guidelines.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
+<li class="chapter" data-level="12" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
+<li class="chapter" data-level="" data-path="naming.html"><a href="naming.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>13</b> Tercen app library</a></li>
 <li class="chapter" data-level="14" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>14</b> Known issues</a></li>
@@ -221,7 +221,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="building-an-operator-app" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Building an operator app</h1>
-<p>Here we will learn through a general approach to create an R operator for Tercen. A more detailed and concreate example is outlined in the next chapter where a linear regression operator is built from scratch, in the form of a tutorial.</p>
+<p>Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built from scratch.</p>
 <p>Building an operator requires the following sequential steps:</p>
 <ul>
 <li>Design the operator</li>
@@ -239,30 +239,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>“<strong>Table in, table out!</strong>”</p>
 </blockquote>
-<p>The concept of an input project and an output relation helps in defining your operator.</p>
-<p>The <strong>input project</strong> is the project in the data step which is used to use the operator. For example what is on the <code>y-axis</code>, <code>x-axis</code>, <code>row</code>, <code>col</code>, <code>color</code>, <code>label</code>. This input project determines what is the structure of the data which is given to the operator.</p>
+<p>To understand the input table and the output table. The input table is defined by the data <strong>input projection</strong> in Tercen and output table is what is computed by the operator. The output table is related to the input table by an <strong>output relation</strong>.</p>
+<p>The <strong>input project</strong> is the projection in the data step which is used by the operator. For example a projection is composed of the <code>y-axis</code>, <code>x-axis</code>, <code>row</code>, <code>col</code>, <code>color</code>, <code>label</code>. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple <code>mean</code> would use a <code>y-axis</code>, <code>row</code>, <code>col</code> projection. This allows the <code>mean</code> to be computed per cell. A linear regression operator like <code>lm</code> might use a projection with <code>y-axis</code>, <code>x-axis</code>, and <code>row</code>, <code>col</code>. This allows the <code>lm</code> to be computed per cell.</p>
 <p>The <strong>output relation</strong> is the relation of the calculated output to the input values. For example:</p>
 <ul>
 <li>Is the relation per Cell?</li>
 <li>Is the relation per Col or Row?</li>
 <li>Is the relation for All the data?</li>
 </ul>
-<p><strong>Per Cell</strong> example : Let’s say the operator used a projection with <code>row</code> and <code>col</code> and the operator calculates a mean per row/col (i.e. per cell), this would be a per cell relationship. Excel, for example, is always calculating per cell relationships.</p>
+<p><strong>Per Cell</strong> example : Let’s say the operator used a projection with <code>row</code> and <code>col</code> and the operator calculates a <code>mean</code> per row/col (i.e. per cell), this would be a per cell relationship.</p>
 <p><strong>Per Col</strong> example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator performed a clustering on the columns, this would be a column relationship.</p>
-<p><strong>for All</strong> data example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator calculated a total mean of all the data, this would be an all data relationship.</p>
+<p><strong>for All</strong> data example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator calculated a total <code>mean</code> of all the data (i.e. across all rows and cols), this would be an all data relationship.</p>
 </div>
 <div id="set-up-a-github-project" class="section level2 unnumbered">
 <h2>Set up a GitHub project</h2>
-<p><strong>Create a GitHub repository from a template</strong></p>
+<p>All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have three pre-defined templates.</p>
 <ul>
-<li><p><strong>Create a new GitHub repository</strong> with your own account based on a Tercen operator template that you can find on GitHub (<a href="https://github.com/tercen/" class="uri">https://github.com/tercen/</a>).</p></li>
-<li><p>Then you can create your own repository based on this template. Choose an explicit name.</p></li>
-<li><p>Now that the repository is initialized in your GitHub account, you can work on it locally, using tercen-studio for example.</p></li>
+<li><a href="https://github.com/tercen/template_R_operator">template for r operators</a></li>
+<li><a href="https://github.com/tercen/template_shinyr_operator">template for shiny r operators</a></li>
+<li><a href="https://github.com/tercen/template_docker_operator">template for docker operators</a></li>
+</ul>
+<p>It is important to choose a good name for your operator repository, see <a href="naming.html#naming">12</a></p>
+<p><strong>Steps for starting with the operator repository</strong></p>
+<ul>
+<li>Get github account</li>
+<li>Choose an operator name</li>
+<li>Create an operator repository on github based on a template (see above)</li>
+<li>Clone the repo into the local Rstudio contained in tercen studio</li>
 </ul>
 </div>
 <div id="setup-the-input-data" class="section level2 unnumbered">
 <h2>Setup the input data</h2>
-<p>This can be in the local or a cloud instance of Tercen.</p>
+<p>This can be done in the local or a cloud instance of Tercen.</p>
 <ul>
 <li>Login to Tercen (either local or cloud)</li>
 <li>Prepare your data by defining a <strong>cross-tab</strong> projection using a <strong>data step</strong>.</li>
@@ -271,7 +279,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="connecting-to-tercen" class="section level2 unnumbered">
 <h2>Connecting to tercen</h2>
-<p>Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally.</p>
+<p>Once you have cloned the github operator project into your local RStudio and you have setup the Tercen data projection, we can code and test our operator locally.</p>
 <p>If you wish to test with the local version of Tercen, then you do not require to set the <code>tercen.service</code> system variable.</p>
 <ul>
 <li>Load some data up in the</li>

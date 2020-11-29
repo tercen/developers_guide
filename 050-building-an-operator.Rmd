@@ -1,6 +1,6 @@
 # Building an operator app
 
-Here we will learn through a general approach to create an R operator for Tercen. A more detailed and concreate example is outlined in the next chapter where a linear regression operator is built from scratch, in the form of a tutorial.
+Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built from scratch.
 
 Building an operator requires the following sequential steps: 
 
@@ -20,11 +20,9 @@ The first step is to define our __input projection__ and __output relation__. In
 
 > "__Table in, table out!__"
 
-The concept of an input project and an output relation helps in defining your operator.
+To understand the input table and the output table. The input table is defined by the data __input projection__ in Tercen and output table is what is computed by the operator. The output table is related to the input table by an __output relation__.  
 
-
-
-The __input project__ is the project in the data step which is used to use the operator. For example what is on the `y-axis`, `x-axis`, `row`, `col`, `color`, `label`. This input project determines what is the structure of the data which is given to the operator.
+The __input project__ is the projection in the data step which is used by the operator. For example a projection is composed of the `y-axis`, `x-axis`, `row`, `col`, `color`, `label`. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple `mean` would use a `y-axis`, `row`, `col` projection. This allows the `mean` to be computed per cell. A linear regression operator like `lm` might use a projection with `y-axis`, `x-axis`, and `row`, `col`. This allows the `lm` to be computed per cell. 
 
 
 The __output relation__ is the relation of the calculated output to the input values. For example:
@@ -34,26 +32,34 @@ The __output relation__ is the relation of the calculated output to the input va
 * Is the relation for All the data?
 
 
-__Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a mean per row/col (i.e. per cell), this would be a per cell relationship. Excel, for example, is always calculating per cell relationships.
+__Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a `mean` per row/col (i.e. per cell), this would be a per cell relationship.
 
 __Per Col__ example: Let's say the operator used a project with `row` and `col` and the operator performed a clustering on the columns, this would be a column relationship.
 
-__for All__ data example: Let's say the operator used a project with `row` and `col` and the operator calculated a total mean of all the data, this would be an all data relationship.
+__for All__ data example: Let's say the operator used a project with `row` and `col` and the operator calculated a total `mean` of all the data (i.e. across all rows and cols), this would be an all data relationship.
 
 
 ## Set up a GitHub project {-}
 
-**Create a GitHub repository from a template**
+All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have three pre-defined templates.
 
-* __Create a new GitHub repository__ with your own account based on a Tercen operator template that you can find on GitHub (https://github.com/tercen/).
+* [template for r operators](https://github.com/tercen/template_R_operator)
+* [template for shiny r operators](https://github.com/tercen/template_shinyr_operator)
+* [template for docker operators](https://github.com/tercen/template_docker_operator)
 
-* Then you can create your own repository based on this template. Choose an explicit name.
+It is important to choose a good name for your operator repository, see \@ref(naming)
 
-* Now that the repository is initialized in your GitHub account, you can work on it locally, using tercen-studio for example.
+
+**Steps for starting with the operator repository**
+
+* Get github account
+* Choose an operator name
+* Create an operator repository on github based on a template (see above)
+* Clone the repo into the local Rstudio contained in tercen studio
 
 ## Setup the input data {-}
 
-This can be in the local or a cloud instance of Tercen.
+This can be done in the local or a cloud instance of Tercen.
 
 * Login to Tercen (either local or cloud)
 * Prepare your data by defining a __cross-tab__ projection using a __data step__.
@@ -61,7 +67,7 @@ This can be in the local or a cloud instance of Tercen.
 
 ## Connecting to tercen {-}
 
-Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally.
+Once you have cloned the github operator project into your local RStudio and you have setup the Tercen data projection, we can code and test our operator locally.
 
 If you wish to test with the local version of Tercen, then you do not require to set the `tercen.service` system variable. 
 
