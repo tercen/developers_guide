@@ -20,7 +20,7 @@ The first step is to define our __input projection__ and __output relation__. In
 
 > "__Table in, table out!__"
 
-To understand the input table and the output table. The input table is defined by the data __input projection__ in Tercen and output table is what is computed by the operator. The output table is related to the input table by an __output relation__.  
+To understand the input table and the output table. The input table is defined by the data __input projection__ in Tercen and output table is what is computed by the operator. The output table (also called the __computed table__) is related to the input table by an __output relation__.  
 
 The __input project__ is the projection in the data step which is used by the operator. For example a projection is composed of the `y-axis`, `x-axis`, `row`, `col`, `color`, `label`. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple `mean` would use a `y-axis`, `row`, `col` projection. This allows the `mean` to be computed per cell. A linear regression operator like `lm` might use a projection with `y-axis`, `x-axis`, and `row`, `col`. This allows the `lm` to be computed per cell. 
 
@@ -32,11 +32,18 @@ The __output relation__ is the relation of the calculated output to the input va
 * Is the relation for All the data?
 
 
-__Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a `mean` per row/col (i.e. per cell), this would be a per cell relationship.
+__Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a `mean` which is computed for each cell (i.e. per row/col), this would be a per cell relationship.
 
 __Per Col__ example: Let's say the operator used a project with `row` and `col` and the operator performed a clustering on the columns, this would be a column relationship.
 
 __for All__ data example: Let's say the operator used a project with `row` and `col` and the operator calculated a total `mean` of all the data (i.e. across all rows and cols), this would be an all data relationship.
+
+**Steps for designing the operator**
+
+* Understand the Tercen concepts
+* Look at existing operators
+* Decide what __input projection__
+* Decide waht __output relation__
 
 
 ## Set up a GitHub project {-}
@@ -98,18 +105,25 @@ The operator has a file called `operator.json` these define the parameters which
 
 Before deploying, please think what parameters are required and modify this file.
 
-
 ## Managing R packages {-}
 
-The operator manages its packages using the `renv` system.
+The newly created operators requires the correct packages to be loaded.
+Install the packages your require using the standard install procedures, we recommend the following:
+
+* install.packages()
+* remotes::install_github()
+
+Just before you deploy your operator, it is necessary to setup the package management system. A Tercen operator manages its packages using the `renv` system. The `renv` system allows all the packages you required to be recorded in a `renv.lock` file.
+
+
 To generate this use:
 
 
-`renv::init()` 
+```
+renv::init() 
+```
 
-
-
-Before deployment.
+This is done before you `push` the repository to github.
 
 
 
