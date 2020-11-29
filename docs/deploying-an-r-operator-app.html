@@ -278,15 +278,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>1. Copy the code to the main.R script</strong></p>
 <p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file.</p>
 <p>Make sure not to include the <code>options()</code> calls that are only needed during the local development step:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="deploying-an-r-operator-app.html#cb7-1"></a><span class="co"># The following lines shall not be included into main.R:</span></span>
-<span id="cb7-2"><a href="deploying-an-r-operator-app.html#cb7-2"></a><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;wwww&quot;</span>)</span>
-<span id="cb7-3"><a href="deploying-an-r-operator-app.html#cb7-3"></a><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;dddd&quot;</span>)</span>
-<span id="cb7-4"><a href="deploying-an-r-operator-app.html#cb7-4"></a></span>
-<span id="cb7-5"><a href="deploying-an-r-operator-app.html#cb7-5"></a><span class="kw">getOption</span>(<span class="st">&quot;tercen.workflowId&quot;</span>)</span>
-<span id="cb7-6"><a href="deploying-an-r-operator-app.html#cb7-6"></a><span class="kw">getOption</span>(<span class="st">&quot;tercen.stepId&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="deploying-an-r-operator-app.html#cb8-1"></a><span class="co"># The following lines shall not be included into main.R:</span></span>
+<span id="cb8-2"><a href="deploying-an-r-operator-app.html#cb8-2"></a><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;wwww&quot;</span>)</span>
+<span id="cb8-3"><a href="deploying-an-r-operator-app.html#cb8-3"></a><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;dddd&quot;</span>)</span>
+<span id="cb8-4"><a href="deploying-an-r-operator-app.html#cb8-4"></a></span>
+<span id="cb8-5"><a href="deploying-an-r-operator-app.html#cb8-5"></a><span class="kw">getOption</span>(<span class="st">&quot;tercen.workflowId&quot;</span>)</span>
+<span id="cb8-6"><a href="deploying-an-r-operator-app.html#cb8-6"></a><span class="kw">getOption</span>(<span class="st">&quot;tercen.stepId&quot;</span>)</span></code></pre></div>
 <p><strong>2. Initiate renv</strong></p>
 <p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="deploying-an-r-operator-app.html#cb8-1"></a>renv<span class="op">::</span><span class="kw">init</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="deploying-an-r-operator-app.html#cb9-1"></a>renv<span class="op">::</span><span class="kw">init</span>()</span></code></pre></div>
 <p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
 <p><strong>3. Push it to your GitHub repository</strong></p>
 <p>Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.</p>

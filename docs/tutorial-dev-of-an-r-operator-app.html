@@ -265,36 +265,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Open <code>workspace.R</code></p></li>
 <li><p>Replace the data step and workflow IDs taken from the Tercen data step URL in <code>workspace.R</code>:</p></li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="tutorial-dev-of-an-r-operator-app.html#cb5-1"></a><span class="kw">library</span>(tercen)</span>
-<span id="cb5-2"><a href="tutorial-dev-of-an-r-operator-app.html#cb5-2"></a><span class="kw">library</span>(dplyr)</span>
-<span id="cb5-3"><a href="tutorial-dev-of-an-r-operator-app.html#cb5-3"></a></span>
-<span id="cb5-4"><a href="tutorial-dev-of-an-r-operator-app.html#cb5-4"></a><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;WORKFLOWID&quot;</span>)</span>
-<span id="cb5-5"><a href="tutorial-dev-of-an-r-operator-app.html#cb5-5"></a><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;DATASTEPID&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-1"></a><span class="kw">library</span>(tercen)</span>
+<span id="cb6-2"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-2"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb6-3"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-4"></a><span class="kw">options</span>(<span class="st">&quot;tercen.workflowId&quot;</span> =<span class="st"> &quot;WORKFLOWID&quot;</span>)</span>
+<span id="cb6-5"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-5"></a><span class="kw">options</span>(<span class="st">&quot;tercen.stepId&quot;</span>     =<span class="st"> &quot;DATASTEPID&quot;</span>)</span></code></pre></div>
 <ul>
 <li>Code your operator. Here, we implement a function <code>do.lm()</code> that performs a linear regression on the input data frame and return the slope and intercept of the model.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-1"></a>do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</span>
-<span id="cb6-2"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-2"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb6-3"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-3"></a>    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</span>
-<span id="cb6-4"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-4"></a>    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</span>
-<span id="cb6-5"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-5"></a>    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</span>
-<span id="cb6-6"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-6"></a>    <span class="dt">slope =</span> <span class="ot">NaN</span></span>
-<span id="cb6-7"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-7"></a>  )</span>
-<span id="cb6-8"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-8"></a>  </span>
-<span id="cb6-9"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-9"></a>  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df)</span>
-<span id="cb6-10"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-10"></a>  </span>
-<span id="cb6-11"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-11"></a>  out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</span>
-<span id="cb6-12"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-12"></a>  out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</span>
-<span id="cb6-13"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-13"></a>  </span>
-<span id="cb6-14"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-14"></a>  <span class="kw">return</span>(out)</span>
-<span id="cb6-15"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-15"></a>}</span>
-<span id="cb6-16"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-16"></a></span>
-<span id="cb6-17"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-17"></a>ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>()  <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># Get data from the data step</span></span>
-<span id="cb6-18"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-18"></a><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># select variables of interest</span></span>
-<span id="cb6-19"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-19"></a><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># group by row and column (&quot;per cell&quot;)</span></span>
-<span id="cb6-20"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-20"></a><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.)) <span class="op">%&gt;%</span><span class="st">               </span><span class="co"># do the linear model</span></span>
-<span id="cb6-21"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-21"></a><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># add namespace</span></span>
-<span id="cb6-22"><a href="tutorial-dev-of-an-r-operator-app.html#cb6-22"></a><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()                     <span class="co"># push results back to Tercen using the API</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-1"></a>do.lm &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</span>
+<span id="cb7-2"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-2"></a>  out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb7-3"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-3"></a>    <span class="dt">.ri =</span> df<span class="op">$</span>.ri[<span class="dv">1</span>],</span>
+<span id="cb7-4"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-4"></a>    <span class="dt">.ci =</span> df<span class="op">$</span>.ci[<span class="dv">1</span>],</span>
+<span id="cb7-5"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-5"></a>    <span class="dt">intercept =</span> <span class="ot">NaN</span>,</span>
+<span id="cb7-6"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-6"></a>    <span class="dt">slope =</span> <span class="ot">NaN</span></span>
+<span id="cb7-7"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-7"></a>  )</span>
+<span id="cb7-8"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-8"></a>  </span>
+<span id="cb7-9"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-9"></a>  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(.y <span class="op">~</span><span class="st"> </span>.x, <span class="dt">data =</span> df)</span>
+<span id="cb7-10"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-10"></a>  </span>
+<span id="cb7-11"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-11"></a>  out<span class="op">$</span>intercept &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">1</span>]</span>
+<span id="cb7-12"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-12"></a>  out<span class="op">$</span>slope &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[<span class="dv">2</span>]</span>
+<span id="cb7-13"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-13"></a>  </span>
+<span id="cb7-14"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-14"></a>  <span class="kw">return</span>(out)</span>
+<span id="cb7-15"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-15"></a>}</span>
+<span id="cb7-16"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-16"></a></span>
+<span id="cb7-17"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-17"></a>ctx &lt;-<span class="st"> </span><span class="kw">tercenCtx</span>()  <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># Get data from the data step</span></span>
+<span id="cb7-18"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-18"></a><span class="st">  </span><span class="kw">select</span>(.x, .y, .ri, .ci) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># select variables of interest</span></span>
+<span id="cb7-19"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-19"></a><span class="st">  </span><span class="kw">group_by</span>(.ri, .ci) <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># group by row and column (&quot;per cell&quot;)</span></span>
+<span id="cb7-20"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-20"></a><span class="st">  </span><span class="kw">do</span>(<span class="kw">do.lm</span>(.)) <span class="op">%&gt;%</span><span class="st">               </span><span class="co"># do the linear model</span></span>
+<span id="cb7-21"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-21"></a><span class="st">  </span>ctx<span class="op">$</span><span class="kw">addNamespace</span>() <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># add namespace</span></span>
+<span id="cb7-22"><a href="tutorial-dev-of-an-r-operator-app.html#cb7-22"></a><span class="st">  </span>ctx<span class="op">$</span><span class="kw">save</span>()                     <span class="co"># push results back to Tercen using the API</span></span></code></pre></div>
 <ul>
 <li><strong>Execute the code</strong> and <strong>check the results</strong> in Tercen</li>
 </ul>

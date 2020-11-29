@@ -239,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>“<strong>Table in, table out!</strong>”</p>
 </blockquote>
-<p>To understand the input table and the output table. The input table is defined by the data <strong>input projection</strong> in Tercen and output table is what is computed by the operator. The output table is related to the input table by an <strong>output relation</strong>.</p>
+<p>To understand the input table and the output table. The input table is defined by the data <strong>input projection</strong> in Tercen and output table is what is computed by the operator. The output table (also called the <strong>computed table</strong>) is related to the input table by an <strong>output relation</strong>.</p>
 <p>The <strong>input project</strong> is the projection in the data step which is used by the operator. For example a projection is composed of the <code>y-axis</code>, <code>x-axis</code>, <code>row</code>, <code>col</code>, <code>color</code>, <code>label</code>. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple <code>mean</code> would use a <code>y-axis</code>, <code>row</code>, <code>col</code> projection. This allows the <code>mean</code> to be computed per cell. A linear regression operator like <code>lm</code> might use a projection with <code>y-axis</code>, <code>x-axis</code>, and <code>row</code>, <code>col</code>. This allows the <code>lm</code> to be computed per cell.</p>
 <p>The <strong>output relation</strong> is the relation of the calculated output to the input values. For example:</p>
 <ul>
@@ -247,9 +247,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Is the relation per Col or Row?</li>
 <li>Is the relation for All the data?</li>
 </ul>
-<p><strong>Per Cell</strong> example : Let’s say the operator used a projection with <code>row</code> and <code>col</code> and the operator calculates a <code>mean</code> per row/col (i.e. per cell), this would be a per cell relationship.</p>
+<p><strong>Per Cell</strong> example : Let’s say the operator used a projection with <code>row</code> and <code>col</code> and the operator calculates a <code>mean</code> which is computed for each cell (i.e. per row/col), this would be a per cell relationship.</p>
 <p><strong>Per Col</strong> example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator performed a clustering on the columns, this would be a column relationship.</p>
 <p><strong>for All</strong> data example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator calculated a total <code>mean</code> of all the data (i.e. across all rows and cols), this would be an all data relationship.</p>
+<p><strong>Steps for designing the operator</strong></p>
+<ul>
+<li>Understand the Tercen concepts</li>
+<li>Look at existing operators</li>
+<li>Decide what <strong>input projection</strong></li>
+<li>Decide waht <strong>output relation</strong></li>
+</ul>
 </div>
 <div id="set-up-a-github-project" class="section level2 unnumbered">
 <h2>Set up a GitHub project</h2>
@@ -301,10 +308,16 @@ options(&quot;tercen.password&quot;= &quot;pppp&quot;)</code></pre>
 </div>
 <div id="managing-r-packages" class="section level2 unnumbered">
 <h2>Managing R packages</h2>
-<p>The operator manages its packages using the <code>renv</code> system.
-To generate this use:</p>
-<p><code>renv::init()</code></p>
-<p>Before deployment.</p>
+<p>The newly created operators requires the correct packages to be loaded.
+Install the packages your require using the standard install procedures, we recommend the following:</p>
+<ul>
+<li>install.packages()</li>
+<li>remotes::install_github()</li>
+</ul>
+<p>Just before you deploy your operator, it is necessary to setup the package management system. A Tercen operator manages its packages using the <code>renv</code> system. The <code>renv</code> system allows all the packages you required to be recorded in a <code>renv.lock</code> file.</p>
+<p>To generate this use:</p>
+<pre><code>renv::init() </code></pre>
+<p>This is done before you <code>push</code> the repository to github.</p>
 </div>
 <div id="deploy" class="section level2 unnumbered">
 <h2>Deploy!</h2>
