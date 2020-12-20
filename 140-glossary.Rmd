@@ -1,6 +1,6 @@
 # Glossary
 
-_Measurement__: A numerical variable
+__Measurement__: A numerical variable
 
 __Observation__: An observation is the factor name given to a value (measurement), at a particular moment in time, of a particular variable.
 
