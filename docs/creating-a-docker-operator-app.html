@@ -189,6 +189,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-in-tercen-studio"><i class="fa fa-check"></i>Create the R operator in Tercen Studio</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#integrating-any-code"><i class="fa fa-check"></i>Integrating any code</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
 <li class="chapter" data-level="" data-path="naming.html"><a href="naming.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
@@ -313,6 +314,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Finally, push the image to your hub.</li>
 </ul>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="creating-a-docker-operator-app.html#cb22-1"></a><span class="fu">sudo</span> docker push <span class="va">$ACCOUNT</span>/<span class="va">$REPO</span>:<span class="va">$TAG</span></span></code></pre></div>
+</div>
+<div id="integrating-any-code" class="section level2 unnumbered">
+<h2>Integrating any code</h2>
+<p>If your algorithm code is not in R. Then consider the following example, it highlights an operator which is written in C++ called <code>atsne</code> or approximate tsne.</p>
+<p>It is implemented in Tercen using two concepts, one an operator and one a docker.</p>
+<ul>
+<li>an <a href="https://github.com/tercen/atsne_operator">atsne_operator</a></li>
+<li>an <a href="https://github.com/tercen/atsne_docker_operator">atsne_docker</a></li>
+</ul>
+<p>The <code>atsne_operator</code> calls the C++ code implemented in the <code>atsne_docker</code>.</p>
+<p>Please check out the repository (click on links above) and see how this it was configured.</p>
 <center>
 <img src="images/goldfish.png" />
 </center>

@@ -1,9 +1,7 @@
 # Known issues
 
-The beta version of Tercen has the following known issues and limitations:
+Here is a list of known  `tercen_studio` issues.
 
-* In the Tercen app library, the apps currently do not use the category concept.
-
-This issues are in progress of being solved.
+* on Windows it is necessary to have sufficient memory to run `tercen studio`
 
 <center>![](images/goldfish.png)</center>

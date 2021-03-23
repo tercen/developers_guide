@@ -126,4 +126,18 @@ docker build -t $ACCOUNT/$REPO:$TAG .
 sudo docker push $ACCOUNT/$REPO:$TAG
 ```
 
+## Integrating any code  {-}
+
+If your algorithm code is not in R. Then consider the following example, it highlights an operator which is written in C++ called `atsne` or approximate tsne.
+
+It is implemented in Tercen using two concepts, one an operator and one a docker.
+
+* an [atsne_operator](https://github.com/tercen/atsne_operator)
+* an [atsne_docker](https://github.com/tercen/atsne_docker_operator)
+
+The `atsne_operator` calls the C++ code implemented in the `atsne_docker`.
+
+Please check out the repository (click on links above) and see how this it was configured.
+
+
 <center>![](images/goldfish.png)</center>
