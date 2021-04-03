@@ -16,7 +16,7 @@ First you need to install [docker-compose](https://docs.docker.com/compose/insta
 
 If you use Windows, you can install [Docker-Desktop for Windows](https://docs.docker.com/docker-for-windows/install/) that includes `docker-compose`.
 
-**Important**: Make sure the _Enable Hyper-V Windows Features_ option is selected on the Configuration page.
+**Advise**: Select the __WSL 2 backend__ system option when installing on Windows.
 
 
 **For Mac and Linux:**
