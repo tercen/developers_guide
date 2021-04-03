@@ -6,7 +6,7 @@ Some R packages require additional system libraries that might not be installed 
 
 A solution is to create a **docker container** with our environment. If you are not familiar with Docker, it is highly recommended that you read the [Get started with Docker guide](https://docs.docker.com/get-started/).
 
-## Create the R operator in Tercen Studio {-}
+## Create the R operator locally {-}
 
 As an example, we will use the [worldmap Tercen operator](https://github.com/tercen/shiny_worldmap_operator). It requires the R package `sf`, commonly used to plot maps. This package requires an external system dependency, `GDAL`, depending itself on `UDUNIT2`.
 
@@ -15,7 +15,7 @@ You will not be able to install this R package if you don't have these dependenc
 ```bash
 apt-get -y update && apt-get install -y libudunits2-dev libgdal-dev
 ```
-Once the operator is running locally, we can prepare the docker operator.
+Once the operator is running locally (see section [Running docker operators locally]), we can prepare the docker operator.
 
 ## Create the docker operator {-}
 
@@ -126,7 +126,37 @@ docker build -t $ACCOUNT/$REPO:$TAG .
 sudo docker push $ACCOUNT/$REPO:$TAG
 ```
 
-## Integrating any code  {-}
+## Running docker operators locally {-}
+
+If you wish to test your docker operator in your local __Tercen__, you require to activate the docker capability in __Tercen Studio__ by changing the `docker-compose.yaml` file of your __Tercen Studio__ setup.
+
+Please check the `docker-compose.yaml` file, it is found in main installation folder of __Tercen Studio__.
+
+The steps to modify the file are:
+
+First stop the dockers:
+
+`docker-compose down`
+
+Edit the `docker-compose.yaml` file, read the comments within the file, there a set of lines which require to be uncommented. The are by default commented out:
+
+```
+#    environment:
+#      - tercen.log.level="0"
+# needed for docker operators, 172.17.0.1 is the default docker gateway
+#      - tercen.public.client.uri=http://172.17.0.1:5402
+#      - tercen.worker.public.ip=172.17.0.1
+```
+
+The above is an example to activate on an Ubuntu system, the settings may differ for windows, please check with `support@tercen.com`.
+
+After you have saved the file, then start the dockers.
+
+`docker-compose up -d`
+
+These modification allow __Tercen Studio__ to run operators which are using dockers.
+
+## Integrating any code (e.g. C++)  {-}
 
 If your algorithm code is not in R. Then consider the following example, it highlights an operator which is written in C++ called `atsne` or approximate tsne.
 

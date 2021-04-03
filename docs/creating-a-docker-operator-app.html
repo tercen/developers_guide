@@ -186,10 +186,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#preparing-operator-testing"><i class="fa fa-check"></i>Preparing operator testing</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>11</b> Creating a docker operator app</a><ul>
-<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-in-tercen-studio"><i class="fa fa-check"></i>Create the R operator in Tercen Studio</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-locally"><i class="fa fa-check"></i>Create the R operator locally</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
-<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#integrating-any-code"><i class="fa fa-check"></i>Integrating any code</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#running-docker-operators-locally"><i class="fa fa-check"></i>Running docker operators locally</a></li>
+<li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#integrating-any-code-e.g.-c"><i class="fa fa-check"></i>Integrating any code (e.g. C++)</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
 <li class="chapter" data-level="" data-path="naming.html"><a href="naming.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
@@ -225,12 +226,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Some R packages require additional system libraries that might not be installed in the Tercen environment. We can install them locally, but a problem persists:</p>
 <p><strong>How to tell Tercen to install these dependencies when installing an operator?</strong></p>
 <p>A solution is to create a <strong>docker container</strong> with our environment. If you are not familiar with Docker, it is highly recommended that you read the <a href="https://docs.docker.com/get-started/">Get started with Docker guide</a>.</p>
-<div id="create-the-r-operator-in-tercen-studio" class="section level2 unnumbered">
-<h2>Create the R operator in Tercen Studio</h2>
+<div id="create-the-r-operator-locally" class="section level2 unnumbered">
+<h2>Create the R operator locally</h2>
 <p>As an example, we will use the <a href="https://github.com/tercen/shiny_worldmap_operator">worldmap Tercen operator</a>. It requires the R package <code>sf</code>, commonly used to plot maps. This package requires an external system dependency, <code>GDAL</code>, depending itself on <code>UDUNIT2</code>.</p>
 <p>You will not be able to install this R package if you don’t have these dependencies installed on the system. To install the package in Tercen Studio, we simply need to run this command in the terminal:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="creating-a-docker-operator-app.html#cb16-1"></a><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y libudunits2-dev libgdal-dev</span></code></pre></div>
-<p>Once the operator is running locally, we can prepare the docker operator.</p>
+<p>Once the operator is running locally (see section <a href="creating-a-docker-operator-app.html#running-docker-operators-locally">Running docker operators locally</a>), we can prepare the docker operator.</p>
 </div>
 <div id="create-the-docker-operator" class="section level2 unnumbered">
 <h2>Create the docker operator</h2>
@@ -315,8 +316,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="creating-a-docker-operator-app.html#cb22-1"></a><span class="fu">sudo</span> docker push <span class="va">$ACCOUNT</span>/<span class="va">$REPO</span>:<span class="va">$TAG</span></span></code></pre></div>
 </div>
-<div id="integrating-any-code" class="section level2 unnumbered">
-<h2>Integrating any code</h2>
+<div id="running-docker-operators-locally" class="section level2 unnumbered">
+<h2>Running docker operators locally</h2>
+<p>If you wish to test your docker operator in your local <strong>Tercen</strong>, you require to activate the docker capability in <strong>Tercen Studio</strong> by changing the <code>docker-compose.yaml</code> file of your <strong>Tercen Studio</strong> setup.</p>
+<p>Please check the <code>docker-compose.yaml</code> file, it is found in main installation folder of <strong>Tercen Studio</strong>.</p>
+<p>The steps to modify the file are:</p>
+<p>First stop the dockers:</p>
+<p><code>docker-compose down</code></p>
+<p>Edit the <code>docker-compose.yaml</code> file, read the comments within the file, there a set of lines which require to be uncommented. The are by default commented out:</p>
+<pre><code>#    environment:
+#      - tercen.log.level=&quot;0&quot;
+# needed for docker operators, 172.17.0.1 is the default docker gateway
+#      - tercen.public.client.uri=http://172.17.0.1:5402
+#      - tercen.worker.public.ip=172.17.0.1</code></pre>
+<p>The above is an example to activate on an Ubuntu system, the settings may differ for windows, please check with <code>support@tercen.com</code>.</p>
+<p>After you have saved the file, then start the dockers.</p>
+<p><code>docker-compose up -d</code></p>
+<p>These modification allow <strong>Tercen Studio</strong> to run operators which are using dockers.</p>
+</div>
+<div id="integrating-any-code-e.g.-c" class="section level2 unnumbered">
+<h2>Integrating any code (e.g. C++)</h2>
 <p>If your algorithm code is not in R. Then consider the following example, it highlights an operator which is written in C++ called <code>atsne</code> or approximate tsne.</p>
 <p>It is implemented in Tercen using two concepts, one an operator and one a docker.</p>
 <ul>
