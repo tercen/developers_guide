@@ -44,7 +44,7 @@ Our terms for developers include:
 * You must only use the data you need to build your product or service.
 * You must have an end user agreement and a privacy policy in place with respect to each of your customers - and it must be compatible with Tercen’s terms.
 * You must ensure you're meeting all your legal obligations in terms of applicable data protection and consumer protection; don’t use Tercen’s products in connection with data you don’t have permission to process.
-* You must be able to meet the requirements of the European Union's General Data Protection Regulation (GDPR) for any data you process which falls within the scope of the legislation and fulfil subject access requests as required. In addition to breach notifications required under GDPR, you'll notify Tercen of any personal data breaches within 72 hours of becoming aware of a breach.
+* You must be able to meet the requirements of the European Union's General Data Protection Regulation (GDPR) for any data you process which falls within the scope of the legislation and fulfill subject access requests as required. In addition to breach notifications required under GDPR, you'll notify Tercen of any personal data breaches within 72 hours of becoming aware of a breach.
 * You must grant Tercen permission to audit your data processing activities. This can include independently produced audit reports.
 
 

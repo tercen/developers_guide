@@ -18,7 +18,7 @@ All __workflow apps__ who are on a git repository are installable, only the git 
 
 ## Notify the community {-}
 
-Currently, we ask you to send an email to info@tercen.com containing the description and link to the workflow app git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+Currently, we ask you to send an email to <support@tercen.com> containing the description and link to the workflow app git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
 
 
 

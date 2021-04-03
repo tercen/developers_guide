@@ -36,9 +36,7 @@ A breakdown of the different parts are:
 \
 
 
-
-
-Please make sure the git repo description outlines a brief functional description of the operator. e.g. `calculates a median`
+Please make sure the git repository description outlines a brief functional description of the operator. e.g. `calculates a median`
 
 
 <center>![](images/goldfish.png)</center>
