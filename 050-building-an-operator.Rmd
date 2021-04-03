@@ -28,9 +28,9 @@ The __input project__ is the projection in the data step which is used by the op
 The __output relation__ is the relation of the calculated output to the input values. For example:
 
 * Is the relation per Cell?
-* Is the relation per Col or Row? 
+* Is the relation per Col?
+* Is the relation per Row? 
 * Is the relation for All the data?
-
 
 __Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a `mean` which is computed for each cell (i.e. per row/col), this would be a per cell relationship.
 
@@ -51,8 +51,9 @@ __for All__ data example: Let's say the operator used a project with `row` and `
 All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have three pre-defined templates.
 
 * [template for r operators](https://github.com/tercen/template_R_operator)
-* [template for shiny r operators](https://github.com/tercen/template_shinyr_operator)
+* [template for shiny r operators](https://github.com/tercen/template_shiny_operator)
 * [template for docker operators](https://github.com/tercen/template_docker_operator)
+* [template for python operators](https://github.com/tercen/template_python_operator)
 
 It is important to choose a good name for your operator repository, see \@ref(naming)
 
