@@ -48,7 +48,7 @@ __for All__ data example: Let's say the operator used a project with `row` and `
 
 ## Set up a GitHub project {-}
 
-All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have three pre-defined templates.
+All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have the following templates available:
 
 * [template for r operators](https://github.com/tercen/template_R_operator)
 * [template for shiny r operators](https://github.com/tercen/template_shiny_operator)

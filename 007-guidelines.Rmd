@@ -1,11 +1,9 @@
 # Guidelines
 
-We want developers to have a great experience building on the Tercen Platform. We believe that building a vibrant developer ecosystem around Tercen benefits everyone involved, and helps our mission to make internet business personal. 
-
+We want developers to have a great experience building on the Tercen Platform. We believe that building a vibrant developer ecosystem around Tercen benefits everyone involved, and helps our mission to make data analysis accessible to a wider community. 
 
 
 We've written these guidelines for anyone using Tercen’s products and services, to show you how to use Tercen and our APIs, and to share best practices as we, and you, continue to build new and exciting products and services.
-
 
 
 But, like everything in life, there have to be some rules of engagement which is why we’ve drawn up these developer guidelines. Yes, they're written in legal terms, to protect us and you, but we’ve tried to ensure they are as simple as possible. We want to point you towards opportunities rather than focusing on what can’t be done.
