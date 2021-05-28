@@ -8,8 +8,13 @@ The process for building a workflows app is:
 * Replace the initial Table step with Input step
 * Add a final Output step
 * Save it
-* Go to the properties and set it as an app
+* Create an app folder in the project area
+* Move the workflow to this app folder
 * Test it in a workflow with data
+* Download the workflow
+* Create a github repository
+* Upload the workflow app
+* Tag the repository
 * Notify the community of its existence (see below)
 
 All the building and deployment processes are performed in Tercen.

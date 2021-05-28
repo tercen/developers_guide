@@ -4,8 +4,12 @@ The process for building a __template app__ is:
 
 * Design the __template__
 * Create a workflow in Tercen
-* Set the properties of the workflow to __template__
 * Test it on input data
+* Create a template folder in the project
+* Move the workflow into the template folder
+* Download the template from the project
+* Create a github and upload template
+* Tag the github
 * Notify the community of its existence (see below)
 
 All the building and deployment steps are performed in Tercen.
