@@ -1,5 +1,9 @@
 # Building a template app
 
+A template workflow is perfect for users who wish to have a complete workflow to perform a complete analysis.
+
+The building of a __template app__ does not require any programming.
+
 The process for building a __template app__ is:
 
 * Design the __template__

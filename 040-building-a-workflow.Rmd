@@ -1,6 +1,10 @@
 # Building a workflow app
 
-The process for building a workflows app is:
+A __workflow app__ is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA)
+
+The building of a __workflow app__ does not require any programming.
+
+The process for building a workflow app is:
 
 * Design the __workflow app__
 * Create a __workflow app__ in Tercen
