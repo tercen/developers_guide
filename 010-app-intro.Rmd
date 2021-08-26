@@ -26,11 +26,11 @@ The building of each app is explained in the following chapters.
 
 ## Template app {-}
 No programming knowledge is required to build a template app.
-These are built by using Tercen user interface and deployed within Tercen 
+These are built by using the Tercen user interface and deployed within Tercen 
 
 ## Workflow app {-}
 No programming knowledge is required to build a workflow app.
-These are built by using Tercen user interface and deployed within Tercen 
+These are built by using the Tercen user interface and deployed within Tercen 
 
 ## Operator app {-}
 Programming knowledge is required to build an __operator app__ using any number of programming languages (R, Python, Rust, etc.). The code is put on git hub for the __app library__ to find. 

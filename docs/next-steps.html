@@ -32,6 +32,7 @@
   
 <link rel="prev" href="known-issues.html"/>
 <link rel="next" href="glossary.html"/>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -49,7 +50,6 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script>
@@ -65,18 +65,18 @@
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -96,7 +96,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -145,25 +145,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="welcome.html"><a href="welcome.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
-<li class="chapter" data-level="2" data-path="guidelines.html"><a href="guidelines.html"><i class="fa fa-check"></i><b>2</b> Guidelines</a><ul>
+<li class="chapter" data-level="2" data-path="guidelines.html"><a href="guidelines.html"><i class="fa fa-check"></i><b>2</b> Guidelines</a>
+<ul>
 <li class="chapter" data-level="" data-path="guidelines.html"><a href="guidelines.html#legal-text"><i class="fa fa-check"></i>Legal text</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>3</b> Apps types</a><ul>
+<li class="chapter" data-level="3" data-path="apps-types.html"><a href="apps-types.html"><i class="fa fa-check"></i><b>3</b> Apps types</a>
+<ul>
 <li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#template-app"><i class="fa fa-check"></i>Template app</a></li>
 <li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#workflow-app"><i class="fa fa-check"></i>Workflow app</a></li>
 <li class="chapter" data-level="" data-path="apps-types.html"><a href="apps-types.html#operator-app"><i class="fa fa-check"></i>Operator app</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>4</b> Setting up Tercen Studio</a><ul>
+<li class="chapter" data-level="4" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>4</b> Setting up Tercen Studio</a>
+<ul>
 <li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#installing-tercen-studio"><i class="fa fa-check"></i>Installing Tercen Studio</a></li>
 <li class="chapter" data-level="" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html#starting-tercen-studio"><i class="fa fa-check"></i>Starting Tercen Studio</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>5</b> Building a template app</a><ul>
+<li class="chapter" data-level="5" data-path="building-a-template-app.html"><a href="building-a-template-app.html"><i class="fa fa-check"></i><b>5</b> Building a template app</a>
+<ul>
 <li class="chapter" data-level="" data-path="building-a-template-app.html"><a href="building-a-template-app.html#notify-the-community"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>6</b> Building a workflow app</a><ul>
+<li class="chapter" data-level="6" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html"><i class="fa fa-check"></i><b>6</b> Building a workflow app</a>
+<ul>
 <li class="chapter" data-level="" data-path="building-a-workflow-app.html"><a href="building-a-workflow-app.html#notify-the-community-1"><i class="fa fa-check"></i>Notify the community</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html"><i class="fa fa-check"></i><b>7</b> Building an operator app</a><ul>
+<li class="chapter" data-level="7" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html"><i class="fa fa-check"></i><b>7</b> Building an operator app</a>
+<ul>
 <li class="chapter" data-level="" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html#design-the-operator"><i class="fa fa-check"></i>Design the operator</a></li>
 <li class="chapter" data-level="" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html#set-up-a-github-project"><i class="fa fa-check"></i>Set up a GitHub project</a></li>
 <li class="chapter" data-level="" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html#setup-the-input-data"><i class="fa fa-check"></i>Setup the input data</a></li>
@@ -172,35 +178,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html#managing-r-packages"><i class="fa fa-check"></i>Managing R packages</a></li>
 <li class="chapter" data-level="" data-path="building-an-operator-app.html"><a href="building-an-operator-app.html#deploy"><i class="fa fa-check"></i>Deploy!</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html"><i class="fa fa-check"></i><b>8</b> Tutorial: Dev of an R operator app</a><ul>
+<li class="chapter" data-level="8" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html"><i class="fa fa-check"></i><b>8</b> Tutorial: Dev of an R operator app</a>
+<ul>
 <li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#designing-the-operator"><i class="fa fa-check"></i>Designing the operator</a></li>
 <li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#setting-up-the-project"><i class="fa fa-check"></i>Setting up the project</a></li>
 <li class="chapter" data-level="" data-path="tutorial-dev-of-an-r-operator-app.html"><a href="tutorial-dev-of-an-r-operator-app.html#develope-the-operator-locally"><i class="fa fa-check"></i>Develope the operator locally</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html"><i class="fa fa-check"></i><b>9</b> Deploying an R operator app</a><ul>
+<li class="chapter" data-level="9" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html"><i class="fa fa-check"></i><b>9</b> Deploying an R operator app</a>
+<ul>
 <li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#documenting-the-operator"><i class="fa fa-check"></i>Documenting the operator</a></li>
 <li class="chapter" data-level="" data-path="deploying-an-r-operator-app.html"><a href="deploying-an-r-operator-app.html#deploy-1"><i class="fa fa-check"></i>Deploy!</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html"><i class="fa fa-check"></i><b>10</b> Improving an R operator app</a><ul>
+<li class="chapter" data-level="10" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html"><i class="fa fa-check"></i><b>10</b> Improving an R operator app</a>
+<ul>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#error-catching"><i class="fa fa-check"></i>Error catching</a></li>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#adding-properties"><i class="fa fa-check"></i>Adding properties</a></li>
 <li class="chapter" data-level="" data-path="improving-an-r-operator-app.html"><a href="improving-an-r-operator-app.html#preparing-operator-testing"><i class="fa fa-check"></i>Preparing operator testing</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>11</b> Creating a docker operator app</a><ul>
+<li class="chapter" data-level="11" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html"><i class="fa fa-check"></i><b>11</b> Creating a docker operator app</a>
+<ul>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-r-operator-locally"><i class="fa fa-check"></i>Create the R operator locally</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#create-the-docker-operator"><i class="fa fa-check"></i>Create the docker operator</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#build-and-push-docker-image"><i class="fa fa-check"></i>Build and push docker image</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#running-docker-operators-locally"><i class="fa fa-check"></i>Running docker operators locally</a></li>
 <li class="chapter" data-level="" data-path="creating-a-docker-operator-app.html"><a href="creating-a-docker-operator-app.html#integrating-any-code-e.g.-c"><i class="fa fa-check"></i>Integrating any code (e.g. C++)</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a><ul>
+<li class="chapter" data-level="12" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>12</b> Naming guidelines</a>
+<ul>
 <li class="chapter" data-level="" data-path="naming.html"><a href="naming.html#operator-naming-guidelines"><i class="fa fa-check"></i>Operator naming guidelines</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="tercen-app-library.html"><a href="tercen-app-library.html"><i class="fa fa-check"></i><b>13</b> Tercen app library</a></li>
 <li class="chapter" data-level="14" data-path="known-issues.html"><a href="known-issues.html"><i class="fa fa-check"></i><b>14</b> Known issues</a></li>
 <li class="chapter" data-level="15" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>15</b> Next steps</a></li>
 <li class="chapter" data-level="16" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>16</b> Glossary</a></li>
-<li class="chapter" data-level="17" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>17</b> Appendix</a><ul>
+<li class="chapter" data-level="17" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>17</b> Appendix</a>
+<ul>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#updating-tercen-studio"><i class="fa fa-check"></i>Updating tercen-studio</a></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#uninstallation-of-tercen-studio"><i class="fa fa-check"></i>Uninstallation of tercen-studio</a></li>
 <li class="chapter" data-level="" data-path="appendix.html"><a href="appendix.html#building-tercen-studio"><i class="fa fa-check"></i>Building tercen-studio</a></li>
@@ -222,7 +234,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="next-steps" class="section level1">
+<div id="next-steps" class="section level1" number="15">
 <h1><span class="header-section-number">Chapter 15</span> Next steps</h1>
 <p>Here are some ideas:</p>
 <ul>
