@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>App builder’s guide to Tercen</title>
+  <title>Chapter 11 Creating a shiny operator app | App builder’s guide to Tercen</title>
   <meta name="description" content="This is a app builder’s guide to Tercen" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="App builder’s guide to Tercen" />
+  <meta property="og:title" content="Chapter 11 Creating a shiny operator app | App builder’s guide to Tercen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="tercen/appbuilders-guide" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="App builder’s guide to Tercen" />
+  <meta name="twitter:title" content="Chapter 11 Creating a shiny operator app | App builder’s guide to Tercen" />
   
   <meta name="twitter:description" content="This is a app builder’s guide to Tercen" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="welcome.html"/>
+<link rel="prev" href="improving-an-r-operator-app.html"/>
+<link rel="next" href="creating-a-docker-operator-app.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -235,32 +235,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">App builder’s guide to Tercen</h1>
-<p class="author"><em>Tercen support document</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>This guide outlines how to design, develop and share apps for <strong>Tercen</strong>.</p>
-<center>
-<img src="images/cover.png" />
-</center>
+<div id="creating-a-shiny-operator-app" class="section level1" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Creating a shiny operator app</h1>
+<p>It is easy to create a shiny operator. It is exactly like the creating a standard operator but it uses a the shiny framework.</p>
+<p>An example of a simple shiny is found at:</p>
+<p><a href="https://github.com/tercen/heatmap_shiny_operator" class="uri">https://github.com/tercen/heatmap_shiny_operator</a></p>
+<p>A shiny app can be in three modes, these modes reflect the three states of a shiny operator.</p>
 <ul>
-<li><p><strong>Why read this guide?</strong> :
-Your curious or wish to build an app for Tercen then this is the guide.</p></li>
-<li><p><strong>Acknowledgement</strong>:
-I would like to thank all the users for their feedback. It has helped us improve Tercen.</p></li>
-<li><p><strong>Feedback</strong>:
-If you wish to give feedback then please do not hesitate to create an entry in the <a href="https://github.com/tercen/appbuilders-guide/issues">issue tracker</a>.</p></li>
-<li><p><strong>Motivation</strong>:<br />
-Tercen promotes collaboration for data analysis. Not everyone can code or even wants to, but everyone should benefit from the explosion of data and code currently taking place.
-Tercen allows non programmers (e.g. biologists) to explore their data and allows programmers (e.g. bioinformaticians) to upload their code (or web-apps) for the biologist to use. By offering this services we believe biologist get empowered and can claim back control of their data. The bioinformatician gets liberated from the operational details and day to day analysis demands from the biologist. This is summed up with the phrase:</p></li>
+<li>show</li>
+<li>run</li>
+<li>showResult</li>
 </ul>
-<blockquote>
-<p>Tercen <strong>empowers</strong> the biologist and <strong>liberates</strong> the bioinformatician.</p>
-</blockquote>
+<p>The first mode “show” is when the initial mode when an shiny operator is added to the cross-tab view
+The second mode “run” is when the shiny has been executed
+The third mode “showResult” is when the results of the an excuted shiny is presented.</p>
+<p>A good example of all three modes go to
+<a href="https://github.com/tercen/shiny_operator2" class="uri">https://github.com/tercen/shiny_operator2</a></p>
 <center>
-<img src="images/stairs.png" />
+<img src="images/goldfish.png" />
 </center>
 
 </div>
@@ -269,8 +261,8 @@ Tercen allows non programmers (e.g. biologists) to explore their data and allow
           </div>
         </div>
       </div>
-
-<a href="welcome.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="improving-an-r-operator-app.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="creating-a-docker-operator-app.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

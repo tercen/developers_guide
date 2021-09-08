@@ -8,6 +8,7 @@ building-an-operator-app
 tutorial-dev-of-an-r-operator-app
 deploying-an-r-operator-app
 improving-an-r-operator-app
+creating-a-shiny-operator-app
 creating-a-docker-operator-app
 naming
 tercen-app-library
