@@ -1,7 +1,0 @@
-# Known issues
-
-Here is a list of known  `tercen_studio` issues.
-
-* on Windows it is necessary to have sufficient memory to run `tercen studio`
-
-<center>![](images/goldfish.png)</center>

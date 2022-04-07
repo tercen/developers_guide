@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Known issues | Tercen developer’s guide</title>
+<title>Chapter 2 Data relations | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="Here is a list of known tercen_studio issues. on Windows it is necessary to have sufficient memory to run tercen studio">
+<meta name="description" content="Refer to starters guide. Main activity Tercen is developing data analysis workflows. Building block = operator.">
 <meta name="generator" content="bookdown 0.25 with bs4_book()">
-<meta property="og:title" content="Known issues | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 2 Data relations | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="Here is a list of known tercen_studio issues. on Windows it is necessary to have sufficient memory to run tercen studio">
+<meta property="og:description" content="Refer to starters guide. Main activity Tercen is developing data analysis workflows. Building block = operator.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Known issues | Tercen developer’s guide">
-<meta name="twitter:description" content="Here is a list of known tercen_studio issues. on Windows it is necessary to have sufficient memory to run tercen studio">
+<meta name="twitter:title" content="Chapter 2 Data relations | Tercen developer’s guide">
+<meta name="twitter:description" content="Refer to starters guide. Main activity Tercen is developing data analysis workflows. Building block = operator.">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -45,27 +45,28 @@
 <li><a class="" href="index.html">Welcome</a></li>
 <li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
 <li class="book-part">Getting started</li>
-<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
-<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li><a class="active" href="data-relations.html"><span class="header-section-number">2</span> Data relations</a></li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">3</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">4</span> Setting up Tercen Studio</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">5</span> Building a template</a></li>
 <li class="book-part">Operators</li>
-<li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
-<li><a class="" href="tutorial-dev-of-an-r-operator.html"><span class="header-section-number">6</span> Tutorial: Dev of an R operator</a></li>
-<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
-<li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
-<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
+<li><a class="" href="building-an-operator.html"><span class="header-section-number">6</span> Building an operator</a></li>
+<li><a class="" href="tutorial-dev-of-an-r-operator.html"><span class="header-section-number">7</span> Tutorial: Dev of an R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">8</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">9</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">10</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">11</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">12</span> Continuous integration</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">12</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="naming.html"><span class="header-section-number">13</span> Development guidelines</a></li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">14</span> Next steps</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">15</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
-<li><a class="active" href="known-issues.html">Known issues</a></li>
+<li><a class="" href="known-issues.html">Known issues</a></li>
 <li><a class="" href="tercen-app-library.html">Tercen app library</a></li>
 </ul>
 
@@ -74,25 +75,20 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="known-issues" class="section level1 unnumbered">
-<h1>Known issues<a class="anchor" aria-label="anchor" href="#known-issues"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="data-relations" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Data relations<a class="anchor" aria-label="anchor" href="#data-relations"><i class="fas fa-link"></i></a>
 </h1>
-<p>Here is a list of known <code>tercen_studio</code> issues.</p>
-<ul>
-<li>on Windows it is necessary to have sufficient memory to run <code>tercen studio</code>
-</li>
-</ul>
-<center>
-<img src="images/goldfish.png">
-</center>
-
+<p>Refer to starters guide.</p>
+<p>Main activity Tercen is developing data analysis workflows.</p>
+<p>Building block = operator.</p>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="tercen-studio.html">Tercen Studio</a></div>
-<div class="next"><a href="tercen-app-library.html">Tercen app library</a></div>
+<div class="prev"><a href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></div>
+<div class="next"><a href="core-concepts.html"><span class="header-section-number">3</span> Core concepts</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#known-issues">Known issues</a></li></ul>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#data-relations"><span class="header-section-number">2</span> Data relations</a></li></ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

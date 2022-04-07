@@ -1,0 +1,106 @@
+# Guidelines
+
+We want developers to have a great experience building on the Tercen Platform. 
+We believe that building a vibrant developer ecosystem around Tercen benefits 
+everyone involved, and helps our mission to make data analysis accessible to a 
+wider community. 
+
+
+We've written these guidelines for anyone using Tercen’s products and services, 
+to show you how to use Tercen and our APIs, and to share best practices as we, 
+and you, continue to build new and exciting products and services.
+
+
+But, like everything in life, there have to be some rules of engagement which is
+why we’ve drawn up these developer guidelines. Yes, they're written in legal 
+terms, to protect us and you, but we’ve tried to ensure they are as simple as 
+possible. We want to point you towards opportunities rather than focusing on 
+what can’t be done.
+
+These guidelines sit alongside, and are in addition to our 
+[Terms of Service](https://github.com/tercen/Policy/blob/main/Terms.md) and 
+[Privacy Policy](https://github.com/tercen/Policy/blob/main/Privacy.md) so 
+please do make sure you’ve read and understand these documents. If we feel you 
+are misusing our products or services, we reserve the right to withdraw access 
+to our products and services entirely.
+
+## Legal text {-}
+
+Before starting work, we'll ask you to confirm that you're happy to comply with 
+the spirit and the letter of these guidelines.
+
+
+Please use Tercen’s products and services responsibly. Our products, services 
+and our brand are really important to us, and we ask that you do not do anything 
+that might damage them.
+
+
+We expect data produced with Tercen’s products to be represented transparently 
+and honestly. Don’t misrepresent data or metrics created by our products.
+We expect you to use our products and services to help serve your customers. 
+Don't re-sell, re-purpose or license, any data obtained from Tercen. Don’t use 
+our products to create a service that competes with Tercen or infringes our 
+copyright. Keeping our customers' data secure is the most important thing that 
+Tercen does. Don’t use spiders, robots crawlers, data mining or similar tools 
+to scrape the Tercen Website or APIs.
+
+
+Tercen needs access to monitor your access to our API so don’t block us from 
+doing so. Respect our rate-limits. Don’t overuse our APIs or resources – we 
+expect you to comply with any fair usage guidelines we publish from time to time.
+If you have an idea as to how our products can be improved or you would like 
+to try something experimental then please let us know and we'd be happy to 
+discuss with you.
+
+
+You can use our logo and branding where you have the right to do so, but please 
+don’t do anything that could damage our brand integrity or be misleading or 
+confusing to customers - that includes using our logo in any part of your logo, 
+using the Tercen name in your app name or anything else that could be considered 
+an abuse of our branding, logos or copyrighted materials.
+
+
+Treat your customers and their data responsibly.
+Keeping our customers' data secure is the most important thing that Tercen does.
+We go to considerable lengths to ensure that all data sent to Tercen is 
+handled securely.
+
+
+We expect others with access to our customers’ data to treat it with the same 
+level of trust and responsibility. 
+
+
+Our terms for developers include:
+
+
+* You must have appropriate measures in place to protect any information you 
+receive from Tercen against unauthorized access, use, or disclosure.
+* You must only use the data you need to build your product or service.
+* You must have an end user agreement and a privacy policy in place with respect
+to each of your customers - and it must be compatible with Tercen’s terms.
+* You must ensure you're meeting all your legal obligations in terms of 
+applicable data protection and consumer protection; don’t use Tercen’s products 
+in connection with data you don’t have permission to process.
+* You must be able to meet the requirements of the European Union's General Data
+Protection Regulation (GDPR) for any data you process which falls within the 
+scope of the legislation and fulfill subject access requests as required. In 
+addition to breach notifications required under GDPR, you'll notify Tercen of 
+any personal data breaches within 72 hours of becoming aware of a breach.
+* You must grant Tercen permission to audit your data processing activities. 
+This can include independently produced audit reports.
+
+
+As our developer platform and business evolves, so too will these guidelines. 
+We’d love for you to get in touch if you’ve any feedback or suggestions for how
+we can make them better.
+
+
+We know that occasionally things can go wrong and mistakes can be made. If at
+any time you are concerned that these guidelines may have been breached, please 
+do notify us as soon as you become aware. These guidelines may change over time,
+so do come back and check periodically.
+
+
+Thanks for reading this far - we’re excited to see what you’ll build! 
+
+<center>![](images/goldfish.png)</center>

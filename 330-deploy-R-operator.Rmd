@@ -1,0 +1,76 @@
+# Deploying an R operator
+
+Now that we have a working R operator for Tercen, we want to deploy it! We will now document, prepare tests and release our __linear regression__ operator.
+
+## Documenting the operator {-}
+
+Edit the `README.md` to describe the operator design and usage. The documentation should contain:
+
+* A __general description__ of the operator
+
+* A description of the __input projections__
+
+* A description of the __output relations__
+
+For example, here is how the `lm` operator documentation looks:
+
+**Description**
+
+The `lm` operator performs a linear regression in Tercen.
+
+**Usage**
+
+Input projection|
+:--|:--
+`y-axis`| measurement value
+`x-axis`| explanatory value
+
+Output relations|
+:--|:--
+`intercept`| numeric, intercept of the linear regression, per cell
+`slope`| numeric, slope of the linear regression, per cell
+
+**Details**
+
+The `lm` operator performs a linear regression on each cell and returns the slope and intercept of the model.
+
+
+## Deploy! {-}
+
+**1. Copy the code to the main.R script**
+
+Once you are confident enough that your operator is working after testing it locally, you can copy the code to the `main.R` file.
+
+Make sure not to include the `options()` calls that are only needed during the local development step:
+
+```r
+# The following lines shall not be included into main.R:
+options("tercen.workflowId" = "wwww")
+options("tercen.stepId"     = "dddd")
+
+getOption("tercen.workflowId")
+getOption("tercen.stepId")
+```
+
+**2. Initiate renv**
+
+The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the `init()` function of the `renv` package: 
+
+```r
+renv::init()
+```
+
+This will initiate a project-local environment with a private R library in the `renv` subdirectory.
+
+**3. Push it to your GitHub repository**
+
+Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.
+
+If you want to install it directly from `Tercen`, you will need to [create a release in GitHub](https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
+
+**4. Notify community**
+
+Currently, we ask you to send an email to <support@tercen.com> containing the description and link to the __operators app__ git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
+
+
+<center>![](images/goldfish.png)</center>
