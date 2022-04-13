@@ -30,10 +30,16 @@ Then, __get tercen-studio__ by cloning the following repository:
 ```bash
 git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
+```
+
+You then need to create the `tercen` network by running the following command.
+
+```
 docker network create tercen
 ```
 
-The best instructions on how to install tercen studio is found in the README of the tercen studio repository (https://github.com/tercen/tercen_studio)
+The latest instructions on how to install Tercen Studio can be found in the 
+README of the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio).
 
 ## Starting Tercen Studio {-}
 

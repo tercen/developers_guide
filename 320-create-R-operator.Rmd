@@ -47,7 +47,7 @@ In this example, We will use the khan dataset (available on https://github.com/t
 
 Note that the data step URL includes this pattern: `/w/WORKF+LOWID/ds/DATASTEPID`, where `WORKFLOWID` and `DATASTEPID` are __unique workflow and data step identifiers__, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.
 
-## Develope the operator locally {-}
+## Develop the operator locally {-}
 
 Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:
 

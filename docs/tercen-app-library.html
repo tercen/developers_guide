@@ -1,337 +1,127 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Tercen app library | Tercen developer’s guide</title>
-  <meta name="description" content="This is a developer’s guide to Tercen" />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Tercen app library | Tercen developer’s guide" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="This is a developer’s guide to Tercen" />
-  <meta name="github-repo" content="tercen/appbuilders-guide" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Tercen app library | Tercen developer’s guide" />
-  
-  <meta name="twitter:description" content="This is a developer’s guide to Tercen" />
-  
-
-<meta name="author" content="Tercen" />
-
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="known-issues.html"/>
-
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-105575395-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Tercen app library | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it. Anyone can request an app be added to the Tercen app library. Here are the steps for...">
+<meta name="generator" content="bookdown 0.25 with bs4_book()">
+<meta property="og:title" content="Tercen app library | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it. Anyone can request an app be added to the Tercen app library. Here are the steps for...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tercen app library | Tercen developer’s guide">
+<meta name="twitter:description" content="The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it. Anyone can request an app be added to the Tercen app library. Here are the steps for...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="index.html#welcome">Welcome<span></span></a></li>
-<li class="chapter" data-level="1" data-path="guidelines.html"><a href="guidelines.html"><i class="fa fa-check"></i><b>1</b> Guidelines<span></span></a>
-<ul>
-<li><a href="guidelines.html#legal-text">Legal text<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Getting started<span></span></b></span></li>
-<li class="chapter" data-level="2" data-path="core-concepts.html"><a href="core-concepts.html"><i class="fa fa-check"></i><b>2</b> Core concepts<span></span></a>
-<ul>
-<li><a href="core-concepts.html#tercen-modules">Tercen modules<span></span></a></li>
-<li><a href="core-concepts.html#template">Template<span></span></a></li>
-<li><a href="core-concepts.html#app">App<span></span></a></li>
-<li><a href="core-concepts.html#operator">Operator<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="setting-up-tercen-studio.html"><a href="setting-up-tercen-studio.html"><i class="fa fa-check"></i><b>3</b> Setting up Tercen Studio<span></span></a>
-<ul>
-<li><a href="setting-up-tercen-studio.html#installing-tercen-studio">Installing Tercen Studio<span></span></a></li>
-<li><a href="setting-up-tercen-studio.html#starting-tercen-studio">Starting Tercen Studio<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Templates<span></span></b></span></li>
-<li class="chapter" data-level="4" data-path="building-a-template.html"><a href="building-a-template.html"><i class="fa fa-check"></i><b>4</b> Building a template<span></span></a></li>
-<li class="part"><span><b>Operator development<span></span></b></span></li>
-<li class="chapter" data-level="5" data-path="general-workflow.html"><a href="general-workflow.html"><i class="fa fa-check"></i><b>5</b> General workflow<span></span></a>
-<ul>
-<li><a href="general-workflow.html#design-the-operator">Design the operator<span></span></a></li>
-<li><a href="general-workflow.html#set-up-a-github-project">Set up a GitHub project<span></span></a></li>
-<li><a href="general-workflow.html#setup-the-input-data">Setup the input data<span></span></a></li>
-<li><a href="general-workflow.html#connecting-to-tercen">Connecting to tercen<span></span></a></li>
-<li><a href="general-workflow.html#managing-input-parameters">Managing input parameters<span></span></a></li>
-<li><a href="general-workflow.html#managing-r-packages">Managing R packages<span></span></a></li>
-<li><a href="general-workflow.html#deploy">Deploy!<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="walkthrough-example-r-operator.html"><a href="walkthrough-example-r-operator.html"><i class="fa fa-check"></i><b>6</b> Walkthrough example: R operator<span></span></a>
-<ul>
-<li><a href="walkthrough-example-r-operator.html#designing-the-operator">Designing the operator<span></span></a></li>
-<li><a href="walkthrough-example-r-operator.html#setting-up-the-project">Setting up the project<span></span></a></li>
-<li><a href="walkthrough-example-r-operator.html#develope-the-operator-locally">Develope the operator locally<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="deploying-an-r-operator.html"><a href="deploying-an-r-operator.html"><i class="fa fa-check"></i><b>7</b> Deploying an R operator<span></span></a>
-<ul>
-<li><a href="deploying-an-r-operator.html#documenting-the-operator">Documenting the operator<span></span></a></li>
-<li><a href="deploying-an-r-operator.html#deploy-1">Deploy!<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="improving-an-operator.html"><a href="improving-an-operator.html"><i class="fa fa-check"></i><b>8</b> Improving an operator<span></span></a>
-<ul>
-<li><a href="improving-an-operator.html#error-catching">Error catching<span></span></a></li>
-<li><a href="improving-an-operator.html#adding-properties">Adding properties<span></span></a></li>
-<li><a href="improving-an-operator.html#preparing-operator-testing">Preparing operator testing<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="creating-a-shiny-operator.html"><a href="creating-a-shiny-operator.html"><i class="fa fa-check"></i><b>9</b> Creating a shiny operator<span></span></a></li>
-<li class="chapter" data-level="10" data-path="creating-a-docker-operator.html"><a href="creating-a-docker-operator.html"><i class="fa fa-check"></i><b>10</b> Creating a docker operator<span></span></a>
-<ul>
-<li><a href="creating-a-docker-operator.html#create-the-r-operator-locally">Create the R operator locally<span></span></a></li>
-<li><a href="creating-a-docker-operator.html#create-the-docker-operator">Create the docker operator<span></span></a></li>
-<li><a href="creating-a-docker-operator.html#build-and-push-docker-image">Build and push docker image<span></span></a></li>
-<li><a href="creating-a-docker-operator.html#running-docker-operators-locally">Running docker operators locally<span></span></a></li>
-<li><a href="creating-a-docker-operator.html#integrating-any-code-e.g.-c">Integrating any code (e.g. C++)<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="11" data-path="continuous-integration.html"><a href="continuous-integration.html"><i class="fa fa-check"></i><b>11</b> Continuous integration<span></span></a></li>
-<li class="chapter" data-level="12" data-path="common-patterns.html"><a href="common-patterns.html"><i class="fa fa-check"></i><b>12</b> Common patterns<span></span></a>
-<ul>
-<li class="chapter" data-level="12.1" data-path="common-patterns.html"><a href="common-patterns.html#output-data"><i class="fa fa-check"></i><b>12.1</b> Output data<span></span></a>
-<ul>
-<li class="chapter" data-level="12.1.1" data-path="common-patterns.html"><a href="common-patterns.html#one-table"><i class="fa fa-check"></i><b>12.1.1</b> One table<span></span></a></li>
-<li class="chapter" data-level="12.1.2" data-path="common-patterns.html"><a href="common-patterns.html#list-of-tables"><i class="fa fa-check"></i><b>12.1.2</b> List of tables<span></span></a></li>
-<li class="chapter" data-level="12.1.3" data-path="common-patterns.html"><a href="common-patterns.html#serialised-r-object"><i class="fa fa-check"></i><b>12.1.3</b> Serialised R object<span></span></a></li>
-<li class="chapter" data-level="12.1.4" data-path="common-patterns.html"><a href="common-patterns.html#serialised-file"><i class="fa fa-check"></i><b>12.1.4</b> Serialised file<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="12.2" data-path="common-patterns.html"><a href="common-patterns.html#output-relations"><i class="fa fa-check"></i><b>12.2</b> Output relations<span></span></a>
-<ul>
-<li class="chapter" data-level="12.2.1" data-path="common-patterns.html"><a href="common-patterns.html#per-cell"><i class="fa fa-check"></i><b>12.2.1</b> Per Cell<span></span></a></li>
-<li class="chapter" data-level="12.2.2" data-path="common-patterns.html"><a href="common-patterns.html#per-row-per-column"><i class="fa fa-check"></i><b>12.2.2</b> Per Row / Per Column<span></span></a></li>
-<li class="chapter" data-level="12.2.3" data-path="common-patterns.html"><a href="common-patterns.html#no-relation"><i class="fa fa-check"></i><b>12.2.3</b> No relation<span></span></a></li>
-</ul></li>
-</ul></li>
-<li class="part"><span><b>Apps<span></span></b></span></li>
-<li class="chapter" data-level="13" data-path="building-an-app.html"><a href="building-an-app.html"><i class="fa fa-check"></i><b>13</b> Building an app<span></span></a>
-<ul>
-<li class="chapter" data-level="13.1" data-path="building-an-app.html"><a href="building-an-app.html#the-app-concept"><i class="fa fa-check"></i><b>13.1</b> The app concept<span></span></a></li>
-<li class="chapter" data-level="13.2" data-path="building-an-app.html"><a href="building-an-app.html#creating-an-app"><i class="fa fa-check"></i><b>13.2</b> Creating an app<span></span></a></li>
-</ul></li>
-<li class="part"><span><b>Going forward<span></span></b></span></li>
-<li class="chapter" data-level="14" data-path="naming.html"><a href="naming.html"><i class="fa fa-check"></i><b>14</b> Development guidelines<span></span></a>
-<ul>
-<li><a href="naming.html#operator-naming-convention">Operator naming convention<span></span></a></li>
-<li><a href="naming.html#github-repository">GitHub repository<span></span></a></li>
-</ul></li>
-<li class="chapter" data-level="15" data-path="next-steps.html"><a href="next-steps.html"><i class="fa fa-check"></i><b>15</b> Next steps<span></span></a></li>
-<li class="part"><span><b>Appendix<span></span></b></span></li>
-<li><a href="glossary.html#glossary">Glossary<span></span></a></li>
-<li><a href="tercen-studio.html#tercen-studio">Tercen Studio<span></span></a>
-<ul>
-<li><a href="tercen-studio.html#updating-tercen-studio">Updating tercen-studio<span></span></a></li>
-<li><a href="tercen-studio.html#uninstallation-of-tercen-studio">Uninstallation of tercen-studio<span></span></a></li>
-<li><a href="tercen-studio.html#building-tercen-studio">Building tercen-studio<span></span></a></li>
-</ul></li>
-<li><a href="known-issues.html#known-issues">Known issues<span></span></a></li>
-<li><a href="tercen-app-library.html#tercen-app-library">Tercen app library<span></span></a></li>
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tercen developer’s guide</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Apps</li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">15</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+<li><a class="" href="known-issues.html">Known issues</a></li>
+<li><a class="active" href="tercen-app-library.html">Tercen app library</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="tercen-app-library" class="section level1 unnumbered hasAnchor">
-<h1>Tercen app library<a href="tercen-app-library.html#tercen-app-library" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tercen-app-library" class="section level1 unnumbered">
+<h1>Tercen app library<a class="anchor" aria-label="anchor" href="#tercen-app-library"><i class="fas fa-link"></i></a>
+</h1>
 <p>The Tercen app library is managed by a json file. Currently Tercen support is the only authorized to modify it.</p>
 <p>Anyone can request an app be added to the Tercen <strong>app library</strong>.</p>
 <p>Here are the steps for adding it to Tercen <strong>app library</strong>:</p>
 <ul>
-<li>Notify Tercen support (<a href="mailto:support@tercen.com" class="email">support@tercen.com</a>) regarding your wish to add it to <strong>app-library</strong></li>
+<li>Notify Tercen support (<a href="mailto:support@tercen.com" class="email">support@tercen.com</a>) regarding your wish to add it to <strong>app-library</strong>
+</li>
 <li>Tercen support tests the app</li>
 <li>Tercen support modifies the <strong>app-library</strong> repository (publish)</li>
 <li>Tercen support send email to indicate it is available</li>
 </ul>
 <center>
-<img src="images/apps.png" />
+<img src="images/apps.png">
 </center>
 
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="known-issues.html">Known issues</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#tercen-app-library">Tercen app library</a></li></ul>
 
-          </div>
-        </div>
-      </div>
-<a href="known-issues.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
 
-    </div>
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
-});
-</script>
 
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
 </body>
-
 </html>
