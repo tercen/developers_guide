@@ -2,7 +2,9 @@
 
 # General workflow
 
-Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built from scratch.
+Lets go through a general approach to create an R operator for Tercen. 
+A more detailed walk through (a tutorial) example is outlined in the next 
+chapter where a linear regression operator is built from scratch.
 
 Building an operator requires the following sequential steps: 
 
@@ -18,25 +20,37 @@ Building an operator requires the following sequential steps:
 
 ## Design the operator {-}
 
-The first step is to define our __input projection__ and __output relation__. In Tercen, each operator shall take as input a table and return a table. Remember:
+The first step is to define our __input projection__ and __output relation__. 
+In Tercen, each operator shall take as input a table and return a table. Remember:
 
 > "__Table in, table out!__"
 
-To understand the input table and the output table. The input table is defined by the data __input projection__ in Tercen and output table is what is computed by the operator. The output table (also called the __computed table__) is related to the input table by an __output relation__.  
+To understand the input table and the output table. The input table is defined 
+by the data __input projection__ in Tercen and output table is what is computed 
+by the operator. The output table (also called the __computed table__) is 
+related to the input table by an __output relation__.  
 
-The __input project__ is the projection in the data step which is used by the operator. For example a projection is composed of the `y-axis`, `x-axis`, `row`, `col`, `color`, `label`. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple `mean` would use a `y-axis`, `row`, `col` projection. This allows the `mean` to be computed per cell. A linear regression operator like `lm` might use a projection with `y-axis`, `x-axis`, and `row`, `col`. This allows the `lm` to be computed per cell. 
+The __input project__ is the projection in the data step which is used by 
+the operator. For example a projection is composed of the `y-axis`, `x-axis`,
+`row`, `col`, `color`, `label`. This input project determines what is the
+structure of the data which is given to the operator. An operator which computes 
+a simple `mean` would use a `y-axis`, `row`, `col` projection. This allows 
+the `mean` to be computed per cell. A linear regression operator like `lm` might
+use a projection with `y-axis`, `x-axis`, and `row`, `col`. This allows the `lm` 
+to be computed per cell. 
 
 
-The __output relation__ is the relation of the calculated output to the input values. For example:
+The __output relation__ is the relation of the calculated output to the 
+input values. For example:
 
 * Is the relation per Cell?
-* Is the relation per Col?
+* Is the relation per Column?
 * Is the relation per Row? 
 * Is the relation for All the data?
 
 __Per Cell__ example : Let's say the operator used a projection with `row` and `col` and the operator calculates a `mean` which is computed for each cell (i.e. per row/col), this would be a per cell relationship.
 
-__Per Col__ example: Let's say the operator used a project with `row` and `col` and the operator performed a clustering on the columns, this would be a column relationship.
+__Per Column__ example: Let's say the operator used a project with `row` and `col` and the operator performed a clustering on the columns, this would be a column relationship.
 
 __for All__ data example: Let's say the operator used a project with `row` and `col` and the operator calculated a total `mean` of all the data (i.e. across all rows and cols), this would be an all data relationship.
 
@@ -44,13 +58,18 @@ __for All__ data example: Let's say the operator used a project with `row` and `
 
 * Understand the Tercen concepts
 * Look at existing operators
-* Decide what __input projection__
-* Decide waht __output relation__
+* Decide what variables are needed for the __input projection__
+* Decide what values need to be computed and which __output relations__ have to be created
 
 
 ## Set up a GitHub project {-}
 
-All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have the following templates available:
+All operators currently are developed on GitHub. It is required to have a 
+GitHub account to develop an operator, as operator are implemented in a 
+GitHub repository.
+
+In order to get started, the easiest way is the use one of the GitHub repository
+templates we have prepared:
 
 * [minimal template for R operators](https://github.com/tercen/template_R_operator_lite)
 * [template for R operators](https://github.com/tercen/template_R_operator)
@@ -60,10 +79,10 @@ All operators currently are developed on github. It is necessary to have a githu
 
 **Steps for starting with the operator repository**
 
-* Get github account
+* Get a GitHub account
 * Choose an operator name
-* Create an operator repository on github based on a template (see above)
-* Clone the repo into the local Rstudio contained in Tercen Studio
+* Create an operator repository on GitHub based on a template (see above)
+* Clone the repo into the local RStudio contained in Tercen Studio
 
 ## Setup the input data {-}
 
@@ -75,11 +94,13 @@ This can be done in your local environment or in a cloud instance of Tercen.
 
 ## Connecting to tercen {-}
 
-Once you have cloned the github operator project into your local RStudio and you have setup the Tercen data projection, we can code and test our operator locally.
+Once you have cloned the github operator project into your local RStudio and you 
+have setup the Tercen data projection, we can code and test our operator locally.
 
-If you wish to test with the local version of Tercen, then you do not require to set the `tercen.service` system variable. 
+If you wish to test with the local version of Tercen, then you do not require 
+to set the `tercen.service` system variable. 
 
-* Load some data up in the 
+* Load some data up in the local instance of Tercen
 * Each data step has a unique`workflowId` and a `stepId` combination.
 
 ```
@@ -87,9 +108,10 @@ options("tercen.workflowId"= "8a8845f6a5eeff27ce33fd382444de88")
 options("tercen.stepId"= "5191724b-3963-4e34-af58-7977cc61e5b1")
 ```
 
-___Connecting to tercen cloud___
+___Connecting to Tercen cloud___
 
-Additional system variable are required in order to connect to a data step in the tercen cloud.
+Additional system variable are required in order to connect to a data step in 
+the Tercen cloud.
 
 ```
 options("tercen.serviceUri"= "https://tercen.com/api/v1/")
