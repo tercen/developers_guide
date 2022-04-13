@@ -1,8 +1,5 @@
-## Tercen developer guide
+## Tercen developer's guide
 
-This is an app builders guide for Tercen
+This is the developer's guide to Tercen.
 
-The online web version is found at:
-
-(https://tercen.github.io/appbuilders-guide/)
-
+The online version can be found at [https://tercen.github.io/developers_guide/](https://tercen.github.io/developers_guide/).
