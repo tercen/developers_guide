@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 2 Core concepts | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="So you want to build an app, or just plain curious. The first question to ask oneself is which type of Tercen app would you like to build. There are three main types: Templates Workflows Operators...">
+<meta name="description" content="Tercen modules There are three main types of Tercen modules: Templates Apps Operators A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto, etc.) chooses one of the...">
 <meta name="generator" content="bookdown 0.25 with bs4_book()">
 <meta property="og:title" content="Chapter 2 Core concepts | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="So you want to build an app, or just plain curious. The first question to ask oneself is which type of Tercen app would you like to build. There are three main types: Templates Workflows Operators...">
+<meta property="og:description" content="Tercen modules There are three main types of Tercen modules: Templates Apps Operators A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto, etc.) chooses one of the...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 2 Core concepts | Tercen developer’s guide">
-<meta name="twitter:description" content="So you want to build an app, or just plain curious. The first question to ask oneself is which type of Tercen app would you like to build. There are three main types: Templates Workflows Operators...">
+<meta name="twitter:description" content="Tercen modules There are three main types of Tercen modules: Templates Apps Operators A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto, etc.) chooses one of the...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -51,17 +51,18 @@
 <li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
 <li class="book-part">Operators</li>
 <li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
-<li><a class="" href="tutorial-dev-of-an-r-operator.html"><span class="header-section-number">6</span> Tutorial: Dev of an R operator</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
 <li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
 <li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
 <li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">12</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="naming.html"><span class="header-section-number">13</span> Development guidelines</a></li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">14</span> Next steps</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">15</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
@@ -78,12 +79,13 @@
 <h1>
 <span class="header-section-number">2</span> Core concepts<a class="anchor" aria-label="anchor" href="#core-concepts"><i class="fas fa-link"></i></a>
 </h1>
-<p>So you want to build an app, or just plain curious. The first question to ask
-oneself is which type of Tercen app would you like to build. There are
-three main types:</p>
+<div id="tercen-modules" class="section level2 unnumbered">
+<h2>Tercen modules<a class="anchor" aria-label="anchor" href="#tercen-modules"><i class="fas fa-link"></i></a>
+</h2>
+<p>There are three main types of Tercen <strong>modules</strong>:</p>
 <ul>
 <li><strong>Templates</strong></li>
-<li><strong>Workflows</strong></li>
+<li><strong>Apps</strong></li>
 <li><strong>Operators</strong></li>
 </ul>
 <p>A researcher wanting a complete workflow data analysis (e.g. RNA-seq, flow cyto,
@@ -107,21 +109,22 @@ accessed by researchers.</p>
 <p>Deciding on which to build is determined by what you would like the app to achieve.
 The first two, <strong>template</strong> and <strong>workflow</strong>, do not need programming experience,
 the <strong>operator</strong> does.</p>
-<p>The building of each app is explained in the following chapters.</p>
-<div id="template-app" class="section level2 unnumbered">
-<h2>Template app<a class="anchor" aria-label="anchor" href="#template-app"><i class="fas fa-link"></i></a>
-</h2>
-<p>No programming knowledge is required to build a template app.
-These are built by using the Tercen user interface and deployed within Tercen</p>
+<p>The building of each type of module is explained in the following chapters.</p>
 </div>
-<div id="workflow-app" class="section level2 unnumbered">
-<h2>Workflow app<a class="anchor" aria-label="anchor" href="#workflow-app"><i class="fas fa-link"></i></a>
+<div id="template" class="section level2 unnumbered">
+<h2>Template<a class="anchor" aria-label="anchor" href="#template"><i class="fas fa-link"></i></a>
 </h2>
-<p>No programming knowledge is required to build a workflow app.
-These are built by using the Tercen user interface and deployed within Tercen</p>
+<p>No programming knowledge is required to build a template.
+These are built by using the Tercen user interface and deployed within Tercen.</p>
 </div>
-<div id="operator-app" class="section level2 unnumbered">
-<h2>Operator app<a class="anchor" aria-label="anchor" href="#operator-app"><i class="fas fa-link"></i></a>
+<div id="app" class="section level2 unnumbered">
+<h2>App<a class="anchor" aria-label="anchor" href="#app"><i class="fas fa-link"></i></a>
+</h2>
+<p>No programming knowledge is required to build an app.
+These are built by using the Tercen user interface and deployed within Tercen.</p>
+</div>
+<div id="operator" class="section level2 unnumbered">
+<h2>Operator<a class="anchor" aria-label="anchor" href="#operator"><i class="fas fa-link"></i></a>
 </h2>
 <p>Programming knowledge is required to build an <strong>operator</strong> using any number of
 programming languages (R, Python, Rust, etc.). The code is put on Github
@@ -129,11 +132,8 @@ for the <strong>app library</strong> to find.</p>
 <p>Currently Tercen has made a convenient R package for working with the Tercen API,
 we aim to quickly cater for the other programming languages (Python, Matlab etc.)
 during our final release.</p>
-<p>A command line function can also be deployed as an <strong>operator app</strong>. This is
+<p>A command line function can also be deployed as an <strong>operator</strong>. This is
 done using a docker concept.</p>
-<center>
-<img src="images/goldfish.png">
-</center>
 
 </div>
 </div>
@@ -144,9 +144,10 @@ done using a docker concept.</p>
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#core-concepts"><span class="header-section-number">2</span> Core concepts</a></li>
-<li><a class="nav-link" href="#template-app">Template app</a></li>
-<li><a class="nav-link" href="#workflow-app">Workflow app</a></li>
-<li><a class="nav-link" href="#operator-app">Operator app</a></li>
+<li><a class="nav-link" href="#tercen-modules">Tercen modules</a></li>
+<li><a class="nav-link" href="#template">Template</a></li>
+<li><a class="nav-link" href="#app">App</a></li>
+<li><a class="nav-link" href="#operator">Operator</a></li>
 </ul>
 
       <div class="book-extra">

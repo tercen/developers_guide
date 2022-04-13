@@ -71,6 +71,3 @@ If you want to install it directly from `Tercen`, you will need to [create a rel
 **4. Notify community**
 
 Currently, we ask you to send an email to <support@tercen.com> containing the description and link to the __operators app__ git repository, Tercen support will manually test it and add it to the __app-library__ and thus allowing others to access it. We are currently building an web entry point for researchers to browse all the apps offered by the community.
-
-
-<center>![](images/goldfish.png)</center>

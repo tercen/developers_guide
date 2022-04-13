@@ -1,4 +1,4 @@
-# Tutorial: Dev of an R operator
+# Walkthrough example: R operator
 
 Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a __linear regression__ on our input data and returning the slope and intercept of the model.
 
@@ -97,6 +97,3 @@ Note that we recommend to implement the following __sanity checks__ when creatin
 * check the presence of __expected inputs__ (here, x and y axes)
 
 * use the __`try()` function__ to test the main function implemented (here, `lm()`)
-
-
-<center>![](images/goldfish.png)</center>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 12 Common patterns | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="This section outlines common development patterns encountered while developing operators in Tercen.  12.1 Output data  12.1.1 One table Coming soon. Example: Mean operator and lm operator.  12.1.2...">
+<meta name="generator" content="bookdown 0.25 with bs4_book()">
+<meta property="og:title" content="Chapter 12 Common patterns | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  12.1 Output data  12.1.1 One table Coming soon. Example: Mean operator and lm operator.  12.1.2...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 12 Common patterns | Tercen developer’s guide">
+<meta name="twitter:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  12.1 Output data  12.1.1 One table Coming soon. Example: Mean operator and lm operator.  12.1.2...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
+<li class="book-part">Operators</li>
+<li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
+<li><a class="active" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Apps</li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">15</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+<li><a class="" href="known-issues.html">Known issues</a></li>
+<li><a class="" href="tercen-app-library.html">Tercen app library</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="common-patterns" class="section level1" number="12">
+<h1>
+<span class="header-section-number">12</span> Common patterns<a class="anchor" aria-label="anchor" href="#common-patterns"><i class="fas fa-link"></i></a>
+</h1>
+<p>This section outlines common development patterns encountered while developing
+operators in Tercen.</p>
+<div id="output-data" class="section level2" number="12.1">
+<h2>
+<span class="header-section-number">12.1</span> Output data<a class="anchor" aria-label="anchor" href="#output-data"><i class="fas fa-link"></i></a>
+</h2>
+<div id="one-table" class="section level3" number="12.1.1">
+<h3>
+<span class="header-section-number">12.1.1</span> One table<a class="anchor" aria-label="anchor" href="#one-table"><i class="fas fa-link"></i></a>
+</h3>
+<p>Coming soon.</p>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/mean_operator">Mean operator</a> and
+<a href="https://github.com/tercen/lm_operator">lm operator</a>.</p>
+</div>
+<div id="list-of-tables" class="section level3" number="12.1.2">
+<h3>
+<span class="header-section-number">12.1.2</span> List of tables<a class="anchor" aria-label="anchor" href="#list-of-tables"><i class="fas fa-link"></i></a>
+</h3>
+<p>Coming soon.</p>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/pca_operator">PCA operator</a>.</p>
+</div>
+<div id="serialised-r-object" class="section level3" number="12.1.3">
+<h3>
+<span class="header-section-number">12.1.3</span> Serialised R object<a class="anchor" aria-label="anchor" href="#serialised-r-object"><i class="fas fa-link"></i></a>
+</h3>
+<p>Coming soon.</p>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/flowsom_operator">FlowSOM operator</a>.</p>
+</div>
+<div id="serialised-file" class="section level3" number="12.1.4">
+<h3>
+<span class="header-section-number">12.1.4</span> Serialised file<a class="anchor" aria-label="anchor" href="#serialised-file"><i class="fas fa-link"></i></a>
+</h3>
+<p>Coming soon.</p>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/barplot_operator">Barplot operator</a>.</p>
+</div>
+</div>
+<div id="output-relations" class="section level2" number="12.2">
+<h2>
+<span class="header-section-number">12.2</span> Output relations<a class="anchor" aria-label="anchor" href="#output-relations"><i class="fas fa-link"></i></a>
+</h2>
+<div id="per-cell" class="section level3" number="12.2.1">
+<h3>
+<span class="header-section-number">12.2.1</span> Per Cell<a class="anchor" aria-label="anchor" href="#per-cell"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/mean_operator">Mean operator</a>, <a href="https://github.com/tercen/lm_operator">lm operator</a>.</p>
+</div>
+<div id="per-row-per-column" class="section level3" number="12.2.2">
+<h3>
+<span class="header-section-number">12.2.2</span> Per Row / Per Column<a class="anchor" aria-label="anchor" href="#per-row-per-column"><i class="fas fa-link"></i></a>
+</h3>
+<p>There are two typical cases for creating a relation per row or per column only:</p>
+<ul>
+<li><p>the output is computed per <strong>observation</strong>. This is the case of clustering
+algorithms that assign each observation to a cluster ID.</p></li>
+<li><p>the is computed per <strong>variable</strong>. For example, we want to scale our values and
+perform, this operation per variable or stratifying factor in our dataset.</p></li>
+</ul>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/pca_operator">PCA operator</a>.</p>
+</div>
+<div id="no-relation" class="section level3" number="12.2.3">
+<h3>
+<span class="header-section-number">12.2.3</span> No relation<a class="anchor" aria-label="anchor" href="#no-relation"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is useful when no relation needs to be made between computed values and existing
+data. For example, we can consider two cases where this is relevant:</p>
+<ul>
+<li>the operator computes an end result that cannot be linked to individual input
+data points</li>
+<li>the computation must be available to be linked to <em>any</em> data point (for example,
+when we want to generate a constant that can be used together with any other data)</li>
+</ul>
+<p><strong>Example</strong>: <a href="https://github.com/tercen/constant_operator">Constant operator</a>.</p>
+
+</div>
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></div>
+<div class="next"><a href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#common-patterns"><span class="header-section-number">12</span> Common patterns</a></li>
+<li>
+<a class="nav-link" href="#output-data"><span class="header-section-number">12.1</span> Output data</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#one-table"><span class="header-section-number">12.1.1</span> One table</a></li>
+<li><a class="nav-link" href="#list-of-tables"><span class="header-section-number">12.1.2</span> List of tables</a></li>
+<li><a class="nav-link" href="#serialised-r-object"><span class="header-section-number">12.1.3</span> Serialised R object</a></li>
+<li><a class="nav-link" href="#serialised-file"><span class="header-section-number">12.1.4</span> Serialised file</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#output-relations"><span class="header-section-number">12.2</span> Output relations</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#per-cell"><span class="header-section-number">12.2.1</span> Per Cell</a></li>
+<li><a class="nav-link" href="#per-row-per-column"><span class="header-section-number">12.2.2</span> Per Row / Per Column</a></li>
+<li><a class="nav-link" href="#no-relation"><span class="header-section-number">12.2.3</span> No relation</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

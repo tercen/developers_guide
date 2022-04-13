@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 6 Tutorial: Dev of an R operator | Tercen developer’s guide</title>
+<title>Chapter 6 Walkthrough example: R operator | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
 <meta name="generator" content="bookdown 0.25 with bs4_book()">
-<meta property="og:title" content="Chapter 6 Tutorial: Dev of an R operator | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 6 Walkthrough example: R operator | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 6 Tutorial: Dev of an R operator | Tercen developer’s guide">
+<meta name="twitter:title" content="Chapter 6 Walkthrough example: R operator | Tercen developer’s guide">
 <meta name="twitter:description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
 <li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
 <li class="book-part">Operators</li>
 <li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
-<li><a class="active" href="tutorial-dev-of-an-r-operator.html"><span class="header-section-number">6</span> Tutorial: Dev of an R operator</a></li>
+<li><a class="active" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
 <li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
@@ -75,9 +75,9 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tutorial-dev-of-an-r-operator" class="section level1" number="6">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="walkthrough-example-r-operator" class="section level1" number="6">
 <h1>
-<span class="header-section-number">6</span> Tutorial: Dev of an R operator<a class="anchor" aria-label="anchor" href="#tutorial-dev-of-an-r-operator"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6</span> Walkthrough example: R operator<a class="anchor" aria-label="anchor" href="#walkthrough-example-r-operator"><i class="fas fa-link"></i></a>
 </h1>
 <p>Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a <strong>linear regression</strong> on our input data and returning the slope and intercept of the model.</p>
 <div id="designing-the-operator" class="section level2 unnumbered">
@@ -167,10 +167,6 @@
 <li><p>check the presence of <strong>expected inputs</strong> (here, x and y axes)</p></li>
 <li><p>use the <strong><code><a href="https://rdrr.io/r/base/try.html">try()</a></code> function</strong> to test the main function implemented (here, <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>)</p></li>
 </ul>
-<center>
-<img src="images/goldfish.png">
-</center>
-
 </div>
 </div>
   <div class="chapter-nav">
@@ -179,7 +175,7 @@
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#tutorial-dev-of-an-r-operator"><span class="header-section-number">6</span> Tutorial: Dev of an R operator</a></li>
+<li><a class="nav-link" href="#walkthrough-example-r-operator"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
 <li><a class="nav-link" href="#designing-the-operator">Designing the operator</a></li>
 <li><a class="nav-link" href="#setting-up-the-project">Setting up the project</a></li>
 <li><a class="nav-link" href="#develope-the-operator-locally">Develope the operator locally</a></li>
