@@ -180,6 +180,9 @@ credentials::set_github_pat()
 
 Note that the `credentials` package is installed by default in Tercen Studio.
 
+A good introduction to Git and RStudio is [happygitwithr](https://happygitwithr.com/index.html).
+
+
 **Install the operator**
 
 If you want to install it directly from `Tercen`, you will need to 
