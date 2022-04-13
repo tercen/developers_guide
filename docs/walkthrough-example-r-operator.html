@@ -49,8 +49,8 @@
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
 <li class="book-part">Templates</li>
 <li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
-<li class="book-part">Operators</li>
-<li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></li>
 <li><a class="active" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
@@ -126,7 +126,7 @@
 <li><p>Open <code>workspace.R</code></p></li>
 <li><p>Replace the data step and workflow IDs taken from the Tercen data step URL in <code>workspace.R</code>:</p></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">tercen</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
@@ -135,7 +135,7 @@
 <ul>
 <li>Code your operator. Here, we implement a function <code>do.lm()</code> that performs a linear regression on the input data frame and return the slope and intercept of the model.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">do.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
     .ri <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">.ri</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
@@ -170,7 +170,7 @@
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></div>
+<div class="prev"><a href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></div>
 <div class="next"><a href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>

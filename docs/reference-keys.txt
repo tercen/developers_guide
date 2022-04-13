@@ -2,7 +2,7 @@ guidelines
 core-concepts
 setting-up-tercen-studio
 building-a-template
-building-an-operator
+general-workflow
 walkthrough-example-r-operator
 deploying-an-r-operator
 improving-an-operator

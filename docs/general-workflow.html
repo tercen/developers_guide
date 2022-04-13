@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 5 General workflow | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built...">
+<meta name="generator" content="bookdown 0.25 with bs4_book()">
+<meta property="og:title" content="Chapter 5 General workflow | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 5 General workflow | Tercen developer’s guide">
+<meta name="twitter:description" content="Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="active" href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Apps</li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">15</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+<li><a class="" href="known-issues.html">Known issues</a></li>
+<li><a class="" href="tercen-app-library.html">Tercen app library</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="general-workflow" class="section level1" number="5">
+<h1>
+<span class="header-section-number">5</span> General workflow<a class="anchor" aria-label="anchor" href="#general-workflow"><i class="fas fa-link"></i></a>
+</h1>
+<p>Lets go through a general approach to create an R operator for Tercen. A more detailed walk through (a tutorial) example is outlined in the next chapter where a linear regression operator is built from scratch.</p>
+<p>Building an operator requires the following sequential steps:</p>
+<ul>
+<li>Design the operator</li>
+<li>Setup the github repository</li>
+<li>Setup the input projection</li>
+<li>Connecting to Tercen</li>
+<li>Testing</li>
+<li>Managing input parameters</li>
+<li>Managing R packages</li>
+<li>Deploy</li>
+</ul>
+<div id="design-the-operator" class="section level2 unnumbered">
+<h2>Design the operator<a class="anchor" aria-label="anchor" href="#design-the-operator"><i class="fas fa-link"></i></a>
+</h2>
+<p>The first step is to define our <strong>input projection</strong> and <strong>output relation</strong>. In Tercen, each operator shall take as input a table and return a table. Remember:</p>
+<blockquote>
+<p>“<strong>Table in, table out!</strong>”</p>
+</blockquote>
+<p>To understand the input table and the output table. The input table is defined by the data <strong>input projection</strong> in Tercen and output table is what is computed by the operator. The output table (also called the <strong>computed table</strong>) is related to the input table by an <strong>output relation</strong>.</p>
+<p>The <strong>input project</strong> is the projection in the data step which is used by the operator. For example a projection is composed of the <code>y-axis</code>, <code>x-axis</code>, <code>row</code>, <code>col</code>, <code>color</code>, <code>label</code>. This input project determines what is the structure of the data which is given to the operator. An operator which computes a simple <code>mean</code> would use a <code>y-axis</code>, <code>row</code>, <code>col</code> projection. This allows the <code>mean</code> to be computed per cell. A linear regression operator like <code>lm</code> might use a projection with <code>y-axis</code>, <code>x-axis</code>, and <code>row</code>, <code>col</code>. This allows the <code>lm</code> to be computed per cell.</p>
+<p>The <strong>output relation</strong> is the relation of the calculated output to the input values. For example:</p>
+<ul>
+<li>Is the relation per Cell?</li>
+<li>Is the relation per Col?</li>
+<li>Is the relation per Row?</li>
+<li>Is the relation for All the data?</li>
+</ul>
+<p><strong>Per Cell</strong> example : Let’s say the operator used a projection with <code>row</code> and <code>col</code> and the operator calculates a <code>mean</code> which is computed for each cell (i.e. per row/col), this would be a per cell relationship.</p>
+<p><strong>Per Col</strong> example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator performed a clustering on the columns, this would be a column relationship.</p>
+<p><strong>for All</strong> data example: Let’s say the operator used a project with <code>row</code> and <code>col</code> and the operator calculated a total <code>mean</code> of all the data (i.e. across all rows and cols), this would be an all data relationship.</p>
+<p><strong>Steps for designing the operator</strong></p>
+<ul>
+<li>Understand the Tercen concepts</li>
+<li>Look at existing operators</li>
+<li>Decide what <strong>input projection</strong>
+</li>
+<li>Decide waht <strong>output relation</strong>
+</li>
+</ul>
+</div>
+<div id="set-up-a-github-project" class="section level2 unnumbered">
+<h2>Set up a GitHub project<a class="anchor" aria-label="anchor" href="#set-up-a-github-project"><i class="fas fa-link"></i></a>
+</h2>
+<p>All operators currently are developed on github. It is necessary to have a github account. Each operator is implemented as a separate repository therefore you require to create a repository for your operator. The quickest method is the use the template feature in github, where, at the moment of repository creation you can choose to use a template, currently we have the following templates available:</p>
+<ul>
+<li><a href="https://github.com/tercen/template_R_operator_lite">minimal template for R operators</a></li>
+<li><a href="https://github.com/tercen/template_R_operator">template for R operators</a></li>
+<li><a href="https://github.com/tercen/template_shiny_operator">template for Shiny operators</a></li>
+<li><a href="https://github.com/tercen/simple_docker_operator">template for Docker operators</a></li>
+<li><a href="https://github.com/tercen/template_python_operator">template for Python operators</a></li>
+</ul>
+<p><strong>Steps for starting with the operator repository</strong></p>
+<ul>
+<li>Get github account</li>
+<li>Choose an operator name</li>
+<li>Create an operator repository on github based on a template (see above)</li>
+<li>Clone the repo into the local Rstudio contained in Tercen Studio</li>
+</ul>
+</div>
+<div id="setup-the-input-data" class="section level2 unnumbered">
+<h2>Setup the input data<a class="anchor" aria-label="anchor" href="#setup-the-input-data"><i class="fas fa-link"></i></a>
+</h2>
+<p>This can be done in your local environment or in a cloud instance of Tercen.</p>
+<ul>
+<li>Login to Tercen (either local or cloud)</li>
+<li>Prepare your data by defining a <strong>cross-tab</strong> projection using a <strong>data step</strong>.</li>
+<li>Note that the project in the data step has URL with this pattern: <code>/w/workflowId/ds/stepId</code>, where <code>workflowId</code> and <code>stepId</code> are <strong>unique workflow and data step identifiers</strong>, respectively. These identifiers will be used in the next step to get data from this data step.</li>
+</ul>
+</div>
+<div id="connecting-to-tercen" class="section level2 unnumbered">
+<h2>Connecting to tercen<a class="anchor" aria-label="anchor" href="#connecting-to-tercen"><i class="fas fa-link"></i></a>
+</h2>
+<p>Once you have cloned the github operator project into your local RStudio and you have setup the Tercen data projection, we can code and test our operator locally.</p>
+<p>If you wish to test with the local version of Tercen, then you do not require to set the <code>tercen.service</code> system variable.</p>
+<ul>
+<li>Load some data up in the</li>
+<li>Each data step has a unique<code>workflowId</code> and a <code>stepId</code> combination.</li>
+</ul>
+<pre><code>options("tercen.workflowId"= "8a8845f6a5eeff27ce33fd382444de88")
+options("tercen.stepId"= "5191724b-3963-4e34-af58-7977cc61e5b1")</code></pre>
+<p><strong><em>Connecting to tercen cloud</em></strong></p>
+<p>Additional system variable are required in order to connect to a data step in the tercen cloud.</p>
+<pre><code>options("tercen.serviceUri"= "https://tercen.com/api/v1/")
+options("tercen.username"= "uuuu")
+options("tercen.password"= "pppp")</code></pre>
+<p>Where <code>uuuu</code> is the username and <code>pppp</code> is the password, these are specific
+to your username and password.</p>
+</div>
+<div id="managing-input-parameters" class="section level2 unnumbered">
+<h2>Managing input parameters<a class="anchor" aria-label="anchor" href="#managing-input-parameters"><i class="fas fa-link"></i></a>
+</h2>
+<p>The operator has a file called <code>operator.json</code> these define the parameters which
+the user can set when using your operator.</p>
+<p>Before deploying, please think what parameters are required and modify this file.</p>
+</div>
+<div id="managing-r-packages" class="section level2 unnumbered">
+<h2>Managing R packages<a class="anchor" aria-label="anchor" href="#managing-r-packages"><i class="fas fa-link"></i></a>
+</h2>
+<p>The newly created operators requires the correct packages to be loaded.
+Install the packages your require using the standard install procedures, we
+recommend the following:</p>
+<ul>
+<li>install.packages()</li>
+<li>remotes::install_github()</li>
+</ul>
+<p>Just before you deploy your operator, it is necessary to setup the package
+management system. A Tercen operator manages its packages using the <code>renv</code> system.
+The <code>renv</code> system allows all the packages you required to be recorded
+in a <code>renv.lock</code> file.</p>
+<p>To generate this use:</p>
+<pre><code>renv::init() </code></pre>
+<p>This is done before you <code>push</code> the repository to github.</p>
+</div>
+<div id="deploy" class="section level2 unnumbered">
+<h2>Deploy!<a class="anchor" aria-label="anchor" href="#deploy"><i class="fas fa-link"></i></a>
+</h2>
+<p>Once you are satisfied with your operator, you can release it.</p>
+<p><strong>Document the operator</strong></p>
+<p>Edit the <code>README.md</code> to describe the operator design and usage. The documentation should contain:</p>
+<ul>
+<li><p>A <strong>general description</strong> of the operator</p></li>
+<li><p>A description of the <strong>input projections</strong></p></li>
+<li><p>A description of the <strong>output relations</strong></p></li>
+</ul>
+<p><strong>Prepare operator testing</strong></p>
+<p>It’s always good to prepare some unit tests that could be ran when a new version of Tercen is released.</p>
+<p>To include a test, you need to <strong>create a <code>tests</code> subdirectory</strong> in your project directory. It must include:</p>
+<ul>
+<li><p>a test <strong>input file</strong></p></li>
+<li><p>an expected <strong>output file</strong></p></li>
+<li><p>a <strong><code>JSON</code> file</strong> containing information about the test</p></li>
+</ul>
+<p><strong>Initiate package version control</strong></p>
+<p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by initiating a project-local environment with a private libraries in a subdirectory.</p>
+<p><strong>Push it to your GitHub repository</strong></p>
+<p>Once everything is ready, you simply need to push all the modifications to the GitHub repository that you created before.</p>
+<p>It is possible that a more secure authentication is required by GitHub
+to push your changes the first time. One solution is to get a personal access token
+(PAT) from GitHub from <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>.
+You can click on <code>Generate new token</code>, name it and select the <code>repo</code> scope. Be
+mindful of the expiration setting as well.</p>
+<p>Then, you can copy this token and paste it into RStudio after running the following
+command in the R console:</p>
+<pre><code>credentials::set_github_pat()</code></pre>
+<p>Note that the <code>credentials</code> package is installed by default in Tercen Studio.</p>
+<p><strong>Install the operator</strong></p>
+<p>If you want to install it directly from <code>Tercen</code>, you will need to
+<a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">create a release in GitHub</a>. All the operators are version controlled.</p>
+<p>All <strong>operators</strong> who are on a git repository are installable,
+only the git URL and a tag version number is required for a researcher to
+install it in Tercen.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></div>
+<div class="next"><a href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#general-workflow"><span class="header-section-number">5</span> General workflow</a></li>
+<li><a class="nav-link" href="#design-the-operator">Design the operator</a></li>
+<li><a class="nav-link" href="#set-up-a-github-project">Set up a GitHub project</a></li>
+<li><a class="nav-link" href="#setup-the-input-data">Setup the input data</a></li>
+<li><a class="nav-link" href="#connecting-to-tercen">Connecting to tercen</a></li>
+<li><a class="nav-link" href="#managing-input-parameters">Managing input parameters</a></li>
+<li><a class="nav-link" href="#managing-r-packages">Managing R packages</a></li>
+<li><a class="nav-link" href="#deploy">Deploy!</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

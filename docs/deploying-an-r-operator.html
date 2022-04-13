@@ -49,8 +49,8 @@
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
 <li class="book-part">Templates</li>
 <li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
-<li class="book-part">Operators</li>
-<li><a class="" href="building-an-operator.html"><span class="header-section-number">5</span> Building an operator</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></li>
 <li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
 <li><a class="active" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
@@ -134,7 +134,7 @@
 <p><strong>1. Copy the code to the main.R script</strong></p>
 <p>Once you are confident enough that your operator is working after testing it locally, you can copy the code to the <code>main.R</code> file.</p>
 <p>Make sure not to include the <code><a href="https://rdrr.io/r/base/options.html">options()</a></code> calls that are only needed during the local development step:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The following lines shall not be included into main.R:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"tercen.workflowId"</span> <span class="op">=</span> <span class="st">"wwww"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"tercen.stepId"</span>     <span class="op">=</span> <span class="st">"dddd"</span><span class="op">)</span>
@@ -143,7 +143,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"tercen.stepId"</span><span class="op">)</span></code></pre></div>
 <p><strong>2. Initiate renv</strong></p>
 <p>The ability to run an operator with exactly the same packages you used when you developed is essential for reproducible science. In order to ensure reproducibility, you can associate packages and their versions to your operator by using the <code>init()</code> function of the <code>renv</code> package:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">renv</span><span class="fu">::</span><span class="fu">init</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>This will initiate a project-local environment with a private R library in the <code>renv</code> subdirectory.</p>
 <p><strong>3. Push it to your GitHub repository</strong></p>
