@@ -33,5 +33,3 @@ All the building and deployment processes are performed in Tercen.
 All __apps__ who are on a git repository are installable, only the git URL and 
 a tag version number is required for a researcher to install it in Tercen.
 
-
-<center>![](images/goldfish.png)</center>

@@ -62,5 +62,3 @@ You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8
 * _Password_: tercen
 
 Now you're all set!
-
-<center>![](images/goldfish.png)</center>

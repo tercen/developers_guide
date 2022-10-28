@@ -11,10 +11,10 @@ github-repo: tercen/appbuilders-guide
 description: "This is a developer's guide to Tercen"
 ---
 
-# Welcome {-}
+# Introduction {-}
 
 <center>
-```{r, echo=FALSE, out.width="50%"}
+```{r, echo=FALSE, out.width="100%"}
 knitr::include_graphics("images/cover.png")
 ```
 </center>
@@ -55,5 +55,3 @@ and explore our documentation to get a sense of what you can do.
 * Check out [Tercen Github](https://github.com/tercen) for some existing apps.
 * Check out [Tercen Explore](https://tercen.com/explore) section to discover example projects.
 
-
-<center>![](images/goldfish.png)</center>

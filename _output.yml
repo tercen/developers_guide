@@ -3,4 +3,5 @@ bookdown::bs4_book:
     in_header: google_analytics.html
   css: style.css
   theme:
-    primary: "#3188f9"
+    primary: "#317ef9"
+    secondary: "#ffbf00"

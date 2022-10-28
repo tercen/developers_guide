@@ -176,6 +176,3 @@ It is implemented in Tercen using two concepts, one an operator and one a docker
 The `atsne_operator` calls the C++ code implemented in the `atsne_docker`.
 
 Please check out the repository (click on links above) and see how this it was configured.
-
-
-<center>![](images/goldfish.png)</center>

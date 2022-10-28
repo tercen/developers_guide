@@ -102,5 +102,3 @@ so do come back and check periodically.
 
 
 Thanks for reading this far - we’re excited to see what you’ll build! 
-
-<center>![](images/goldfish.png)</center>

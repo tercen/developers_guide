@@ -2,7 +2,8 @@
 
 # Building a template
 
-A template workflow is perfect for users who wish to have a complete workflow to perform a complete analysis.
+A template workflow is perfect for users who wish to reuse a workflow to perform 
+a complete analysis.
 
 The building of a __template__ does not require any programming.
 
@@ -21,6 +22,3 @@ The process for building a __template__ is:
 All the building and deployment steps are performed in Tercen.
 
 All __templates__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
-
-
-<center>![](images/goldfish.png)</center>
