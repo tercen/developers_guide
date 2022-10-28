@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 9 Creating a shiny operator | Tercen developer’s guide</title>
+<title>Chapter 8 Creating a shiny operator | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="It is easy to create a shiny operator. It is exactly like the creating a standard operator but it uses a the shiny framework. An example of a simple shiny is found at:...">
 <meta name="generator" content="bookdown 0.29 with bs4_book()">
-<meta property="og:title" content="Chapter 9 Creating a shiny operator | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 8 Creating a shiny operator | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="It is easy to create a shiny operator. It is exactly like the creating a standard operator but it uses a the shiny framework. An example of a simple shiny is found at:...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 9 Creating a shiny operator | Tercen developer’s guide">
+<meta name="twitter:title" content="Chapter 8 Creating a shiny operator | Tercen developer’s guide">
 <meta name="twitter:description" content="It is easy to create a shiny operator. It is exactly like the creating a standard operator but it uses a the shiny framework. An example of a simple shiny is found at:...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -57,17 +57,17 @@
 <li class="book-part">Getting started</li>
 <li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
-<li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">4</span> Building a template</a></li>
 <li class="book-part">Operator development</li>
-<li><a class="" href="general-workflow.html"><span class="header-section-number">5</span> General workflow</a></li>
-<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">6</span> Walkthrough example: R operator</a></li>
-<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">7</span> Deploying an R operator</a></li>
-<li><a class="" href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></li>
-<li><a class="active" href="creating-a-shiny-operator.html"><span class="header-section-number">9</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
-<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li><a class="active" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
 <li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Going forward</li>
@@ -83,9 +83,9 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="creating-a-shiny-operator" class="section level1" number="9">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="creating-a-shiny-operator" class="section level1" number="8">
 <h1>
-<span class="header-section-number">9</span> Creating a shiny operator<a class="anchor" aria-label="anchor" href="#creating-a-shiny-operator"><i class="fas fa-link"></i></a>
+<span class="header-section-number">8</span> Creating a shiny operator<a class="anchor" aria-label="anchor" href="#creating-a-shiny-operator"><i class="fas fa-link"></i></a>
 </h1>
 <p>It is easy to create a shiny operator. It is exactly like the creating a standard operator but it uses a the shiny framework.</p>
 <p>An example of a simple shiny is found at:</p>
@@ -101,17 +101,14 @@
 <p>The third mode “showResult” is when the results of the an executed shiny is presented. For example, the result maybe a new graph based on a computation performed during the run.</p>
 <p>A good example of all three modes go to
 <a href="https://github.com/tercen/shiny_operator2" class="uri">https://github.com/tercen/shiny_operator2</a></p>
-<center>
-<img src="images/goldfish.png">
-</center>
 
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="improving-an-operator.html"><span class="header-section-number">8</span> Improving an operator</a></div>
-<div class="next"><a href="creating-a-docker-operator.html"><span class="header-section-number">10</span> Creating a docker operator</a></div>
+<div class="prev"><a href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></div>
+<div class="next"><a href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#creating-a-shiny-operator"><span class="header-section-number">9</span> Creating a shiny operator</a></li></ul>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#creating-a-shiny-operator"><span class="header-section-number">8</span> Creating a shiny operator</a></li></ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

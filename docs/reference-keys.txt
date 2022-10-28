@@ -1,7 +1,6 @@
 guidelines
 core-concepts
 setting-up-tercen-studio
-building-a-template
 general-workflow
 walkthrough-example-r-operator
 deploying-an-r-operator
@@ -19,6 +18,7 @@ output-relations
 per-cell
 per-row-per-column
 no-relation
+building-a-template
 building-an-app
 the-app-concept
 creating-an-app

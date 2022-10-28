@@ -1,0 +1,64 @@
+# Setting up Tercen Studio
+
+If you wish to develop __operators__ then you need to set up a development environment.
+
+If you are a regular programmer then you already have your environment.
+
+For __templates__ and __apps__ you do not need a development environment as Tercen contains all the features required to build them.
+
+## Installing Tercen Studio {-}
+
+**1. Install docker-compose**
+
+First you need to install [docker-compose](https://docs.docker.com/compose/install/). 
+
+**For Windows:**
+
+If you use Windows, you can install [Docker-Desktop for Windows](https://docs.docker.com/docker-for-windows/install/) that includes `docker-compose`.
+
+**Advise**: Select the __WSL 2 backend__ system option when installing on Windows.
+
+
+**For Mac and Linux:**
+
+Check out [how to install docker-compose](https://docs.docker.com/compose/install/) on Mac or Linux.
+
+**2. Clone tercen-studio repository**
+
+Then, __get tercen-studio__ by cloning the following repository:
+
+```bash
+git clone https://github.com/tercen/tercen_studio.git
+cd tercen_studio
+```
+
+You then need to create the `tercen` network by running the following command.
+
+```
+docker network create tercen
+```
+
+The latest instructions on how to install Tercen Studio can be found in the 
+README of the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio).
+
+## Starting Tercen Studio {-}
+
+Once `docker-compose` is installed and the `tercen-studio` repository cloned, you can __start tercen__ by running:
+
+```bash
+docker-compose up -d
+```
+
+You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402).
+
+* _Username_: admin
+
+* _Password_: admin
+
+You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8787/).
+ 
+* _Username_: rstudio
+
+* _Password_: tercen
+
+Now you're all set!
