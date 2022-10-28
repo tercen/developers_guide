@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 @import url('https://fonts.googleapis.com/css?family=Source+Sans');
 
-p, div, li {
+p, div {
   font-family: 'Source Sans', sans-serif;
 }
 
-h1, h2, h3 {
+h1, h2, h3, li.book-part {
   font-family: 'Fira Sans', sans-serif;
   font-weight: bold;
 }

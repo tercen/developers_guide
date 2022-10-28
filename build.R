@@ -1,3 +1,1 @@
-suppressWarnings(
-  bookdown::render_book("./source/")
-)
+bookdown::render_book("./source/")
