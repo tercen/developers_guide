@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans');
 
-p, div, li, h1, h2, h3 {
+p, div, li {
+  font-family: 'Source Sans', sans-serif;
+}
+
+h1, h2, h3 {
   font-family: 'Fira Sans', sans-serif;
+  font-weight: bold;
 }
 
 p.caption {
