@@ -23,4 +23,15 @@ building-an-app
 the-app-concept
 creating-an-app
 naming
+tim
+common-operator-issues
+ci-and-github-actions
+test-not-found
+wrong-relations
+wrong-ncols-nrows
+wrong-column-names
+wrong-column-type
+wrong-values
+wrong-correlation
+untrusted-git
 next-steps

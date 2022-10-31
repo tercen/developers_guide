@@ -1,4 +1,4 @@
-# (PART\*) Going forward {.unnumbered}
+# (PART\*) Best practices {.unnumbered}
 
 # Development guidelines {#naming}
 

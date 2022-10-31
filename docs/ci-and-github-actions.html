@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 13 Building an app | Tercen developer’s guide</title>
+<title>Chapter 17 CI and Github Actions | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta name="description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <meta name="generator" content="bookdown 0.29 with bs4_book()">
-<meta property="og:title" content="Chapter 13 Building an app | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 17 CI and Github Actions | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta property="og:description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 13 Building an app | Tercen developer’s guide">
-<meta name="twitter:description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta name="twitter:title" content="Chapter 17 CI and Github Actions | Tercen developer’s guide">
+<meta name="twitter:description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -69,13 +69,13 @@
 <li class="book-part">Templates</li>
 <li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="active" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Best practices</li>
 <li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
 <li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
 <li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li><a class="active" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
 <li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
@@ -88,58 +88,94 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="building-an-app" class="section level1" number="13">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="ci-and-github-actions" class="section level1" number="17">
 <h1>
-<span class="header-section-number">13</span> Building an app<a class="anchor" aria-label="anchor" href="#building-an-app"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17</span> CI and Github Actions<a class="anchor" aria-label="anchor" href="#ci-and-github-actions"><i class="fas fa-link"></i></a>
 </h1>
-<div id="the-app-concept" class="section level2" number="13.1">
+<div id="test-not-found" class="section level2" number="17.1">
 <h2>
-<span class="header-section-number">13.1</span> The app concept<a class="anchor" aria-label="anchor" href="#the-app-concept"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.1</span> Test not found<a class="anchor" aria-label="anchor" href="#test-not-found"><i class="fas fa-link"></i></a>
 </h2>
-<p>An <strong>app</strong> is perfect for users who wish tot have a focused module of analysis
-with multiple operators and views (e.g. PCA).</p>
-<p>The building of an <strong>app</strong> does not require any programming.</p>
+<p><code>operator.run.test.not.found</code></p>
 </div>
-<div id="creating-an-app" class="section level2" number="13.2">
+<div id="wrong-relations" class="section level2" number="17.2">
 <h2>
-<span class="header-section-number">13.2</span> Creating an app<a class="anchor" aria-label="anchor" href="#creating-an-app"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.2</span> Wrong relations<a class="anchor" aria-label="anchor" href="#wrong-relations"><i class="fas fa-link"></i></a>
 </h2>
-<p>The process for building an app is:</p>
+<p><code>task.test.operator.bad.nRelations</code></p>
+</div>
+<div id="wrong-ncols-nrows" class="section level2" number="17.3">
+<h2>
+<span class="header-section-number">17.3</span> Wrong nCols / nRows<a class="anchor" aria-label="anchor" href="#wrong-ncols-nrows"><i class="fas fa-link"></i></a>
+</h2>
+<p><code>task.test.operator.bad.nCols</code>
+<code>task.test.operator.bad.nRows</code></p>
+</div>
+<div id="wrong-column-names" class="section level2" number="17.4">
+<h2>
+<span class="header-section-number">17.4</span> Wrong column names<a class="anchor" aria-label="anchor" href="#wrong-column-names"><i class="fas fa-link"></i></a>
+</h2>
+<p><code>task.test.operator.bad.column.names</code></p>
+<p>Maybe you’ve added or renamed a column in the latest version of the operator? In
+that case, the reference table should be updated accordingly.</p>
+</div>
+<div id="wrong-column-type" class="section level2" number="17.5">
+<h2>
+<span class="header-section-number">17.5</span> Wrong column type<a class="anchor" aria-label="anchor" href="#wrong-column-type"><i class="fas fa-link"></i></a>
+</h2>
+<p><code>task.test.operator.bad.column.type</code></p>
 <ul>
-<li>Design the <strong>app</strong>
-</li>
-<li>Create a <strong>app</strong> in Tercen</li>
-<li>Insert Wizard step (optional)</li>
-<li>Replace the initial Table step with Input step</li>
-<li>Add a final Output step</li>
-<li>Save it</li>
-<li>Create an app folder in the project area</li>
-<li>Move the workflow to this app folder</li>
-<li>Test it in a workflow with data</li>
-<li>Download the workflow</li>
-<li>Create a github repository</li>
-<li>Upload the app</li>
-<li>Tag the repository</li>
-<li>Notify the community of its existence (see below)</li>
+<li>Check that .ri and .ci factors are output as integers in your operators.</li>
+<li>If another factor (for example, a cluster ID), tercen test will expect is to be
+a double. In that case, you need to provide a schema file. If you use
+tim to genenerate your test, you can use the XXX argument to the build_test_data
+function.</li>
 </ul>
-<p>All the building and deployment processes are performed in Tercen.</p>
-<p>All <strong>apps</strong> who are on a git repository are installable, only the git URL and
-a tag version number is required for a researcher to install it in Tercen.</p>
+<!-- Examples: --><!-- * X operator --><!-- * X operator, ci and ri --><div id="wrong-values" class="section level3" number="17.5.1">
+<h3>
+<span class="header-section-number">17.5.1</span> Wrong values<a class="anchor" aria-label="anchor" href="#wrong-values"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>task.test.operator.bad.value</code></p>
+<p>This error occurs when a value value is different between the reference table and
+the computed table. It gives you the row number and both values to help
+finding the issue.</p>
+</div>
+<div id="wrong-correlation" class="section level3" number="17.5.2">
+<h3>
+<span class="header-section-number">17.5.2</span> Wrong correlation<a class="anchor" aria-label="anchor" href="#wrong-correlation"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>task.test.operator.bad.correlation</code></p>
+</div>
+<div id="untrusted-git" class="section level3" number="17.5.3">
+<h3>
+<span class="header-section-number">17.5.3</span> Untrusted git<a class="anchor" aria-label="anchor" href="#untrusted-git"><i class="fas fa-link"></i></a>
+</h3>
+<p><code>tercen.forbidden.untrusted.git</code></p>
 
+</div>
 </div>
 </div>
 
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></div>
-<div class="next"><a href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></div>
+<div class="prev"><a href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></div>
+<div class="next"><a href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#building-an-app"><span class="header-section-number">13</span> Building an app</a></li>
-<li><a class="nav-link" href="#the-app-concept"><span class="header-section-number">13.1</span> The app concept</a></li>
-<li><a class="nav-link" href="#creating-an-app"><span class="header-section-number">13.2</span> Creating an app</a></li>
+<li><a class="nav-link" href="#ci-and-github-actions"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li><a class="nav-link" href="#test-not-found"><span class="header-section-number">17.1</span> Test not found</a></li>
+<li><a class="nav-link" href="#wrong-relations"><span class="header-section-number">17.2</span> Wrong relations</a></li>
+<li><a class="nav-link" href="#wrong-ncols-nrows"><span class="header-section-number">17.3</span> Wrong nCols / nRows</a></li>
+<li><a class="nav-link" href="#wrong-column-names"><span class="header-section-number">17.4</span> Wrong column names</a></li>
+<li>
+<a class="nav-link" href="#wrong-column-type"><span class="header-section-number">17.5</span> Wrong column type</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#wrong-values"><span class="header-section-number">17.5.1</span> Wrong values</a></li>
+<li><a class="nav-link" href="#wrong-correlation"><span class="header-section-number">17.5.2</span> Wrong correlation</a></li>
+<li><a class="nav-link" href="#untrusted-git"><span class="header-section-number">17.5.3</span> Untrusted git</a></li>
+</ul>
+</li>
 </ul>
 
       <div class="book-extra">
