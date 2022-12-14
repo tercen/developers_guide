@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 5 Walkthrough example: R operator | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
+<meta name="generator" content="bookdown 0.31 with bs4_book()">
+<meta property="og:title" content="Chapter 5 Walkthrough example: R operator | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 5 Walkthrough example: R operator | Tercen developer’s guide">
+<meta name="twitter:description" content="Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a linear regression on our input data and returning the slope and...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.1/transition.js"></script><script src="libs/bs3compat-0.4.1/tabs.js"></script><script src="libs/bs3compat-0.4.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-105575395-1', 'auto');
+      ga('send', 'pageview');
+
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="active" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
+<li class="book-part">Apps</li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Best practices</li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
+<li class="book-part">Troubleshooting</li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="walkthrough-example-r-operator" class="section level1" number="5">
+<h1>
+<span class="header-section-number">5</span> Walkthrough example: R operator<a class="anchor" aria-label="anchor" href="#walkthrough-example-r-operator"><i class="fas fa-link"></i></a>
+</h1>
+<p>Here we will learn through a concrete example how to create an R operator for Tercen. Our goal is to create an operator performing a <strong>linear regression</strong> on our input data and returning the slope and intercept of the model.</p>
+<div id="designing-the-operator" class="section level2 unnumbered">
+<h2>Designing the operator<a class="anchor" aria-label="anchor" href="#designing-the-operator"><i class="fas fa-link"></i></a>
+</h2>
+<p>The first step is to define our <strong>input projection</strong> and <strong>output relation</strong>. In Tercen, each operator shall take as input a table and return a table. Remember:</p>
+<blockquote>
+<p>“<strong>Table in, table out!</strong>”</p>
+</blockquote>
+<p>Here we want to perform the linear regression of the values <strong>projected on the y axis</strong> against the values <strong>projected on the x axis</strong>, <strong>per cell</strong>. In this example, we will output only the intercept and the slope of the model, <strong>per cell</strong>. The operator model can be seen as follow:</p>
+<center>
+<img src="images/R_operator_example_MODEL.png" width="500">
+</center>
+</div>
+<div id="setting-up-the-project" class="section level2 unnumbered">
+<h2>Setting up the project<a class="anchor" aria-label="anchor" href="#setting-up-the-project"><i class="fas fa-link"></i></a>
+</h2>
+<p>Make sure that <code>tercen-studio</code> is properly set up and that both <code>Tercen</code> and <code>RStudio</code> run locally (respectively on <a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a> and <a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>). Otherwise, please refer to <strong>Chapter 2</strong>.</p>
+<p><strong>1. Create a GitHub repository from a template</strong></p>
+<p><strong>Create a new GitHub repository</strong> with your own account based on the Tercen R operator template (<a href="https://github.com/tercen/templateR_operator" class="uri">https://github.com/tercen/templateR_operator</a>). Click on the green button <strong>Use this template</strong> in the Tercen template repository.</p>
+<center>
+<img src="images/R_operator_example_SETUP2.png" width="1000">
+</center>
+<p>Then you can create your own repository based on this template. Choose an explicit name (here, <code>lm_operator</code>).</p>
+<p>Now that the repository is initiated in your GitHub account, <strong>go back to RStudio Server</strong> (<a href="http://127.0.0.1:8787/" class="uri">http://127.0.0.1:8787/</a>). <strong>Create a new project</strong> by clicking on File &gt; New project &gt; Version control &gt; Git.</p>
+<p>You will be asked the URL of the repository (put the newly created one) and a name for the project. Now, your local project should include the skeleton:</p>
+<ul>
+<li><p><code>main.R</code>: main operator script</p></li>
+<li><p><code>workspace.R</code>: local testing script</p></li>
+<li><p><code>operator.json</code>: operator metadata</p></li>
+<li><p><code>README_template.md</code>: operator documentation template</p></li>
+<li><p><code>doc</code> directory: includes a <code>dev_commands.md</code> file, which contains useful development command lines.</p></li>
+</ul>
+<p><strong>2. Set up the Tercen input projection</strong></p>
+<p>In this example, We will use the khan dataset (available on <a href="https://github.com/tercen/khan_data" class="uri">https://github.com/tercen/khan_data</a>). First, we start Tercen locally (<a href="http://127.0.0.1:5402" class="uri">http://127.0.0.1:5402</a>) and set up a pairwise projection of the measurement in different tissues. The data step of interest should look as follow:</p>
+<center>
+<img src="images/R_operator_example_DATASTEP.png" width="700">
+</center>
+<p>Note that the data step URL includes this pattern: <code>/w/WORKF+LOWID/ds/DATASTEPID</code>, where <code>WORKFLOWID</code> and <code>DATASTEPID</code> are <strong>unique workflow and data step identifiers</strong>, respectively. These identifiers will be used in the next step within RStudio to get data from this data step.</p>
+</div>
+<div id="develop-the-operator-locally" class="section level2 unnumbered">
+<h2>Develop the operator locally<a class="anchor" aria-label="anchor" href="#develop-the-operator-locally"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now that our RStudio project and Tercen projection are set up, we can code and test our operator locally as follow:</p>
+<ul>
+<li><p>Open <code>workspace.R</code></p></li>
+<li><p>Replace the data step and workflow IDs taken from the Tercen data step URL in <code>workspace.R</code>:</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">tercen</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"tercen.workflowId"</span> <span class="op">=</span> <span class="st">"WORKFLOWID"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"tercen.stepId"</span>     <span class="op">=</span> <span class="st">"DATASTEPID"</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>Code your operator. Here, we implement a function <code>do.lm()</code> that performs a linear regression on the input data frame and return the slope and intercept of the model.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">do.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    .ri <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">.ri</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    .ci <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">.ci</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    intercept <span class="op">=</span> <span class="cn">NaN</span>,</span>
+<span>    slope <span class="op">=</span> <span class="cn">NaN</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">.y</span> <span class="op">~</span> <span class="va">.x</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">out</span><span class="op">$</span><span class="va">intercept</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span>  <span class="va">out</span><span class="op">$</span><span class="va">slope</span> <span class="op">&lt;-</span> <span class="va">mod</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">ctx</span> <span class="op">&lt;-</span> <span class="fu">tercenCtx</span><span class="op">(</span><span class="op">)</span>  <span class="op">%&gt;%</span>          <span class="co"># Get data from the data step</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">.x</span>, <span class="va">.y</span>, <span class="va">.ri</span>, <span class="va">.ci</span><span class="op">)</span> <span class="op">%&gt;%</span>   <span class="co"># select variables of interest</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">.ri</span>, <span class="va">.ci</span><span class="op">)</span> <span class="op">%&gt;%</span>         <span class="co"># group by row and column ("per cell")</span></span>
+<span>  <span class="fu">do</span><span class="op">(</span><span class="fu">do.lm</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>               <span class="co"># do the linear model</span></span>
+<span>  <span class="va">ctx</span><span class="op">$</span><span class="fu">addNamespace</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>         <span class="co"># add namespace</span></span>
+<span>  <span class="va">ctx</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="op">)</span>                     <span class="co"># push results back to Tercen using the API</span></span></code></pre></div>
+<ul>
+<li>
+<strong>Execute the code</strong> and <strong>check the results</strong> in Tercen</li>
+</ul>
+<p>Note that we recommend to implement the following <strong>sanity checks</strong> when creating an operator:</p>
+<ul>
+<li><p>check the presence of <strong>expected inputs</strong> (here, x and y axes)</p></li>
+<li><p>use the <strong><code><a href="https://rdrr.io/r/base/try.html">try()</a></code> function</strong> to test the main function implemented (here, <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>)</p></li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></div>
+<div class="next"><a href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#walkthrough-example-r-operator"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="nav-link" href="#designing-the-operator">Designing the operator</a></li>
+<li><a class="nav-link" href="#setting-up-the-project">Setting up the project</a></li>
+<li><a class="nav-link" href="#develop-the-operator-locally">Develop the operator locally</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

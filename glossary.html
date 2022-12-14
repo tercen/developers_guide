@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Glossary | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="App: A small workflow composed of steps, visuals and operators. Typically it achieves one task, e.g. PCA app. The PCA app is composed of one result visual and one computation and one data...">
+<meta name="generator" content="bookdown 0.31 with bs4_book()">
+<meta property="og:title" content="Glossary | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="App: A small workflow composed of steps, visuals and operators. Typically it achieves one task, e.g. PCA app. The PCA app is composed of one result visual and one computation and one data...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glossary | Tercen developer’s guide">
+<meta name="twitter:description" content="App: A small workflow composed of steps, visuals and operators. Typically it achieves one task, e.g. PCA app. The PCA app is composed of one result visual and one computation and one data...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.1/transition.js"></script><script src="libs/bs3compat-0.4.1/tabs.js"></script><script src="libs/bs3compat-0.4.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-105575395-1', 'auto');
+      ga('send', 'pageview');
+
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
+<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
+<li class="book-part">Apps</li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Best practices</li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
+<li class="book-part">Troubleshooting</li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="active" href="glossary.html">Glossary</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="glossary" class="section level1 unnumbered">
+<h1>Glossary<a class="anchor" aria-label="anchor" href="#glossary"><i class="fas fa-link"></i></a>
+</h1>
+<p><strong>App</strong>:
+A small workflow composed of <strong>steps</strong>, visuals and <strong>operators</strong>. Typically it
+achieves one task, e.g. PCA app. The PCA app is composed of one result visual
+and one computation and one data wrangling step.</p>
+<p><strong>App library</strong>:
+A repository of Tercen <strong>components</strong>.</p>
+<p><strong>Component</strong>:
+A plug-in to Tercen. It can be an <strong>operator</strong>, <strong>app</strong>, or <strong>template</strong>.</p>
+<p><strong>Cross-tab view</strong>:
+A Tercen interface window to define a projection view (i.e. what is on the:
+row, col, y-axis, x-axis, color, label).</p>
+<p><strong>Long format</strong>:
+A format where every row is a measurement.</p>
+<p><strong>Measurement</strong>: A numerical variable</p>
+<p><strong>Observation</strong>: An observation is the factor name given to a value (measurement),
+at a particular moment in time, of a particular variable.</p>
+<p><strong>Operator</strong>:
+An operator computes on data supplied to it by the <strong>projection</strong> view defined using the <strong>cross-tab window</strong>.</p>
+<p><strong>Projection</strong>:
+A projection is defined using the <strong>cross-tab window</strong>.</p>
+<p><strong>Step</strong>:
+A single step allows for a visual <strong>projection</strong> and optionally a
+computation using an <strong>operator</strong>.</p>
+<p><strong>Template</strong>:
+A templatised <strong>workflow</strong>.</p>
+<p><strong>Variable</strong>: A variable is a characteristic of a unit being observed that may
+assume more than one of a set of values to which a numerical measure or a
+category from a classification can be assigned (e.g. income, age, weight, etc.,
+and “occupation”, “industry”, “disease”, etc.</p>
+<p><strong>Wide format</strong>:
+A format where every column is a variable.</p>
+<p><strong>Workflow</strong>:
+A sequence of <strong>steps</strong> or <strong>apps</strong> to achieve an analysis pipeline.</p>
+
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></div>
+<div class="next"><a href="tercen-studio.html">Tercen Studio</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#glossary">Glossary</a></li></ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
