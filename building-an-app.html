@@ -104,28 +104,47 @@ with multiple operators and views (e.g. PCA).</p>
 <h2>
 <span class="header-section-number">13.2</span> Creating an app<a class="anchor" aria-label="anchor" href="#creating-an-app"><i class="fas fa-link"></i></a>
 </h2>
-<p>The process for building an app is:</p>
+<p>Here is the full procedure to create an app:</p>
 <ul>
-<li>Design the <strong>app</strong>
+<li>Create a workflow that you wish to convert to an app</li>
+<li>Select a generic dataset, preferable from the <a href="https://github.com/tercen/data_designs">data designs</a>
 </li>
-<li>Create a <strong>app</strong> in Tercen</li>
-<li>Insert Wizard step (optional)</li>
-<li>Replace the initial Table step with Input step</li>
-<li>Add a final Output step</li>
-<li>Save it</li>
-<li>Create an app folder in the project area</li>
-<li>Move the workflow to this app folder</li>
-<li>Test it in a workflow with data</li>
-<li>Download the workflow</li>
-<li>Create a github repository</li>
-<li>Upload the app</li>
-<li>Tag the repository</li>
-<li>Notify the community of its existence (see below)</li>
+<li>Prepare the workflow and run it with the generic data</li>
+<li>Add a <strong>wizard</strong> step</li>
+<li>Open the wizard (<strong>important</strong>)</li>
+<li>Run the wizard, and answer the questions (factors and filters specification)</li>
+<li>Remove the input data (table step) and add an Input step and an Output step</li>
+<li>Open the wizard and fill in:
+<ul>
+<li>
+<em>Namespace</em>: appAbbrev</li>
+<li>
+<em>App design</em>: appAbbrev.dataDesignName</li>
 </ul>
-<p>All the building and deployment processes are performed in Tercen.</p>
+</li>
+<li>Save the app to <strong>apps</strong> project within the team</li>
+</ul>
+</div>
+<div id="publishing-an-app" class="section level2" number="13.3">
+<h2>
+<span class="header-section-number">13.3</span> Publishing an app<a class="anchor" aria-label="anchor" href="#publishing-an-app"><i class="fas fa-link"></i></a>
+</h2>
 <p>All <strong>apps</strong> who are on a git repository are installable, only the git URL and
 a tag version number is required for a researcher to install it in Tercen.</p>
-
+</div>
+<div id="customising-the-app-for-different-instruments-or-data" class="section level2" number="13.4">
+<h2>
+<span class="header-section-number">13.4</span> Customising the app for different instruments or data<a class="anchor" aria-label="anchor" href="#customising-the-app-for-different-instruments-or-data"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>Select an instrument specific pipeline</li>
+<li>Run the app development workflow with an instrument specific dataset</li>
+<li>Clone the app to the apps project of the team</li>
+<li>Run the app and answer questions with new factors and filters</li>
+<li>Click on the <strong>Publish</strong> button give name: appAbbrev.dataDesignName</li>
+<li>Edit the json file with a custom <strong>Description</strong> and <strong>factorName</strong>
+</li>
+</ul>
 </div>
 </div>
 
@@ -140,6 +159,8 @@ a tag version number is required for a researcher to install it in Tercen.</p>
 <li><a class="nav-link" href="#building-an-app"><span class="header-section-number">13</span> Building an app</a></li>
 <li><a class="nav-link" href="#the-app-concept"><span class="header-section-number">13.1</span> The app concept</a></li>
 <li><a class="nav-link" href="#creating-an-app"><span class="header-section-number">13.2</span> Creating an app</a></li>
+<li><a class="nav-link" href="#publishing-an-app"><span class="header-section-number">13.3</span> Publishing an app</a></li>
+<li><a class="nav-link" href="#customising-the-app-for-different-instruments-or-data"><span class="header-section-number">13.4</span> Customising the app for different instruments or data</a></li>
 </ul>
 
       <div class="book-extra">

@@ -22,8 +22,13 @@ building-a-template
 building-an-app
 the-app-concept
 creating-an-app
+publishing-an-app
+customising-the-app-for-different-instruments-or-data
 naming
 tim
+development-workflow-utilities
+test-utilities
+operator-folder-utilities
 common-operator-issues
 ci-and-github-actions
 test-not-found
