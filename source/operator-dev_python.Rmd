@@ -56,7 +56,54 @@ df = tercenCtx.add_namespace(df)
 tercenCtx.save(df)
 ```
 
-Save the Python script.
+Let's break down the code step by step to understand its functionality:
+
+``python
+from tercen.client import context as ctx
+import numpy as np
+``
+
+This section of the code imports the necessary modules. `tercen.client.context` provides the Tercen context for interacting with the environment, while `numpy` is a popular library for numerical computations in Python.
+
+``python
+tercenCtx = ctx.TercenContext()
+``
+
+Here, an instance of the `TercenContext` class is created. This context facilitates interaction with the Tercen environment, including data access and operations.
+
+``python
+df = (
+    tercenCtx
+    .select(['.y', '.ci', '.ri'], df_lib="polars")
+    .groupby(['.ci', '.ri'])
+    .mean()
+    .rename({".y": "mean"})
+)
+``
+
+This section performs a series of operations on the data:
+
+1. `.select(['.y', '.ci', '.ri'], df_lib="polars")`: Selects columns '.y', '.ci', and '.ri' from the data. The `df_lib` parameter is set to "polars," indicating that the data is treated as a Polars DataFrame.
+
+2. `.groupby(['.ci', '.ri'])`: Groups the data by columns '.ci' (column index) and '.ri' (row index).
+
+3. `.mean()`: Calculates the mean for the grouped data. This computes the mean value for each group.
+
+4. `.rename({".y": "mean"})`: Renames the column named '.y' to "mean" to reflect that it contains the computed mean values.
+
+The result is a Polars DataFrame named `df` containing the computed mean per cell.
+
+``python
+df = tercenCtx.add_namespace(df)
+``
+
+This line adds a namespace to the DataFrame using `add_namespace`. This step ensures a unique and data step specific prefix is added to new factors to avoid duplicate factor names in a workflow.
+
+``python
+tercenCtx.save(df)
+``
+
+Finally, the computed DataFrame is saved using the `save` method of the `TercenContext`. This action makes the calculated mean per cell available for use within the Tercen environment.
 
 ### Step 6: Generate Requirements  {-}
 
