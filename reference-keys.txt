@@ -7,6 +7,8 @@ deploying-an-r-operator
 improving-an-operator
 creating-a-shiny-operator
 creating-a-docker-operator
+developing-a-python-operator
+conclusion
 continuous-integration
 common-patterns
 output-data

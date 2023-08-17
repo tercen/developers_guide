@@ -1,0 +1,82 @@
+# Developing a Python Operator
+
+In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and using your operator in Tercen.
+
+## Prerequisites {-}
+
+Before you begin, make sure you have the following prerequisites:
+
+1. Basic understanding of Python programming.
+2. Familiarity with Git and GitHub.
+3. Tercen Studio development environment installed. Follow the instructions in the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio) to set up the environment.
+
+## Development Workflow {-}
+
+### Step 1: Create a New Git Repository {-}
+
+Start by creating a new Git repository for your Python operator. You can use the [template Python operator repository](https://github.com/tercen/template-python-operator) as a starting point. You can either fork the repository or create a new one based on the template.
+
+### Step 2: Open VS Code Server {-}
+
+Open your Tercen Studio development environment and access the VS Code Server by navigating to: `http://127.0.0.1:8443` in your web browser.
+
+### Step 3: Clone the Repository {-}
+
+In VS Code Server, open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and search for the "Clone from GitHub" command. Provide the URL of your newly created Git repository and choose a location to clone it into.
+
+### Step 4: Set Up Environment and Install Core Requirements {-}
+
+Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the `cd` command. Install the core requirements by running the following command:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### Step 5: Develop Your Operator with a Real-Life Example {-}
+
+Start developing your operator by creating a Python script in the cloned repository directory. Create a new Python script, for example, `main.py`, and paste the following code:
+
+```python
+from tercen.client import context as ctx
+import numpy as np
+
+tercenCtx = ctx.TercenContext()
+
+# Select relevant columns and create a pandas DataFrame
+df = (
+    tercenCtx
+    .select(['.y', '.ci', '.ri'], df_lib="polars")
+    .groupby(['.ci', '.ri'])
+    .mean()
+    .rename({".y": "mean"})
+)
+
+# Add namespace and save the computed mean per cell
+df = tercenCtx.add_namespace(df)
+tercenCtx.save(df)
+```
+
+Save the Python script.
+
+### Step 6: Generate Requirements  {-}
+
+If your operator requires additional Python packages, you can generate the requirements.txt file using the following command:
+
+```bash
+python3 -m tercen.util.requirements . > requirements.txt
+```
+
+### Step 7: Push Changes to GitHub {-}
+
+Commit your changes to your local Git repository and push the changes to GitHub. This will trigger the Continuous Integration (CI) GitHub workflow, which performs automated tests on your operator.
+
+### Step 8: Tag the Repository {-}
+
+Once you are satisfied with your operator's development and testing, you can tag your repository. Tagging will trigger the Release GitHub workflow, which will create a release for your operator.
+
+### Conclusion
+
+Congratulations! You have successfully developed and deployed a Python operator for Tercen.
+By following these steps, you can create custom data processing operators to extend the functionality 
+of Tercen and streamline your data analysis workflows. Remember to consult the Tercen documentation for more
+ details and advanced features. Happy coding!
