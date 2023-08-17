@@ -149,7 +149,24 @@
 <span id="cb27-15"><a href="developing-a-python-operator.html#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add namespace and save the computed mean per cell</span></span>
 <span id="cb27-16"><a href="developing-a-python-operator.html#cb27-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> tercenCtx.add_namespace(df)</span>
 <span id="cb27-17"><a href="developing-a-python-operator.html#cb27-17" aria-hidden="true" tabindex="-1"></a>tercenCtx.save(df)</span></code></pre></div>
-<p>Save the Python script.</p>
+<p>Let’s break down the code step by step to understand its functionality:</p>
+<p><code>python from tercen.client import context as ctx import numpy as np</code></p>
+<p>This section of the code imports the necessary modules. <code>tercen.client.context</code> provides the Tercen context for interacting with the environment, while <code>numpy</code> is a popular library for numerical computations in Python.</p>
+<p><code>python tercenCtx = ctx.TercenContext()</code></p>
+<p>Here, an instance of the <code>TercenContext</code> class is created. This context facilitates interaction with the Tercen environment, including data access and operations.</p>
+<p><code>python df = (     tercenCtx     .select(['.y', '.ci', '.ri'], df_lib="polars")     .groupby(['.ci', '.ri'])     .mean()     .rename({".y": "mean"}) )</code></p>
+<p>This section performs a series of operations on the data:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>.select(['.y', '.ci', '.ri'], df_lib="polars")</code>: Selects columns ‘.y’, ‘.ci’, and ‘.ri’ from the data. The <code>df_lib</code> parameter is set to “polars,” indicating that the data is treated as a Polars DataFrame.</p></li>
+<li><p><code>.groupby(['.ci', '.ri'])</code>: Groups the data by columns ‘.ci’ (column index) and ‘.ri’ (row index).</p></li>
+<li><p><code>.mean()</code>: Calculates the mean for the grouped data. This computes the mean value for each group.</p></li>
+<li><p><code>.rename({".y": "mean"})</code>: Renames the column named ‘.y’ to “mean” to reflect that it contains the computed mean values.</p></li>
+</ol>
+<p>The result is a Polars DataFrame named <code>df</code> containing the computed mean per cell.</p>
+<p><code>python df = tercenCtx.add_namespace(df)</code></p>
+<p>This line adds a namespace to the DataFrame using <code>add_namespace</code>. This step ensures a unique and data step specific prefix is added to new factors to avoid duplicate factor names in a workflow.</p>
+<p><code>python tercenCtx.save(df)</code></p>
+<p>Finally, the computed DataFrame is saved using the <code>save</code> method of the <code>TercenContext</code>. This action makes the calculated mean per cell available for use within the Tercen environment.</p>
 </div>
 <div id="step-6-generate-requirements" class="section level3 unnumbered">
 <h3>Step 6: Generate Requirements<a class="anchor" aria-label="anchor" href="#step-6-generate-requirements"><i class="fas fa-link"></i></a>
