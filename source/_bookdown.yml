@@ -17,6 +17,7 @@ rmd_files:
     "operator-dev_improve.Rmd",
     "operator-dev_shiny.Rmd",
     "operator-dev_docker.Rmd",
+    "operator-dev_python.Rmd",
     "operator-dev_ci.Rmd",
     "operator-dev_patterns.Rmd",
     "templates-apps_templates.Rmd",
