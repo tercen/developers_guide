@@ -7,7 +7,7 @@
 <title>Chapter 10 Developing a Python Operator | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and...">
-<meta name="generator" content="bookdown 0.35 with bs4_book()">
+<meta name="generator" content="bookdown 0.40 with bs4_book()">
 <meta property="og:title" content="Chapter 10 Developing a Python Operator | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and...">
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.1/transition.js"></script><script src="libs/bs3compat-0.5.1/tabs.js"></script><script src="libs/bs3compat-0.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.7.0/transition.js"></script><script src="libs/bs3compat-0.7.0/tabs.js"></script><script src="libs/bs3compat-0.7.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -126,42 +126,42 @@
 <h3>Step 4: Set Up Environment and Install Core Requirements<a class="anchor" aria-label="anchor" href="#step-4-set-up-environment-and-install-core-requirements"><i class="fas fa-link"></i></a>
 </h3>
 <p>Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the <code>cd</code> command. Install the core requirements by running the following command:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="developing-a-python-operator.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="developing-a-python-operator.html#cb26-1" tabindex="-1"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div>
 </div>
 <div id="step-5-develop-your-operator-with-a-real-life-example" class="section level3 unnumbered">
 <h3>Step 5: Develop Your Operator with a Real-Life Example<a class="anchor" aria-label="anchor" href="#step-5-develop-your-operator-with-a-real-life-example"><i class="fas fa-link"></i></a>
 </h3>
 <p>Start developing your operator by creating a Python script in the cloned repository directory. Create a new Python script, for example, <code>main.py</code>, and paste the following code:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="developing-a-python-operator.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
-<span id="cb27-2"><a href="developing-a-python-operator.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb27-3"><a href="developing-a-python-operator.html#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="developing-a-python-operator.html#cb27-4" aria-hidden="true" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext()</span>
-<span id="cb27-5"><a href="developing-a-python-operator.html#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="developing-a-python-operator.html#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Select relevant columns and create a pandas DataFrame</span></span>
-<span id="cb27-7"><a href="developing-a-python-operator.html#cb27-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (</span>
-<span id="cb27-8"><a href="developing-a-python-operator.html#cb27-8" aria-hidden="true" tabindex="-1"></a>    tercenCtx</span>
-<span id="cb27-9"><a href="developing-a-python-operator.html#cb27-9" aria-hidden="true" tabindex="-1"></a>    .select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
-<span id="cb27-10"><a href="developing-a-python-operator.html#cb27-10" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span>
-<span id="cb27-11"><a href="developing-a-python-operator.html#cb27-11" aria-hidden="true" tabindex="-1"></a>    .mean()</span>
-<span id="cb27-12"><a href="developing-a-python-operator.html#cb27-12" aria-hidden="true" tabindex="-1"></a>    .rename({<span class="st">".y"</span>: <span class="st">"mean"</span>})</span>
-<span id="cb27-13"><a href="developing-a-python-operator.html#cb27-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-14"><a href="developing-a-python-operator.html#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="developing-a-python-operator.html#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add namespace and save the computed mean per cell</span></span>
-<span id="cb27-16"><a href="developing-a-python-operator.html#cb27-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> tercenCtx.add_namespace(df)</span>
-<span id="cb27-17"><a href="developing-a-python-operator.html#cb27-17" aria-hidden="true" tabindex="-1"></a>tercenCtx.save(df)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="developing-a-python-operator.html#cb27-1" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
+<span id="cb27-2"><a href="developing-a-python-operator.html#cb27-2" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb27-3"><a href="developing-a-python-operator.html#cb27-3" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="developing-a-python-operator.html#cb27-4" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext()</span>
+<span id="cb27-5"><a href="developing-a-python-operator.html#cb27-5" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="developing-a-python-operator.html#cb27-6" tabindex="-1"></a><span class="co"># Select relevant columns and create a pandas DataFrame</span></span>
+<span id="cb27-7"><a href="developing-a-python-operator.html#cb27-7" tabindex="-1"></a>df <span class="op">=</span> (</span>
+<span id="cb27-8"><a href="developing-a-python-operator.html#cb27-8" tabindex="-1"></a>    tercenCtx</span>
+<span id="cb27-9"><a href="developing-a-python-operator.html#cb27-9" tabindex="-1"></a>    .select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
+<span id="cb27-10"><a href="developing-a-python-operator.html#cb27-10" tabindex="-1"></a>    .groupby([<span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span>
+<span id="cb27-11"><a href="developing-a-python-operator.html#cb27-11" tabindex="-1"></a>    .mean()</span>
+<span id="cb27-12"><a href="developing-a-python-operator.html#cb27-12" tabindex="-1"></a>    .rename({<span class="st">".y"</span>: <span class="st">"mean"</span>})</span>
+<span id="cb27-13"><a href="developing-a-python-operator.html#cb27-13" tabindex="-1"></a>)</span>
+<span id="cb27-14"><a href="developing-a-python-operator.html#cb27-14" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="developing-a-python-operator.html#cb27-15" tabindex="-1"></a><span class="co"># Add namespace and save the computed mean per cell</span></span>
+<span id="cb27-16"><a href="developing-a-python-operator.html#cb27-16" tabindex="-1"></a>df <span class="op">=</span> tercenCtx.add_namespace(df)</span>
+<span id="cb27-17"><a href="developing-a-python-operator.html#cb27-17" tabindex="-1"></a>tercenCtx.save(df)</span></code></pre></div>
 <p>Let’s break down the code step by step to understand its functionality:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="developing-a-python-operator.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
-<span id="cb28-2"><a href="developing-a-python-operator.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="developing-a-python-operator.html#cb28-1" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
+<span id="cb28-2"><a href="developing-a-python-operator.html#cb28-2" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div>
 <p>This section of the code imports the necessary modules. <code>tercen.client.context</code> provides the Tercen context for interacting with the environment, while <code>numpy</code> is a popular library for numerical computations in Python.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="developing-a-python-operator.html#cb29-1" aria-hidden="true" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext()</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="developing-a-python-operator.html#cb29-1" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext()</span></code></pre></div>
 <p>Here, an instance of the <code>TercenContext</code> class is created. This context facilitates interaction with the Tercen environment, including data access and operations.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="developing-a-python-operator.html#cb30-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (</span>
-<span id="cb30-2"><a href="developing-a-python-operator.html#cb30-2" aria-hidden="true" tabindex="-1"></a>    tercenCtx</span>
-<span id="cb30-3"><a href="developing-a-python-operator.html#cb30-3" aria-hidden="true" tabindex="-1"></a>    .select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
-<span id="cb30-4"><a href="developing-a-python-operator.html#cb30-4" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span>
-<span id="cb30-5"><a href="developing-a-python-operator.html#cb30-5" aria-hidden="true" tabindex="-1"></a>    .mean()</span>
-<span id="cb30-6"><a href="developing-a-python-operator.html#cb30-6" aria-hidden="true" tabindex="-1"></a>    .rename({<span class="st">".y"</span>: <span class="st">"mean"</span>})</span>
-<span id="cb30-7"><a href="developing-a-python-operator.html#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="developing-a-python-operator.html#cb30-1" tabindex="-1"></a>df <span class="op">=</span> (</span>
+<span id="cb30-2"><a href="developing-a-python-operator.html#cb30-2" tabindex="-1"></a>    tercenCtx</span>
+<span id="cb30-3"><a href="developing-a-python-operator.html#cb30-3" tabindex="-1"></a>    .select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
+<span id="cb30-4"><a href="developing-a-python-operator.html#cb30-4" tabindex="-1"></a>    .groupby([<span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span>
+<span id="cb30-5"><a href="developing-a-python-operator.html#cb30-5" tabindex="-1"></a>    .mean()</span>
+<span id="cb30-6"><a href="developing-a-python-operator.html#cb30-6" tabindex="-1"></a>    .rename({<span class="st">".y"</span>: <span class="st">"mean"</span>})</span>
+<span id="cb30-7"><a href="developing-a-python-operator.html#cb30-7" tabindex="-1"></a>)</span></code></pre></div>
 <p>This section performs a series of operations on the data:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>.select(['.y', '.ci', '.ri'], df_lib="polars")</code>: Selects columns ‘.y’, ‘.ci’, and ‘.ri’ from the data. The <code>df_lib</code> parameter is set to “polars,” indicating that the data is treated as a Polars DataFrame.</p></li>
@@ -170,16 +170,16 @@
 <li><p><code>.rename({".y": "mean"})</code>: Renames the column named ‘.y’ to “mean” to reflect that it contains the computed mean values.</p></li>
 </ol>
 <p>The result is a Polars DataFrame named <code>df</code> containing the computed mean per cell.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="developing-a-python-operator.html#cb31-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> tercenCtx.add_namespace(df)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="developing-a-python-operator.html#cb31-1" tabindex="-1"></a>df <span class="op">=</span> tercenCtx.add_namespace(df)</span></code></pre></div>
 <p>This line adds a namespace to the DataFrame using <code>add_namespace</code>. This step ensures a unique and data step specific prefix is added to new factors to avoid duplicate factor names in a workflow.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="developing-a-python-operator.html#cb32-1" aria-hidden="true" tabindex="-1"></a>tercenCtx.save(df)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="developing-a-python-operator.html#cb32-1" tabindex="-1"></a>tercenCtx.save(df)</span></code></pre></div>
 <p>Finally, the computed DataFrame is saved using the <code>save</code> method of the <code>TercenContext</code>. This action makes the calculated mean per cell available for use within the Tercen environment.</p>
 </div>
 <div id="step-6-generate-requirements" class="section level3 unnumbered">
 <h3>Step 6: Generate Requirements<a class="anchor" aria-label="anchor" href="#step-6-generate-requirements"><i class="fas fa-link"></i></a>
 </h3>
 <p>If your operator requires additional Python packages, you can generate the requirements.txt file using the following command:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="developing-a-python-operator.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> tercen.util.requirements . <span class="op">&gt;</span> requirements.txt</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="developing-a-python-operator.html#cb33-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> tercen.util.requirements . <span class="op">&gt;</span> requirements.txt</span></code></pre></div>
 </div>
 <div id="step-7-push-changes-to-github" class="section level3 unnumbered">
 <h3>Step 7: Push Changes to GitHub<a class="anchor" aria-label="anchor" href="#step-7-push-changes-to-github"><i class="fas fa-link"></i></a>
