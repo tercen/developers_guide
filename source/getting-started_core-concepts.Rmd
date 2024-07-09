@@ -32,11 +32,11 @@ In summary a researcher wishing a full end-to-end workflow chooses a __template_
 a specific data process chooses a __workflow__, a specific computation chooses 
 an __operator__.
 
-Once an app is built, it may be added to the __app library__ where it can be 
+Once a module is built, it may be added to the __app library__ where it can be 
 accessed by researchers.
 
 
-Deciding on which to build is determined by what you would like the app to achieve.
+Deciding on which to build is determined by what you would like the module to achieve.
 The first two, __template__ and __workflow__, do not need programming experience, 
 the __operator__ does. 
 
