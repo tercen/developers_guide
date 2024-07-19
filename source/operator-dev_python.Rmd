@@ -4,10 +4,83 @@
 
 * Go to Tercen local instance
 
-* Create a project, upload data and create a new workflow
+* Create a project by clicking on __New project__
 
-* Table Step and Data Step
+* Click on the __From git__ tab and create a new project from `https://github.com/tercen/developers_guide_project` as follows: 
 
+<center><img src="./images/python_dev_1.png" width=700></img></center>
+
+* This action will populate a new project that contains an example dataset (_Crabs_) and a small workflow to get started with development.
+
+* Open the workflow and navigate to the XXX data step
+
+* This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors).
+
+Go to VS Code
+
+### Step X: Set Up Environment and Install Core Requirements {-}
+
+Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the `cd` command. Install the core requirements by running the following command:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### Step X: Interact with data through the API {-}
+
+The first thing we'll do is to interactively work with the data we have projected in the crosstab.
+
+To do so, you can get from the data step URL the __workflow ID__ and the __data step ID__ that you
+can then use as follows:
+
+```python
+from tercen.client import context as ctx
+import numpy as np
+
+tercenCtx = ctx.TercenContext(
+    workflowId="YOUR_WORKFLOW_ID",
+    stepId="YOUR_STEP_ID",
+    username="admin", # if using the local Tercen instance
+    password="admin", # if using the local Tercen instance
+    serviceUri="http://tercen:5400/" # if using the local Tercen instance 
+)
+```
+
+* Select data
+
+```python
+tercenCtx.select(['.y'])
+```
+
+```python
+tercenCtx.select(['.y', '.ci', '.ri'])
+```
+
+* Check the table in the crosstab. It contains the data that has been queried. You can look at it to get some inspiration.
+
+
+Now try to run the following lines of code:
+
+```python
+tercenCtx.cselect()
+tercenCtx.rselect()
+tercenCtx.colors()
+
+```
+
+Now you can play around with the API and check the output of various functions. What do they do ?
+
+Here is a description of the most commonly used ones:
+
+* `select()`
+* `cselect()`
+* `rselect()`
+* `cnames`
+* `rnames`
+* `colors`
+* `labels`
+* `addNamespace()`
+* `save()`
 
 # Developing a Python Operator
 
