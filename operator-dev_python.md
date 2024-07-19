@@ -12,9 +12,9 @@ Before you begin, make sure you have the following prerequisites:
 
 ## Getting started {-}
 
-### Step 1: Set Up Development Data Step {-}
+### Step 1: Set Up a Development Data Step {-}
 
-* Go to Tercen local instance
+* Go to Tercen local instance: http://127.0.0.1:5402/
 
 * Create a project by clicking on __New project__
 
@@ -24,15 +24,21 @@ Before you begin, make sure you have the following prerequisites:
 
 * This action will populate a new project that contains an example dataset (_Crabs_) and a small workflow to get started with development.
 
-* Open the workflow and navigate to the XXX data step
+* Open the __Dev workflow__ and double click on the  __Dev data step__ to open the __crosstab__ view.
 
-* This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors).
+* This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors). You should
+see the following projection:
+
+<center><img src="./images/python_dev_2.png" width=700></img></center>
+
 
 ### Step 2: Set Up Environment and Install Core Requirements {-}
 
-Navigate to VS Code: http://127.0.0.1:8443/
+* Navigate to VS Code: http://127.0.0.1:8443/
 
-Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the `cd` command. Install the core requirements by running the following command:
+* If you open it for the first time, you might be asked to install some VS Code extensions. Accept and install the Python extensions.
+
+* Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the `cd` command. Install the core requirements by running the following command:
 
 ```bash
 pip3 install -r requirements.txt
@@ -68,12 +74,15 @@ Now that we have initialised the __Tercen context__, we can interact with the da
 tercenCtx.select(['.y'])
 ```
 
+What does it do ?
+
 ```python
 tercenCtx.select(['.y', '.ci', '.ri'])
 ```
+What does it do ?
 
-* Check the table in the crosstab. It contains the data that has been queried. You can look at it to get some inspiration.
-
+You can check what is available in the __Tables__ button in the crosstab. It contains the data that has been queried. You can look at it to get some inspiration. For example,
+we can identify the `.y`, `.ci` (column index) and `.ri` (row index) factors that we have queried above, but more are available.
 
 Now try to run the following lines of code:
 
@@ -81,28 +90,28 @@ Now try to run the following lines of code:
 tercenCtx.cselect()
 tercenCtx.rselect()
 tercenCtx.colors()
-
 ```
 
 Now you can play around with the API and check the output of various functions. What do they do ?
 
 Here is a description of the most commonly used ones:
 
-* `select()`
-* `cselect()`
-* `rselect()`
-* `cnames`
-* `rnames`
-* `colors`
-* `labels`
-* `addNamespace()`
-* `save()`
+* `select()`: select any factor specified in the arguments
+* `as.matrix()`: gets data from Tercen in a matrix format (rows x columns, y values being used to fill the matrix)
+* `cselect()`: select column factors
+* `rselect()`: select row factors
+* `cnames`: get column factor names
+* `rnames`: get row factor names
+* `colors`: get color factor names
+* `labels`: get label factor names
+* `addNamespace()`: add a unique namespace (defined in the data step environment within Tercen) to variable names
+* `save()`: send back an output table to Tercen
+
+We invite you to play around and test these different functions. They are mainly designed to retrieve data from Tercen, and send back output tables. In between, you are free to compute whatever you need.
 
 # Developing a Python Operator
 
-In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and using your operator in Tercen.
-
-Building an operator requires to go through the following steps:
+We will now see how we can develop a simple operator in Tercen. Building an operator requires to go through the following steps:
 
 * Design the operator
 * Setup the github repository

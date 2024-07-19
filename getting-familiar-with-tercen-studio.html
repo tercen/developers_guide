@@ -107,11 +107,11 @@
 <div id="getting-started" class="section level2 unnumbered">
 <h2>Getting started<a class="anchor" aria-label="anchor" href="#getting-started"><i class="fas fa-link"></i></a>
 </h2>
-<div id="step-1-set-up-development-data-step" class="section level3 unnumbered">
-<h3>Step 1: Set Up Development Data Step<a class="anchor" aria-label="anchor" href="#step-1-set-up-development-data-step"><i class="fas fa-link"></i></a>
+<div id="step-1-set-up-a-development-data-step" class="section level3 unnumbered">
+<h3>Step 1: Set Up a Development Data Step<a class="anchor" aria-label="anchor" href="#step-1-set-up-a-development-data-step"><i class="fas fa-link"></i></a>
 </h3>
 <ul>
-<li><p>Go to Tercen local instance</p></li>
+<li><p>Go to Tercen local instance: <a href="http://127.0.0.1:5402/" class="uri">http://127.0.0.1:5402/</a></p></li>
 <li><p>Create a project by clicking on <strong>New project</strong></p></li>
 <li><p>Click on the <strong>From git</strong> tab and create a new project from <code>https://github.com/tercen/developers_guide_project</code> as follows:</p></li>
 </ul>
@@ -120,15 +120,22 @@
 </center>
 <ul>
 <li><p>This action will populate a new project that contains an example dataset (<em>Crabs</em>) and a small workflow to get started with development.</p></li>
-<li><p>Open the workflow and navigate to the XXX data step</p></li>
-<li><p>This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors).</p></li>
+<li><p>Open the <strong>Dev workflow</strong> and double click on the <strong>Dev data step</strong> to open the <strong>crosstab</strong> view.</p></li>
+<li><p>This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors). You should
+see the following projection:</p></li>
 </ul>
+<center>
+<img src="images/python_dev_2.png" width="700">
+</center>
 </div>
 <div id="step-2-set-up-environment-and-install-core-requirements" class="section level3 unnumbered">
 <h3>Step 2: Set Up Environment and Install Core Requirements<a class="anchor" aria-label="anchor" href="#step-2-set-up-environment-and-install-core-requirements"><i class="fas fa-link"></i></a>
 </h3>
-<p>Navigate to VS Code: <a href="http://127.0.0.1:8443/" class="uri">http://127.0.0.1:8443/</a></p>
-<p>Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the <code>cd</code> command. Install the core requirements by running the following command:</p>
+<ul>
+<li><p>Navigate to VS Code: <a href="http://127.0.0.1:8443/" class="uri">http://127.0.0.1:8443/</a></p></li>
+<li><p>If you open it for the first time, you might be asked to install some VS Code extensions. Accept and install the Python extensions.</p></li>
+<li><p>Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the <code>cd</code> command. Install the core requirements by running the following command:</p></li>
+</ul>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="getting-familiar-with-tercen-studio.html#cb18-1" tabindex="-1"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div>
 </div>
 <div id="step-3-interact-with-data-through-the-api" class="section level3 unnumbered">
@@ -151,10 +158,11 @@ and paste the following code:</p>
 <p><em>What does it do?</em></p>
 <p>Now that we have initialised the <strong>Tercen context</strong>, we can interact with the data step. Let’s start by <strong>selecting</strong> some data:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="getting-familiar-with-tercen-studio.html#cb20-1" tabindex="-1"></a>tercenCtx.select([<span class="st">'.y'</span>])</span></code></pre></div>
+<p>What does it do ?</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="getting-familiar-with-tercen-studio.html#cb21-1" tabindex="-1"></a>tercenCtx.select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span></code></pre></div>
-<ul>
-<li>Check the table in the crosstab. It contains the data that has been queried. You can look at it to get some inspiration.</li>
-</ul>
+<p>What does it do ?</p>
+<p>You can check what is available in the <strong>Tables</strong> button in the crosstab. It contains the data that has been queried. You can look at it to get some inspiration. For example,
+we can identify the <code>.y</code>, <code>.ci</code> (column index) and <code>.ri</code> (row index) factors that we have queried above, but more are available.</p>
 <p>Now try to run the following lines of code:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="getting-familiar-with-tercen-studio.html#cb22-1" tabindex="-1"></a>tercenCtx.cselect()</span>
 <span id="cb22-2"><a href="getting-familiar-with-tercen-studio.html#cb22-2" tabindex="-1"></a>tercenCtx.rselect()</span>
@@ -162,16 +170,28 @@ and paste the following code:</p>
 <p>Now you can play around with the API and check the output of various functions. What do they do ?</p>
 <p>Here is a description of the most commonly used ones:</p>
 <ul>
-<li><code>select()</code></li>
-<li><code>cselect()</code></li>
-<li><code>rselect()</code></li>
-<li><code>cnames</code></li>
-<li><code>rnames</code></li>
-<li><code>colors</code></li>
-<li><code>labels</code></li>
-<li><code>addNamespace()</code></li>
-<li><code><a href="https://rdrr.io/r/base/save.html">save()</a></code></li>
+<li>
+<code>select()</code>: select any factor specified in the arguments</li>
+<li>
+<code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code>: gets data from Tercen in a matrix format (rows x columns, y values being used to fill the matrix)</li>
+<li>
+<code>cselect()</code>: select column factors</li>
+<li>
+<code>rselect()</code>: select row factors</li>
+<li>
+<code>cnames</code>: get column factor names</li>
+<li>
+<code>rnames</code>: get row factor names</li>
+<li>
+<code>colors</code>: get color factor names</li>
+<li>
+<code>labels</code>: get label factor names</li>
+<li>
+<code>addNamespace()</code>: add a unique namespace (defined in the data step environment within Tercen) to variable names</li>
+<li>
+<code><a href="https://rdrr.io/r/base/save.html">save()</a></code>: send back an output table to Tercen</li>
 </ul>
+<p>We invite you to play around and test these different functions. They are mainly designed to retrieve data from Tercen, and send back output tables. In between, you are free to compute whatever you need.</p>
 </div>
 </div>
 </div>
@@ -185,7 +205,7 @@ and paste the following code:</p>
 <li><a class="nav-link" href="#prerequisites">Prerequisites</a></li>
 <li>
 <a class="nav-link" href="#getting-started">Getting started</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#step-1-set-up-development-data-step">Step 1: Set Up Development Data Step</a></li>
+<li><a class="nav-link" href="#step-1-set-up-a-development-data-step">Step 1: Set Up a Development Data Step</a></li>
 <li><a class="nav-link" href="#step-2-set-up-environment-and-install-core-requirements">Step 2: Set Up Environment and Install Core Requirements</a></li>
 <li><a class="nav-link" href="#step-3-interact-with-data-through-the-api">Step 3: Interact with data through the API</a></li>
 </ul>
