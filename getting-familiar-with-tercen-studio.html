@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 8 Getting familiar with Tercen Studio | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="Go to Tercen local instance Create a project by clicking on New project Click on the From git tab and create a new project from https://github.com/tercen/developers_guide_project as follows:  This...">
+<meta name="description" content="Prerequisites Before you begin, make sure you have the following prerequisites: Basic understanding of Python programming. Familiarity with Git and GitHub. Tercen Studio development environment...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
 <meta property="og:title" content="Chapter 8 Getting familiar with Tercen Studio | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="Go to Tercen local instance Create a project by clicking on New project Click on the From git tab and create a new project from https://github.com/tercen/developers_guide_project as follows:  This...">
+<meta property="og:description" content="Prerequisites Before you begin, make sure you have the following prerequisites: Basic understanding of Python programming. Familiarity with Git and GitHub. Tercen Studio development environment...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 8 Getting familiar with Tercen Studio | Tercen developer’s guide">
-<meta name="twitter:description" content="Go to Tercen local instance Create a project by clicking on New project Click on the From git tab and create a new project from https://github.com/tercen/developers_guide_project as follows:  This...">
+<meta name="twitter:description" content="Prerequisites Before you begin, make sure you have the following prerequisites: Basic understanding of Python programming. Familiarity with Git and GitHub. Tercen Studio development environment...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.7.0/transition.js"></script><script src="libs/bs3compat-0.7.0/tabs.js"></script><script src="libs/bs3compat-0.7.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -94,6 +94,22 @@
 <h1>
 <span class="header-section-number">8</span> Getting familiar with Tercen Studio<a class="anchor" aria-label="anchor" href="#getting-familiar-with-tercen-studio"><i class="fas fa-link"></i></a>
 </h1>
+<div id="prerequisites" class="section level2 unnumbered">
+<h2>Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"><i class="fas fa-link"></i></a>
+</h2>
+<p>Before you begin, make sure you have the following prerequisites:</p>
+<ol style="list-style-type: decimal">
+<li>Basic understanding of Python programming.</li>
+<li>Familiarity with Git and GitHub.</li>
+<li>Tercen Studio development environment installed. Follow the instructions in the <a href="https://github.com/tercen/tercen_studio">Tercen Studio GitHub repository</a> to set up the environment.</li>
+</ol>
+</div>
+<div id="getting-started" class="section level2 unnumbered">
+<h2>Getting started<a class="anchor" aria-label="anchor" href="#getting-started"><i class="fas fa-link"></i></a>
+</h2>
+<div id="step-1-set-up-development-data-step" class="section level3 unnumbered">
+<h3>Step 1: Set Up Development Data Step<a class="anchor" aria-label="anchor" href="#step-1-set-up-development-data-step"><i class="fas fa-link"></i></a>
+</h3>
 <ul>
 <li><p>Go to Tercen local instance</p></li>
 <li><p>Create a project by clicking on <strong>New project</strong></p></li>
@@ -107,19 +123,20 @@
 <li><p>Open the workflow and navigate to the XXX data step</p></li>
 <li><p>This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors).</p></li>
 </ul>
-<p>Go to VS Code</p>
-<div id="step-x-set-up-environment-and-install-core-requirements" class="section level3 unnumbered">
-<h3>Step X: Set Up Environment and Install Core Requirements<a class="anchor" aria-label="anchor" href="#step-x-set-up-environment-and-install-core-requirements"><i class="fas fa-link"></i></a>
+</div>
+<div id="step-2-set-up-environment-and-install-core-requirements" class="section level3 unnumbered">
+<h3>Step 2: Set Up Environment and Install Core Requirements<a class="anchor" aria-label="anchor" href="#step-2-set-up-environment-and-install-core-requirements"><i class="fas fa-link"></i></a>
 </h3>
+<p>Navigate to VS Code: <a href="http://127.0.0.1:8443/" class="uri">http://127.0.0.1:8443/</a></p>
 <p>Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the <code>cd</code> command. Install the core requirements by running the following command:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="getting-familiar-with-tercen-studio.html#cb18-1" tabindex="-1"></a><span class="ex">pip3</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div>
 </div>
-<div id="step-x-interact-with-data-through-the-api" class="section level3 unnumbered">
-<h3>Step X: Interact with data through the API<a class="anchor" aria-label="anchor" href="#step-x-interact-with-data-through-the-api"><i class="fas fa-link"></i></a>
+<div id="step-3-interact-with-data-through-the-api" class="section level3 unnumbered">
+<h3>Step 3: Interact with data through the API<a class="anchor" aria-label="anchor" href="#step-3-interact-with-data-through-the-api"><i class="fas fa-link"></i></a>
 </h3>
 <p>The first thing we’ll do is to interactively work with the data we have projected in the crosstab.</p>
-<p>To do so, you can get from the data step URL the <strong>workflow ID</strong> and the <strong>data step ID</strong> that you
-can then use as follows:</p>
+<p>To do so, you can get from the data step URL the <strong>workflow ID</strong> and the <strong>data step ID</strong>. Open the <code>main.py</code> file
+and paste the following code:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="getting-familiar-with-tercen-studio.html#cb19-1" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
 <span id="cb19-2"><a href="getting-familiar-with-tercen-studio.html#cb19-2" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb19-3"><a href="getting-familiar-with-tercen-studio.html#cb19-3" tabindex="-1"></a></span>
@@ -130,9 +147,9 @@ can then use as follows:</p>
 <span id="cb19-8"><a href="getting-familiar-with-tercen-studio.html#cb19-8" tabindex="-1"></a>    password<span class="op">=</span><span class="st">"admin"</span>, <span class="co"># if using the local Tercen instance</span></span>
 <span id="cb19-9"><a href="getting-familiar-with-tercen-studio.html#cb19-9" tabindex="-1"></a>    serviceUri<span class="op">=</span><span class="st">"http://tercen:5400/"</span> <span class="co"># if using the local Tercen instance </span></span>
 <span id="cb19-10"><a href="getting-familiar-with-tercen-studio.html#cb19-10" tabindex="-1"></a>)</span></code></pre></div>
-<ul>
-<li>Select data</li>
-</ul>
+<p>Execute this code (Shift + Enter) in the Python console after having replaced the workflow and step IDs.</p>
+<p><em>What does it do?</em></p>
+<p>Now that we have initialised the <strong>Tercen context</strong>, we can interact with the data step. Let’s start by <strong>selecting</strong> some data:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="getting-familiar-with-tercen-studio.html#cb20-1" tabindex="-1"></a>tercenCtx.select([<span class="st">'.y'</span>])</span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="getting-familiar-with-tercen-studio.html#cb21-1" tabindex="-1"></a>tercenCtx.select([<span class="st">'.y'</span>, <span class="st">'.ci'</span>, <span class="st">'.ri'</span>])</span></code></pre></div>
 <ul>
@@ -157,17 +174,23 @@ can then use as follows:</p>
 </ul>
 </div>
 </div>
+</div>
   <div class="chapter-nav">
 <div class="prev"><a href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></div>
 <div class="next"><a href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li>
-<a class="nav-link" href="#getting-familiar-with-tercen-studio"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#step-x-set-up-environment-and-install-core-requirements">Step X: Set Up Environment and Install Core Requirements</a></li>
-<li><a class="nav-link" href="#step-x-interact-with-data-through-the-api">Step X: Interact with data through the API</a></li>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#getting-familiar-with-tercen-studio"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="nav-link" href="#prerequisites">Prerequisites</a></li>
+<li>
+<a class="nav-link" href="#getting-started">Getting started</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#step-1-set-up-development-data-step">Step 1: Set Up Development Data Step</a></li>
+<li><a class="nav-link" href="#step-2-set-up-environment-and-install-core-requirements">Step 2: Set Up Environment and Install Core Requirements</a></li>
+<li><a class="nav-link" href="#step-3-interact-with-data-through-the-api">Step 3: Interact with data through the API</a></li>
 </ul>
-</li></ul>
+</li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

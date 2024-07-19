@@ -7,7 +7,6 @@ deploying-an-r-operator
 improving-an-operator
 getting-familiar-with-tercen-studio
 developing-a-python-operator
-conclusion
 continuous-integration
 common-patterns
 output-data

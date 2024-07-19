@@ -95,21 +95,22 @@
 <span class="header-section-number">9</span> Developing a Python Operator<a class="anchor" aria-label="anchor" href="#developing-a-python-operator"><i class="fas fa-link"></i></a>
 </h1>
 <p>In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and using your operator in Tercen.</p>
-<div id="prerequisites" class="section level2 unnumbered">
-<h2>Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"><i class="fas fa-link"></i></a>
-</h2>
-<p>Before you begin, make sure you have the following prerequisites:</p>
-<ol style="list-style-type: decimal">
-<li>Basic understanding of Python programming.</li>
-<li>Familiarity with Git and GitHub.</li>
-<li>Tercen Studio development environment installed. Follow the instructions in the <a href="https://github.com/tercen/tercen_studio">Tercen Studio GitHub repository</a> to set up the environment.</li>
-</ol>
-</div>
+<p>Building an operator requires to go through the following steps:</p>
+<ul>
+<li>Design the operator</li>
+<li>Setup the github repository</li>
+<li>Setup the input projection</li>
+<li>Connecting to Tercen</li>
+<li>Develop and test</li>
+<li>Manage input settings</li>
+<li>Manage dependencies</li>
+<li>Deployment</li>
+</ul>
 <div id="development-workflow" class="section level2 unnumbered">
 <h2>Development Workflow<a class="anchor" aria-label="anchor" href="#development-workflow"><i class="fas fa-link"></i></a>
 </h2>
-<div id="step-1-create-a-new-git-repository" class="section level3 unnumbered">
-<h3>Step 1: Create a New Git Repository<a class="anchor" aria-label="anchor" href="#step-1-create-a-new-git-repository"><i class="fas fa-link"></i></a>
+<div id="optional-step-1-create-a-new-git-repository" class="section level3 unnumbered">
+<h3>[OPTIONAL] Step 1: Create a New Git Repository<a class="anchor" aria-label="anchor" href="#optional-step-1-create-a-new-git-repository"><i class="fas fa-link"></i></a>
 </h3>
 <p>Start by creating a new Git repository for your Python operator. You can use the <a href="https://github.com/tercen/template-python-operator">template Python operator repository</a> as a starting point. You can either fork the repository or create a new one based on the template.</p>
 </div>
@@ -118,10 +119,11 @@
 </h3>
 <p>Open your Tercen Studio development environment and access the VS Code Server by navigating to: <code>http://127.0.0.1:8443</code> in your web browser.</p>
 </div>
-<div id="step-3-clone-the-repository" class="section level3 unnumbered">
-<h3>Step 3: Clone the Repository<a class="anchor" aria-label="anchor" href="#step-3-clone-the-repository"><i class="fas fa-link"></i></a>
+<div id="optional-step-3-clone-the-repository" class="section level3 unnumbered">
+<h3>[OPTIONAL] Step 3: Clone the Repository<a class="anchor" aria-label="anchor" href="#optional-step-3-clone-the-repository"><i class="fas fa-link"></i></a>
 </h3>
 <p>In VS Code Server, open the Command Palette (<code>Ctrl+Shift+P</code> or <code>Cmd+Shift+P</code>) and search for the “Clone from GitHub” command. Provide the URL of your newly created Git repository and choose a location to clone it into.</p>
+<p><strong>If you were not able to create a GitHub repository</strong>, you can clone the template repository directly. You will be able to experiment with the API and follow this tutorial but you won’t be able to push changes and install the operator.</p>
 </div>
 <div id="step-4-set-up-environment-and-install-core-requirements" class="section level3 unnumbered">
 <h3>Step 4: Set Up Environment and Install Core Requirements<a class="anchor" aria-label="anchor" href="#step-4-set-up-environment-and-install-core-requirements"><i class="fas fa-link"></i></a>
@@ -182,19 +184,18 @@
 <p>If your operator requires additional Python packages, you can generate the requirements.txt file using the following command:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="developing-a-python-operator.html#cb30-1" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> tercen.util.requirements . <span class="op">&gt;</span> requirements.txt</span></code></pre></div>
 </div>
-<div id="step-7-push-changes-to-github" class="section level3 unnumbered">
-<h3>Step 7: Push Changes to GitHub<a class="anchor" aria-label="anchor" href="#step-7-push-changes-to-github"><i class="fas fa-link"></i></a>
+<div id="optional-step-7-push-changes-to-github" class="section level3 unnumbered">
+<h3>[OPTIONAL] Step 7: Push Changes to GitHub<a class="anchor" aria-label="anchor" href="#optional-step-7-push-changes-to-github"><i class="fas fa-link"></i></a>
 </h3>
 <p>Commit your changes to your local Git repository and push the changes to GitHub. This will trigger the Continuous Integration (CI) GitHub workflow, which performs automated tests on your operator.</p>
 </div>
-<div id="step-8-tag-the-repository" class="section level3 unnumbered">
-<h3>Step 8: Tag the Repository<a class="anchor" aria-label="anchor" href="#step-8-tag-the-repository"><i class="fas fa-link"></i></a>
+<div id="optional-step-8-tag-the-repository" class="section level3 unnumbered">
+<h3>[OPTIONAL] Step 8: Tag the Repository<a class="anchor" aria-label="anchor" href="#optional-step-8-tag-the-repository"><i class="fas fa-link"></i></a>
 </h3>
 <p>Once you are satisfied with your operator’s development and testing, you can tag your repository. Tagging will trigger the Release GitHub workflow, which will create a release for your operator.</p>
 </div>
-<div id="conclusion" class="section level3" number="9.0.1">
-<h3>
-<span class="header-section-number">9.0.1</span> Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"><i class="fas fa-link"></i></a>
+<div id="conclusion" class="section level3 unnumbered">
+<h3>Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"><i class="fas fa-link"></i></a>
 </h3>
 <p>Congratulations! You have successfully developed and deployed a Python operator for Tercen.
 By following these steps, you can create custom data processing operators to extend the functionality
@@ -214,18 +215,17 @@ details and advanced features. Happy coding!</p>
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#developing-a-python-operator"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
-<li><a class="nav-link" href="#prerequisites">Prerequisites</a></li>
 <li>
 <a class="nav-link" href="#development-workflow">Development Workflow</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#step-1-create-a-new-git-repository">Step 1: Create a New Git Repository</a></li>
+<li><a class="nav-link" href="#optional-step-1-create-a-new-git-repository">[OPTIONAL] Step 1: Create a New Git Repository</a></li>
 <li><a class="nav-link" href="#step-2-open-vs-code-server">Step 2: Open VS Code Server</a></li>
-<li><a class="nav-link" href="#step-3-clone-the-repository">Step 3: Clone the Repository</a></li>
+<li><a class="nav-link" href="#optional-step-3-clone-the-repository">[OPTIONAL] Step 3: Clone the Repository</a></li>
 <li><a class="nav-link" href="#step-4-set-up-environment-and-install-core-requirements">Step 4: Set Up Environment and Install Core Requirements</a></li>
 <li><a class="nav-link" href="#step-5-develop-your-operator-with-a-real-life-example">Step 5: Develop Your Operator with a Real-Life Example</a></li>
 <li><a class="nav-link" href="#step-6-generate-requirements">Step 6: Generate Requirements</a></li>
-<li><a class="nav-link" href="#step-7-push-changes-to-github">Step 7: Push Changes to GitHub</a></li>
-<li><a class="nav-link" href="#step-8-tag-the-repository">Step 8: Tag the Repository</a></li>
-<li><a class="nav-link" href="#conclusion"><span class="header-section-number">9.0.1</span> Conclusion</a></li>
+<li><a class="nav-link" href="#optional-step-7-push-changes-to-github">[OPTIONAL] Step 7: Push Changes to GitHub</a></li>
+<li><a class="nav-link" href="#optional-step-8-tag-the-repository">[OPTIONAL] Step 8: Tag the Repository</a></li>
+<li><a class="nav-link" href="#conclusion">Conclusion</a></li>
 </ul>
 </li>
 </ul>
