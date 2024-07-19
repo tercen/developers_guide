@@ -32,7 +32,7 @@ In summary a researcher wishing a full end-to-end workflow chooses a __template_
 a specific data process chooses a __workflow__, a specific computation chooses 
 an __operator__.
 
-Once a module is built, it may be added to the __app library__ where it can be 
+Once a module is built, it may be added to the __Library__ where it can be 
 accessed by researchers.
 
 
@@ -40,28 +40,4 @@ Deciding on which to build is determined by what you would like the module to ac
 The first two, __template__ and __workflow__, do not need programming experience, 
 the __operator__ does. 
 
-
 The building of each type of module is explained in the following chapters.
-
-## Template {-}
-
-No programming knowledge is required to build a template.
-These are built by using the Tercen user interface and deployed within Tercen.
-
-## App {-}
-
-No programming knowledge is required to build an app.
-These are built by using the Tercen user interface and deployed within Tercen.
-
-## Operator {-}
-
-Programming knowledge is required to build an __operator__ using any number of 
-programming languages (R, Python, Rust, etc.). The code is put on Github 
-for the __app library__ to find. 
-
-Currently Tercen has made a convenient R package for working with the Tercen API,
-we aim to quickly cater for the other programming languages (Python, Matlab etc.) 
-during our final release.
-
-A command line function can also be deployed as an __operator__. This is 
-done using a docker concept.

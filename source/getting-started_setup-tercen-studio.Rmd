@@ -2,10 +2,6 @@
 
 If you wish to develop __operators__ then you need to set up a development environment.
 
-If you are a regular programmer then you already have your environment.
-
-For __templates__ and __apps__ you do not need a development environment as Tercen contains all the features required to build them.
-
 ## Installing Tercen Studio {-}
 
 **1. Install docker-compose**
@@ -60,5 +56,10 @@ You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8
 * _Username_: rstudio
 
 * _Password_: tercen
+
+You can run **VS Code** by going to  [http://127.0.0.1:8443/](http://127.0.0.1:8443/).
+ 
+* _Password_: tercen
+
 
 Now you're all set!

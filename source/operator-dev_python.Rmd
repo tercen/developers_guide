@@ -1,3 +1,14 @@
+# (PART\*) Python Operator development {.unnumbered}
+
+# Getting familiar with Tercen Studio
+
+* Go to Tercen local instance
+
+* Create a project, upload data and create a new workflow
+
+* Table Step and Data Step
+
+
 # Developing a Python Operator
 
 In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and using your operator in Tercen.
