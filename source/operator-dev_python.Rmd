@@ -2,6 +2,18 @@
 
 # Getting familiar with Tercen Studio
 
+## Prerequisites {-}
+
+Before you begin, make sure you have the following prerequisites:
+
+1. Basic understanding of Python programming.
+2. Familiarity with Git and GitHub.
+3. Tercen Studio development environment installed. Follow the instructions in the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio) to set up the environment.
+
+## Getting started {-}
+
+### Step 1: Set Up Development Data Step {-}
+
 * Go to Tercen local instance
 
 * Create a project by clicking on __New project__
@@ -16,9 +28,9 @@
 
 * This a an input data projection we have prepared in the purpose of developing an operator to compute the mean value of the y axis factor, per cell (i.e., the data is grouped using row and column factors).
 
-Go to VS Code
+### Step 2: Set Up Environment and Install Core Requirements {-}
 
-### Step X: Set Up Environment and Install Core Requirements {-}
+Navigate to VS Code: http://127.0.0.1:8443/
 
 Open a terminal in VS Code Server by clicking on the terminal icon in the lower left corner. Navigate to your cloned repository directory using the `cd` command. Install the core requirements by running the following command:
 
@@ -26,12 +38,12 @@ Open a terminal in VS Code Server by clicking on the terminal icon in the lower 
 pip3 install -r requirements.txt
 ```
 
-### Step X: Interact with data through the API {-}
+### Step 3: Interact with data through the API {-}
 
 The first thing we'll do is to interactively work with the data we have projected in the crosstab.
 
-To do so, you can get from the data step URL the __workflow ID__ and the __data step ID__ that you
-can then use as follows:
+To do so, you can get from the data step URL the __workflow ID__ and the __data step ID__. Open the `main.py` file 
+and paste the following code:
 
 ```python
 from tercen.client import context as ctx
@@ -46,7 +58,11 @@ tercenCtx = ctx.TercenContext(
 )
 ```
 
-* Select data
+Execute this code (Shift + Enter) in the Python console after having replaced the workflow and step IDs.
+
+_What does it do?_
+
+Now that we have initialised the __Tercen context__, we can interact with the data step. Let's start by __selecting__ some data:
 
 ```python
 tercenCtx.select(['.y'])
@@ -86,17 +102,20 @@ Here is a description of the most commonly used ones:
 
 In this tutorial, we will walk you through the process of developing a Python operator for Tercen. We will cover the entire development workflow, from setting up your environment to installing and using your operator in Tercen.
 
-## Prerequisites {-}
+Building an operator requires to go through the following steps:
 
-Before you begin, make sure you have the following prerequisites:
-
-1. Basic understanding of Python programming.
-2. Familiarity with Git and GitHub.
-3. Tercen Studio development environment installed. Follow the instructions in the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio) to set up the environment.
+* Design the operator
+* Setup the github repository
+* Setup the input projection
+* Connecting to Tercen
+* Develop and test
+* Manage input settings
+* Manage dependencies
+* Deployment
 
 ## Development Workflow {-}
 
-### Step 1: Create a New Git Repository {-}
+### [OPTIONAL] Step 1: Create a New Git Repository {-}
 
 Start by creating a new Git repository for your Python operator. You can use the [template Python operator repository](https://github.com/tercen/template-python-operator) as a starting point. You can either fork the repository or create a new one based on the template.
 
@@ -104,9 +123,11 @@ Start by creating a new Git repository for your Python operator. You can use the
 
 Open your Tercen Studio development environment and access the VS Code Server by navigating to: `http://127.0.0.1:8443` in your web browser.
 
-### Step 3: Clone the Repository {-}
+### [OPTIONAL] Step 3: Clone the Repository {-}
 
 In VS Code Server, open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and search for the "Clone from GitHub" command. Provide the URL of your newly created Git repository and choose a location to clone it into.
+
+__If you were not able to create a GitHub repository__, you can clone the template repository directly. You will be able to experiment with the API and follow this tutorial but you won't be able to push changes and install the operator.
 
 ### Step 4: Set Up Environment and Install Core Requirements {-}
 
@@ -197,15 +218,15 @@ If your operator requires additional Python packages, you can generate the requi
 python3 -m tercen.util.requirements . > requirements.txt
 ```
 
-### Step 7: Push Changes to GitHub {-}
+### [OPTIONAL] Step 7: Push Changes to GitHub {-}
 
 Commit your changes to your local Git repository and push the changes to GitHub. This will trigger the Continuous Integration (CI) GitHub workflow, which performs automated tests on your operator.
 
-### Step 8: Tag the Repository {-}
+### [OPTIONAL] Step 8: Tag the Repository {-}
 
 Once you are satisfied with your operator's development and testing, you can tag your repository. Tagging will trigger the Release GitHub workflow, which will create a release for your operator.
 
-### Conclusion
+### Conclusion {-}
 
 Congratulations! You have successfully developed and deployed a Python operator for Tercen.
 By following these steps, you can create custom data processing operators to extend the functionality 
