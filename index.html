@@ -57,28 +57,29 @@
 <li class="book-part">Getting started</li>
 <li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
-<li class="book-part">Operator development</li>
+<li class="book-part">R Operator development</li>
 <li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
 <li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
-<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
-<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">10</span> Developing a Python Operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
-<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">13</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">14</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">15</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">16</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">17</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">18</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">19</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
@@ -96,37 +97,20 @@
 <img src="images/cover.png" width="100%">
 </center>
 <p><br></p>
-<p>This guide outlines how to design, develop and share apps for <strong>Tercen</strong>.</p>
-<ul>
-<li><p><strong>Why read this guide?</strong> :
-You are curious or wish to build an app for Tercen, then this is the guide.</p></li>
-<li><p><strong>Acknowledgement</strong>:
-I would like to thank all the users for their feedback. It has helped us improve Tercen.</p></li>
-<li><p><strong>Feedback</strong>:
-If you wish to give feedback then please do not hesitate to create an entry in the <a href="https://github.com/tercen/appbuilders-guide/issues">issue tracker</a>.</p></li>
-<li><p><strong>Motivation</strong>:<br>
-Tercen promotes collaboration for data analysis. Not everyone can code or even
+<p>This guide outlines how to design, develop and share <strong>modules</strong> for <strong>Tercen</strong>.</p>
+<p>Tercen promotes collaboration for data analysis. Not everyone can code or even
 wants to, but everyone should benefit from the explosion of data and code
-currently taking place.
-Tercen allows non programmers (e.g. biologists) to explore their data and
-allows programmers (e.g. bioinformaticians) to upload their code (or web-apps)
+currently taking place.</p>
+<p>Tercen allows non programmers (e.g. biologists) to explore their data and
+programmers (e.g. bioinformaticians) to upload their code (or web-apps)
 for the biologist to use. By offering this services we believe biologist get
 empowered and can claim back control of their data. The bioinformatician gets
 liberated from the operational details and day to day analysis demands from
-the biologist. This is summed up with the phrase:</p></li>
-</ul>
+the biologist. This is summed up with the phrase:</p>
 <blockquote>
 <p>Tercen <strong>empowers</strong> the biologist and <strong>liberates</strong> the bioinformatician.</p>
 </blockquote>
-<p>Discover all the incredible capabilities of our platform so that you can
-build useful and exciting apps directly on top of Tercen with ease - whether
-you’re public apps, or you’re building for your own team’s private apps.</p>
-<p>See what others have built on Tercen, chat with developers in our Community,
-and explore our documentation to get a sense of what you can do.</p>
-<ul>
-<li>Check out <a href="https://github.com/tercen">Tercen Github</a> for some existing apps.</li>
-<li>Check out <a href="https://tercen.com/explore">Tercen Explore</a> section to discover example projects.</li>
-</ul>
+
 </div>
   <div class="chapter-nav">
 <div class="empty"></div>

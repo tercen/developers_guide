@@ -5,8 +5,7 @@ general-workflow
 walkthrough-example-r-operator
 deploying-an-r-operator
 improving-an-operator
-creating-a-shiny-operator
-creating-a-docker-operator
+getting-familiar-with-tercen-studio
 developing-a-python-operator
 conclusion
 continuous-integration

@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 18 CI and Github Actions | Tercen developer’s guide</title>
+<title>Chapter 17 CI and Github Actions | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="18.1 Test not found operator.run.test.not.found  18.2 Wrong relations task.test.operator.bad.nRelations  18.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  18.4...">
+<meta name="description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Chapter 18 CI and Github Actions | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 17 CI and Github Actions | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="18.1 Test not found operator.run.test.not.found  18.2 Wrong relations task.test.operator.bad.nRelations  18.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  18.4...">
+<meta property="og:description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 18 CI and Github Actions | Tercen developer’s guide">
-<meta name="twitter:description" content="18.1 Test not found operator.run.test.not.found  18.2 Wrong relations task.test.operator.bad.nRelations  18.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  18.4...">
+<meta name="twitter:title" content="Chapter 17 CI and Github Actions | Tercen developer’s guide">
+<meta name="twitter:description" content="17.1 Test not found operator.run.test.not.found  17.2 Wrong relations task.test.operator.bad.nRelations  17.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  17.4...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.7.0/transition.js"></script><script src="libs/bs3compat-0.7.0/tabs.js"></script><script src="libs/bs3compat-0.7.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -57,28 +57,29 @@
 <li class="book-part">Getting started</li>
 <li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
-<li class="book-part">Operator development</li>
+<li class="book-part">R Operator development</li>
 <li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
 <li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
-<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
-<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">10</span> Developing a Python Operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
-<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">13</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">14</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">15</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">16</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">17</span> Common operator issues</a></li>
-<li><a class="active" href="ci-and-github-actions.html"><span class="header-section-number">18</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="active" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">19</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
@@ -89,40 +90,40 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="ci-and-github-actions" class="section level1" number="18">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="ci-and-github-actions" class="section level1" number="17">
 <h1>
-<span class="header-section-number">18</span> CI and Github Actions<a class="anchor" aria-label="anchor" href="#ci-and-github-actions"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17</span> CI and Github Actions<a class="anchor" aria-label="anchor" href="#ci-and-github-actions"><i class="fas fa-link"></i></a>
 </h1>
-<div id="test-not-found" class="section level2" number="18.1">
+<div id="test-not-found" class="section level2" number="17.1">
 <h2>
-<span class="header-section-number">18.1</span> Test not found<a class="anchor" aria-label="anchor" href="#test-not-found"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.1</span> Test not found<a class="anchor" aria-label="anchor" href="#test-not-found"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>operator.run.test.not.found</code></p>
 </div>
-<div id="wrong-relations" class="section level2" number="18.2">
+<div id="wrong-relations" class="section level2" number="17.2">
 <h2>
-<span class="header-section-number">18.2</span> Wrong relations<a class="anchor" aria-label="anchor" href="#wrong-relations"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.2</span> Wrong relations<a class="anchor" aria-label="anchor" href="#wrong-relations"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.nRelations</code></p>
 </div>
-<div id="wrong-ncols-nrows" class="section level2" number="18.3">
+<div id="wrong-ncols-nrows" class="section level2" number="17.3">
 <h2>
-<span class="header-section-number">18.3</span> Wrong nCols / nRows<a class="anchor" aria-label="anchor" href="#wrong-ncols-nrows"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.3</span> Wrong nCols / nRows<a class="anchor" aria-label="anchor" href="#wrong-ncols-nrows"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.nCols</code>
 <code>task.test.operator.bad.nRows</code></p>
 </div>
-<div id="wrong-column-names" class="section level2" number="18.4">
+<div id="wrong-column-names" class="section level2" number="17.4">
 <h2>
-<span class="header-section-number">18.4</span> Wrong column names<a class="anchor" aria-label="anchor" href="#wrong-column-names"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.4</span> Wrong column names<a class="anchor" aria-label="anchor" href="#wrong-column-names"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.column.names</code></p>
 <p>Maybe you’ve added or renamed a column in the latest version of the operator? In
 that case, the reference table should be updated accordingly.</p>
 </div>
-<div id="wrong-column-type" class="section level2" number="18.5">
+<div id="wrong-column-type" class="section level2" number="17.5">
 <h2>
-<span class="header-section-number">18.5</span> Wrong column type<a class="anchor" aria-label="anchor" href="#wrong-column-type"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.5</span> Wrong column type<a class="anchor" aria-label="anchor" href="#wrong-column-type"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.column.type</code></p>
 <ul>
@@ -132,24 +133,24 @@ a double. In that case, you need to provide a schema file. If you use
 tim to genenerate your test, you can use the XXX argument to the build_test_data
 function.</li>
 </ul>
-<!-- Examples: --><!-- * X operator --><!-- * X operator, ci and ri --><div id="wrong-values" class="section level3" number="18.5.1">
+<!-- Examples: --><!-- * X operator --><!-- * X operator, ci and ri --><div id="wrong-values" class="section level3" number="17.5.1">
 <h3>
-<span class="header-section-number">18.5.1</span> Wrong values<a class="anchor" aria-label="anchor" href="#wrong-values"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.5.1</span> Wrong values<a class="anchor" aria-label="anchor" href="#wrong-values"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>task.test.operator.bad.value</code></p>
 <p>This error occurs when a value value is different between the reference table and
 the computed table. It gives you the row number and both values to help
 finding the issue.</p>
 </div>
-<div id="wrong-correlation" class="section level3" number="18.5.2">
+<div id="wrong-correlation" class="section level3" number="17.5.2">
 <h3>
-<span class="header-section-number">18.5.2</span> Wrong correlation<a class="anchor" aria-label="anchor" href="#wrong-correlation"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.5.2</span> Wrong correlation<a class="anchor" aria-label="anchor" href="#wrong-correlation"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>task.test.operator.bad.correlation</code></p>
 </div>
-<div id="untrusted-git" class="section level3" number="18.5.3">
+<div id="untrusted-git" class="section level3" number="17.5.3">
 <h3>
-<span class="header-section-number">18.5.3</span> Untrusted git<a class="anchor" aria-label="anchor" href="#untrusted-git"><i class="fas fa-link"></i></a>
+<span class="header-section-number">17.5.3</span> Untrusted git<a class="anchor" aria-label="anchor" href="#untrusted-git"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>tercen.forbidden.untrusted.git</code></p>
 
@@ -160,21 +161,21 @@ finding the issue.</p>
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="common-operator-issues.html"><span class="header-section-number">17</span> Common operator issues</a></div>
-<div class="next"><a href="next-steps.html"><span class="header-section-number">19</span> Next steps</a></div>
+<div class="prev"><a href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></div>
+<div class="next"><a href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#ci-and-github-actions"><span class="header-section-number">18</span> CI and Github Actions</a></li>
-<li><a class="nav-link" href="#test-not-found"><span class="header-section-number">18.1</span> Test not found</a></li>
-<li><a class="nav-link" href="#wrong-relations"><span class="header-section-number">18.2</span> Wrong relations</a></li>
-<li><a class="nav-link" href="#wrong-ncols-nrows"><span class="header-section-number">18.3</span> Wrong nCols / nRows</a></li>
-<li><a class="nav-link" href="#wrong-column-names"><span class="header-section-number">18.4</span> Wrong column names</a></li>
+<li><a class="nav-link" href="#ci-and-github-actions"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li><a class="nav-link" href="#test-not-found"><span class="header-section-number">17.1</span> Test not found</a></li>
+<li><a class="nav-link" href="#wrong-relations"><span class="header-section-number">17.2</span> Wrong relations</a></li>
+<li><a class="nav-link" href="#wrong-ncols-nrows"><span class="header-section-number">17.3</span> Wrong nCols / nRows</a></li>
+<li><a class="nav-link" href="#wrong-column-names"><span class="header-section-number">17.4</span> Wrong column names</a></li>
 <li>
-<a class="nav-link" href="#wrong-column-type"><span class="header-section-number">18.5</span> Wrong column type</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#wrong-values"><span class="header-section-number">18.5.1</span> Wrong values</a></li>
-<li><a class="nav-link" href="#wrong-correlation"><span class="header-section-number">18.5.2</span> Wrong correlation</a></li>
-<li><a class="nav-link" href="#untrusted-git"><span class="header-section-number">18.5.3</span> Untrusted git</a></li>
+<a class="nav-link" href="#wrong-column-type"><span class="header-section-number">17.5</span> Wrong column type</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#wrong-values"><span class="header-section-number">17.5.1</span> Wrong values</a></li>
+<li><a class="nav-link" href="#wrong-correlation"><span class="header-section-number">17.5.2</span> Wrong correlation</a></li>
+<li><a class="nav-link" href="#untrusted-git"><span class="header-section-number">17.5.3</span> Untrusted git</a></li>
 </ul>
 </li>
 </ul>

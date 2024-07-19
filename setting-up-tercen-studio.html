@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 3 Setting up Tercen Studio | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="If you wish to develop operators then you need to set up a development environment. If you are a regular programmer then you already have your environment. For templates and apps you do not need a...">
+<meta name="description" content="If you wish to develop operators then you need to set up a development environment. Installing Tercen Studio 1. Install docker-compose First you need to install docker-compose. For Windows: If you...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Setting up Tercen Studio | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="If you wish to develop operators then you need to set up a development environment. If you are a regular programmer then you already have your environment. For templates and apps you do not need a...">
+<meta property="og:description" content="If you wish to develop operators then you need to set up a development environment. Installing Tercen Studio 1. Install docker-compose First you need to install docker-compose. For Windows: If you...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 3 Setting up Tercen Studio | Tercen developer’s guide">
-<meta name="twitter:description" content="If you wish to develop operators then you need to set up a development environment. If you are a regular programmer then you already have your environment. For templates and apps you do not need a...">
+<meta name="twitter:description" content="If you wish to develop operators then you need to set up a development environment. Installing Tercen Studio 1. Install docker-compose First you need to install docker-compose. For Windows: If you...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.7.0/transition.js"></script><script src="libs/bs3compat-0.7.0/tabs.js"></script><script src="libs/bs3compat-0.7.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -57,28 +57,29 @@
 <li class="book-part">Getting started</li>
 <li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
 <li><a class="active" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
-<li class="book-part">Operator development</li>
+<li class="book-part">R Operator development</li>
 <li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
 <li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
-<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
-<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">10</span> Developing a Python Operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
-<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">13</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">14</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">15</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">16</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">17</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">18</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">19</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
@@ -94,8 +95,6 @@
 <span class="header-section-number">3</span> Setting up Tercen Studio<a class="anchor" aria-label="anchor" href="#setting-up-tercen-studio"><i class="fas fa-link"></i></a>
 </h1>
 <p>If you wish to develop <strong>operators</strong> then you need to set up a development environment.</p>
-<p>If you are a regular programmer then you already have your environment.</p>
-<p>For <strong>templates</strong> and <strong>apps</strong> you do not need a development environment as Tercen contains all the features required to build them.</p>
 <div id="installing-tercen-studio" class="section level2 unnumbered">
 <h2>Installing Tercen Studio<a class="anchor" aria-label="anchor" href="#installing-tercen-studio"><i class="fas fa-link"></i></a>
 </h2>
@@ -129,6 +128,11 @@ README of the <a href="https://github.com/tercen/tercen_studio">Tercen Studio Gi
 <ul>
 <li><p><em>Username</em>: rstudio</p></li>
 <li><p><em>Password</em>: tercen</p></li>
+</ul>
+<p>You can run <strong>VS Code</strong> by going to <a href="http://127.0.0.1:8443/">http://127.0.0.1:8443/</a>.</p>
+<ul>
+<li>
+<em>Password</em>: tercen</li>
 </ul>
 <p>Now you’re all set!</p>
 

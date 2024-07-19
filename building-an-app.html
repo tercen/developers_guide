@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 14 Building an app | Tercen developer’s guide</title>
+<title>Chapter 13 Building an app | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="14.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta name="description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Chapter 14 Building an app | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 13 Building an app | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="14.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta property="og:description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 14 Building an app | Tercen developer’s guide">
-<meta name="twitter:description" content="14.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
+<meta name="twitter:title" content="Chapter 13 Building an app | Tercen developer’s guide">
+<meta name="twitter:description" content="13.1 The app concept An app is perfect for users who wish tot have a focused module of analysis with multiple operators and views (e.g. PCA). The building of an app does not require any...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.7.0/transition.js"></script><script src="libs/bs3compat-0.7.0/tabs.js"></script><script src="libs/bs3compat-0.7.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -57,28 +57,29 @@
 <li class="book-part">Getting started</li>
 <li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
 <li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
-<li class="book-part">Operator development</li>
+<li class="book-part">R Operator development</li>
 <li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
 <li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
 <li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
 <li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
-<li><a class="" href="creating-a-shiny-operator.html"><span class="header-section-number">8</span> Creating a shiny operator</a></li>
-<li><a class="" href="creating-a-docker-operator.html"><span class="header-section-number">9</span> Creating a docker operator</a></li>
-<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">10</span> Developing a Python Operator</a></li>
-<li><a class="" href="continuous-integration.html"><span class="header-section-number">11</span> Continuous integration</a></li>
-<li><a class="" href="common-patterns.html"><span class="header-section-number">12</span> Common patterns</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
+<li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">13</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="active" href="building-an-app.html"><span class="header-section-number">14</span> Building an app</a></li>
+<li><a class="active" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">15</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">16</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">17</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">18</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">19</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
@@ -89,21 +90,21 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="building-an-app" class="section level1" number="14">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="building-an-app" class="section level1" number="13">
 <h1>
-<span class="header-section-number">14</span> Building an app<a class="anchor" aria-label="anchor" href="#building-an-app"><i class="fas fa-link"></i></a>
+<span class="header-section-number">13</span> Building an app<a class="anchor" aria-label="anchor" href="#building-an-app"><i class="fas fa-link"></i></a>
 </h1>
-<div id="the-app-concept" class="section level2" number="14.1">
+<div id="the-app-concept" class="section level2" number="13.1">
 <h2>
-<span class="header-section-number">14.1</span> The app concept<a class="anchor" aria-label="anchor" href="#the-app-concept"><i class="fas fa-link"></i></a>
+<span class="header-section-number">13.1</span> The app concept<a class="anchor" aria-label="anchor" href="#the-app-concept"><i class="fas fa-link"></i></a>
 </h2>
 <p>An <strong>app</strong> is perfect for users who wish tot have a focused module of analysis
 with multiple operators and views (e.g. PCA).</p>
 <p>The building of an <strong>app</strong> does not require any programming.</p>
 </div>
-<div id="creating-an-app" class="section level2" number="14.2">
+<div id="creating-an-app" class="section level2" number="13.2">
 <h2>
-<span class="header-section-number">14.2</span> Creating an app<a class="anchor" aria-label="anchor" href="#creating-an-app"><i class="fas fa-link"></i></a>
+<span class="header-section-number">13.2</span> Creating an app<a class="anchor" aria-label="anchor" href="#creating-an-app"><i class="fas fa-link"></i></a>
 </h2>
 <p>Here is the full procedure to create an app:</p>
 <ul>
@@ -126,16 +127,16 @@ with multiple operators and views (e.g. PCA).</p>
 <li>Save the app to <strong>apps</strong> project within the team</li>
 </ul>
 </div>
-<div id="publishing-an-app" class="section level2" number="14.3">
+<div id="publishing-an-app" class="section level2" number="13.3">
 <h2>
-<span class="header-section-number">14.3</span> Publishing an app<a class="anchor" aria-label="anchor" href="#publishing-an-app"><i class="fas fa-link"></i></a>
+<span class="header-section-number">13.3</span> Publishing an app<a class="anchor" aria-label="anchor" href="#publishing-an-app"><i class="fas fa-link"></i></a>
 </h2>
 <p>All <strong>apps</strong> who are on a git repository are installable, only the git URL and
 a tag version number is required for a researcher to install it in Tercen.</p>
 </div>
-<div id="customising-the-app-for-different-instruments-or-data" class="section level2" number="14.4">
+<div id="customising-the-app-for-different-instruments-or-data" class="section level2" number="13.4">
 <h2>
-<span class="header-section-number">14.4</span> Customising the app for different instruments or data<a class="anchor" aria-label="anchor" href="#customising-the-app-for-different-instruments-or-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">13.4</span> Customising the app for different instruments or data<a class="anchor" aria-label="anchor" href="#customising-the-app-for-different-instruments-or-data"><i class="fas fa-link"></i></a>
 </h2>
 <ul>
 <li>Select an instrument specific pipeline</li>
@@ -152,16 +153,16 @@ a tag version number is required for a researcher to install it in Tercen.</p>
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="building-a-template.html"><span class="header-section-number">13</span> Building a template</a></div>
-<div class="next"><a href="naming.html"><span class="header-section-number">15</span> Development guidelines</a></div>
+<div class="prev"><a href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></div>
+<div class="next"><a href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#building-an-app"><span class="header-section-number">14</span> Building an app</a></li>
-<li><a class="nav-link" href="#the-app-concept"><span class="header-section-number">14.1</span> The app concept</a></li>
-<li><a class="nav-link" href="#creating-an-app"><span class="header-section-number">14.2</span> Creating an app</a></li>
-<li><a class="nav-link" href="#publishing-an-app"><span class="header-section-number">14.3</span> Publishing an app</a></li>
-<li><a class="nav-link" href="#customising-the-app-for-different-instruments-or-data"><span class="header-section-number">14.4</span> Customising the app for different instruments or data</a></li>
+<li><a class="nav-link" href="#building-an-app"><span class="header-section-number">13</span> Building an app</a></li>
+<li><a class="nav-link" href="#the-app-concept"><span class="header-section-number">13.1</span> The app concept</a></li>
+<li><a class="nav-link" href="#creating-an-app"><span class="header-section-number">13.2</span> Creating an app</a></li>
+<li><a class="nav-link" href="#publishing-an-app"><span class="header-section-number">13.3</span> Publishing an app</a></li>
+<li><a class="nav-link" href="#customising-the-app-for-different-instruments-or-data"><span class="header-section-number">13.4</span> Customising the app for different instruments or data</a></li>
 </ul>
 
       <div class="book-extra">
