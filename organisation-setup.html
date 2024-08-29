@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Tercen Studio | Tercen developer’s guide</title>
+<title>Organisation setup | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="Updating tercen-studio You can update tercen-studio by running: # stop tercen_studio docker-compose down     # get tercen_studio latest version      git pull docker-compose pull # start...">
+<meta name="description" content="If you wish to develop your own Tercen modules, an initial setup is required 1. Create a Docker Hub organisation Operators are Docker images. The images are built and pushed to Docker Hub through...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Tercen Studio | Tercen developer’s guide">
+<meta property="og:title" content="Organisation setup | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="Updating tercen-studio You can update tercen-studio by running: # stop tercen_studio docker-compose down     # get tercen_studio latest version      git pull docker-compose pull # start...">
+<meta property="og:description" content="If you wish to develop your own Tercen modules, an initial setup is required 1. Create a Docker Hub organisation Operators are Docker images. The images are built and pushed to Docker Hub through...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tercen Studio | Tercen developer’s guide">
-<meta name="twitter:description" content="Updating tercen-studio You can update tercen-studio by running: # stop tercen_studio docker-compose down     # get tercen_studio latest version      git pull docker-compose pull # start...">
+<meta name="twitter:title" content="Organisation setup | Tercen developer’s guide">
+<meta name="twitter:description" content="If you wish to develop your own Tercen modules, an initial setup is required 1. Create a Docker Hub organisation Operators are Docker images. The images are built and pushed to Docker Hub through...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -71,10 +71,10 @@
 <li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
 <li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
-<li><a class="" href="organisation-setup.html">Organisation setup</a></li>
+<li><a class="active" href="organisation-setup.html">Organisation setup</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
-<li><a class="active" href="tercen-studio.html">Tercen Studio</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
 </ul>
 
         <div class="book-extra">
@@ -82,57 +82,78 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tercen-studio" class="section level1 unnumbered">
-<h1>Tercen Studio<a class="anchor" aria-label="anchor" href="#tercen-studio"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="organisation-setup" class="section level1 unnumbered">
+<h1>Organisation setup<a class="anchor" aria-label="anchor" href="#organisation-setup"><i class="fas fa-link"></i></a>
 </h1>
-<div id="updating-tercen-studio" class="section level2 unnumbered">
-<h2>Updating tercen-studio<a class="anchor" aria-label="anchor" href="#updating-tercen-studio"><i class="fas fa-link"></i></a>
+<p>If you wish to develop your own Tercen modules, an initial setup is required</p>
+<div id="create-a-docker-hub-organisation" class="section level2 unnumbered">
+<h2>1. Create a Docker Hub organisation<a class="anchor" aria-label="anchor" href="#create-a-docker-hub-organisation"><i class="fas fa-link"></i></a>
 </h2>
-<p>You can <strong>update tercen-studio</strong> by running:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="tercen-studio.html#cb36-1" tabindex="-1"></a><span class="co"># stop tercen_studio</span></span>
-<span id="cb36-2"><a href="tercen-studio.html#cb36-2" tabindex="-1"></a><span class="ex">docker-compose</span> down        </span>
-<span id="cb36-3"><a href="tercen-studio.html#cb36-3" tabindex="-1"></a><span class="co"># get tercen_studio latest version           </span></span>
-<span id="cb36-4"><a href="tercen-studio.html#cb36-4" tabindex="-1"></a><span class="fu">git</span> pull</span>
-<span id="cb36-5"><a href="tercen-studio.html#cb36-5" tabindex="-1"></a><span class="ex">docker-compose</span> pull</span>
-<span id="cb36-6"><a href="tercen-studio.html#cb36-6" tabindex="-1"></a><span class="co"># start tercen_studio</span></span>
-<span id="cb36-7"><a href="tercen-studio.html#cb36-7" tabindex="-1"></a><span class="ex">docker-compose</span> up <span class="at">-d</span></span></code></pre></div>
+<ul>
+<li>Operators are Docker images.</li>
+<li>The images are built and pushed to Docker Hub through a GitHub Action after each commit and/or tag.</li>
+<li>When the operator is installed in Tercen, the image is pulled from Docker Hub.</li>
+<li>If you don’t already have one, you need to <strong>set up an organisation account</strong> on <a href="https://hub.docker.com/">Docker Hub</a>: <a href="https://hub.docker.com/" class="uri">https://hub.docker.com/</a>
+</li>
+</ul>
 </div>
-<div id="uninstallation-of-tercen-studio" class="section level2 unnumbered">
-<h2>Uninstallation of tercen-studio<a class="anchor" aria-label="anchor" href="#uninstallation-of-tercen-studio"><i class="fas fa-link"></i></a>
+<div id="choose-a-tercen-instance-to-run-unit-tests" class="section level2 unnumbered">
+<h2>2. Choose a Tercen instance to run unit tests<a class="anchor" aria-label="anchor" href="#choose-a-tercen-instance-to-run-unit-tests"><i class="fas fa-link"></i></a>
 </h2>
-<p>To <strong>uninstall tercen-studio</strong>, you need to run:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="tercen-studio.html#cb37-1" tabindex="-1"></a><span class="ex">docker-compose</span> down</span>
-<span id="cb37-2"><a href="tercen-studio.html#cb37-2" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="tercen-studio.html#cb37-3" tabindex="-1"></a><span class="co"># check tercen docker volumes names</span></span>
-<span id="cb37-4"><a href="tercen-studio.html#cb37-4" tabindex="-1"></a><span class="ex">docker</span> volume ls</span>
-<span id="cb37-5"><a href="tercen-studio.html#cb37-5" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="tercen-studio.html#cb37-6" tabindex="-1"></a><span class="co"># delete tercen docker volumes</span></span>
-<span id="cb37-7"><a href="tercen-studio.html#cb37-7" tabindex="-1"></a><span class="ex">docker</span> volume rm tercen_studio_couchdb-data</span>
-<span id="cb37-8"><a href="tercen-studio.html#cb37-8" tabindex="-1"></a><span class="ex">docker</span> volume rm tercen_studio_tercen-data</span>
-<span id="cb37-9"><a href="tercen-studio.html#cb37-9" tabindex="-1"></a><span class="ex">docker</span> volume rm tercen_studio_tercen-studio-data</span>
-<span id="cb37-10"><a href="tercen-studio.html#cb37-10" tabindex="-1"></a><span class="ex">docker</span> volume rm tercen_studio_tercen-studio-renv</span></code></pre></div>
+<ul>
+<li>Regression testing is used for the development process of Tercen modules.</li>
+<li>Those tests consist in Tercen workflows that can be run on a Tercen instance. This instance needs to be specified and a Tercen “test user” needs to be created. This user will be used to
+run the tests from the GitHub Action.</li>
+<li>Choose an instance that will be used to run the test. It could be your development instance for example. You will need to use the service URI (e.g. <a href="https://tercen.com" class="uri">https://tercen.com</a>) in the next step.</li>
+<li>Create a test user. You will need its name and password in the next step.</li>
+</ul>
 </div>
-<div id="building-tercen-studio" class="section level2 unnumbered">
-<h2>Building tercen-studio<a class="anchor" aria-label="anchor" href="#building-tercen-studio"><i class="fas fa-link"></i></a>
+<div id="set-up-your-github-organisation" class="section level2 unnumbered">
+<h2>3. Set up your GitHub organisation<a class="anchor" aria-label="anchor" href="#set-up-your-github-organisation"><i class="fas fa-link"></i></a>
 </h2>
-<p>If you need to <strong>build tercen-studio</strong>, run the following code:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="tercen-studio.html#cb38-1" tabindex="-1"></a><span class="bu">cd</span> docker</span>
-<span id="cb38-2"><a href="tercen-studio.html#cb38-2" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> tercen/tercen_studio:0.9.2.9 .</span>
-<span id="cb38-3"><a href="tercen-studio.html#cb38-3" tabindex="-1"></a><span class="ex">docker</span> history <span class="at">--no-trunc</span> tercen_studio:0.9.2.9</span>
-<span id="cb38-4"><a href="tercen-studio.html#cb38-4" tabindex="-1"></a><span class="ex">docker</span> push tercen/tercen_studio:0.9.2.9</span></code></pre></div>
+<ul>
+<li>We assume you already have a GitHub organisation in place</li>
+<li>You need to add the GH secrets
+<ul>
+<li>DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD</li>
+<li>TERCEN_TEST_USERNAME and TERCEN_TEST_PASSWORD</li>
+<li>TERCEN_TEST_URI</li>
+<li>GITHIUB_PAT</li>
+</ul>
+</li>
+<li>Template and GH Actions
+<ul>
+<li>Create a template GitHub repository on your own organisation, based on the Tercen one</li>
+<li>Edit the GitHub workflow files to replace the secrets by your own organisation secrets you just set up</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="tercen-instance-configuration" class="section level2 unnumbered">
+<h2>4. Tercen instance configuration<a class="anchor" aria-label="anchor" href="#tercen-instance-configuration"><i class="fas fa-link"></i></a>
+</h2>
+<p>If you are using your own Tercen instance, you need to modify the Tercen config file and add your GitHub organisation to the “trusted git” list.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb35-1"><a href="organisation-setup.html#cb35-1" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.git</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb35-2"><a href="organisation-setup.html#cb35-2" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.docker</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb35-3"><a href="organisation-setup.html#cb35-3" tabindex="-1"></a><span class="fu">tercen.trusted.git</span><span class="kw">:</span></span>
+<span id="cb35-4"><a href="organisation-setup.html#cb35-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/tercen/'</span></span></code></pre></div>
 
 </div>
 </div>
+
+
+
   <div class="chapter-nav">
-<div class="prev"><a href="glossary.html">Glossary</a></div>
-<div class="empty"></div>
+<div class="prev"><a href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></div>
+<div class="next"><a href="glossary.html">Glossary</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#tercen-studio">Tercen Studio</a></li>
-<li><a class="nav-link" href="#updating-tercen-studio">Updating tercen-studio</a></li>
-<li><a class="nav-link" href="#uninstallation-of-tercen-studio">Uninstallation of tercen-studio</a></li>
-<li><a class="nav-link" href="#building-tercen-studio">Building tercen-studio</a></li>
+<li><a class="nav-link" href="#organisation-setup">Organisation setup</a></li>
+<li><a class="nav-link" href="#create-a-docker-hub-organisation">1. Create a Docker Hub organisation</a></li>
+<li><a class="nav-link" href="#choose-a-tercen-instance-to-run-unit-tests">2. Choose a Tercen instance to run unit tests</a></li>
+<li><a class="nav-link" href="#set-up-your-github-organisation">3. Set up your GitHub organisation</a></li>
+<li><a class="nav-link" href="#tercen-instance-configuration">4. Tercen instance configuration</a></li>
 </ul>
 
       <div class="book-extra">
