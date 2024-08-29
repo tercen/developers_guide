@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 14 Development guidelines | Tercen developer’s guide</title>
+<title>Chapter 16 Development guidelines | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="Operator naming convention The art of naming is fundamental to programming and here are some guidelines to help. Here are some examples of operator names: median_operator flowsom_operator , here...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Chapter 14 Development guidelines | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 16 Development guidelines | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Operator naming convention The art of naming is fundamental to programming and here are some guidelines to help. Here are some examples of operator names: median_operator flowsom_operator , here...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 14 Development guidelines | Tercen developer’s guide">
+<meta name="twitter:title" content="Chapter 16 Development guidelines | Tercen developer’s guide">
 <meta name="twitter:description" content="Operator naming convention The art of naming is fundamental to programming and here are some guidelines to help. Here are some examples of operator names: median_operator flowsom_operator , here...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -63,14 +63,17 @@
 <li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
 <li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Library</li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">14</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">15</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="active" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
+<li><a class="active" href="naming.html"><span class="header-section-number">16</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">17</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">18</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">19</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">20</span> Next steps</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
@@ -82,9 +85,9 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="naming" class="section level1" number="14">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="naming" class="section level1" number="16">
 <h1>
-<span class="header-section-number">14</span> Development guidelines<a class="anchor" aria-label="anchor" href="#naming"><i class="fas fa-link"></i></a>
+<span class="header-section-number">16</span> Development guidelines<a class="anchor" aria-label="anchor" href="#naming"><i class="fas fa-link"></i></a>
 </h1>
 <div id="operator-naming-convention" class="section level2 unnumbered">
 <h2>Operator naming convention<a class="anchor" aria-label="anchor" href="#operator-naming-convention"><i class="fas fa-link"></i></a>
@@ -114,12 +117,12 @@ description of the operator. e.g. <code>calculates a median</code>.</p>
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></div>
-<div class="next"><a href="tim.html"><span class="header-section-number">15</span> Using tim</a></div>
+<div class="prev"><a href="custom-library.html"><span class="header-section-number">15</span> Custom library</a></div>
+<div class="next"><a href="tim.html"><span class="header-section-number">17</span> Using tim</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#naming"><span class="header-section-number">14</span> Development guidelines</a></li>
+<li><a class="nav-link" href="#naming"><span class="header-section-number">16</span> Development guidelines</a></li>
 <li><a class="nav-link" href="#operator-naming-convention">Operator naming convention</a></li>
 <li><a class="nav-link" href="#github-repository">GitHub repository</a></li>
 </ul>

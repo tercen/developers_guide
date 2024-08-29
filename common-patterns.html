@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 11 Common patterns | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Coming soon. Example: Mean operator and lm operator.  11.1.2...">
+<meta name="description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Example: Mean operator and lm operator.  11.1.2 List of...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
 <meta property="og:title" content="Chapter 11 Common patterns | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Coming soon. Example: Mean operator and lm operator.  11.1.2...">
+<meta property="og:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Example: Mean operator and lm operator.  11.1.2 List of...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 11 Common patterns | Tercen developer’s guide">
-<meta name="twitter:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Coming soon. Example: Mean operator and lm operator.  11.1.2...">
+<meta name="twitter:description" content="This section outlines common development patterns encountered while developing operators in Tercen.  11.1 Output data  11.1.1 One table Example: Mean operator and lm operator.  11.1.2 List of...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -63,14 +63,17 @@
 <li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
 <li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
+<li class="book-part">Library</li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">14</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">15</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">14</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">15</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">16</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">17</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">16</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">17</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">18</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">19</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">18</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">20</span> Next steps</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
@@ -96,7 +99,6 @@ operators in Tercen.</p>
 <h3>
 <span class="header-section-number">11.1.1</span> One table<a class="anchor" aria-label="anchor" href="#one-table"><i class="fas fa-link"></i></a>
 </h3>
-<p>Coming soon.</p>
 <p><strong>Example</strong>: <a href="https://github.com/tercen/mean_operator">Mean operator</a> and
 <a href="https://github.com/tercen/lm_operator">lm operator</a>.</p>
 </div>
@@ -104,21 +106,18 @@ operators in Tercen.</p>
 <h3>
 <span class="header-section-number">11.1.2</span> List of tables<a class="anchor" aria-label="anchor" href="#list-of-tables"><i class="fas fa-link"></i></a>
 </h3>
-<p>Coming soon.</p>
 <p><strong>Example</strong>: <a href="https://github.com/tercen/pca_operator">PCA operator</a>.</p>
 </div>
 <div id="serialised-r-object" class="section level3" number="11.1.3">
 <h3>
 <span class="header-section-number">11.1.3</span> Serialised R object<a class="anchor" aria-label="anchor" href="#serialised-r-object"><i class="fas fa-link"></i></a>
 </h3>
-<p>Coming soon.</p>
 <p><strong>Example</strong>: <a href="https://github.com/tercen/flowsom_operator">FlowSOM operator</a>.</p>
 </div>
 <div id="serialised-file" class="section level3" number="11.1.4">
 <h3>
 <span class="header-section-number">11.1.4</span> Serialised file<a class="anchor" aria-label="anchor" href="#serialised-file"><i class="fas fa-link"></i></a>
 </h3>
-<p>Coming soon.</p>
 <p><strong>Example</strong>: <a href="https://github.com/tercen/barplot_operator">Barplot operator</a>.</p>
 </div>
 </div>

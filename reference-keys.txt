@@ -24,6 +24,8 @@ the-app-concept
 creating-an-app
 publishing-an-app
 customising-the-app-for-different-instruments-or-data
+tercen-library
+custom-library
 naming
 tim
 development-workflow-utilities

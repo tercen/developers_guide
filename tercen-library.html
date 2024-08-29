@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 12 Building a template | Tercen developer’s guide</title>
+<title>Chapter 14 Tercen Library | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
+<meta name="description" content="Description A Tercen Library is a collection of operators, apps, templates and datasets shared across a team or an organisation. When you add a dataset, a step to a workflow, or an operator within...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Chapter 12 Building a template | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 14 Tercen Library | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
+<meta property="og:description" content="Description A Tercen Library is a collection of operators, apps, templates and datasets shared across a team or an organisation. When you add a dataset, a step to a workflow, or an operator within...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 12 Building a template | Tercen developer’s guide">
-<meta name="twitter:description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
+<meta name="twitter:title" content="Chapter 14 Tercen Library | Tercen developer’s guide">
+<meta name="twitter:description" content="Description A Tercen Library is a collection of operators, apps, templates and datasets shared across a team or an organisation. When you add a dataset, a step to a workflow, or an operator within...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -60,11 +60,11 @@
 <li><a class="" href="continuous-integration.html"><span class="header-section-number">10</span> Continuous integration</a></li>
 <li><a class="" href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></li>
 <li class="book-part">Templates</li>
-<li><a class="active" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">12</span> Building a template</a></li>
 <li class="book-part">Apps</li>
 <li><a class="" href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">14</span> Tercen Library</a></li>
+<li><a class="active" href="tercen-library.html"><span class="header-section-number">14</span> Tercen Library</a></li>
 <li><a class="" href="custom-library.html"><span class="header-section-number">15</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
 <li><a class="" href="naming.html"><span class="header-section-number">16</span> Development guidelines</a></li>
@@ -85,39 +85,38 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="building-a-template" class="section level1" number="12">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tercen-library" class="section level1" number="14">
 <h1>
-<span class="header-section-number">12</span> Building a template<a class="anchor" aria-label="anchor" href="#building-a-template"><i class="fas fa-link"></i></a>
+<span class="header-section-number">14</span> Tercen Library<a class="anchor" aria-label="anchor" href="#tercen-library"><i class="fas fa-link"></i></a>
 </h1>
-<p>A template workflow is perfect for users who wish to reuse a workflow to perform
-a complete analysis.</p>
-<p>The building of a <strong>template</strong> does not require any programming.</p>
-<p>The process for building a <strong>template</strong> is:</p>
-<ul>
-<li>Design the <strong>template</strong>
-</li>
-<li>Create a workflow in Tercen</li>
-<li>Test it on input data</li>
-<li>Create a template folder in the project</li>
-<li>Move the workflow into the template folder</li>
-<li>Download the template from the project</li>
-<li>Create a github and upload template</li>
-<li>Tag the github</li>
-<li>Notify the community of its existence (see below)</li>
-</ul>
-<p>All the building and deployment steps are performed in Tercen.</p>
-<p>All <strong>templates</strong> who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.</p>
-
+<div id="description" class="section level2 unnumbered">
+<h2>Description<a class="anchor" aria-label="anchor" href="#description"><i class="fas fa-link"></i></a>
+</h2>
+<p>A Tercen <strong>Library</strong> is a collection of <strong>operators</strong>, <strong>apps</strong>, <strong>templates</strong> and <strong>datasets</strong>
+shared across a team or an organisation.</p>
+<p>When you add a dataset, a step to a workflow, or an operator within a step, the Library window
+appears:</p>
+<center>
+<img src="images/library.png" width="700">
+</center>
+<p>You can see the modules you can access from the Tercen public library or your organisational or personal library.</p>
 </div>
-
-
-
+<div id="library-management" class="section level2 unnumbered">
+<h2>Library management<a class="anchor" aria-label="anchor" href="#library-management"><i class="fas fa-link"></i></a>
+</h2>
+<p>Coming soon.</p>
+</div>
+</div>
   <div class="chapter-nav">
-<div class="prev"><a href="common-patterns.html"><span class="header-section-number">11</span> Common patterns</a></div>
-<div class="next"><a href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></div>
+<div class="prev"><a href="building-an-app.html"><span class="header-section-number">13</span> Building an app</a></div>
+<div class="next"><a href="custom-library.html"><span class="header-section-number">15</span> Custom library</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#building-a-template"><span class="header-section-number">12</span> Building a template</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#tercen-library"><span class="header-section-number">14</span> Tercen Library</a></li>
+<li><a class="nav-link" href="#description">Description</a></li>
+<li><a class="nav-link" href="#library-management">Library management</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

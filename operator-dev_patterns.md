@@ -7,26 +7,18 @@ operators in Tercen.
 
 ### One table
 
-Coming soon.
-
 __Example__: [Mean operator](https://github.com/tercen/mean_operator) and 
 [lm operator](https://github.com/tercen/lm_operator).
 
 ### List of tables
 
-Coming soon.
-
 __Example__: [PCA operator](https://github.com/tercen/pca_operator).
 
 ### Serialised R object
 
-Coming soon.
-
 __Example__: [FlowSOM operator](https://github.com/tercen/flowsom_operator).
 
 ###  Serialised file
-
-Coming soon.
 
 __Example__: [Barplot operator](https://github.com/tercen/barplot_operator).
 
