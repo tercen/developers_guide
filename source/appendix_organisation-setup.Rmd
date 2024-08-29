@@ -38,5 +38,14 @@ tercen.allow.untrusted.git: 'false'
 tercen.allow.untrusted.docker: 'false'
 tercen.trusted.git:
   - 'https://github.com/tercen/'
+  - 'https://github.com/YOUR_GITHUB_ORGANISATION/'
 ```
 
+You also need to authorise the Docker Hub organisation.
+
+```yaml
+# accept any image name starting by tercen or my-trusted-dockerhub-org, ex. my-trusted-dockerhub-org/my-docker-image
+tercen.trusted.docker:
+  - 'tercen'
+  - 'my-trusted-dockerhub-org'
+```
