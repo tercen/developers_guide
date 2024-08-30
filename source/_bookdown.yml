@@ -26,7 +26,7 @@ rmd_files:
     "troubleshooting_common-issues.Rmd",
     "troubleshooting_ci.Rmd",
     "going-forward_next-steps.Rmd",
-    "appendix_organisation-setup.Rmd",
     "appendix_glossary.Rmd",
+    "appendix_organisation-setup.Rmd",
     "appendix_tercen-studio.Rmd"
   ]
