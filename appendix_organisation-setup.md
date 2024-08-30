@@ -21,10 +21,10 @@ run the tests from the GitHub Action.
 
 * We assume you already have a GitHub organisation in place
 * You need to add the GH secrets
-    * DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD
+    * DOCKERHUB_ORG, DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD
     * TERCEN_TEST_USERNAME and TERCEN_TEST_PASSWORD
     * TERCEN_TEST_URI
-    * GITHIUB_PAT
+    * GITHUB_PAT
 * Template and GH Actions
     * Create a template GitHub repository on your own organisation, based on the Tercen one
     * Edit the GitHub workflow files to replace the secrets by your own organisation secrets you just set up
