@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Page not found | Tercen developer’s guide</title>
+<title>Chapter 11 Release Workflow | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="description" content="Once you are satisfied with your operator, you can release your operator by following the steps described below.  11.1 1. Edit the operator.json file You should first edit the container field of...">
 <meta name="generator" content="bookdown 0.40 with bs4_book()">
-<meta property="og:title" content="Page not found | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 11 Release Workflow | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta property="og:description" content="Once you are satisfied with your operator, you can release your operator by following the steps described below.  11.1 1. Edit the operator.json file You should first edit the container field of...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Page not found | Tercen developer’s guide">
-<meta name="twitter:description" content="The page you requested cannot be found (perhaps it was moved or renamed). You may want to try searching to find the page's new location, or use the table of contents to find the page you are...">
+<meta name="twitter:title" content="Chapter 11 Release Workflow | Tercen developer’s guide">
+<meta name="twitter:description" content="Once you are satisfied with your operator, you can release your operator by following the steps described below.  11.1 1. Edit the operator.json file You should first edit the container field of...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -58,7 +58,7 @@
 <li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
 <li class="book-part">Advanced concepts</li>
 <li><a class="" href="continuous-integration-workflow.html"><span class="header-section-number">10</span> Continuous Integration Workflow</a></li>
-<li><a class="" href="release-workflow.html"><span class="header-section-number">11</span> Release Workflow</a></li>
+<li><a class="active" href="release-workflow.html"><span class="header-section-number">11</span> Release Workflow</a></li>
 <li><a class="" href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></li>
 <li><a class="" href="common-patterns.html"><span class="header-section-number">13</span> Common patterns</a></li>
 <li><a class="" href="advanced-patterns.html"><span class="header-section-number">14</span> Advanced patterns</a></li>
@@ -88,18 +88,54 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="page-not-found" class="section level1">
-<h1>Page not found<a class="anchor" aria-label="anchor" href="#page-not-found"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="release-workflow" class="section level1" number="11">
+<h1>
+<span class="header-section-number">11</span> Release Workflow<a class="anchor" aria-label="anchor" href="#release-workflow"><i class="fas fa-link"></i></a>
 </h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<p>Once you are satisfied with your operator, you can release your operator by following the steps described below.</p>
+<div id="edit-the-operator.json-file" class="section level2" number="11.1">
+<h2>
+<span class="header-section-number">11.1</span> 1. Edit the operator.json file<a class="anchor" aria-label="anchor" href="#edit-the-operator.json-file"><i class="fas fa-link"></i></a>
+</h2>
+<p>You should first edit the <strong>container</strong> field of the <strong>operator.json</strong> file so that it matched the version number you would like to push (here, <strong>0.0.1</strong> for example).</p>
+</div>
+<div id="push-your-changes-and-tag-the-repository" class="section level2" number="11.2">
+<h2>
+<span class="header-section-number">11.2</span> 2. Push your changes and tag the repository<a class="anchor" aria-label="anchor" href="#push-your-changes-and-tag-the-repository"><i class="fas fa-link"></i></a>
+</h2>
+<p>After pushing your latest commit, you can add the same version number as a tag from the command line as follows:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="release-workflow.html#cb39-1" tabindex="-1"></a><span class="fu">git</span> tag 0.0.1</span></code></pre></div>
+<p>Then push it with this command:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="release-workflow.html#cb40-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">--tags</span></span></code></pre></div>
+</div>
+<div id="wait-and-check-the-results-of-the-release-workflow" class="section level2" number="11.3">
+<h2>
+<span class="header-section-number">11.3</span> 3. Wait and check the results of the release workflow<a class="anchor" aria-label="anchor" href="#wait-and-check-the-results-of-the-release-workflow"><i class="fas fa-link"></i></a>
+</h2>
+<p>The same way a workflow is triggered after each commit, tagging a repository will trigger another workflow, <strong>release.yaml</strong>. This workflow that will build and push the Docker image, tag it with the run the unit tests.
+Once the workflow is run, you can verify it has been successful. If that is the case, you are now ready to install your operator in a <strong>Library</strong>.</p>
+
+</div>
 </div>
   <div class="chapter-nav">
-<div class="empty"></div>
-<div class="empty"></div>
+<div class="prev"><a href="continuous-integration-workflow.html"><span class="header-section-number">10</span> Continuous Integration Workflow</a></div>
+<div class="next"><a href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
-    </div>
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#release-workflow"><span class="header-section-number">11</span> Release Workflow</a></li>
+<li><a class="nav-link" href="#edit-the-operator.json-file"><span class="header-section-number">11.1</span> 1. Edit the operator.json file</a></li>
+<li><a class="nav-link" href="#push-your-changes-and-tag-the-repository"><span class="header-section-number">11.2</span> 2. Push your changes and tag the repository</a></li>
+<li><a class="nav-link" href="#wait-and-check-the-results-of-the-release-workflow"><span class="header-section-number">11.3</span> 3. Wait and check the results of the release workflow</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
 
 </div>
 </div> <!-- .container -->
