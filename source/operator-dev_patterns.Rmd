@@ -51,3 +51,8 @@ data points
 when we want to generate a constant that can be used together with any other data)
 
 __Example__: [Constant operator](https://github.com/tercen/constant_operator).
+
+
+# Advanced patterns
+
+Coming soon.

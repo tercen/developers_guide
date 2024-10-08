@@ -17,8 +17,4 @@ The process for building a __template__ is:
 * Download the template from the project
 * Create a github and upload template
 * Tag the github
-* Notify the community of its existence (see below)
 
-All the building and deployment steps are performed in Tercen.
-
-All __templates__ who are on a git repository are installable, only the git URL and a tag version number is required for a researcher to install it in Tercen.
