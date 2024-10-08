@@ -17,6 +17,7 @@ rmd_files:
     "operator-dev_improve.Rmd",
     "operator-dev_python.Rmd",
     "operator-dev_ci.Rmd",
+    "operator-dev_installation.Rmd",
     "operator-dev_patterns.Rmd",
     "templates-apps_templates.Rmd",
     "templates-apps_apps.Rmd",
