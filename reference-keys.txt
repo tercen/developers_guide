@@ -39,6 +39,12 @@ per-row-per-column
 no-relation
 advanced-patterns
 building-a-template
+what-is-a-template
+general-development-workflow
+detailed-workflow
+template-installation
+how-to-add-unit-tests
+updating-a-template
 building-an-app
 the-app-concept
 creating-an-app

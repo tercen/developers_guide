@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 15 Building a template | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
-<meta name="generator" content="bookdown 0.40 with bs4_book()">
+<meta name="description" content="15.1 What is a template? A template is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.  15.2 General development...">
+<meta name="generator" content="bookdown 0.41 with bs4_book()">
 <meta property="og:title" content="Chapter 15 Building a template | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
+<meta property="og:description" content="15.1 What is a template? A template is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.  15.2 General development...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 15 Building a template | Tercen developer’s guide">
-<meta name="twitter:description" content="A template workflow is perfect for users who wish to reuse a workflow to perform a complete analysis. The building of a template does not require any programming. The process for building a...">
+<meta name="twitter:description" content="15.1 What is a template? A template is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.  15.2 General development...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -64,19 +64,20 @@
 <li><a class="" href="advanced-patterns.html"><span class="header-section-number">14</span> Advanced patterns</a></li>
 <li class="book-part">Templates</li>
 <li><a class="active" href="building-a-template.html"><span class="header-section-number">15</span> Building a template</a></li>
+<li><a class="" href="updating-a-template.html"><span class="header-section-number">16</span> Updating a template</a></li>
 <li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">16</span> Building an app</a></li>
+<li><a class="" href="building-an-app.html"><span class="header-section-number">17</span> Building an app</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">17</span> Tercen Library</a></li>
-<li><a class="" href="custom-library.html"><span class="header-section-number">18</span> Custom library</a></li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">19</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">20</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">21</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">22</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">23</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
@@ -92,31 +93,86 @@
 <h1>
 <span class="header-section-number">15</span> Building a template<a class="anchor" aria-label="anchor" href="#building-a-template"><i class="fas fa-link"></i></a>
 </h1>
-<p>A template workflow is perfect for users who wish to reuse a workflow to perform
-a complete analysis.</p>
-<p>The building of a <strong>template</strong> does not require any programming.</p>
-<p>The process for building a <strong>template</strong> is:</p>
-<ul>
-<li>Design the <strong>template</strong>
-</li>
-<li>Create a workflow in Tercen</li>
-<li>Test it on input data</li>
-<li>Create a template folder in the project</li>
-<li>Move the workflow into the template folder</li>
-<li>Download the template from the project</li>
-<li>Create a github and upload template</li>
-<li>Tag the github</li>
-</ul>
+<div id="what-is-a-template" class="section level2" number="15.1">
+<h2>
+<span class="header-section-number">15.1</span> What is a template?<a class="anchor" aria-label="anchor" href="#what-is-a-template"><i class="fas fa-link"></i></a>
+</h2>
+<p>A <strong>template</strong> is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.</p>
 </div>
-
-
-
+<div id="general-development-workflow" class="section level2" number="15.2">
+<h2>
+<span class="header-section-number">15.2</span> General development workflow<a class="anchor" aria-label="anchor" href="#general-development-workflow"><i class="fas fa-link"></i></a>
+</h2>
+<p>The recommended <strong>test-driven</strong> development workflow is as follows:
+* Initialise a GitHub repository for your workflow based on a template provided by Tercen
+* Clone this GitHub repository to your Tercen development instance
+* Load a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.
+* Develop your workflow on your example dataset.
+* Prepare the workflow template.
+* Push your changes and deploy.</p>
+</div>
+<div id="detailed-workflow" class="section level2" number="15.3">
+<h2>
+<span class="header-section-number">15.3</span> Detailed workflow<a class="anchor" aria-label="anchor" href="#detailed-workflow"><i class="fas fa-link"></i></a>
+</h2>
+<p><strong>1. Create the Template Repo</strong></p>
+<p>Create a new project based on the <a href="https://github.com/tercen/template_workflow">template repository</a>.</p>
+<p><strong>2. Import the repository into Tercen</strong></p>
+<p>Create a new project from Github.</p>
+<div class="inline-figure"><img src="./images/001_NewProject.png" alt="New Project" width="500"></div>
+<div class="inline-figure"><img src="./images/002_NewProject_FromGit.png" alt="New Project from Git" width="500"></div>
+<p><strong>3. Create the Template Workflow</strong></p>
+<p>Create a standard Tercen workflow. Run the steps as needed.</p>
+<p>A finalized workflow might look like the one below.</p>
+<div class="inline-figure"><img src="./images/004_RunWorkflow.png" alt="Completed Workflow" width="300"></div>
+<p><strong>4. Clone and Rename</strong></p>
+<p>Clone the workflow to create the <strong>golden standard</strong>. Rename it with an unique **_gs** suffix (see naming convention).</p>
+<div class="inline-figure"><img src="./images/005_Clone.png" alt="Clone Workflow" width="600"></div>
+<div class="inline-figure"><img src="./images/006_CloneName.png" alt="Clone Workflow Name" width="600"></div>
+<p><strong>Naming Conventions</strong></p>
+<ul>
+<li><p>A Template workflow is compared to its Golden Standard workflows based on a naming convention.</p></li>
+<li><p>A workflow is considered a Golden Standard if its name ends with **_gs**<em>, where </em> is a set of letter and numbers. For example, Template_gs1, Template_gsA01 and Template_gsAA are all valid Golden Standard names, whereas Template_gs_01 is not.</p></li>
+<li><p>A Template and a Golden Standard are considered match if they have the same <em>base</em> name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.</p></li>
+</ul>
+<p>Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named <strong>tests</strong>. To do so, rename the Golden Standard, adding <em>tests/</em> before the name and pressing the Ok button.</p>
+<div class="inline-figure"><img src="./images/007_CloneReName.png" alt="Rename" width="600"></div>
+<div class="inline-figure"><img src="./images/008_CloneReNameFolder.png" alt="Rename" width="600"></div>
+<p><strong>5. Reset the Template Workflow</strong></p>
+<p>Open the Template Workflow (the one without the _gs** suffix), reset and save it.</p>
+<p><strong>6. Commit the Changes to Github</strong></p>
+<p>Finally, select the Git button.</p>
+<div class="inline-figure"><img src="./images/012_Git.png" alt="Git Function" width="600"></div>
+<p>Then, add any desired commit message, your personal Github token and press Ok.</p>
+<div class="inline-figure"><img src="./images/013_Commit.png" alt="Git Function" width="600"></div>
+</div>
+<div id="template-installation" class="section level2" number="15.4">
+<h2>
+<span class="header-section-number">15.4</span> Template installation<a class="anchor" aria-label="anchor" href="#template-installation"><i class="fas fa-link"></i></a>
+</h2>
+<p>A template is installed like any Tercen module (operators, apps, templates).
+You need to publish the template JSON only, the one at the root.</p>
+</div>
+<div id="how-to-add-unit-tests" class="section level2" number="15.5">
+<h2>
+<span class="header-section-number">15.5</span> How to add unit tests?<a class="anchor" aria-label="anchor" href="#how-to-add-unit-tests"><i class="fas fa-link"></i></a>
+</h2>
+<p>Coming soon.</p>
+</div>
+</div>
   <div class="chapter-nav">
 <div class="prev"><a href="advanced-patterns.html"><span class="header-section-number">14</span> Advanced patterns</a></div>
-<div class="next"><a href="building-an-app.html"><span class="header-section-number">16</span> Building an app</a></div>
+<div class="next"><a href="updating-a-template.html"><span class="header-section-number">16</span> Updating a template</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#building-a-template"><span class="header-section-number">15</span> Building a template</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#building-a-template"><span class="header-section-number">15</span> Building a template</a></li>
+<li><a class="nav-link" href="#what-is-a-template"><span class="header-section-number">15.1</span> What is a template?</a></li>
+<li><a class="nav-link" href="#general-development-workflow"><span class="header-section-number">15.2</span> General development workflow</a></li>
+<li><a class="nav-link" href="#detailed-workflow"><span class="header-section-number">15.3</span> Detailed workflow</a></li>
+<li><a class="nav-link" href="#template-installation"><span class="header-section-number">15.4</span> Template installation</a></li>
+<li><a class="nav-link" href="#how-to-add-unit-tests"><span class="header-section-number">15.5</span> How to add unit tests?</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
