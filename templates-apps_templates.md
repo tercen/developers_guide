@@ -9,11 +9,17 @@ A __template__ is a reusable Tercen workflow. It is typically developed when you
 ## General development workflow
 
 The recommended __test-driven__ development workflow is as follows:
+
 * Initialise a GitHub repository for your workflow based on a template provided by Tercen
+
 * Clone this GitHub repository to your Tercen development instance
+
 * Load a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.
+
 * Develop your workflow on your example dataset.
+
 * Prepare the workflow template.
+
 * Push your changes and deploy.
 
 ## Detailed workflow
@@ -26,9 +32,9 @@ __2. Import the repository into Tercen__
 
 Create a new project from Github.
 
-<img src="./images/001_NewProject.png" alt="New Project" width="500"/>
+<center><img src="./images/001_NewProject.png" width=500></img></center>
 
-<img src="./images/002_NewProject_FromGit.png" alt="New Project from Git" width="500"/>
+<center><img src="./images/002_NewProject_FromGit.png" width=500></img></center>
 
 __3. Create the Template Workflow__
 
@@ -36,16 +42,16 @@ Create a standard Tercen workflow. Run the steps as needed.
 
 A finalized workflow might look like the one below.
 
-<img src="./images/004_RunWorkflow.png" alt="Completed Workflow" width="300"/>
+<center><img src="./images/004_RunWorkflow.png" width=300></img></center>
 
 
 __4. Clone and Rename__
 
 Clone the workflow to create the **golden standard**. Rename it with an unique **_gs** suffix (see naming convention). 
 
-<img src="./images/005_Clone.png" alt="Clone Workflow" width="600"/>
+<center><img src="./images/005_Clone.png" width=600></img></center>
 
-<img src="./images/006_CloneName.png" alt="Clone Workflow Name" width="600"/>
+<center><img src="./images/006_CloneName.png" width=600></img></center>
 
 __Naming Conventions__
 
@@ -58,9 +64,10 @@ __Naming Conventions__
 
 Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named **tests**. To do so, rename the Golden Standard, adding _tests/_ before the name and pressing the Ok button.
 
-<img src="./images/007_CloneReName.png" alt="Rename" width="600"/>
 
-<img src="./images/008_CloneReNameFolder.png" alt="Rename" width="600"/>
+<center><img src="./images/007_CloneReName.png" width=600></img></center>
+
+<center><img src="./images/008_CloneReNameFolder.png" width=600></img></center>
 
 __5. Reset the Template Workflow__
 
@@ -70,12 +77,11 @@ __6. Commit the Changes to Github__
 
 Finally, select the Git button.
 
-<img src="./images/012_Git.png" alt="Git Function" width="600"/>
+<center><img src="./images/012_Git.png" width=600></img></center>
 
 Then, add any desired commit message, your personal Github token and press Ok.
 
-<img src="./images/013_Commit.png" alt="Git Function" width="600"/>
-
+<center><img src="./images/013_Commit.png" width=600></img></center>
 
 
 ## Template installation

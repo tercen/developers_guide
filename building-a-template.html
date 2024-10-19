@@ -65,19 +65,17 @@
 <li class="book-part">Templates</li>
 <li><a class="active" href="building-a-template.html"><span class="header-section-number">15</span> Building a template</a></li>
 <li><a class="" href="updating-a-template.html"><span class="header-section-number">16</span> Updating a template</a></li>
-<li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">17</span> Building an app</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
-<li><a class="" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">17</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">18</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">19</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">20</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">21</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">22</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">23</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
@@ -103,13 +101,15 @@
 <h2>
 <span class="header-section-number">15.2</span> General development workflow<a class="anchor" aria-label="anchor" href="#general-development-workflow"><i class="fas fa-link"></i></a>
 </h2>
-<p>The recommended <strong>test-driven</strong> development workflow is as follows:
-* Initialise a GitHub repository for your workflow based on a template provided by Tercen
-* Clone this GitHub repository to your Tercen development instance
-* Load a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.
-* Develop your workflow on your example dataset.
-* Prepare the workflow template.
-* Push your changes and deploy.</p>
+<p>The recommended <strong>test-driven</strong> development workflow is as follows:</p>
+<ul>
+<li><p>Initialise a GitHub repository for your workflow based on a template provided by Tercen</p></li>
+<li><p>Clone this GitHub repository to your Tercen development instance</p></li>
+<li><p>Load a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.</p></li>
+<li><p>Develop your workflow on your example dataset.</p></li>
+<li><p>Prepare the workflow template.</p></li>
+<li><p>Push your changes and deploy.</p></li>
+</ul>
 </div>
 <div id="detailed-workflow" class="section level2" number="15.3">
 <h2>
@@ -119,16 +119,26 @@
 <p>Create a new project based on the <a href="https://github.com/tercen/template_workflow">template repository</a>.</p>
 <p><strong>2. Import the repository into Tercen</strong></p>
 <p>Create a new project from Github.</p>
-<div class="inline-figure"><img src="images/001_NewProject.png" alt="New Project" width="500"></div>
-<div class="inline-figure"><img src="images/002_NewProject_FromGit.png" alt="New Project from Git" width="500"></div>
+<center>
+<img src="images/001_NewProject.png" width="500">
+</center>
+<center>
+<img src="images/002_NewProject_FromGit.png" width="500">
+</center>
 <p><strong>3. Create the Template Workflow</strong></p>
 <p>Create a standard Tercen workflow. Run the steps as needed.</p>
 <p>A finalized workflow might look like the one below.</p>
-<div class="inline-figure"><img src="images/004_RunWorkflow.png" alt="Completed Workflow" width="300"></div>
+<center>
+<img src="images/004_RunWorkflow.png" width="300">
+</center>
 <p><strong>4. Clone and Rename</strong></p>
 <p>Clone the workflow to create the <strong>golden standard</strong>. Rename it with an unique **_gs** suffix (see naming convention).</p>
-<div class="inline-figure"><img src="images/005_Clone.png" alt="Clone Workflow" width="600"></div>
-<div class="inline-figure"><img src="images/006_CloneName.png" alt="Clone Workflow Name" width="600"></div>
+<center>
+<img src="images/005_Clone.png" width="600">
+</center>
+<center>
+<img src="images/006_CloneName.png" width="600">
+</center>
 <p><strong>Naming Conventions</strong></p>
 <ul>
 <li><p>A Template workflow is compared to its Golden Standard workflows based on a naming convention.</p></li>
@@ -136,15 +146,23 @@
 <li><p>A Template and a Golden Standard are considered match if they have the same <em>base</em> name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.</p></li>
 </ul>
 <p>Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named <strong>tests</strong>. To do so, rename the Golden Standard, adding <em>tests/</em> before the name and pressing the Ok button.</p>
-<div class="inline-figure"><img src="images/007_CloneReName.png" alt="Rename" width="600"></div>
-<div class="inline-figure"><img src="images/008_CloneReNameFolder.png" alt="Rename" width="600"></div>
+<center>
+<img src="images/007_CloneReName.png" width="600">
+</center>
+<center>
+<img src="images/008_CloneReNameFolder.png" width="600">
+</center>
 <p><strong>5. Reset the Template Workflow</strong></p>
 <p>Open the Template Workflow (the one without the _gs** suffix), reset and save it.</p>
 <p><strong>6. Commit the Changes to Github</strong></p>
 <p>Finally, select the Git button.</p>
-<div class="inline-figure"><img src="images/012_Git.png" alt="Git Function" width="600"></div>
+<center>
+<img src="images/012_Git.png" width="600">
+</center>
 <p>Then, add any desired commit message, your personal Github token and press Ok.</p>
-<div class="inline-figure"><img src="images/013_Commit.png" alt="Git Function" width="600"></div>
+<center>
+<img src="images/013_Commit.png" width="600">
+</center>
 </div>
 <div id="template-installation" class="section level2" number="15.4">
 <h2>

@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 21 Using tim | Tercen developer’s guide</title>
+<title>Chapter 20 Using tim | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  21.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
+<meta name="description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  20.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
 <meta name="generator" content="bookdown 0.41 with bs4_book()">
-<meta property="og:title" content="Chapter 21 Using tim | Tercen developer’s guide">
+<meta property="og:title" content="Chapter 20 Using tim | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  21.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
+<meta property="og:description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  20.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 21 Using tim | Tercen developer’s guide">
-<meta name="twitter:description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  21.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
+<meta name="twitter:title" content="Chapter 20 Using tim | Tercen developer’s guide">
+<meta name="twitter:description" content="tim is an R package that includes utilities to facilitate operator development in Tercen Studio.  20.1 Development workflow utilities tim::set_workflow_step_ids(data_step_url)...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -65,19 +65,17 @@
 <li class="book-part">Templates</li>
 <li><a class="" href="building-a-template.html"><span class="header-section-number">15</span> Building a template</a></li>
 <li><a class="" href="updating-a-template.html"><span class="header-section-number">16</span> Updating a template</a></li>
-<li class="book-part">Apps</li>
-<li><a class="" href="building-an-app.html"><span class="header-section-number">17</span> Building an app</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
-<li><a class="" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">17</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">18</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
-<li><a class="active" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">19</span> Development guidelines</a></li>
+<li><a class="active" href="tim.html"><span class="header-section-number">20</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">21</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">22</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">23</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
@@ -89,30 +87,30 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tim" class="section level1" number="21">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tim" class="section level1" number="20">
 <h1>
-<span class="header-section-number">21</span> Using <code>tim</code><a class="anchor" aria-label="anchor" href="#tim"><i class="fas fa-link"></i></a>
+<span class="header-section-number">20</span> Using <code>tim</code><a class="anchor" aria-label="anchor" href="#tim"><i class="fas fa-link"></i></a>
 </h1>
 <p><code>tim</code> is an R package that includes utilities to facilitate operator development in Tercen Studio.</p>
-<div id="development-workflow-utilities" class="section level2" number="21.1">
+<div id="development-workflow-utilities" class="section level2" number="20.1">
 <h2>
-<span class="header-section-number">21.1</span> Development workflow utilities<a class="anchor" aria-label="anchor" href="#development-workflow-utilities"><i class="fas fa-link"></i></a>
+<span class="header-section-number">20.1</span> Development workflow utilities<a class="anchor" aria-label="anchor" href="#development-workflow-utilities"><i class="fas fa-link"></i></a>
 </h2>
 <pre><code>tim::set_workflow_step_ids(data_step_url)
 tim::set_tercen_credentials()</code></pre>
 </div>
-<div id="test-utilities" class="section level2" number="21.2">
+<div id="test-utilities" class="section level2" number="20.2">
 <h2>
-<span class="header-section-number">21.2</span> Test utilities<a class="anchor" aria-label="anchor" href="#test-utilities"><i class="fas fa-link"></i></a>
+<span class="header-section-number">20.2</span> Test utilities<a class="anchor" aria-label="anchor" href="#test-utilities"><i class="fas fa-link"></i></a>
 </h2>
 <p><strong>Populate test data:</strong></p>
 <pre><code>tim::build_test_data(out_table = out_table, ctx = ctx, test_name = "test1")</code></pre>
 <p><strong>Check test data:</strong></p>
 <pre><code>tim::check_test_local(out_table = out_table, test_name = "test1")</code></pre>
 </div>
-<div id="operator-folder-utilities" class="section level2" number="21.3">
+<div id="operator-folder-utilities" class="section level2" number="20.3">
 <h2>
-<span class="header-section-number">21.3</span> Operator folder utilities<a class="anchor" aria-label="anchor" href="#operator-folder-utilities"><i class="fas fa-link"></i></a>
+<span class="header-section-number">20.3</span> Operator folder utilities<a class="anchor" aria-label="anchor" href="#operator-folder-utilities"><i class="fas fa-link"></i></a>
 </h2>
 <p><strong>Populate GitHub workflow files:</strong></p>
 <pre><code>tim::populate_gh_workflow(type = "R")
@@ -124,15 +122,15 @@ tim::populate_gh_workflow(type = "docker")</code></pre>
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></div>
-<div class="next"><a href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></div>
+<div class="prev"><a href="naming.html"><span class="header-section-number">19</span> Development guidelines</a></div>
+<div class="next"><a href="common-operator-issues.html"><span class="header-section-number">21</span> Common operator issues</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#tim"><span class="header-section-number">21</span> Using tim</a></li>
-<li><a class="nav-link" href="#development-workflow-utilities"><span class="header-section-number">21.1</span> Development workflow utilities</a></li>
-<li><a class="nav-link" href="#test-utilities"><span class="header-section-number">21.2</span> Test utilities</a></li>
-<li><a class="nav-link" href="#operator-folder-utilities"><span class="header-section-number">21.3</span> Operator folder utilities</a></li>
+<li><a class="nav-link" href="#tim"><span class="header-section-number">20</span> Using tim</a></li>
+<li><a class="nav-link" href="#development-workflow-utilities"><span class="header-section-number">20.1</span> Development workflow utilities</a></li>
+<li><a class="nav-link" href="#test-utilities"><span class="header-section-number">20.2</span> Test utilities</a></li>
+<li><a class="nav-link" href="#operator-folder-utilities"><span class="header-section-number">20.3</span> Operator folder utilities</a></li>
 </ul>
 
       <div class="book-extra">

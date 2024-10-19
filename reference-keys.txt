@@ -45,11 +45,6 @@ detailed-workflow
 template-installation
 how-to-add-unit-tests
 updating-a-template
-building-an-app
-the-app-concept
-creating-an-app
-publishing-an-app
-customising-the-app-for-different-instruments-or-data
 tercen-library
 custom-library
 naming
