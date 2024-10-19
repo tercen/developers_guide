@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 22 CI and Github Actions | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
-<meta name="description" content="22.1 Test not found operator.run.test.not.found  22.2 Wrong relations task.test.operator.bad.nRelations  22.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  22.4...">
+<meta name="description" content="22.1 Test not found operator.run.test.not.found This error happens when none of the test, tests or workflow_tests have been found at the repository root.  22.2 Wrong relations...">
 <meta name="generator" content="bookdown 0.41 with bs4_book()">
 <meta property="og:title" content="Chapter 22 CI and Github Actions | Tercen developer’s guide">
 <meta property="og:type" content="book">
-<meta property="og:description" content="22.1 Test not found operator.run.test.not.found  22.2 Wrong relations task.test.operator.bad.nRelations  22.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  22.4...">
+<meta property="og:description" content="22.1 Test not found operator.run.test.not.found This error happens when none of the test, tests or workflow_tests have been found at the repository root.  22.2 Wrong relations...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 22 CI and Github Actions | Tercen developer’s guide">
-<meta name="twitter:description" content="22.1 Test not found operator.run.test.not.found  22.2 Wrong relations task.test.operator.bad.nRelations  22.3 Wrong nCols / nRows task.test.operator.bad.nCols task.test.operator.bad.nRows  22.4...">
+<meta name="twitter:description" content="22.1 Test not found operator.run.test.not.found This error happens when none of the test, tests or workflow_tests have been found at the repository root.  22.2 Wrong relations...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -96,12 +96,14 @@
 <span class="header-section-number">22.1</span> Test not found<a class="anchor" aria-label="anchor" href="#test-not-found"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>operator.run.test.not.found</code></p>
+<p>This error happens when none of the <code>test</code>, <code>tests</code> or <code>workflow_tests</code> have been found at the repository root.</p>
 </div>
 <div id="wrong-relations" class="section level2" number="22.2">
 <h2>
 <span class="header-section-number">22.2</span> Wrong relations<a class="anchor" aria-label="anchor" href="#wrong-relations"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.nRelations</code></p>
+<p>This error happens when there are not as many tables (relations) between the computed and expected outputs.</p>
 </div>
 <div id="wrong-ncols-nrows" class="section level2" number="22.3">
 <h2>
@@ -109,14 +111,15 @@
 </h2>
 <p><code>task.test.operator.bad.nCols</code>
 <code>task.test.operator.bad.nRows</code></p>
+<p>This error happens when there are not as many columns or rows between the computed and expected output relations.</p>
 </div>
 <div id="wrong-column-names" class="section level2" number="22.4">
 <h2>
 <span class="header-section-number">22.4</span> Wrong column names<a class="anchor" aria-label="anchor" href="#wrong-column-names"><i class="fas fa-link"></i></a>
 </h2>
 <p><code>task.test.operator.bad.column.names</code></p>
-<p>Maybe you’ve added or renamed a column in the latest version of the operator? In
-that case, the reference table should be updated accordingly.</p>
+<p>This error happens when the computed and expected output relations do not have the exact same column names.</p>
+<p>Maybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.</p>
 </div>
 <div id="wrong-column-type" class="section level2" number="22.5">
 <h2>
@@ -135,7 +138,7 @@ function.</li>
 <span class="header-section-number">22.5.1</span> Wrong values<a class="anchor" aria-label="anchor" href="#wrong-values"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>task.test.operator.bad.value</code></p>
-<p>This error occurs when a value value is different between the reference table and
+<p>This error occurs when a value is different between the reference table and
 the computed table. It gives you the row number and both values to help
 finding the issue.</p>
 </div>
@@ -144,12 +147,16 @@ finding the issue.</p>
 <span class="header-section-number">22.5.2</span> Wrong correlation<a class="anchor" aria-label="anchor" href="#wrong-correlation"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>task.test.operator.bad.correlation</code></p>
+<p>This error occurs when the correlation between the reference table and
+the computed table values is not high enough.</p>
 </div>
 <div id="untrusted-git" class="section level3" number="22.5.3">
 <h3>
 <span class="header-section-number">22.5.3</span> Untrusted git<a class="anchor" aria-label="anchor" href="#untrusted-git"><i class="fas fa-link"></i></a>
 </h3>
 <p><code>tercen.forbidden.untrusted.git</code></p>
+<p>This error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator
+should be added to your Tercen instance configuration file.</p>
 
 </div>
 </div>
