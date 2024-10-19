@@ -2,19 +2,92 @@
 
 # Building a template
 
-A template workflow is perfect for users who wish to reuse a workflow to perform 
-a complete analysis.
+## What is a template?
 
-The building of a __template__ does not require any programming.
+A __template__ is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.
 
-The process for building a __template__ is:
+## General development workflow
 
-* Design the __template__
-* Create a workflow in Tercen
-* Test it on input data
-* Create a template folder in the project
-* Move the workflow into the template folder
-* Download the template from the project
-* Create a github and upload template
-* Tag the github
+The recommended __test-driven__ development workflow is as follows:
+* Initialise a GitHub repository for your workflow based on a template provided by Tercen
+* Clone this GitHub repository to your Tercen development instance
+* Load a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.
+* Develop your workflow on your example dataset.
+* Prepare the workflow template.
+* Push your changes and deploy.
 
+## Detailed workflow
+
+__1. Create the Template Repo__
+
+Create a new project based on the [template repository](https://github.com/tercen/template_workflow).
+
+__2. Import the repository into Tercen__
+
+Create a new project from Github.
+
+<img src="./images/001_NewProject.png" alt="New Project" width="500"/>
+
+<img src="./images/002_NewProject_FromGit.png" alt="New Project from Git" width="500"/>
+
+__3. Create the Template Workflow__
+
+Create a standard Tercen workflow. Run the steps as needed.
+
+A finalized workflow might look like the one below.
+
+<img src="./images/004_RunWorkflow.png" alt="Completed Workflow" width="300"/>
+
+
+__4. Clone and Rename__
+
+Clone the workflow to create the **golden standard**. Rename it with an unique **_gs** suffix (see naming convention). 
+
+<img src="./images/005_Clone.png" alt="Clone Workflow" width="600"/>
+
+<img src="./images/006_CloneName.png" alt="Clone Workflow Name" width="600"/>
+
+__Naming Conventions__
+
+* A Template workflow is compared to its Golden Standard workflows based on a naming convention. 
+
+* A workflow is considered a Golden Standard if its name ends with **_gs***, where * is a set of letter and numbers. For example, Template_gs1, Template_gsA01 and Template_gsAA are all valid Golden Standard names, whereas Template_gs_01 is not.
+
+* A Template and a Golden Standard are considered match if they have the same *base* name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.
+
+
+Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named **tests**. To do so, rename the Golden Standard, adding _tests/_ before the name and pressing the Ok button.
+
+<img src="./images/007_CloneReName.png" alt="Rename" width="600"/>
+
+<img src="./images/008_CloneReNameFolder.png" alt="Rename" width="600"/>
+
+__5. Reset the Template Workflow__
+
+Open the Template Workflow (the one without the _gs** suffix), reset and save it.
+
+__6. Commit the Changes to Github__
+
+Finally, select the Git button.
+
+<img src="./images/012_Git.png" alt="Git Function" width="600"/>
+
+Then, add any desired commit message, your personal Github token and press Ok.
+
+<img src="./images/013_Commit.png" alt="Git Function" width="600"/>
+
+
+
+## Template installation
+
+A template is installed like any Tercen module (operators, apps, templates).
+You need to publish the template JSON only, the one at the root.
+
+## How to add unit tests?
+
+Coming soon.
+
+
+# Updating a template
+
+Coming soon.
