@@ -62,18 +62,19 @@ __Naming Conventions__
 * A Template and a Golden Standard are considered match if they have the same *base* name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.
 
 
-Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named **tests**. To do so, rename the Golden Standard, adding _tests/_ before the name and pressing the Ok button.
-
+Once cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named **workflow_tests**. To do so, rename the Golden Standard, adding *workflow_tests/* before the name and pressing the Ok button.
 
 <center><img src="./images/007_CloneReName.png" width=600></img></center>
-
-<center><img src="./images/008_CloneReNameFolder.png" width=600></img></center>
 
 __5. Reset the Template Workflow__
 
 Open the Template Workflow (the one without the _gs** suffix), reset and save it.
 
-__6. Commit the Changes to Github__
+__6. Select which elements to publish__
+
+You should now have at least two workflows as part of your project: the __template__ and the __gold standard__. As we do not want the gold standard to be published in the library, you should make sure the "Publish" check box is unchecked for this workflow.
+
+__7. Commit the Changes to Github__
 
 Finally, select the Git button.
 
@@ -86,8 +87,7 @@ Then, add any desired commit message, your personal Github token and press Ok.
 
 ## Template installation
 
-A template is installed like any Tercen module (operators, apps, templates).
-You need to publish the template JSON only, the one at the root.
+A template is installed like any Tercen module (operators, apps, templates). Check the [Operator Installation Chapter](https://tercen.github.io/developers_guide/installing-an-operator.html) to learn how to proceed.
 
 # Continuous Integration Workflow
 
