@@ -89,11 +89,63 @@ Then, add any desired commit message, your personal Github token and press Ok.
 A template is installed like any Tercen module (operators, apps, templates).
 You need to publish the template JSON only, the one at the root.
 
-## How to add unit tests?
+# Continuous Integration Workflow
 
-Coming soon.
+Here is a link to the [Workflow CI Action](https://github.com/tercen/actions/tree/main/workflow-CI) that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.
 
+Here’s a breakdown of what each part of the workflow does:
 
-# Updating a template
+### Inputs
 
-Coming soon.
+The workflow accepts several inputs, which are parameters for the CI process:
+
+* `git-repository` (required): The GitHub repository containing the template to be tested.
+* `branch` (optional, defaults to main): The branch of the GitHub repository.
+* `tag` (optional): A commit or version tag for the GitHub repository.
+* `git-token` (required): GitHub access token used to authenticate and access the repository.
+* `service-uri` (optional): The URI of a service to which the workflow will connect.
+* `tercen-username` (optional): Tercen service username.
+* `tercen-password` (optional): Tercen service password.
+
+### Steps
+
+__1. Start Tercen Services__
+
+Action: tercen/actions/start-tercen@main
+Starts necessary Tercen services to facilitate the test environment.
+
+__2. Log in to Docker Registry__ 
+
+Action: docker/login-action@v3.3.0
+Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor's credentials and the provided GitHub access token.
+
+__3. Install Template Runner__
+
+Run: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.
+
+__4. Test Template__
+
+Run: Executes the tercen/workflow_runner_operator Docker container.
+Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run.
+The --report flag is used to generate a test report.
+
+__5. Copy Result File__
+
+Run: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.
+
+__6. Read Runner Results__
+
+Run: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.
+
+__7. Check Runner Results__
+
+Condition: If the Status field in the JSON output is not "Success," the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.
+
+__8. Upload Runner Results__
+
+Action: actions/upload-artifact@v3
+The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.
+
+### Summary
+
+CI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.

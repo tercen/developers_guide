@@ -43,8 +43,10 @@ what-is-a-template
 general-development-workflow
 detailed-workflow
 template-installation
-how-to-add-unit-tests
-updating-a-template
+continuous-integration-workflow-1
+inputs
+steps
+summary
 tercen-library
 custom-library
 naming
