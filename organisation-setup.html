@@ -138,16 +138,16 @@ run the tests from the GitHub Action.</li>
 <h2>4. Tercen instance configuration<a class="anchor" aria-label="anchor" href="#tercen-instance-configuration"><i class="fas fa-link"></i></a>
 </h2>
 <p>If you are using your own Tercen instance, you need to modify the Tercen config file and add your GitHub organisation to the “trusted git” list.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb45-1"><a href="organisation-setup.html#cb45-1" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.git</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
-<span id="cb45-2"><a href="organisation-setup.html#cb45-2" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.docker</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
-<span id="cb45-3"><a href="organisation-setup.html#cb45-3" tabindex="-1"></a><span class="fu">tercen.trusted.git</span><span class="kw">:</span></span>
-<span id="cb45-4"><a href="organisation-setup.html#cb45-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/tercen/'</span></span>
-<span id="cb45-5"><a href="organisation-setup.html#cb45-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/YOUR_GITHUB_ORGANISATION/'</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="organisation-setup.html#cb46-1" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.git</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb46-2"><a href="organisation-setup.html#cb46-2" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.docker</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb46-3"><a href="organisation-setup.html#cb46-3" tabindex="-1"></a><span class="fu">tercen.trusted.git</span><span class="kw">:</span></span>
+<span id="cb46-4"><a href="organisation-setup.html#cb46-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/tercen/'</span></span>
+<span id="cb46-5"><a href="organisation-setup.html#cb46-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/YOUR_GITHUB_ORGANISATION/'</span></span></code></pre></div>
 <p>You also need to authorise the Docker Hub organisation.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="organisation-setup.html#cb46-1" tabindex="-1"></a><span class="co"># accept any image name starting by tercen or my-trusted-dockerhub-org, ex. my-trusted-dockerhub-org/my-docker-image</span></span>
-<span id="cb46-2"><a href="organisation-setup.html#cb46-2" tabindex="-1"></a><span class="fu">tercen.trusted.docker</span><span class="kw">:</span></span>
-<span id="cb46-3"><a href="organisation-setup.html#cb46-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'tercen'</span></span>
-<span id="cb46-4"><a href="organisation-setup.html#cb46-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'my-trusted-dockerhub-org'</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb47-1"><a href="organisation-setup.html#cb47-1" tabindex="-1"></a><span class="co"># accept any image name starting by tercen or my-trusted-dockerhub-org, ex. my-trusted-dockerhub-org/my-docker-image</span></span>
+<span id="cb47-2"><a href="organisation-setup.html#cb47-2" tabindex="-1"></a><span class="fu">tercen.trusted.docker</span><span class="kw">:</span></span>
+<span id="cb47-3"><a href="organisation-setup.html#cb47-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'tercen'</span></span>
+<span id="cb47-4"><a href="organisation-setup.html#cb47-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'my-trusted-dockerhub-org'</span></span></code></pre></div>
 
 </div>
 </div>

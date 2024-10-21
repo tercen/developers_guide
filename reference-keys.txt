@@ -53,6 +53,7 @@ development-workflow-utilities
 test-utilities
 operator-folder-utilities
 common-operator-issues
+failed-to-decode
 ci-and-github-actions
 test-not-found
 wrong-relations
