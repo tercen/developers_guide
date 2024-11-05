@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 13 Input and Output Patterns | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="This chapter provides a walkthrough for using advanced input and output operations in Tercen. It demonstrates how to output data frames and relations, save files as Tercen tables, and read data...">
+<meta name="generator" content="bookdown 0.41 with bs4_book()">
+<meta property="og:title" content="Chapter 13 Input and Output Patterns | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="This chapter provides a walkthrough for using advanced input and output operations in Tercen. It demonstrates how to output data frames and relations, save files as Tercen tables, and read data...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 13 Input and Output Patterns | Tercen developer’s guide">
+<meta name="twitter:description" content="This chapter provides a walkthrough for using advanced input and output operations in Tercen. It demonstrates how to output data frames and relations, save files as Tercen tables, and read data...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">R Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration-workflow.html"><span class="header-section-number">10</span> Continuous Integration Workflow</a></li>
+<li><a class="" href="release-workflow.html"><span class="header-section-number">11</span> Release Workflow</a></li>
+<li><a class="" href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></li>
+<li><a class="active" href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">14</span> Building a template</a></li>
+<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">15</span> Continuous Integration Workflow</a></li>
+<li class="book-part">Library</li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">16</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">17</span> Custom library</a></li>
+<li class="book-part">Best practices</li>
+<li><a class="" href="naming.html"><span class="header-section-number">18</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">19</span> Using tim</a></li>
+<li class="book-part">Troubleshooting</li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">20</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">21</span> CI and Github Actions</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">22</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="organisation-setup.html">Organisation setup</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="input-and-output-patterns" class="section level1" number="13">
+<h1>
+<span class="header-section-number">13</span> Input and Output Patterns<a class="anchor" aria-label="anchor" href="#input-and-output-patterns"><i class="fas fa-link"></i></a>
+</h1>
+<p>This chapter provides a walkthrough for using advanced input and output operations in Tercen. It demonstrates how to output data frames and relations,
+save files as Tercen tables, and read data from projects. This guide will help you better manage and interact with data in Tercen workflows.</p>
+<div id="setting-up-the-tercen-context" class="section level2 unnumbered">
+<h2>1. Setting Up the Tercen Context<a class="anchor" aria-label="anchor" href="#setting-up-the-tercen-context"><i class="fas fa-link"></i></a>
+</h2>
+<p>Before working with any Tercen workflow, start by setting up the context with <code>TercenContext</code>, which connects to your specific Tercen instance.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="input-and-output-patterns.html#cb41-1" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
+<span id="cb41-2"><a href="input-and-output-patterns.html#cb41-2" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="input-and-output-patterns.html#cb41-3" tabindex="-1"></a>ctx <span class="op">=</span> ctx.TercenContext(</span>
+<span id="cb41-4"><a href="input-and-output-patterns.html#cb41-4" tabindex="-1"></a>    workflowId<span class="op">=</span><span class="st">"your_workflow_id"</span>,</span>
+<span id="cb41-5"><a href="input-and-output-patterns.html#cb41-5" tabindex="-1"></a>    stepId<span class="op">=</span><span class="st">"your_step_id"</span>,</span>
+<span id="cb41-6"><a href="input-and-output-patterns.html#cb41-6" tabindex="-1"></a>    username<span class="op">=</span><span class="st">"admin"</span>,</span>
+<span id="cb41-7"><a href="input-and-output-patterns.html#cb41-7" tabindex="-1"></a>    password<span class="op">=</span><span class="st">"admin"</span>,</span>
+<span id="cb41-8"><a href="input-and-output-patterns.html#cb41-8" tabindex="-1"></a>    serviceUri<span class="op">=</span><span class="st">"http://tercen:5400/"</span>  <span class="co"># for local Tercen instance</span></span>
+<span id="cb41-9"><a href="input-and-output-patterns.html#cb41-9" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="output-patterns" class="section level2 unnumbered">
+<h2>2. Output Patterns<a class="anchor" aria-label="anchor" href="#output-patterns"><i class="fas fa-link"></i></a>
+</h2>
+<div id="data-frame-output" class="section level3 unnumbered">
+<h3>Data Frame Output<a class="anchor" aria-label="anchor" href="#data-frame-output"><i class="fas fa-link"></i></a>
+</h3>
+<p>Data frames in Tercen are outputted per row, per column, or per cell. Each type of output requires to include a specific column: <code>.ri</code> for rows and <code>.ci</code> for columns.</p>
+<div id="row-wise-output" class="section level4 unnumbered">
+<h4>2.1 Row-Wise Output<a class="anchor" aria-label="anchor" href="#row-wise-output"><i class="fas fa-link"></i></a>
+</h4>
+<p>The following code outputs the mean value for each row. It groups the data by <code>.ri</code>, calculates the mean, and saves it back to Tercen.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="input-and-output-patterns.html#cb42-1" tabindex="-1"></a>df_per_row <span class="op">=</span> (</span>
+<span id="cb42-2"><a href="input-and-output-patterns.html#cb42-2" tabindex="-1"></a>    ctx</span>
+<span id="cb42-3"><a href="input-and-output-patterns.html#cb42-3" tabindex="-1"></a>    .select([<span class="st">".ri"</span>, <span class="st">".y"</span>])</span>
+<span id="cb42-4"><a href="input-and-output-patterns.html#cb42-4" tabindex="-1"></a>    .groupby([<span class="st">".ri"</span>])</span>
+<span id="cb42-5"><a href="input-and-output-patterns.html#cb42-5" tabindex="-1"></a>    .mean()</span>
+<span id="cb42-6"><a href="input-and-output-patterns.html#cb42-6" tabindex="-1"></a>    .rename({<span class="st">'.y'</span>: <span class="st">'mean_rows'</span>})</span>
+<span id="cb42-7"><a href="input-and-output-patterns.html#cb42-7" tabindex="-1"></a>)</span>
+<span id="cb42-8"><a href="input-and-output-patterns.html#cb42-8" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="input-and-output-patterns.html#cb42-9" tabindex="-1"></a>df_per_row <span class="op">=</span> ctx.add_namespace(df_per_row)</span>
+<span id="cb42-10"><a href="input-and-output-patterns.html#cb42-10" tabindex="-1"></a>ctx.save(df_per_row)</span></code></pre></div>
+</div>
+<div id="column-wise-output" class="section level4 unnumbered">
+<h4>2.2 Column-Wise Output<a class="anchor" aria-label="anchor" href="#column-wise-output"><i class="fas fa-link"></i></a>
+</h4>
+<p>To calculate the mean value for each column, group the data by <code>.ci</code>.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="input-and-output-patterns.html#cb43-1" tabindex="-1"></a>df_per_col <span class="op">=</span> (</span>
+<span id="cb43-2"><a href="input-and-output-patterns.html#cb43-2" tabindex="-1"></a>    ctx</span>
+<span id="cb43-3"><a href="input-and-output-patterns.html#cb43-3" tabindex="-1"></a>    .select([<span class="st">".ci"</span>, <span class="st">".y"</span>])</span>
+<span id="cb43-4"><a href="input-and-output-patterns.html#cb43-4" tabindex="-1"></a>    .groupby([<span class="st">".ci"</span>])</span>
+<span id="cb43-5"><a href="input-and-output-patterns.html#cb43-5" tabindex="-1"></a>    .mean()</span>
+<span id="cb43-6"><a href="input-and-output-patterns.html#cb43-6" tabindex="-1"></a>    .rename({<span class="st">'.y'</span>: <span class="st">'mean_cols'</span>})</span>
+<span id="cb43-7"><a href="input-and-output-patterns.html#cb43-7" tabindex="-1"></a>)</span>
+<span id="cb43-8"><a href="input-and-output-patterns.html#cb43-8" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="input-and-output-patterns.html#cb43-9" tabindex="-1"></a>df_per_col <span class="op">=</span> ctx.add_namespace(df_per_col)</span>
+<span id="cb43-10"><a href="input-and-output-patterns.html#cb43-10" tabindex="-1"></a>ctx.save(df_per_col)</span></code></pre></div>
+</div>
+<div id="cell-wise-output" class="section level4 unnumbered">
+<h4>2.3 Cell-Wise Output<a class="anchor" aria-label="anchor" href="#cell-wise-output"><i class="fas fa-link"></i></a>
+</h4>
+<p>For calculating means per cell, group by both <code>.ri</code> and <code>.ci</code>.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="input-and-output-patterns.html#cb44-1" tabindex="-1"></a>df_per_cell <span class="op">=</span> (</span>
+<span id="cb44-2"><a href="input-and-output-patterns.html#cb44-2" tabindex="-1"></a>    ctx</span>
+<span id="cb44-3"><a href="input-and-output-patterns.html#cb44-3" tabindex="-1"></a>    .select([<span class="st">".ri"</span>, <span class="st">".ci"</span>, <span class="st">".y"</span>])</span>
+<span id="cb44-4"><a href="input-and-output-patterns.html#cb44-4" tabindex="-1"></a>    .groupby([<span class="st">".ri"</span>, <span class="st">".ci"</span>])</span>
+<span id="cb44-5"><a href="input-and-output-patterns.html#cb44-5" tabindex="-1"></a>    .mean()</span>
+<span id="cb44-6"><a href="input-and-output-patterns.html#cb44-6" tabindex="-1"></a>    .rename({<span class="st">'.y'</span>: <span class="st">'mean_cells'</span>})</span>
+<span id="cb44-7"><a href="input-and-output-patterns.html#cb44-7" tabindex="-1"></a>)</span>
+<span id="cb44-8"><a href="input-and-output-patterns.html#cb44-8" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="input-and-output-patterns.html#cb44-9" tabindex="-1"></a>df_per_cell <span class="op">=</span> ctx.add_namespace(df_per_cell)</span>
+<span id="cb44-10"><a href="input-and-output-patterns.html#cb44-10" tabindex="-1"></a>ctx.save(df_per_cell)</span></code></pre></div>
+</div>
+<div id="saving-multiple-data-frames" class="section level4 unnumbered">
+<h4>2.4 Saving Multiple Data Frames<a class="anchor" aria-label="anchor" href="#saving-multiple-data-frames"><i class="fas fa-link"></i></a>
+</h4>
+<p>Multiple tables can be saved as a list in Tercen.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="input-and-output-patterns.html#cb45-1" tabindex="-1"></a>ctx.save([df_per_row, df_per_col, df_per_cell])</span></code></pre></div>
+</div>
+</div>
+<div id="tercen-relation-output" class="section level3 unnumbered">
+<h3>3. Tercen Relation Output<a class="anchor" aria-label="anchor" href="#tercen-relation-output"><i class="fas fa-link"></i></a>
+</h3>
+<p>Relations in Tercen support complex data linking, such as joining tables and managing non-standard row/column associations. Relations allow for left joins and merging tables.</p>
+<p>Here are the relevant API calls:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Create Relations</strong> using <code>as_relation()</code>.</li>
+<li>
+<strong>Join Relations</strong> with <code>left_join_relation()</code>.</li>
+<li>
+<strong>Save Relations</strong> with <code>save_relation()</code>.</li>
+</ol>
+<p><strong>Example: Generating a PCA relation with components.</strong></p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data.matrix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">ctx</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aPca</span> <span class="op">=</span> <span class="va">data.matrix</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="va">scale</span>, center <span class="op">=</span> <span class="va">center</span>, tol <span class="op">=</span> <span class="va">tol</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">maxComp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">maxComp</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">maxComp</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">aPca</span><span class="op">$</span><span class="va">rotation</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">aPca</span><span class="op">$</span><span class="va">rotation</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">npc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">aPca</span><span class="op">$</span><span class="va">sdev</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># pad left pc names with 0 to ensure alphabetic order</span></span>
+<span><span class="va">pcRelation</span> <span class="op">=</span> <span class="fu">tibble</span><span class="op">(</span>PC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"PC%0"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">npc</span><span class="op">)</span><span class="op">)</span>, <span class="st">"d"</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="va">npc</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="fu">addNamespace</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_relation</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">eigenRelation</span> <span class="op">=</span> <span class="fu">tibble</span><span class="op">(</span>pc.eigen.values <span class="op">=</span> <span class="va">aPca</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>var_explained <span class="op">=</span> <span class="va">.</span><span class="op">$</span><span class="va">pc.eigen.values</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">.</span><span class="op">$</span><span class="va">pc.eigen.values</span><span class="op">)</span><span class="op">)</span><span class="op">%&gt;%</span> </span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="fu">addNamespace</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_relation</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">loadingRelation</span> <span class="op">=</span> <span class="va">aPca</span><span class="op">$</span><span class="va">rotation</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">maxComp</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>.var.rids <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">.var.rids</span>,</span>
+<span>                    names_to <span class="op">=</span> <span class="st">".pc.rids"</span>,</span>
+<span>                    values_to <span class="op">=</span> <span class="st">"pc.loading"</span>,</span>
+<span>                    names_transform<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>.pc.rids<span class="op">=</span><span class="va">as.integer</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="fu">addNamespace</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_relation</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">left_join_relation</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">rrelation</span>, <span class="st">".var.rids"</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">rrelation</span><span class="op">$</span><span class="va">rids</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">scoresRelation</span> <span class="op">=</span> <span class="va">aPca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">maxComp</span><span class="op">]</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>.i<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">.i</span>,</span>
+<span>                    names_to <span class="op">=</span> <span class="st">".pc.rids"</span>,</span>
+<span>                    values_to <span class="op">=</span> <span class="st">"pc.value"</span>,</span>
+<span>                    names_transform<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>.pc.rids<span class="op">=</span><span class="va">as.integer</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="fu">addNamespace</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_relation</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">left_join_relation</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">crelation</span>, <span class="st">".i"</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">crelation</span><span class="op">$</span><span class="va">rids</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># link all 4 relation into one and save </span></span>
+<span><span class="va">rels</span> <span class="op">&lt;-</span> <span class="va">pcRelation</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">left_join_relation</span><span class="op">(</span><span class="va">scoresRelation</span>, <span class="va">pcRelation</span><span class="op">$</span><span class="va">rids</span>, <span class="st">".pc.rids"</span><span class="op">)</span>  <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">left_join_relation</span><span class="op">(</span><span class="va">eigenRelation</span>, <span class="va">pcRelation</span><span class="op">$</span><span class="va">rids</span>, <span class="va">eigenRelation</span><span class="op">$</span><span class="va">rids</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">left_join_relation</span><span class="op">(</span><span class="va">loadingRelation</span>, <span class="va">pcRelation</span><span class="op">$</span><span class="va">rids</span>, <span class="st">".pc.rids"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">as_join_operator</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">cnames</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">cnames</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="file-output" class="section level3 unnumbered">
+<h3>4. File Output<a class="anchor" aria-label="anchor" href="#file-output"><i class="fas fa-link"></i></a>
+</h3>
+<p>Tercen supports outputting files, such as images or documents, by first saving them temporarily and then converting them to a Tercen-compatible format.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="input-and-output-patterns.html#cb47-1" tabindex="-1"></a><span class="im">from</span> tempfile <span class="im">import</span> NamedTemporaryFile</span>
+<span id="cb47-2"><a href="input-and-output-patterns.html#cb47-2" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb47-3"><a href="input-and-output-patterns.html#cb47-3" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="input-and-output-patterns.html#cb47-4" tabindex="-1"></a><span class="co"># Save plot as a temporary file</span></span>
+<span id="cb47-5"><a href="input-and-output-patterns.html#cb47-5" tabindex="-1"></a>tmp <span class="op">=</span> NamedTemporaryFile(delete<span class="op">=</span><span class="va">True</span>, suffix<span class="op">=</span><span class="st">'.png'</span>)</span>
+<span id="cb47-6"><a href="input-and-output-patterns.html#cb47-6" tabindex="-1"></a>data_np <span class="op">=</span> df_per_cell[<span class="st">"mean_cells"</span>].to_numpy()</span>
+<span id="cb47-7"><a href="input-and-output-patterns.html#cb47-7" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="input-and-output-patterns.html#cb47-8" tabindex="-1"></a>plt.hist(data_np, bins<span class="op">=</span><span class="dv">5</span>, edgecolor<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb47-9"><a href="input-and-output-patterns.html#cb47-9" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)</span>
+<span id="cb47-10"><a href="input-and-output-patterns.html#cb47-10" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb47-11"><a href="input-and-output-patterns.html#cb47-11" tabindex="-1"></a>plt.title(<span class="st">"Histogram"</span>)</span>
+<span id="cb47-12"><a href="input-and-output-patterns.html#cb47-12" tabindex="-1"></a>plt.savefig(tmp)</span>
+<span id="cb47-13"><a href="input-and-output-patterns.html#cb47-13" tabindex="-1"></a></span>
+<span id="cb47-14"><a href="input-and-output-patterns.html#cb47-14" tabindex="-1"></a><span class="co"># Convert file to Tercen table</span></span>
+<span id="cb47-15"><a href="input-and-output-patterns.html#cb47-15" tabindex="-1"></a><span class="im">from</span> tercen.util.helper_functions <span class="im">import</span> as_relation</span>
+<span id="cb47-16"><a href="input-and-output-patterns.html#cb47-16" tabindex="-1"></a></span>
+<span id="cb47-17"><a href="input-and-output-patterns.html#cb47-17" tabindex="-1"></a>df_plot <span class="op">=</span> as_relation(tmp.name)</span>
+<span id="cb47-18"><a href="input-and-output-patterns.html#cb47-18" tabindex="-1"></a>ctx.save_relation(df_plot)</span></code></pre></div>
+</div>
+<div id="advanced-input-reading-from-project" class="section level3 unnumbered">
+<h3>5. Advanced Input: Reading from Project<a class="anchor" aria-label="anchor" href="#advanced-input-reading-from-project"><i class="fas fa-link"></i></a>
+</h3>
+<p>Tercen enables reading files and documents directly from a project.</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Identify Project and Folder IDs</strong> using <code>workflowId</code> and <code>folderId</code>.</li>
+<li>
+<strong>Locate Files</strong> by matching the file name in the project.</li>
+<li>
+<strong>Download Documents</strong> using <code>download()</code>.</li>
+</ol>
+<p>Example: Retrieving a document from the project.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="input-and-output-patterns.html#cb48-1" tabindex="-1"></a><span class="co"># Get the workflow and Folder ID that contains it</span></span>
+<span id="cb48-2"><a href="input-and-output-patterns.html#cb48-2" tabindex="-1"></a>wf <span class="op">=</span> ctx.context.client.workflowService.get(ctx.context.workflowId)</span>
+<span id="cb48-3"><a href="input-and-output-patterns.html#cb48-3" tabindex="-1"></a>wf.folderId</span>
+<span id="cb48-4"><a href="input-and-output-patterns.html#cb48-4" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="input-and-output-patterns.html#cb48-5" tabindex="-1"></a><span class="co"># Get project ID</span></span>
+<span id="cb48-6"><a href="input-and-output-patterns.html#cb48-6" tabindex="-1"></a>projectId <span class="op">=</span> ctx.schema.projectId </span>
+<span id="cb48-7"><a href="input-and-output-patterns.html#cb48-7" tabindex="-1"></a>project <span class="op">=</span> ctx.context.client.projectService.get(projectId)</span>
+<span id="cb48-8"><a href="input-and-output-patterns.html#cb48-8" tabindex="-1"></a>projectUser <span class="op">=</span> project.acl.owner</span>
+<span id="cb48-9"><a href="input-and-output-patterns.html#cb48-9" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="input-and-output-patterns.html#cb48-10" tabindex="-1"></a>projectFiles <span class="op">=</span> ctx.client.projectDocumentService.findProjectObjectsByFolderAndName(<span class="op">\</span></span>
+<span id="cb48-11"><a href="input-and-output-patterns.html#cb48-11" tabindex="-1"></a>    [projectId, <span class="st">"ufff0"</span>, <span class="st">"ufff0"</span>],<span class="op">\</span></span>
+<span id="cb48-12"><a href="input-and-output-patterns.html#cb48-12" tabindex="-1"></a>    [projectId, <span class="st">""</span>, <span class="st">""</span>], useFactory<span class="op">=</span><span class="va">False</span>, limit<span class="op">=</span><span class="dv">25000</span> )</span>
+<span id="cb48-13"><a href="input-and-output-patterns.html#cb48-13" tabindex="-1"></a></span>
+<span id="cb48-14"><a href="input-and-output-patterns.html#cb48-14" tabindex="-1"></a>fnames <span class="op">=</span> [f.name <span class="cf">for</span> f <span class="kw">in</span> projectFiles]</span>
+<span id="cb48-15"><a href="input-and-output-patterns.html#cb48-15" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="input-and-output-patterns.html#cb48-16" tabindex="-1"></a><span class="co">## Download a document</span></span>
+<span id="cb48-17"><a href="input-and-output-patterns.html#cb48-17" tabindex="-1"></a>my_file_id <span class="op">=</span> [index <span class="cf">for</span> index, fname <span class="kw">in</span> <span class="bu">enumerate</span>(fnames) <span class="cf">if</span> <span class="st">'crabs_file.csv'</span> <span class="kw">in</span> fname][<span class="dv">0</span>] <span class="co"># First match</span></span>
+<span id="cb48-18"><a href="input-and-output-patterns.html#cb48-18" tabindex="-1"></a></span>
+<span id="cb48-19"><a href="input-and-output-patterns.html#cb48-19" tabindex="-1"></a><span class="co"># Get Document properties</span></span>
+<span id="cb48-20"><a href="input-and-output-patterns.html#cb48-20" tabindex="-1"></a>pf <span class="op">=</span> projectFiles[my_file_id]</span>
+<span id="cb48-21"><a href="input-and-output-patterns.html#cb48-21" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="input-and-output-patterns.html#cb48-22" tabindex="-1"></a>pf.name <span class="co"># file name</span></span>
+<span id="cb48-23"><a href="input-and-output-patterns.html#cb48-23" tabindex="-1"></a>pf.folderId <span class="co"># folder ID</span></span>
+<span id="cb48-24"><a href="input-and-output-patterns.html#cb48-24" tabindex="-1"></a>pf.<span class="bu">id</span> <span class="co"># document ID</span></span>
+<span id="cb48-25"><a href="input-and-output-patterns.html#cb48-25" tabindex="-1"></a></span>
+<span id="cb48-26"><a href="input-and-output-patterns.html#cb48-26" tabindex="-1"></a><span class="co"># Download data and read response</span></span>
+<span id="cb48-27"><a href="input-and-output-patterns.html#cb48-27" tabindex="-1"></a>resp <span class="op">=</span> ctx.context.client.fileService.download(pf.<span class="bu">id</span>)</span>
+<span id="cb48-28"><a href="input-and-output-patterns.html#cb48-28" tabindex="-1"></a>resp.read()</span>
+<span id="cb48-29"><a href="input-and-output-patterns.html#cb48-29" tabindex="-1"></a><span class="co"># If binary response, must be decoded</span></span></code></pre></div>
+<blockquote>
+<p><strong>Recommendation:</strong> Avoid manual file retrieval by setting document IDs directly in the workflow input projection.</p>
+</blockquote>
+<hr>
+<p>This chapter provides essential steps for managing inputs and outputs within Tercen. Utilize these methods to streamline workflows and enhance data integration capabilities in your Tercen projects.</p>
+
+</div>
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></div>
+<div class="next"><a href="building-a-template.html"><span class="header-section-number">14</span> Building a template</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#input-and-output-patterns"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
+<li><a class="nav-link" href="#setting-up-the-tercen-context">1. Setting Up the Tercen Context</a></li>
+<li>
+<a class="nav-link" href="#output-patterns">2. Output Patterns</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#data-frame-output">Data Frame Output</a></li>
+<li><a class="nav-link" href="#tercen-relation-output">3. Tercen Relation Output</a></li>
+<li><a class="nav-link" href="#file-output">4. File Output</a></li>
+<li><a class="nav-link" href="#advanced-input-reading-from-project">5. Advanced Input: Reading from Project</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
