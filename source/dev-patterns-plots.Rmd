@@ -1,4 +1,4 @@
-# Tutorial: Development Patterns for Tercen Plot Operators
+# Patterns for Plot Operators
 
 ## Introduction
 
