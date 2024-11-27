@@ -28,7 +28,7 @@ tercen-libraries
 creating-a-custom-library
 installing-an-operator-in-a-custom-library
 input-and-output-patterns
-tutorial-development-patterns-for-tercen-plot-operators
+patterns-for-plot-operators
 introduction-1
 basic-scatter-plot
 connecting-to-tercen-1
