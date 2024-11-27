@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 14 Tutorial: Development Patterns for Tercen Plot Operators | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="14.1 Introduction This tutorial demonstrates how to use Python with the tercen library to create custom plot operators. It covers: Connecting to the Tercen workflow to select data. Creating plots...">
+<meta name="generator" content="bookdown 0.41 with bs4_book()">
+<meta property="og:title" content="Chapter 14 Tutorial: Development Patterns for Tercen Plot Operators | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="14.1 Introduction This tutorial demonstrates how to use Python with the tercen library to create custom plot operators. It covers: Connecting to the Tercen workflow to select data. Creating plots...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 14 Tutorial: Development Patterns for Tercen Plot Operators | Tercen developer’s guide">
+<meta name="twitter:description" content="14.1 Introduction This tutorial demonstrates how to use Python with the tercen library to create custom plot operators. It covers: Connecting to the Tercen workflow to select data. Creating plots...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">R Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration-workflow.html"><span class="header-section-number">10</span> Continuous Integration Workflow</a></li>
+<li><a class="" href="release-workflow.html"><span class="header-section-number">11</span> Release Workflow</a></li>
+<li><a class="" href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></li>
+<li><a class="" href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
+<li><a class="active" href="tutorial-development-patterns-for-tercen-plot-operators.html"><span class="header-section-number">14</span> Tutorial: Development Patterns for Tercen Plot Operators</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">15</span> Building a template</a></li>
+<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">16</span> Continuous Integration Workflow</a></li>
+<li class="book-part">Library</li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">17</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">18</span> Custom library</a></li>
+<li class="book-part">Best practices</li>
+<li><a class="" href="naming.html"><span class="header-section-number">19</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">20</span> Using tim</a></li>
+<li class="book-part">Troubleshooting</li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">21</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">22</span> CI and Github Actions</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">23</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="organisation-setup.html">Organisation setup</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tutorial-development-patterns-for-tercen-plot-operators" class="section level1" number="14">
+<h1>
+<span class="header-section-number">14</span> Tutorial: Development Patterns for Tercen Plot Operators<a class="anchor" aria-label="anchor" href="#tutorial-development-patterns-for-tercen-plot-operators"><i class="fas fa-link"></i></a>
+</h1>
+<div id="introduction-1" class="section level2" number="14.1">
+<h2>
+<span class="header-section-number">14.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>This tutorial demonstrates how to use Python with the <code>tercen</code> library to create custom plot operators. It covers:</p>
+<ol style="list-style-type: decimal">
+<li>Connecting to the Tercen workflow to select data.</li>
+<li>Creating plots with Seaborn.</li>
+<li>Enhancing plots with advanced techniques like facet grids.</li>
+<li>Handling metadata for rows and columns.</li>
+<li>Saving and exporting plots back to Tercen.</li>
+</ol>
+<hr>
+</div>
+<div id="basic-scatter-plot" class="section level2" number="14.2">
+<h2>
+<span class="header-section-number">14.2</span> Basic Scatter Plot<a class="anchor" aria-label="anchor" href="#basic-scatter-plot"><i class="fas fa-link"></i></a>
+</h2>
+<div id="connecting-to-tercen-1" class="section level3" number="14.2.1">
+<h3>
+<span class="header-section-number">14.2.1</span> Connecting to Tercen<a class="anchor" aria-label="anchor" href="#connecting-to-tercen-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Use <code>TercenContext</code> to establish a connection with your Tercen workflow. Provide the required parameters, such as <code>workflowId</code>, <code>stepId</code>, <code>authToken</code>, and <code>serviceUri</code>.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-1" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
+<span id="cb49-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-2" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-3" tabindex="-1"></a>context <span class="op">=</span> ctx.TercenContext(</span>
+<span id="cb49-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-4" tabindex="-1"></a>    workflowId<span class="op">=</span><span class="st">"WORKFLOW_ID"</span>,</span>
+<span id="cb49-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-5" tabindex="-1"></a>    stepId<span class="op">=</span><span class="st">"STEP_ID"</span>,</span>
+<span id="cb49-6"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-6" tabindex="-1"></a>    authToken<span class="op">=</span><span class="st">"TOKEN"</span>,</span>
+<span id="cb49-7"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-7" tabindex="-1"></a>    serviceUri<span class="op">=</span><span class="st">"SERVICE_URI"</span>  </span>
+<span id="cb49-8"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb49-8" tabindex="-1"></a>)</span></code></pre></div>
+<hr>
+</div>
+<div id="accessing-operator-properties" class="section level3" number="14.2.2">
+<h3>
+<span class="header-section-number">14.2.2</span> Accessing Operator Properties<a class="anchor" aria-label="anchor" href="#accessing-operator-properties"><i class="fas fa-link"></i></a>
+</h3>
+<p>Tercen allows custom operator configurations using properties. Here, the <code>title</code> property is retrieved with a default value:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb50-1" tabindex="-1"></a>plot_title <span class="op">=</span> context.operator_property(<span class="st">"title"</span>, <span class="bu">str</span>, default<span class="op">=</span><span class="st">"My plot title"</span>)</span></code></pre></div>
+<p>You can now use this property (e.g., as a plot title).</p>
+<hr>
+</div>
+<div id="selecting-data" class="section level3" number="14.2.3">
+<h3>
+<span class="header-section-number">14.2.3</span> Selecting Data<a class="anchor" aria-label="anchor" href="#selecting-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>select</code> method retrieves data from Tercen’s workflow. For example, to extract <code>x</code> and <code>y</code> axis data:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb51-1" tabindex="-1"></a>df <span class="op">=</span> context.select([<span class="st">".x"</span>, <span class="st">".y"</span>], df_lib<span class="op">=</span><span class="st">"pandas"</span>)</span></code></pre></div>
+<p>The <code>df_lib="pandas"</code> parameter specifies the data format, making it compatible with the Pandas library. The default setting will load a Polars data frame.</p>
+<hr>
+</div>
+<div id="making-the-plot" class="section level3" number="14.2.4">
+<h3>
+<span class="header-section-number">14.2.4</span> Making the Plot<a class="anchor" aria-label="anchor" href="#making-the-plot"><i class="fas fa-link"></i></a>
+</h3>
+<p>Visualize the data using Seaborn:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb52-1" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb52-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb52-2" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb52-3" tabindex="-1"></a>p <span class="op">=</span> sns.scatterplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">".x"</span>, y<span class="op">=</span><span class="st">".y"</span>, linewidth<span class="op">=</span><span class="dv">0</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, s<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb52-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb52-4" tabindex="-1"></a>p.set_xlabel(context.xAxis[<span class="dv">0</span>])</span>
+<span id="cb52-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb52-5" tabindex="-1"></a>p.set_ylabel(context.yAxis[<span class="dv">0</span>])</span></code></pre></div>
+<p>This basic scatter plot uses <code>.x</code> and <code>.y</code> as coordinates and applies axis labels from the Tercen context.</p>
+<hr>
+</div>
+</div>
+<div id="adding-color-to-plots" class="section level2" number="14.3">
+<h2>
+<span class="header-section-number">14.3</span> Adding Color to Plots<a class="anchor" aria-label="anchor" href="#adding-color-to-plots"><i class="fas fa-link"></i></a>
+</h2>
+<p>Use the <code>colors</code> attribute from Tercen to include a color dimension in your plot:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-1" tabindex="-1"></a>df <span class="op">=</span> context.select([<span class="st">".x"</span>, <span class="st">".y"</span>] <span class="op">+</span> context.colors, df_lib<span class="op">=</span><span class="st">"pandas"</span>)</span>
+<span id="cb53-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-2" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-3" tabindex="-1"></a>p <span class="op">=</span> sns.scatterplot(</span>
+<span id="cb53-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-4" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb53-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-5" tabindex="-1"></a>    x<span class="op">=</span><span class="st">".x"</span>,</span>
+<span id="cb53-6"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-6" tabindex="-1"></a>    y<span class="op">=</span><span class="st">".y"</span>,</span>
+<span id="cb53-7"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-7" tabindex="-1"></a>    hue<span class="op">=</span>context.colors[<span class="dv">0</span>],</span>
+<span id="cb53-8"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-8" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">"deep"</span>,</span>
+<span id="cb53-9"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-9" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb53-10"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-10" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb53-11"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-11" tabindex="-1"></a>    s<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb53-12"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb53-12" tabindex="-1"></a>)</span></code></pre></div>
+<p>The <code>hue</code> parameter maps the first color channel to the scatter plot. Note that multiple color factors can be specified. Instead of using the first one only like above, one could concatenate all color factors
+and use the newly created factor as a “hue”.</p>
+<hr>
+</div>
+<div id="faceted-plots" class="section level2" number="14.4">
+<h2>
+<span class="header-section-number">14.4</span> Faceted Plots<a class="anchor" aria-label="anchor" href="#faceted-plots"><i class="fas fa-link"></i></a>
+</h2>
+<div id="rowcolumn-facetting" class="section level3" number="14.4.1">
+<h3>
+<span class="header-section-number">14.4.1</span> Row/Column Facetting<a class="anchor" aria-label="anchor" href="#rowcolumn-facetting"><i class="fas fa-link"></i></a>
+</h3>
+<p>As the crosstab can be stratified by row and column factors, we can do the same in our plot and create a faceted grid:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb54-1" tabindex="-1"></a>df <span class="op">=</span> context.select([<span class="st">".x"</span>, <span class="st">".y"</span>, <span class="st">".ci"</span>, <span class="st">".ri"</span>] <span class="op">+</span> context.colors, df_lib<span class="op">=</span><span class="st">"pandas"</span>)</span>
+<span id="cb54-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb54-2" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(df, col<span class="op">=</span><span class="st">".ci"</span>, row<span class="op">=</span><span class="st">".ri"</span>)</span>
+<span id="cb54-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb54-3" tabindex="-1"></a>g.<span class="bu">map</span>(sns.scatterplot, <span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb54-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb54-4" tabindex="-1"></a>g.set_axis_labels(x_var<span class="op">=</span><span class="st">"X axis"</span>, y_var<span class="op">=</span><span class="st">"Y axis"</span>)</span></code></pre></div>
+<p>Here:
+- <code>.ci</code> (column index) and <code>.ri</code> (row index) define the facets.
+- <code>FacetGrid</code> generates a grid of plots.</p>
+<hr>
+</div>
+<div id="dynamic-column-and-row-names" class="section level3" number="14.4.2">
+<h3>
+<span class="header-section-number">14.4.2</span> Dynamic Column and Row Names<a class="anchor" aria-label="anchor" href="#dynamic-column-and-row-names"><i class="fas fa-link"></i></a>
+</h3>
+<p>Include additional metadata to enhance your facets and not use the row and column indices only:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-1" tabindex="-1"></a>df_row <span class="op">=</span> context.rselect(df_lib<span class="op">=</span><span class="st">"pandas"</span>)</span>
+<span id="cb55-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-2" tabindex="-1"></a>df_row[<span class="st">".ri"</span>] <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(df_row))</span>
+<span id="cb55-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-3" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-4" tabindex="-1"></a>df_col <span class="op">=</span> context.cselect(df_lib<span class="op">=</span><span class="st">"pandas"</span>)</span>
+<span id="cb55-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-5" tabindex="-1"></a>df_col[<span class="st">".ci"</span>] <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(df_col))</span>
+<span id="cb55-6"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-6" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb55-7" tabindex="-1"></a>df_plot <span class="op">=</span> df.merge(df_col, how<span class="op">=</span><span class="st">"left"</span>, on<span class="op">=</span><span class="st">".ci"</span>).merge(df_row, how<span class="op">=</span><span class="st">"left"</span>, on<span class="op">=</span><span class="st">".ri"</span>)</span></code></pre></div>
+<p>This creates enriched dataframes with merged metadata, suitable for more dynamic faceting.</p>
+<p>We need to handle scenarios where column or row names are empty:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-1" tabindex="-1"></a>cn <span class="op">=</span> context.cnames[<span class="dv">0</span>]</span>
+<span id="cb56-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-2" tabindex="-1"></a><span class="cf">if</span> cn <span class="op">==</span> <span class="st">''</span>:</span>
+<span id="cb56-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-3" tabindex="-1"></a>    cn <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb56-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-4" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-5" tabindex="-1"></a>rn <span class="op">=</span> context.rnames[<span class="dv">0</span>]</span>
+<span id="cb56-6"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-6" tabindex="-1"></a><span class="cf">if</span> rn <span class="op">==</span> <span class="st">''</span>:</span>
+<span id="cb56-7"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb56-7" tabindex="-1"></a>    rn <span class="op">=</span> <span class="va">None</span></span></code></pre></div>
+<p>This ensures compatibility with workflows that lack row or column factors.</p>
+<p>We can then produce our plot:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb57-1" tabindex="-1"></a>g <span class="op">=</span> sns.FacetGrid(df_plot, col<span class="op">=</span>cn, row<span class="op">=</span>rn)</span>
+<span id="cb57-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb57-2" tabindex="-1"></a>g.<span class="bu">map</span>(sns.scatterplot, <span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb57-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb57-3" tabindex="-1"></a>g.set_axis_labels(x_var<span class="op">=</span><span class="st">"X axis"</span>, y_var<span class="op">=</span><span class="st">"Y axis"</span>)</span></code></pre></div>
+<hr>
+</div>
+</div>
+<div id="saving-and-exporting-plots" class="section level2" number="14.5">
+<h2>
+<span class="header-section-number">14.5</span> Saving and Exporting Plots<a class="anchor" aria-label="anchor" href="#saving-and-exporting-plots"><i class="fas fa-link"></i></a>
+</h2>
+<p>Finally, you can save the plot as an image and upload it back to Tercen:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb58-1"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-1" tabindex="-1"></a><span class="im">from</span> tempfile <span class="im">import</span> NamedTemporaryFile</span>
+<span id="cb58-2"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-2" tabindex="-1"></a><span class="im">from</span> tercen.util.helper_functions <span class="im">import</span> image_file_to_df, as_relation, as_join_operator</span>
+<span id="cb58-3"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-3" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-4" tabindex="-1"></a>tmp <span class="op">=</span> NamedTemporaryFile(delete<span class="op">=</span><span class="va">True</span>, suffix<span class="op">=</span><span class="st">'.png'</span>)</span>
+<span id="cb58-5"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-5" tabindex="-1"></a>g.savefig(tmp)</span>
+<span id="cb58-6"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-6" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-7" tabindex="-1"></a>df_out <span class="op">=</span> image_file_to_df(tmp.name)</span>
+<span id="cb58-8"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-8" tabindex="-1"></a>rel_out <span class="op">=</span> as_relation(df_out)</span>
+<span id="cb58-9"><a href="tutorial-development-patterns-for-tercen-plot-operators.html#cb58-9" tabindex="-1"></a>context.save_relation(as_join_operator(rel_out, [], []))</span></code></pre></div>
+<p>This pattern uses helper functions to convert the plot into a Tercen-compatible format and save it as a relation.</p>
+<hr>
+</div>
+<div id="conclusion-2" class="section level2" number="14.6">
+<h2>
+<span class="header-section-number">14.6</span> Conclusion<a class="anchor" aria-label="anchor" href="#conclusion-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>These development patterns allow you to:</p>
+<ul>
+<li>Retrieve and process data efficiently.</li>
+<li>Create dynamic, customizable plots.</li>
+<li>Leverage Tercen metadata for advanced visualizations.</li>
+<li>Save and integrate results seamlessly back into Tercen workflows.</li>
+</ul>
+<p>By mastering these techniques, you can build powerful, reusable visualization operators for collaborative data analysis in Tercen.</p>
+
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></div>
+<div class="next"><a href="building-a-template.html"><span class="header-section-number">15</span> Building a template</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#tutorial-development-patterns-for-tercen-plot-operators"><span class="header-section-number">14</span> Tutorial: Development Patterns for Tercen Plot Operators</a></li>
+<li><a class="nav-link" href="#introduction-1"><span class="header-section-number">14.1</span> Introduction</a></li>
+<li>
+<a class="nav-link" href="#basic-scatter-plot"><span class="header-section-number">14.2</span> Basic Scatter Plot</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#connecting-to-tercen-1"><span class="header-section-number">14.2.1</span> Connecting to Tercen</a></li>
+<li><a class="nav-link" href="#accessing-operator-properties"><span class="header-section-number">14.2.2</span> Accessing Operator Properties</a></li>
+<li><a class="nav-link" href="#selecting-data"><span class="header-section-number">14.2.3</span> Selecting Data</a></li>
+<li><a class="nav-link" href="#making-the-plot"><span class="header-section-number">14.2.4</span> Making the Plot</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#adding-color-to-plots"><span class="header-section-number">14.3</span> Adding Color to Plots</a></li>
+<li>
+<a class="nav-link" href="#faceted-plots"><span class="header-section-number">14.4</span> Faceted Plots</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#rowcolumn-facetting"><span class="header-section-number">14.4.1</span> Row/Column Facetting</a></li>
+<li><a class="nav-link" href="#dynamic-column-and-row-names"><span class="header-section-number">14.4.2</span> Dynamic Column and Row Names</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#saving-and-exporting-plots"><span class="header-section-number">14.5</span> Saving and Exporting Plots</a></li>
+<li><a class="nav-link" href="#conclusion-2"><span class="header-section-number">14.6</span> Conclusion</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
