@@ -28,6 +28,12 @@ tercen-libraries
 creating-a-custom-library
 installing-an-operator-in-a-custom-library
 input-and-output-patterns
+gpu-development-in-tercen-studio
+setup-instructions
+changes-to-operators
+verifying-gpu-access
+tensorflow
+pytorch
 patterns-for-plot-operators
 introduction-1
 basic-scatter-plot

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 14 GPU Development in Tercen Studio | Tercen developer’s guide</title>
+<meta name="author" content="Tercen">
+<meta name="description" content="GPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.  14.1 Setup Instructions Pull the latest version of the Tercen Studio...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 14 GPU Development in Tercen Studio | Tercen developer’s guide">
+<meta property="og:type" content="book">
+<meta property="og:description" content="GPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.  14.1 Setup Instructions Pull the latest version of the Tercen Studio...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 14 GPU Development in Tercen Studio | Tercen developer’s guide">
+<meta name="twitter:description" content="GPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.  14.1 Setup Instructions Pull the latest version of the Tercen Studio...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.9.0/transition.js"></script><script src="libs/bs3compat-0.9.0/tabs.js"></script><script src="libs/bs3compat-0.9.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Tercen developer’s guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="guidelines.html"><span class="header-section-number">1</span> Guidelines</a></li>
+<li class="book-part">Getting started</li>
+<li><a class="" href="core-concepts.html"><span class="header-section-number">2</span> Core concepts</a></li>
+<li><a class="" href="setting-up-tercen-studio.html"><span class="header-section-number">3</span> Setting up Tercen Studio</a></li>
+<li class="book-part">R Operator development</li>
+<li><a class="" href="general-workflow.html"><span class="header-section-number">4</span> General workflow</a></li>
+<li><a class="" href="walkthrough-example-r-operator.html"><span class="header-section-number">5</span> Walkthrough example: R operator</a></li>
+<li><a class="" href="deploying-an-r-operator.html"><span class="header-section-number">6</span> Deploying an R operator</a></li>
+<li><a class="" href="improving-an-operator.html"><span class="header-section-number">7</span> Improving an operator</a></li>
+<li class="book-part">Python Operator development</li>
+<li><a class="" href="getting-familiar-with-tercen-studio.html"><span class="header-section-number">8</span> Getting familiar with Tercen Studio</a></li>
+<li><a class="" href="developing-a-python-operator.html"><span class="header-section-number">9</span> Developing a Python Operator</a></li>
+<li class="book-part">Advanced concepts</li>
+<li><a class="" href="continuous-integration-workflow.html"><span class="header-section-number">10</span> Continuous Integration Workflow</a></li>
+<li><a class="" href="release-workflow.html"><span class="header-section-number">11</span> Release Workflow</a></li>
+<li><a class="" href="installing-an-operator.html"><span class="header-section-number">12</span> Installing an Operator</a></li>
+<li><a class="" href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
+<li><a class="active" href="gpu-development-in-tercen-studio.html"><span class="header-section-number">14</span> GPU Development in Tercen Studio</a></li>
+<li><a class="" href="patterns-for-plot-operators.html"><span class="header-section-number">15</span> Patterns for Plot Operators</a></li>
+<li class="book-part">Templates</li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">16</span> Building a template</a></li>
+<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">17</span> Continuous Integration Workflow</a></li>
+<li class="book-part">Library</li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
+<li class="book-part">Best practices</li>
+<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
+<li class="book-part">Troubleshooting</li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
+<li class="book-part">Going forward</li>
+<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="glossary.html">Glossary</a></li>
+<li><a class="" href="organisation-setup.html">Organisation setup</a></li>
+<li><a class="" href="tercen-studio.html">Tercen Studio</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="gpu-development-in-tercen-studio" class="section level1" number="14">
+<h1>
+<span class="header-section-number">14</span> GPU Development in Tercen Studio<a class="anchor" aria-label="anchor" href="#gpu-development-in-tercen-studio"><i class="fas fa-link"></i></a>
+</h1>
+<p>GPU support is now available in <strong>Tercen Studio</strong>. Follow the steps below to enable and test GPU access in your local setup.</p>
+<div id="setup-instructions" class="section level2" number="14.1">
+<h2>
+<span class="header-section-number">14.1</span> Setup Instructions<a class="anchor" aria-label="anchor" href="#setup-instructions"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><p><strong>Pull the latest version</strong> of the Tercen Studio repository:<br><a href="https://github.com/tercen/tercen_studio">https://github.com/tercen/tercen_studio</a></p></li>
+<li><p><strong>Uncomment GPU-related configuration</strong> in <code>docker-compose.yaml</code>.</p></li>
+</ol>
+<p>Under the <code>dind</code> service:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb49-1"><a href="gpu-development-in-tercen-studio.html#cb49-1" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04</span></span>
+<span id="cb49-2"><a href="gpu-development-in-tercen-studio.html#cb49-2" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
+<span id="cb49-3"><a href="gpu-development-in-tercen-studio.html#cb49-3" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb49-4"><a href="gpu-development-in-tercen-studio.html#cb49-4" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
+<span id="cb49-5"><a href="gpu-development-in-tercen-studio.html#cb49-5" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
+<span id="cb49-6"><a href="gpu-development-in-tercen-studio.html#cb49-6" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
+<span id="cb49-7"><a href="gpu-development-in-tercen-studio.html#cb49-7" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb49-8"><a href="gpu-development-in-tercen-studio.html#cb49-8" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
+<p>Under the VS Code service:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href="gpu-development-in-tercen-studio.html#cb50-1" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
+<span id="cb50-2"><a href="gpu-development-in-tercen-studio.html#cb50-2" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb50-3"><a href="gpu-development-in-tercen-studio.html#cb50-3" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
+<span id="cb50-4"><a href="gpu-development-in-tercen-studio.html#cb50-4" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
+<span id="cb50-5"><a href="gpu-development-in-tercen-studio.html#cb50-5" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
+<span id="cb50-6"><a href="gpu-development-in-tercen-studio.html#cb50-6" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb50-7"><a href="gpu-development-in-tercen-studio.html#cb50-7" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
+<p>Once the containers are up, you should be able to access the GPU from <strong>Code Server</strong>.</p>
+</div>
+<div id="changes-to-operators" class="section level2" number="14.2">
+<h2>
+<span class="header-section-number">14.2</span> Changes to operators<a class="anchor" aria-label="anchor" href="#changes-to-operators"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>The <code>Dockerfile</code> uses a GPU-enabled runtime:</li>
+</ul>
+<div class="sourceCode" id="cb51"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb51-1"><a href="gpu-development-in-tercen-studio.html#cb51-1" tabindex="-1"></a><span class="kw">FROM</span> tercen/runtime-tf:2.17.0-gpu</span></code></pre></div>
+<ul>
+<li>The <code>operator.json</code> declares GPU capability:</li>
+</ul>
+<div class="sourceCode" id="cb52"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb52-1"><a href="gpu-development-in-tercen-studio.html#cb52-1" tabindex="-1"></a><span class="er">"capabilities":</span> <span class="ot">[</span><span class="st">"gpu"</span><span class="ot">]</span></span></code></pre></div>
+</div>
+<div id="verifying-gpu-access" class="section level2" number="14.3">
+<h2>
+<span class="header-section-number">14.3</span> Verifying GPU Access<a class="anchor" aria-label="anchor" href="#verifying-gpu-access"><i class="fas fa-link"></i></a>
+</h2>
+<p>Once inside the container, verify GPU access using TensorFlow or PyTorch.</p>
+<div id="tensorflow" class="section level3" number="14.3.1">
+<h3>
+<span class="header-section-number">14.3.1</span> TensorFlow<a class="anchor" aria-label="anchor" href="#tensorflow"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="gpu-development-in-tercen-studio.html#cb53-1" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb53-2"><a href="gpu-development-in-tercen-studio.html#cb53-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Num GPUs Available:"</span>, <span class="bu">len</span>(tf.config.list_physical_devices(<span class="st">'GPU'</span>)))</span></code></pre></div>
+</div>
+<div id="pytorch" class="section level3" number="14.3.2">
+<h3>
+<span class="header-section-number">14.3.2</span> PyTorch<a class="anchor" aria-label="anchor" href="#pytorch"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="gpu-development-in-tercen-studio.html#cb54-1" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb54-2"><a href="gpu-development-in-tercen-studio.html#cb54-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is CUDA available:"</span>, torch.cuda.is_available())</span></code></pre></div>
+<p>If GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:<br><a href="https://docs.docker.com/desktop/features/gpu/">https://docs.docker.com/desktop/features/gpu/</a></p>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></div>
+<div class="next"><a href="patterns-for-plot-operators.html"><span class="header-section-number">15</span> Patterns for Plot Operators</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#gpu-development-in-tercen-studio"><span class="header-section-number">14</span> GPU Development in Tercen Studio</a></li>
+<li><a class="nav-link" href="#setup-instructions"><span class="header-section-number">14.1</span> Setup Instructions</a></li>
+<li><a class="nav-link" href="#changes-to-operators"><span class="header-section-number">14.2</span> Changes to operators</a></li>
+<li>
+<a class="nav-link" href="#verifying-gpu-access"><span class="header-section-number">14.3</span> Verifying GPU Access</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#tensorflow"><span class="header-section-number">14.3.1</span> TensorFlow</a></li>
+<li><a class="nav-link" href="#pytorch"><span class="header-section-number">14.3.2</span> PyTorch</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Tercen developer’s guide</strong>" was written by Tercen. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
