@@ -19,6 +19,7 @@ rmd_files:
     "operator-dev_ci.Rmd",
     "operator-dev_installation.Rmd",
     "operator-dev_patterns.Rmd",
+    "operator-dev-gpu.Rmd",
     "dev-patterns-plots.Rmd",
     "templates-apps_templates.Rmd",
     "library.Rmd",
