@@ -99,26 +99,37 @@
 </h2>
 <ol style="list-style-type: decimal">
 <li><p><strong>Pull the latest version</strong> of the Tercen Studio repository:<br><a href="https://github.com/tercen/tercen_studio">https://github.com/tercen/tercen_studio</a></p></li>
-<li><p><strong>Uncomment GPU-related configuration</strong> in <code>docker-compose.yaml</code>.</p></li>
+<li>
+<p><strong>Configure Docker for GPU support</strong>. Modify the <code>docker-compose.yaml</code> file as described below:</p>
+<ol style="list-style-type: lower-alpha">
+<li>
+<strong>Comment out the default runtime-docker image</strong>.</li>
+</ol>
+<div class="sourceCode" id="cb49"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb49-1"><a href="gpu-development-in-tercen-studio.html#cb49-1" tabindex="-1"></a><span class="co">#image: docker:24.0.6-dind-alpine3.18</span></span></code></pre></div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>
+<strong>Uncomment GPU-related configuration</strong>.</li>
 </ol>
 <p>Under the <code>dind</code> service:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb49-1"><a href="gpu-development-in-tercen-studio.html#cb49-1" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04</span></span>
-<span id="cb49-2"><a href="gpu-development-in-tercen-studio.html#cb49-2" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
-<span id="cb49-3"><a href="gpu-development-in-tercen-studio.html#cb49-3" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
-<span id="cb49-4"><a href="gpu-development-in-tercen-studio.html#cb49-4" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
-<span id="cb49-5"><a href="gpu-development-in-tercen-studio.html#cb49-5" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
-<span id="cb49-6"><a href="gpu-development-in-tercen-studio.html#cb49-6" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
-<span id="cb49-7"><a href="gpu-development-in-tercen-studio.html#cb49-7" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb49-8"><a href="gpu-development-in-tercen-studio.html#cb49-8" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
-<p>Under the VS Code service:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href="gpu-development-in-tercen-studio.html#cb50-1" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
-<span id="cb50-2"><a href="gpu-development-in-tercen-studio.html#cb50-2" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
-<span id="cb50-3"><a href="gpu-development-in-tercen-studio.html#cb50-3" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
-<span id="cb50-4"><a href="gpu-development-in-tercen-studio.html#cb50-4" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
-<span id="cb50-5"><a href="gpu-development-in-tercen-studio.html#cb50-5" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
-<span id="cb50-6"><a href="gpu-development-in-tercen-studio.html#cb50-6" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb50-7"><a href="gpu-development-in-tercen-studio.html#cb50-7" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
-<p>Once the containers are up, you should be able to access the GPU from <strong>Code Server</strong>.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb50-1"><a href="gpu-development-in-tercen-studio.html#cb50-1" tabindex="-1"></a><span class="fu">image</span><span class="kw">:</span><span class="at"> tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04</span></span>
+<span id="cb50-2"><a href="gpu-development-in-tercen-studio.html#cb50-2" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
+<span id="cb50-3"><a href="gpu-development-in-tercen-studio.html#cb50-3" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb50-4"><a href="gpu-development-in-tercen-studio.html#cb50-4" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
+<span id="cb50-5"><a href="gpu-development-in-tercen-studio.html#cb50-5" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
+<span id="cb50-6"><a href="gpu-development-in-tercen-studio.html#cb50-6" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
+<span id="cb50-7"><a href="gpu-development-in-tercen-studio.html#cb50-7" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb50-8"><a href="gpu-development-in-tercen-studio.html#cb50-8" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
+<p>Under the VS Code service <code>code-server</code>:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb51-1"><a href="gpu-development-in-tercen-studio.html#cb51-1" tabindex="-1"></a><span class="fu">deploy</span><span class="kw">:</span></span>
+<span id="cb51-2"><a href="gpu-development-in-tercen-studio.html#cb51-2" tabindex="-1"></a><span class="at">  </span><span class="fu">resources</span><span class="kw">:</span></span>
+<span id="cb51-3"><a href="gpu-development-in-tercen-studio.html#cb51-3" tabindex="-1"></a><span class="at">    </span><span class="fu">reservations</span><span class="kw">:</span></span>
+<span id="cb51-4"><a href="gpu-development-in-tercen-studio.html#cb51-4" tabindex="-1"></a><span class="at">      </span><span class="fu">devices</span><span class="kw">:</span></span>
+<span id="cb51-5"><a href="gpu-development-in-tercen-studio.html#cb51-5" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> nvidia</span></span>
+<span id="cb51-6"><a href="gpu-development-in-tercen-studio.html#cb51-6" tabindex="-1"></a><span class="at">          </span><span class="fu">count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb51-7"><a href="gpu-development-in-tercen-studio.html#cb51-7" tabindex="-1"></a><span class="at">          </span><span class="fu">capabilities</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> gpu </span><span class="kw">]</span></span></code></pre></div>
+</li>
+</ol>
+<p>Once the containers are up, you can access the GPU from <strong>Code Server</strong>.</p>
 </div>
 <div id="changes-to-operators" class="section level2" number="14.2">
 <h2>
@@ -127,11 +138,11 @@
 <ul>
 <li>The <code>Dockerfile</code> uses a GPU-enabled runtime:</li>
 </ul>
-<div class="sourceCode" id="cb51"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb51-1"><a href="gpu-development-in-tercen-studio.html#cb51-1" tabindex="-1"></a><span class="kw">FROM</span> tercen/runtime-tf:2.17.0-gpu</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb52-1"><a href="gpu-development-in-tercen-studio.html#cb52-1" tabindex="-1"></a><span class="kw">FROM</span> tercen/runtime-tf:2.17.0-gpu</span></code></pre></div>
 <ul>
 <li>The <code>operator.json</code> declares GPU capability:</li>
 </ul>
-<div class="sourceCode" id="cb52"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb52-1"><a href="gpu-development-in-tercen-studio.html#cb52-1" tabindex="-1"></a><span class="er">"capabilities":</span> <span class="ot">[</span><span class="st">"gpu"</span><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb53-1"><a href="gpu-development-in-tercen-studio.html#cb53-1" tabindex="-1"></a><span class="er">"capabilities":</span> <span class="ot">[</span><span class="st">"gpu"</span><span class="ot">]</span></span></code></pre></div>
 </div>
 <div id="verifying-gpu-access" class="section level2" number="14.3">
 <h2>
@@ -142,15 +153,15 @@
 <h3>
 <span class="header-section-number">14.3.1</span> TensorFlow<a class="anchor" aria-label="anchor" href="#tensorflow"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="gpu-development-in-tercen-studio.html#cb53-1" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
-<span id="cb53-2"><a href="gpu-development-in-tercen-studio.html#cb53-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Num GPUs Available:"</span>, <span class="bu">len</span>(tf.config.list_physical_devices(<span class="st">'GPU'</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="gpu-development-in-tercen-studio.html#cb54-1" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb54-2"><a href="gpu-development-in-tercen-studio.html#cb54-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Num GPUs Available:"</span>, <span class="bu">len</span>(tf.config.list_physical_devices(<span class="st">'GPU'</span>)))</span></code></pre></div>
 </div>
 <div id="pytorch" class="section level3" number="14.3.2">
 <h3>
 <span class="header-section-number">14.3.2</span> PyTorch<a class="anchor" aria-label="anchor" href="#pytorch"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="gpu-development-in-tercen-studio.html#cb54-1" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb54-2"><a href="gpu-development-in-tercen-studio.html#cb54-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is CUDA available:"</span>, torch.cuda.is_available())</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="gpu-development-in-tercen-studio.html#cb55-1" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb55-2"><a href="gpu-development-in-tercen-studio.html#cb55-2" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Is CUDA available:"</span>, torch.cuda.is_available())</span></code></pre></div>
 <p>If GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:<br><a href="https://docs.docker.com/desktop/features/gpu/">https://docs.docker.com/desktop/features/gpu/</a></p>
 
 </div>
