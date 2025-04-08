@@ -7,32 +7,40 @@ GPU support is now available in **Tercen Studio**. Follow the steps below to ena
 1. **Pull the latest version** of the Tercen Studio repository:  
    [https://github.com/tercen/tercen_studio](https://github.com/tercen/tercen_studio)
 
-2. **Uncomment GPU-related configuration** in `docker-compose.yaml`.
+2. **Configure Docker for GPU support**. Modify the `docker-compose.yaml` file as described below: 
 
-Under the `dind` service:
-```yaml
-image: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04
-deploy:
-  resources:
-    reservations:
-      devices:
-        - driver: nvidia
-          count: 1
-          capabilities: [ gpu ]
-```
+   a. **Comment out the default runtime-docker image**.
 
-Under the VS Code service:
-```yaml
-deploy:
-  resources:
-    reservations:
-      devices:
-        - driver: nvidia
-          count: 1
-          capabilities: [ gpu ]
-```
+   ```yaml
+   #image: docker:24.0.6-dind-alpine3.18
+   ```
 
-Once the containers are up, you should be able to access the GPU from **Code Server**.
+   b. **Uncomment GPU-related configuration**.
+
+   Under the `dind` service:
+   ```yaml
+   image: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04
+   deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             count: 1
+             capabilities: [ gpu ]
+   ```
+   
+   Under the VS Code service `code-server`:
+   ```yaml
+   deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             count: 1
+             capabilities: [ gpu ]
+   ```
+
+Once the containers are up, you can access the GPU from **Code Server**.
 
 ## Changes to operators
 
