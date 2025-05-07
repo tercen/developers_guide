@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 19 Custom library | Tercen developer’s guide</title>
+<title>Chapter 20 Custom library | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="Creating your personal library If you would like to create your own library: Create a team and give it a name (for example “MyLibrary”) Go to Settings &gt; check the “Library team” box This ...">
-<meta name="generator" content="bookdown 0.42 with bs4_book()">
-<meta property="og:title" content="Chapter 19 Custom library | Tercen developer’s guide">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Chapter 20 Custom library | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Creating your personal library If you would like to create your own library: Create a team and give it a name (for example “MyLibrary”) Go to Settings &gt; check the “Library team” box This ...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 19 Custom library | Tercen developer’s guide">
+<meta name="twitter:title" content="Chapter 20 Custom library | Tercen developer’s guide">
 <meta name="twitter:description" content="Creating your personal library If you would like to create your own library: Create a team and give it a name (for example “MyLibrary”) Go to Settings &gt; check the “Library team” box This ...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -63,20 +63,21 @@
 <li><a class="" href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
 <li><a class="" href="gpu-development-in-tercen-studio.html"><span class="header-section-number">14</span> GPU Development in Tercen Studio</a></li>
 <li><a class="" href="patterns-for-plot-operators.html"><span class="header-section-number">15</span> Patterns for Plot Operators</a></li>
+<li><a class="" href="running-tercen-from-the-cli.html"><span class="header-section-number">16</span> Running Tercen from the CLI</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">16</span> Building a template</a></li>
-<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">17</span> Continuous Integration Workflow</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">17</span> Building a template</a></li>
+<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">18</span> Continuous Integration Workflow</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
-<li><a class="active" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">19</span> Tercen Library</a></li>
+<li><a class="active" href="custom-library.html"><span class="header-section-number">20</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">21</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">22</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">23</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">24</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
+<li><a class="" href="next-steps-1.html"><span class="header-section-number">25</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="" href="organisation-setup.html">Organisation setup</a></li>
@@ -88,9 +89,9 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="custom-library" class="section level1" number="19">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="custom-library" class="section level1" number="20">
 <h1>
-<span class="header-section-number">19</span> Custom library<a class="anchor" aria-label="anchor" href="#custom-library"><i class="fas fa-link"></i></a>
+<span class="header-section-number">20</span> Custom library<a class="anchor" aria-label="anchor" href="#custom-library"><i class="fas fa-link"></i></a>
 </h1>
 <div id="creating-your-personal-library" class="section level2 unnumbered">
 <h2>Creating your personal library<a class="anchor" aria-label="anchor" href="#creating-your-personal-library"><i class="fas fa-link"></i></a>
@@ -119,12 +120,12 @@ in your library team:
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></div>
-<div class="next"><a href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></div>
+<div class="prev"><a href="tercen-library.html"><span class="header-section-number">19</span> Tercen Library</a></div>
+<div class="next"><a href="naming.html"><span class="header-section-number">21</span> Development guidelines</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#custom-library"><span class="header-section-number">19</span> Custom library</a></li>
+<li><a class="nav-link" href="#custom-library"><span class="header-section-number">20</span> Custom library</a></li>
 <li><a class="nav-link" href="#creating-your-personal-library">Creating your personal library</a></li>
 <li><a class="nav-link" href="#installing-a-module">Installing a module</a></li>
 </ul>

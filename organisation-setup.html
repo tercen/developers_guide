@@ -7,7 +7,7 @@
 <title>Organisation setup | Tercen developer’s guide</title>
 <meta name="author" content="Tercen">
 <meta name="description" content="If you wish to develop your own Tercen modules, an initial setup is required 1. Create a Docker Hub organisation Operators are Docker images. The images are built and pushed to Docker Hub through...">
-<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
 <meta property="og:title" content="Organisation setup | Tercen developer’s guide">
 <meta property="og:type" content="book">
 <meta property="og:description" content="If you wish to develop your own Tercen modules, an initial setup is required 1. Create a Docker Hub organisation Operators are Docker images. The images are built and pushed to Docker Hub through...">
@@ -63,20 +63,21 @@
 <li><a class="" href="input-and-output-patterns.html"><span class="header-section-number">13</span> Input and Output Patterns</a></li>
 <li><a class="" href="gpu-development-in-tercen-studio.html"><span class="header-section-number">14</span> GPU Development in Tercen Studio</a></li>
 <li><a class="" href="patterns-for-plot-operators.html"><span class="header-section-number">15</span> Patterns for Plot Operators</a></li>
+<li><a class="" href="running-tercen-from-the-cli.html"><span class="header-section-number">16</span> Running Tercen from the CLI</a></li>
 <li class="book-part">Templates</li>
-<li><a class="" href="building-a-template.html"><span class="header-section-number">16</span> Building a template</a></li>
-<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">17</span> Continuous Integration Workflow</a></li>
+<li><a class="" href="building-a-template.html"><span class="header-section-number">17</span> Building a template</a></li>
+<li><a class="" href="continuous-integration-workflow-1.html"><span class="header-section-number">18</span> Continuous Integration Workflow</a></li>
 <li class="book-part">Library</li>
-<li><a class="" href="tercen-library.html"><span class="header-section-number">18</span> Tercen Library</a></li>
-<li><a class="" href="custom-library.html"><span class="header-section-number">19</span> Custom library</a></li>
+<li><a class="" href="tercen-library.html"><span class="header-section-number">19</span> Tercen Library</a></li>
+<li><a class="" href="custom-library.html"><span class="header-section-number">20</span> Custom library</a></li>
 <li class="book-part">Best practices</li>
-<li><a class="" href="naming.html"><span class="header-section-number">20</span> Development guidelines</a></li>
-<li><a class="" href="tim.html"><span class="header-section-number">21</span> Using tim</a></li>
+<li><a class="" href="naming.html"><span class="header-section-number">21</span> Development guidelines</a></li>
+<li><a class="" href="tim.html"><span class="header-section-number">22</span> Using tim</a></li>
 <li class="book-part">Troubleshooting</li>
-<li><a class="" href="common-operator-issues.html"><span class="header-section-number">22</span> Common operator issues</a></li>
-<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">23</span> CI and Github Actions</a></li>
+<li><a class="" href="common-operator-issues.html"><span class="header-section-number">23</span> Common operator issues</a></li>
+<li><a class="" href="ci-and-github-actions.html"><span class="header-section-number">24</span> CI and Github Actions</a></li>
 <li class="book-part">Going forward</li>
-<li><a class="" href="next-steps.html"><span class="header-section-number">24</span> Next steps</a></li>
+<li><a class="" href="next-steps-1.html"><span class="header-section-number">25</span> Next steps</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="glossary.html">Glossary</a></li>
 <li><a class="active" href="organisation-setup.html">Organisation setup</a></li>
@@ -139,16 +140,16 @@ run the tests from the GitHub Action.</li>
 <h2>4. Tercen instance configuration<a class="anchor" aria-label="anchor" href="#tercen-instance-configuration"><i class="fas fa-link"></i></a>
 </h2>
 <p>If you are using your own Tercen instance, you need to modify the Tercen config file and add your GitHub organisation to the “trusted git” list.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb71-1"><a href="organisation-setup.html#cb71-1" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.git</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
-<span id="cb71-2"><a href="organisation-setup.html#cb71-2" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.docker</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
-<span id="cb71-3"><a href="organisation-setup.html#cb71-3" tabindex="-1"></a><span class="fu">tercen.trusted.git</span><span class="kw">:</span></span>
-<span id="cb71-4"><a href="organisation-setup.html#cb71-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/tercen/'</span></span>
-<span id="cb71-5"><a href="organisation-setup.html#cb71-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/YOUR_GITHUB_ORGANISATION/'</span></span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb79-1"><a href="organisation-setup.html#cb79-1" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.git</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb79-2"><a href="organisation-setup.html#cb79-2" tabindex="-1"></a><span class="fu">tercen.allow.untrusted.docker</span><span class="kw">:</span><span class="at"> </span><span class="st">'false'</span></span>
+<span id="cb79-3"><a href="organisation-setup.html#cb79-3" tabindex="-1"></a><span class="fu">tercen.trusted.git</span><span class="kw">:</span></span>
+<span id="cb79-4"><a href="organisation-setup.html#cb79-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/tercen/'</span></span>
+<span id="cb79-5"><a href="organisation-setup.html#cb79-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'https://github.com/YOUR_GITHUB_ORGANISATION/'</span></span></code></pre></div>
 <p>You also need to authorise the Docker Hub organisation.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb72-1"><a href="organisation-setup.html#cb72-1" tabindex="-1"></a><span class="co"># accept any image name starting by tercen or my-trusted-dockerhub-org, ex. my-trusted-dockerhub-org/my-docker-image</span></span>
-<span id="cb72-2"><a href="organisation-setup.html#cb72-2" tabindex="-1"></a><span class="fu">tercen.trusted.docker</span><span class="kw">:</span></span>
-<span id="cb72-3"><a href="organisation-setup.html#cb72-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'tercen'</span></span>
-<span id="cb72-4"><a href="organisation-setup.html#cb72-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'my-trusted-dockerhub-org'</span></span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb80-1"><a href="organisation-setup.html#cb80-1" tabindex="-1"></a><span class="co"># accept any image name starting by tercen or my-trusted-dockerhub-org, ex. my-trusted-dockerhub-org/my-docker-image</span></span>
+<span id="cb80-2"><a href="organisation-setup.html#cb80-2" tabindex="-1"></a><span class="fu">tercen.trusted.docker</span><span class="kw">:</span></span>
+<span id="cb80-3"><a href="organisation-setup.html#cb80-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'tercen'</span></span>
+<span id="cb80-4"><a href="organisation-setup.html#cb80-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">'my-trusted-dockerhub-org'</span></span></code></pre></div>
 
 </div>
 </div>

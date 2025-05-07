@@ -47,6 +47,19 @@ rowcolumn-facetting
 dynamic-column-and-row-names
 saving-and-exporting-plots
 conclusion-2
+running-tercen-from-the-cli
+prerequisites-1
+required-python-libraries
+configuration-variables
+script-workflow
+initialize-the-tercen-client
+create-a-temporary-project
+import-a-git-repository
+trigger-workflow-computation
+next-steps
+available-tasks
+useful-resources
+notes
 building-a-template
 what-is-a-template
 general-development-workflow
@@ -74,4 +87,4 @@ wrong-column-type
 wrong-values
 wrong-correlation
 untrusted-git
-next-steps
+next-steps-1
