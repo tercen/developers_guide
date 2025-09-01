@@ -1,4 +1,4 @@
-## Tercen developer's guide
+## Tercen Developer's Guide
 
 This is the developer's guide to Tercen.
 

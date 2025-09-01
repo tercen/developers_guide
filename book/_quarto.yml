@@ -1,0 +1,61 @@
+project:
+  type: book
+  output-dir: "_site"
+
+book:
+  title: "Tercen Developer's Guide"
+  author: "The Tercen Team"
+  description: "How to develop operators and apps for Tercen."
+  repo-url: https://github.com/tercen/developers_guide
+  repo-actions: [edit, issue]
+  
+  chapters:
+    - index.qmd
+    - intro_guidelines.qmd
+    
+    - part: "Getting Started"
+      chapters:
+        - getting-started_core-concepts.qmd
+        - getting-started_setup-tercen-studio.qmd
+    
+    - part: "Operator Development"
+      chapters:
+        - operator-dev_unified.qmd
+        - operator-dev_deploy.qmd
+        - operator-dev_ci.qmd
+        - operator-dev_installation.qmd
+        - operator-dev_patterns.qmd
+        - operator-dev-gpu.qmd
+        - dev-patterns-plots.qmd
+    
+    - part: "Workflow Template Development"
+      chapters:
+        - templates-apps_templates.qmd
+        - library.qmd
+        - tercen-cli.qmd
+    
+    - part: "Troubleshooting"
+      chapters:
+        - troubleshooting_common-issues.qmd
+        - troubleshooting_ci.qmd
+    
+    - part: "Appendices"
+      chapters:
+        - appendix_glossary.qmd
+        - appendix_organisation-setup.qmd
+        - appendix_tercen-studio.qmd
+
+format:
+  html:
+    theme: 
+      - cosmo
+    css: style.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    highlight-style: github
+    code-fold: false
+    code-tools: true
+
+bibliography: book.bib
+csl: https://www.zotero.org/styles/apa

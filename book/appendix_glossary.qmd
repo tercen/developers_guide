@@ -1,4 +1,4 @@
-# (PART\*) Appendix {.unnumbered}
+# Appendix {.unnumbered}
 
 # Glossary {-}
 

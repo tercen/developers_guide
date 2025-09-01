@@ -1,4 +1,4 @@
-# (PART\*) Templates {.unnumbered}
+# Templates
 
 # Building a template
 

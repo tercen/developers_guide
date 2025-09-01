@@ -1,22 +1,11 @@
 ---
 title: "Tercen developer's guide"
-author: "Tercen"
-site: bookdown::bookdown_site
-documentclass: book
-output: bookdown::gitbook
-bibliography: book.bib
-biblio-style: apalike
-link-citations: yes
-github-repo: tercen/appbuilders-guide
-description: "This is a developer's guide to Tercen"
 ---
 
-# Introduction {-}
+# Introduction {.unnumbered}
 
 <center>
-```{r, echo=FALSE, out.width="100%"}
-knitr::include_graphics("./images/cover.png")
-```
+![](./images/cover.png){width="100%"}
 </center>
 
 \
@@ -35,4 +24,3 @@ liberated from the operational details and  day to day analysis demands from
 the biologist. This is summed up with the phrase:
 
 > Tercen __empowers__ the biologist and __liberates__ the bioinformatician.
-

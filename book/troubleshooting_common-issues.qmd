@@ -1,4 +1,4 @@
-# (PART\*) Troubleshooting {.unnumbered}
+# Troubleshooting
 
 # Common operator issues
 

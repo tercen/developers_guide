@@ -4,6 +4,7 @@
 _publish.R
 _book
 _bookdown_files
+_site
 rsconnect
 _book.7z
 _book.zip
