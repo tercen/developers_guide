@@ -1,6 +1,6 @@
 # Common development issues
 
-#### Where can I find my Tercen token?
+## Where can I find my Tercen token?
 
 You can find your Tercen token by logging into your instance and navigating to:
 
@@ -12,7 +12,7 @@ For example:
 
 The token will be displayed on this page and can be copied for use in your development environment.
 
-#### Failed to decode
+## Failed to decode
 
 ```
 tercen.http.HttpClientService.TercenError: unknown : failed to decode

@@ -37,11 +37,8 @@ a double. In that case, you need to provide a schema file. If you use
 tim to genenerate your test, you can use the XXX argument to the build_test_data 
 function.
 
-<!-- Examples: -->
-<!-- * X operator -->
-<!-- * X operator, ci and ri -->
 
-### Wrong values
+## Wrong values
 
 `task.test.operator.bad.value`
 
@@ -49,14 +46,14 @@ This error occurs when a value is different between the reference table and
 the computed table. It gives you the row number and both values to help
 finding the issue.
 
-### Wrong correlation
+## Wrong correlation
 
 `task.test.operator.bad.correlation`
 
 This error occurs when the correlation between the reference table and 
 the computed table values is not high enough.
 
-### Untrusted git
+## Untrusted git
 
 `tercen.forbidden.untrusted.git`
 
