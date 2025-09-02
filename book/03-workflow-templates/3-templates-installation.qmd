@@ -1,0 +1,31 @@
+# Installing a Template
+
+## Tercen Libraries
+
+Tercen allows you to organize and manage modules (operators, templates, apps) and datasets within libraries. There are two types of libraries:
+
+1. Tercen Library: A curated list of modules and datasets maintained by the Tercen team.
+2. Custom Libraries: Personal or team-shared libraries that you can create and manage.
+
+## Creating a Custom Library
+
+To install an operator, you first need to create a custom library. In Tercen, a library is a specialized type of team, and resources within the library (operators, templates, apps) are treated as specialized projects. This structure allows you to manage the library's content and control access to your resources.
+
+Steps to Create a Custom Library:
+
+1. Create a Team: Go to your Tercen account and create a new team (e.g., "MyLibrary").
+2. Enable Library Team: Navigate to your team's settings and select the "Library team" option to designate this team as a library.
+
+## Installing a Template in a Custom Library
+
+Once your custom library is set up, you can use Tercen's git integration to install templates:
+
+1. Go to your library (the team you created).
+2. Click on "New Project" and choose "From Git."
+3. Fill in the required fields:
+    * Name: The name of the template.
+    * URL: The Git repository URL of the template.
+    * Tag: The specific version or tag (optional).
+    * Auth Token: If required, provide an authentication token.
+
+This process will clone the template's repository into your custom library. It should now be available when you want to create a new workflow.
