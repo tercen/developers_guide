@@ -24,6 +24,7 @@ book:
         - 02-operator-development/2-walkthrough-example.qmd
         - 02-operator-development/3-ci.qmd
         - 02-operator-development/4-installation.qmd
+        - 02-operator-development/5-patterns.qmd
     
     - part: "Workflow Template Development"
       chapters:
@@ -33,10 +34,9 @@ book:
 
     - part: "Advanced Topics"
       chapters:
-        - 04-advanced-topics/1-patterns.qmd
-        - 04-advanced-topics/2-patterns-plots.qmd
-        - 04-advanced-topics/3-tercen-cli.qmd
-        - 04-advanced-topics/4-gpu-development.qmd
+        - 04-advanced-topics/1-patterns-plots.qmd
+        - 04-advanced-topics/2-tercen-cli.qmd
+        - 04-advanced-topics/3-gpu-development.qmd
         
     - part: "Troubleshooting"
       chapters:
