@@ -16,11 +16,11 @@ book:
       chapters:
         - 01-getting-started/0-intro_guidelines.qmd
         - 01-getting-started/1-core-concepts.qmd
-        - 01-getting-started/2-library.qmd
+        - 01-getting-started/2-environment-setup.qmd
     
     - part: "Operator Development"
       chapters:
-        - 02-operator-development/1-overview.qmd
+        - 02-operator-development/1-overview-setup.qmd
         - 02-operator-development/2-walkthrough-example.qmd
         - 02-operator-development/3-ci.qmd
         - 02-operator-development/4-installation.qmd

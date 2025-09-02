@@ -1,0 +1,125 @@
+# Core concepts
+
+This chapter introduces the fundamental concepts and building blocks of the Tercen platform. Understanding these concepts is essential before diving into development.
+
+## Tercen modules
+
+Tercen provides a modular platform where researchers can build and share computational components. There are three main types of modules in Tercen, each serving different purposes and complexity levels:
+
+### Operators
+
+**Operators** are the foundational building blocks of Tercen. They represent single computational steps that can be chained together to create more complex analyses.
+
+- **Purpose**: Execute specific computational functions (e.g., scale, log transform, statistical tests)
+- **Implementation**: Written in R or Python (or any other language) as small units of code
+- **Use case**: When you need a specific calculation or transformation
+- **Programming required**: Yes (R or Python)
+
+::: {.callout-note}
+## Example Operators
+- Statistical functions: t-test, ANOVA, correlation
+- Data transformations: log, scale, normalize  
+- Mathematical operations: addition, multiplication, division
+- Custom algorithms: clustering, dimensionality reduction
+:::
+
+### Workflow Templates
+
+**Workflow Templates** (or simply **Templates**) represent complete, end-to-end analytical workflows that combine multiple steps into a cohesive analysis pipeline.
+
+- **Purpose**: Provide ready-to-use workflows for common analysis types
+- **Implementation**: Visual workflow builder with pre-configured steps
+- **Use case**: When you need a complete analysis pipeline (e.g., RNA-seq, flow cytometry)
+- **Programming required**: No (but understanding of the analysis is helpful)
+- **Scope**: Highest level - encompasses entire analysis workflows
+
+::: {.callout-note}
+## Example Templates
+- RNA-seq differential expression analysis
+- Flow cytometry data processing
+- Proteomics data analysis
+- Time-series analysis pipelines
+:::
+
+### Web Apps
+
+**Web Apps** provide interactive, user-friendly interfaces for specific analytical tasks or visualizations.
+
+- **Purpose**: Create interactive tools for data exploration and analysis
+- **Implementation**: Web-based interfaces that typically interact with an existing template
+- **Use case**: When you need interactive visualizations or guided analysis tools
+- **Programming required**: Yes (web technologies)
+- **User experience**: Interactive dashboards and guided workflows
+
+::: {.callout-note}
+## Example Web Apps
+- Interactive data exploration dashboards
+- Parameter optimization interfaces
+- Custom visualization tools
+- Quality control assessment apps
+:::
+
+## Module hierarchy and relationships
+
+The three module types form a natural hierarchy based on complexity and scope:
+
+```{mermaid}
+graph TD
+    subgraph TP[Tercen Project]
+        A[Web Apps] --> B[Workflow Templates]
+        B --> C[Operators]
+    end
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style TP fill:#f5f5f5,stroke:#333,stroke-width:2px
+```
+
+- **Web Apps** (highest level) provide interactive interfaces that orchestrate workflows and present results. They are optional as one can use the Tercen native interface to interact with templates and operators.
+- **Workflow Templates** (medium level) define complete analysis pipelines
+- **Operators** (foundational level) perform individual computational tasks
+
+## Choosing the right module type
+
+When deciding which type of module to build, consider:
+
+| **Choose Operators when you want to:** | **Choose Web Apps when you want to:** | **Choose Templates when you want to:** |
+|----------------------------------------|---------------------------------------|----------------------------------------|
+| ✅ Create reusable computational functions | ✅ Build interactive analysis tools | ✅ Package complete analysis workflows |
+| ✅ Implement specific algorithms | ✅ Provide guided user experiences | ✅ Standardize common analysis pipelines |
+| ✅ Extend Tercen's analytical capabilities | ✅ Create custom visualizations | ✅ Share best-practice workflows |
+| ✅ Build foundational components | ✅ Develop parameter exploration tools | ✅ Enable one-click analysis solutions |
+
+## The Tercen Library
+
+Once developed and tested, modules can be shared through the **Tercen Library**.
+
+A Tercen __Library__ is a collection of __operators__, __templates__, __web apps__ and __datasets__ shared across a team or an organisation.
+
+When you add a dataset, a step to a workflow, or an operator within a step, the Library window appears:
+
+<center><img src="../images/library.png" width=700></img></center>
+
+You can see the modules you can access from the Tercen public library or your organisational or personal library.
+
+## Development workflow overview
+
+The typical development process follows these stages:
+
+1. **Design**: Define your module's purpose and requirements
+2. **Develop**: Implement your module using appropriate tools
+3. **Test**: Validate functionality with sample data
+4. **Document**: Create clear usage instructions
+5. **Deploy**: Publish to the Tercen Library
+6. **Maintain**: Update and improve based on user feedback
+
+## What's next?
+
+Now that you understand the core concepts, you're ready to:
+
+- Set up your development environment (next chapter)
+- Choose which type of module to build
+- Start developing with the appropriate tools and frameworks
+
+Each module type has dedicated sections in this guide with detailed instructions, examples, and best practices.

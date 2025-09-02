@@ -1,0 +1,147 @@
+# Environment Setup
+
+Setting up your development environment correctly is crucial for a smooth Tercen development experience. This chapter covers all the tools, accounts, and configurations you'll need to start building operators, workflow templates, and applications for the Tercen platform.
+
+## Prerequisites
+
+Before diving into Tercen development, ensure you have the following essential tools and accounts set up:
+
+### Required Tools
+
+**Git Version Control**
+- Install [Git](https://git-scm.com/downloads) for your operating system
+- Git is essential for version control and collaboration
+- Verify installation: `git --version`
+
+**Docker**
+
+Docker is required for local testing and deployment of operators. Installation varies by platform:
+
+**Windows:**
+- Install [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
+- **Important**: Select the **WSL 2 backend** option during installation for optimal performance
+- Requires Windows 10/11 with WSL 2 enabled
+
+**macOS:**
+- Install [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/)
+- Available for both Intel and Apple Silicon (M1/M2) Macs
+- Download the appropriate version for your chip architecture
+
+**Linux:**
+- Install Docker Engine: Follow the [official Docker installation guide for Linux](https://docs.docker.com/engine/install/)
+- Or install Docker Desktop for Linux: [Docker Desktop for Linux](https://docs.docker.com/desktop/install/linux-install/)
+- Popular distributions have specific installation steps (Ubuntu, CentOS, Debian, etc.)
+
+**Verification (all platforms):**
+```bash
+docker --version
+docker run hello-world
+```
+
+Ensure the Docker daemon is running before starting development.
+
+**GitHub Account**
+- Create a [GitHub account](https://github.com) if you don't have one
+- Required for repository hosting and collaboration
+- If using alternative version control systems, please contact the Tercen team
+
+::: {.callout-important}
+## Docker Configuration
+Make sure Docker Desktop is running before starting development. On Windows, select the **WSL 2 backend** option during installation for optimal performance.
+:::
+
+## Development Environment
+
+### Visual Studio Code (Recommended)
+
+We strongly recommend using **Visual Studio Code** as your primary development environment because:
+
+- **Container Support**: Built-in dev container functionality
+- **Template Integration**: Seamless integration with our GitHub repository templates
+- **Multi-language Support**: Excellent support for R, Python, and other languages
+
+**Installation Steps:**
+1. Download and install [VS Code](https://code.visualstudio.com/)
+2. Install the following extensions:
+   - **Dev Containers** (for containerized development)
+   - **R Extension** (for R development)
+   - **Python Extension** (for Python development)
+   - **Docker Extension** (for Docker management)
+
+### GitHub Repository Templates
+
+Tercen provides pre-configured repository templates that include:
+
+- **Development containers** with all Tercen dependencies
+- **Template code** for operators in R and Python
+- **CI/CD pipelines** for automated testing and deployment
+- **Documentation templates** for consistent documentation
+
+
+## Tercen Instance Setup
+
+You have two options for accessing Tercen during development:
+
+### Option 1: Cloud Instance (Recommended for Beginners)
+
+- Use your existing Tercen cloud account at [tercen.com](https://tercen.com) or your own organisation's instance
+- No additional setup required
+- Ideal for learning and initial development
+- Access to shared libraries and community operators
+
+### Option 2: Local Tercen Studio (Advanced)
+
+For advanced development and testing, you can set up a local Tercen instance:
+
+**Installation Steps:**
+
+1. **Clone Tercen Studio repository:**
+```bash
+git clone https://github.com/tercen/tercen_studio.git
+cd tercen_studio
+```
+
+2. **Create Docker network:**
+```bash
+docker network create tercen
+```
+
+3. **Start Tercen Studio:**
+```bash
+docker-compose up -d
+```
+
+4. **Access local instance:**
+   - URL: [http://127.0.0.1:5402](http://127.0.0.1:5402)
+   - Username: `admin`
+   - Password: `admin`
+
+::: {.callout-note}
+## Local vs Cloud Development
+- **Cloud**: Easier setup, shared resources, collaboration features
+- **Local**: Full control, offline development, testing isolation
+
+Most developers start with cloud development and move to local setup for advanced use cases.
+:::
+
+### Troubleshooting Common Issues
+
+**Docker not starting:**
+- Ensure Docker Desktop is running
+- Check system requirements for Docker
+- On Windows, verify WSL 2 is enabled
+
+**Git authentication issues:**
+- Set up SSH keys for GitHub: [GitHub SSH documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+- Or use GitHub CLI: `gh auth login`
+
+**VS Code extensions not working:**
+- Restart VS Code after installing extensions
+- Check extension compatibility with your VS Code version
+- Ensure you have the latest version of VS Code
+
+## Next Steps
+
+Your development environment is now ready for building powerful analytical tools on the Tercen platform! 
+
+You can now start developing a module. The next chapters cover module development. Each module type has dedicated sections in this guide with detailed instructions.
