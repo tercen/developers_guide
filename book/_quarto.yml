@@ -28,6 +28,8 @@ book:
     - part: "Workflow Template Development"
       chapters:
         - 03-workflow-templates/1-templates.qmd
+        - 03-workflow-templates/2-templates-ci.qmd
+        - 03-workflow-templates/3-templates-installation.qmd
 
     - part: "Advanced Topics"
       chapters:
