@@ -11,39 +11,41 @@ book:
   
   chapters:
     - index.qmd
-    - intro_guidelines.qmd
     
     - part: "Getting Started"
       chapters:
-        - getting-started_core-concepts.qmd
-        - getting-started_setup-tercen-studio.qmd
+        - 01-getting-started/0-intro_guidelines.qmd
+        - 01-getting-started/1-core-concepts.qmd
+        - 01-getting-started/2-library.qmd
     
     - part: "Operator Development"
       chapters:
-        - operator-dev_unified.qmd
-        - operator-dev_deploy.qmd
-        - operator-dev_ci.qmd
-        - operator-dev_installation.qmd
-        - operator-dev_patterns.qmd
-        - operator-dev-gpu.qmd
-        - dev-patterns-plots.qmd
+        - 02-operator-development/1-overview.qmd
+        - 02-operator-development/2-walkthrough-example.qmd
+        - 02-operator-development/3-ci.qmd
+        - 02-operator-development/4-installation.qmd
     
     - part: "Workflow Template Development"
       chapters:
-        - templates-apps_templates.qmd
-        - library.qmd
-        - tercen-cli.qmd
-    
+        - 03-workflow-templates/1-templates.qmd
+
+    - part: "Advanced Topics"
+      chapters:
+        - 04-advanced-topics/1-patterns.qmd
+        - 04-advanced-topics/2-patterns-plots.qmd
+        - 04-advanced-topics/3-tercen-cli.qmd
+        - 04-advanced-topics/4-gpu-development.qmd
+        
     - part: "Troubleshooting"
       chapters:
-        - troubleshooting_common-issues.qmd
-        - troubleshooting_ci.qmd
+        - 05-troubleshooting/1-common-issues.qmd
+        - 05-troubleshooting/2-ci.qmd
     
     - part: "Appendices"
       chapters:
-        - appendix_glossary.qmd
-        - appendix_organisation-setup.qmd
-        - appendix_tercen-studio.qmd
+        - 99-appendices/1-glossary.qmd
+        - 99-appendices/2-organisation-setup.qmd
+        - 99-appendices/3-tercen-studio.qmd
 
 format:
   html:
@@ -56,6 +58,6 @@ format:
     highlight-style: github
     code-fold: false
     code-tools: true
+    search: true
 
-bibliography: book.bib
 csl: https://www.zotero.org/styles/apa

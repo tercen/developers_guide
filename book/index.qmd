@@ -10,17 +10,39 @@ title: "Tercen developer's guide"
 
 \
 
-This guide outlines how to design, develop and share __modules__ for __Tercen__.
+Welcome to the Tercen Developer's Guide! This comprehensive resource will help you design, develop, and share **modules** for the **Tercen** platform.
 
-Tercen  promotes collaboration for data analysis. Not everyone can code or even 
-wants to,  but everyone should benefit from the explosion of data and code 
-currently taking place.
+## What is Tercen?
 
-Tercen allows non programmers (e.g. biologists) to explore their data and 
-programmers (e.g. bioinformaticians) to upload their code (or web-apps) 
-for the biologist to use. By offering this services we believe biologist get 
-empowered and can claim back control of their data. The bioinformatician gets 
-liberated from the operational details and  day to day analysis demands from 
-the biologist. This is summed up with the phrase:
+Tercen is a collaborative data analysis platform that bridges the gap between data scientists and domain experts. It enables seamless collaboration by allowing:
 
-> Tercen __empowers__ the biologist and __liberates__ the bioinformatician.
+- **Domain experts** (e.g., biologists, researchers) to explore and analyze their data using intuitive visual interfaces
+- **Developers** (e.g., bioinformaticians, data scientists) to create and share reusable analytical tools and web applications
+
+## Our Mission
+
+Tercen promotes collaboration for data analysis because not everyone can code—nor should they need to. Everyone should benefit from the explosion of data and computational tools currently available.
+
+By connecting non-programmers with programmers, Tercen creates a powerful ecosystem where:
+
+- **Biologists** gain direct access to sophisticated analytical tools without needing programming expertise
+- **Bioinformaticians** can focus on algorithm development rather than operational details and repetitive analysis requests
+
+This symbiotic relationship empowers both communities and democratizes data analysis.
+
+> Tercen **empowers** the biologist and **liberates** the bioinformatician.
+
+## What You'll Learn
+
+This guide covers everything you need to know about developing for Tercen:
+
+- **Core concepts** and platform architecture
+- **Step-by-step development workflows** with practical examples  
+- **Best practices** for creating robust, user-friendly modules
+- **Deployment strategies** and continuous integration
+- **Advanced topics** including GPU development and custom visualizations
+- **Troubleshooting** common issues and debugging techniques
+
+Whether you're a seasoned developer or new to the Tercen ecosystem, this guide will help you create impactful analytical tools that serve the scientific community.
+
+Let's get started building the future of collaborative data analysis!
