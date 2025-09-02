@@ -1,0 +1,35 @@
+# Organisation setup  {-}
+
+If you wish to develop your own Tercen modules, an initial setup is required
+
+## Choose a Tercen instance to run unit tests {-}
+
+* Regression testing is used for the development process of Tercen modules.
+* Those tests consist in Tercen workflows that can be run on a Tercen instance. This instance needs to be specified and a Tercen "test user" needs to be created. This user will be used to
+run the tests from the GitHub Action.
+* Choose an instance that will be used to run the test. It could be your development instance for example. You will need to use the service URI (e.g. https://tercen.com) in the next step.
+* Create a test user. You will need its name and password in the next step.
+
+## Set up your GitHub organisation {-}
+
+* We assume you already have a GitHub organisation in place
+* You need to add the GH secrets
+    * TERCEN_TEST_USERNAME and TERCEN_TEST_PASSWORD
+    * TERCEN_TEST_URI
+    * GITHUB_PAT
+* Template and GH Actions
+    * Create a template GitHub repository on your own organisation, based on the Tercen one
+    * Edit the GitHub workflow files to replace the secrets by your own organisation secrets you just set up
+
+## Tercen instance configuration {-}
+
+If you are using your own Tercen instance, you need to modify the Tercen config file and add your GitHub organisation to the "trusted git" list.
+
+```yaml
+tercen.allow.untrusted.git: 'false'
+tercen.allow.untrusted.docker: 'false'
+tercen.trusted.git:
+  - 'https://github.com/tercen/'
+  - 'https://github.com/YOUR_GITHUB_ORGANISATION/'
+```
+
