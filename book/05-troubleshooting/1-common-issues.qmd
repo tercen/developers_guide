@@ -1,6 +1,16 @@
-# Troubleshooting
+# Common development issues
 
-# Common operator issues
+#### Where can I find my Tercen token?
+
+You can find your Tercen token by logging into your instance and navigating to:
+
+`https://YOUR_INSTANCE_URL/_token`
+
+For example:
+- If you work on tercen.com, go to: `https://tercen.com/_token`
+- If you work on a custom instance, replace `YOUR_INSTANCE_URL` with your actual domain
+
+The token will be displayed on this page and can be copied for use in your development environment.
 
 #### Failed to decode
 
