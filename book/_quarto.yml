@@ -24,7 +24,8 @@ book:
         - 02-operator-development/2-walkthrough-example.qmd
         - 02-operator-development/3-ci.qmd
         - 02-operator-development/4-installation.qmd
-        - 02-operator-development/5-patterns.qmd
+        - 02-operator-development/5-input-output-patterns.qmd
+        - 02-operator-development/6-operator-improvements.qmd
     
     - part: "Workflow Template Development"
       chapters:
