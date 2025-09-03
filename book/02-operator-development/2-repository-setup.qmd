@@ -1,0 +1,98 @@
+# Repository Setup
+
+All Tercen operators are developed and distributed through GitHub repositories. This ensures version control, collaborative development, and seamless integration with Tercen's operator library. This chapter will guide you through setting up your operator repository with the proper structure and configuration.
+
+::: {.callout-note}
+## What You'll Learn
+- GitHub repository creation from templates
+- Repository naming conventions and best practices
+- Project structure understanding
+- Initial configuration setup
+:::
+
+## Prerequisites
+
+- GitHub account with repository creation permissions
+- Basic familiarity with Git version control
+- Understanding of R or Python programming fundamentals
+- Familiarity with R or Python package management concepts (renv, pip, ...)
+
+## Choosing a Template
+
+Tercen provides several repository templates optimized for different operator types:
+
+| Template | Best For | Features |
+|----------|----------|----------|
+| [**R Operator**](https://github.com/tercen/template_R_operator) | Most R operators | Full feature set, examples |
+| [**Python Operator**](https://github.com/tercen/template_python_operator) | All Python operators | Modern Python, poetry support |
+
+## Repository Creation Process
+
+Follow these steps to set up your operator repository:
+
+1. **Choose your operator name**
+   - Use descriptive names that clearly indicate the operator's function
+   - Follow the naming convention: `{descriptive_name}_operator`
+   
+2. **Select appropriate template**
+   - Navigate to the template repository on GitHub
+   - Click "Use this template" → "Create a new repository"
+   
+3. **Configure repository settings**
+   - Set visibility (public for community operators, private for proprietary ones)
+   - Add a descriptive README during creation
+   - Initialize with the template's structure
+   
+4. **Clone locally**
+   - Clone into your development environment
+   - Ensure you have Git configured with your credentials
+
+::: {.callout-warning}
+## Naming Convention
+**Important**: The repository name __must end__ with `_operator`
+
+**Examples:**
+- ✅ `linear_regression_operator`
+- ✅ `differential_expression_operator`
+- ✅ `data_quality_check_operator`
+- ❌ `my_operator`
+- ❌ `test123`
+- ❌ `linear_regression` (missing `_operator` suffix)
+:::
+
+## Repository Structure Overview
+
+The templates provide a complete project structure including:
+
+```
+your_operator_repository/
+├── .devcontainer/          # Development container configuration
+├── .github/
+│   └── workflows/          # CI/CD automation
+├── main.R                  # Main operator implementation (R)
+├── main.py                 # Main operator implementation (Python)
+├── operator.json           # Operator metadata and parameters
+├── README.md               # Documentation
+├── requirements.txt        # Python dependencies
+├── renv.lock              # R dependencies snapshot
+└── test/                  # Test files and data
+    ├── input.csv
+    ├── output.csv
+    ├── test.json
+    └── README.md
+```
+
+::: {.callout-note}
+## Repository Structure Benefits
+The templates provide:
+- Development container configuration for consistent environments
+- Continuous integration setup for automated testing
+- Documentation templates following best practices
+- Example implementations as starting points
+- Testing frameworks for validation
+:::
+
+
+## Next Steps
+
+With your repository set up, you're ready to configure your development environment. The next chapter will guide you through setting up your IDE and connecting to a Tercen instance for testing.

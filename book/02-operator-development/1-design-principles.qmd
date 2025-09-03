@@ -1,0 +1,134 @@
+# Operator Design Principles
+
+The foundation of every successful operator lies in careful design. This chapter covers the fundamental design principles and planning considerations that ensure your operator integrates seamlessly with Tercen's data projection system and provides computational value to users.
+
+::: {.callout-note}
+## What You'll Learn
+- Tercen's data model and projection system
+- Common operator patterns and their use cases
+- Input projection design strategies
+- Output relation planning
+- Design validation checklist
+:::
+
+## Understanding Tercen's Data Model
+
+Tercen operates on a fundamental principle:
+
+::: {.callout-important}
+## Core Principle
+
+Every operator __receives__ data from a Tercen workflow through the __crosstab projection__ as input, and __returns__ tables (with __relations__ to input data) as output.
+:::
+
+This design ensures that operators can be chained together in complex analytical workflows while maintaining data lineage and relationships.
+
+## Development Workflow Overview
+
+Creating a Tercen operator follows a structured, iterative workflow designed to ensure reliability, maintainability, and user-friendliness. The development process consists of eight key phases, with continuous iteration between implementation, testing, and maintenance:
+
+```{mermaid}
+graph TD
+    A["Design<br/>Define input/output<br/>Choose projection type<br/>Plan computations"] --> B["Repository Setup<br/>Create GitHub repo<br/>Configure structure<br/>Set up templates"]
+    B --> C["Development Environment<br/>Set up Tercen Studio<br/>Install dependencies<br/>Configure IDE"]
+    C --> D["Data Connection<br/>Connect to Tercen data<br/>Understand context<br/>Test projections"]
+    D --> E["Implementation<br/>Write computational functions<br/>Handle edge cases<br/>Optimize performance"]
+    E --> F["Testing<br/>Create unit tests<br/>Validate with sample data<br/>Test error scenarios"]
+    F --> G["Documentation<br/>Write usage instructions<br/>Document parameters<br/>Create examples"]
+    G --> H["Deployment<br/>Package dependencies<br/>Create releases<br/>Publish to library"]
+    
+    H --> I["Maintenance<br/>Monitor performance<br/>Fix bugs<br/>Add features"]
+    I --> E
+    
+    classDef designStyle fill:#e3f2fd,color:#000000,font-weight:bold
+    classDef repoStyle fill:#f3e5f5,color:#000000,font-weight:bold
+    classDef envStyle fill:#e8f5e8,color:#000000,font-weight:bold
+    classDef dataStyle fill:#fff3e0,color:#000000,font-weight:bold
+    classDef implStyle fill:#fce4ec,color:#000000,font-weight:bold
+    classDef testStyle fill:#e0f2f1,color:#000000,font-weight:bold
+    classDef docStyle fill:#f1f8e9,color:#000000,font-weight:bold
+    classDef deployStyle fill:#e8eaf6,color:#000000,font-weight:bold
+    classDef maintStyle fill:#fafafa,color:#000000,font-weight:bold
+    
+    class A designStyle
+    class B repoStyle
+    class C envStyle
+    class D dataStyle
+    class E implStyle
+    class F testStyle
+    class G docStyle
+    class H deployStyle
+    class I maintStyle
+```
+
+## Input Projection Design
+
+The **input projection** defines what data your operator will receive. This projection is configured in Tercen's data step and determines the structure of your input table.
+
+**Common projection patterns:**
+
+| Projection Type | Components | Use Case | Example |
+|----------------|------------|----------|---------|
+| **Cell-wise Operations** | `y-axis`, `row`, `col` | Compute a value per cell | Mean, median, custom statistics, normalization |
+| **Row-wise Operations** | `y-axis`, `row` | Compute a value per observation | Clustering, dimension reduction, outlier detection |
+| **Column-wise Operations** | `y-axis`, `col` | Compute a value per variable | Feature importance, column statistics, data loading |
+| **Global Operations** | `y-axis` | Compute across all data | Global statistics, model fitting, data export |
+
+## Output Relation Strategy
+
+The **output relation** defines how your computed results relate back to the input data:
+
+::: {.panel-tabset}
+
+### Per Cell
+Results are computed for each unique combination of row and column factors.
+
+**Example**: Computing mean values per experimental condition.
+```
+Input: Multiple measurements (projected onto the crosstab y axis) per condition (projected onto the rows and columns)
+Output: One mean value per condition
+```
+
+### Per Column  
+Results are computed across all rows for each column.
+
+**Example**: Clustering samples based on feature profiles.
+```
+Input: Feature matrix (genes × samples)
+Output: Cluster assignments per sample
+```
+
+### Per Row
+Results are computed across all columns for each row.
+
+**Example**: Gene-wise statistics across samples.
+```
+Input: Expression matrix (genes × samples)  
+Output: Statistics per gene
+```
+
+:::
+
+## Design Checklist
+
+Before writing any code, ensure you can clearly answer these fundamental questions:
+
+- [ ] **Problem Definition**: What specific computational problem does this operator solve?
+- [ ] **Input Requirements**: Which projection components are required (`x`, `y`, `row`, `col`, etc.)?
+- [ ] **Output Strategy**: What is the output relation (per cell, per column, per row) to the input data?
+- [ ] **Data Types**: What are the expected input data types and valid ranges?
+- [ ] **Parameters**: What parameters should be configurable by users?
+- [ ] **Error Handling**: How will the operator handle invalid inputs or edge cases?
+- [ ] **Performance**: Are there any computational constraints or optimization requirements?
+
+::: {.callout-tip}
+## Design Best Practices
+- Start simple and add complexity gradually
+- Consider how your operator will compose with others in workflows
+- Design for reusability across different data types and use cases
+- Document your design decisions for future reference
+:::
+
+## Next Steps
+
+Once you have a clear design for your operator, the next step is setting up your development repository. Continue to the next chapter to learn about repository setup and project structure.

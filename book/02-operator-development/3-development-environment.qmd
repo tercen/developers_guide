@@ -1,0 +1,151 @@
+# Development Environment Setup
+
+This chapter covers setting up your development environment for building Tercen operators. We'll configure your IDE, set up development containers, and prepare a Tercen instance for testing your operators.
+
+::: {.callout-note}
+## What You'll Learn
+- IDE project setup with development containers
+- Tercen instance configuration for testing
+- Development workflow integration
+- Environment validation procedures
+:::
+
+## IDE Project Setup
+
+As mentioned in the getting started section, we recommend using VS Code for operator development. While this workflow is optimized for VS Code, it can be adapted to other IDEs such as JetBrains products. Please reach out if you need support for an alternative development environment.
+
+### Development Container Setup
+
+The repository templates include pre-configured development containers that provide consistent, reproducible development environments:
+
+1. **Clone the repository**: Clone your newly created operator repository from GitHub into a VS Code workspace
+
+2. **Open in dev container**: The template includes a pre-configured development container that provides:
+   - Minimal Tercen runtime requirements
+   - Containerized environment for consistent dependency management
+   - Docker-based isolation ensuring reproducible builds
+
+3. **Verify container functionality**: 
+   - The first time you open the project, the container will need to be built (this may take several minutes)
+   - Subsequent opens will be much faster as the container is cached
+   - Test the setup by running the appropriate command for your language:
+     - **R**: `library(tercen)`
+     - **Python**: `import tercen`
+
+::: {.callout-tip}
+## Container Benefits
+Using development containers ensures that your operator runs in the same environment during development and deployment, eliminating "works on my machine" issues.
+:::
+
+### IDE Configuration
+
+For optimal development experience, **Install recommended extensions** (VS Code will prompt you):
+   - Language-specific extensions (R or Python)
+   - Dev Container extension for container management
+   - Git extensions for version control
+
+
+## Tercen Instance Setup
+
+Create a development project in Tercen to test your operator. You have two deployment options:
+
+::: {.panel-tabset}
+
+### Cloud Instance
+
+For quick setup and collaboration:
+
+1. **Access Tercen Cloud**: Navigate to [tercen.com](https://tercen.com) or your organization's instance
+2. **Create new project**: 
+   - Navigate to your team workspace
+   - Click "New project" 
+   - Choose a descriptive name for your development project
+3. **Import sample data**: Use "From git" with `https://github.com/tercen/developers_guide_project`
+4. **Open dev workflow**: Navigate to "Dev workflow" → "Dev data step"
+
+### Local Instance
+
+For complete control and offline development:
+
+1. **Start local instance**: Ensure your local Tercen instance is running at `http://127.0.0.1:5402/`
+2. **Create new project**: Click "New project" in the web interface
+3. **Import sample data**: Use "From git" with `https://github.com/tercen/developers_guide_project`
+4. **Open dev workflow**: Navigate to "Dev workflow" → "Dev data step"
+
+:::
+
+The sample project provides a pre-configured crosstab view with real data for testing your operator development.
+
+::: {.callout-tip}
+## Development Project Content
+- Pre-configured data projections for testing
+- Sample dataset
+:::
+
+## Environment Validation
+
+Before proceeding with implementation, validate your complete setup:
+
+### Development Environment Checklist
+
+- [ ] Repository cloned and opened in IDE
+- [ ] Development container built and running
+- [ ] Language-specific dependencies available (`tercen` library accessible)
+- [ ] Git configuration working for commits and pushes
+
+### Tercen Instance Checklist
+
+- [ ] Tercen instance accessible via web browser
+- [ ] Sample project imported successfully
+- [ ] Dev workflow and data step accessible
+- [ ] Data projection displaying correctly in crosstab view
+
+### Connection Test
+
+Perform a basic connection test to ensure everything works:
+
+::: {.panel-tabset}
+
+### R Test
+
+```r
+# Test basic connection (replace with your actual IDs)
+library(tercen)
+
+ctx <- tercenCtx(
+    workflowId = "YOUR_WORKFLOW_ID",
+    stepId = "YOUR_STEP_ID",
+    username = "admin",        # for local instance
+    password = "admin",        # for local instance  
+    serviceUri = "http://tercen:5400/"  # for local instance
+)
+
+# Verify data access
+data <- ctx %>% select(.y)
+print(head(data))
+```
+
+### Python Test
+
+```python
+# Test basic connection (replace with your actual IDs)
+from tercen.client import context as ctx
+
+tercenCtx = ctx.TercenContext(
+    workflowId="YOUR_WORKFLOW_ID",
+    stepId="YOUR_STEP_ID",
+    username="admin",
+    password="admin",
+    serviceUri="http://tercen:5400/"
+)
+
+# Verify data access
+data = tercenCtx.select(['.y'])
+print(data.head())
+```
+
+:::
+
+## Next Steps
+
+With your development environment configured and validated, you're ready to establish a connection to Tercen's data API and begin implementing your operator. The next chapter will cover the fundamentals of connecting to Tercen data and understanding the context system.
