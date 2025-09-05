@@ -1536,6 +1536,17 @@
     ]
   },
   {
+    "objectID": "99-appendices/2-organisation-setup.html#github-token-configuration",
+    "href": "99-appendices/2-organisation-setup.html#github-token-configuration",
+    "title": "Organisation setup",
+    "section": "GitHub Token Configuration",
+    "text": "GitHub Token Configuration\nConfigure the GitHub token with the required scopes for accessing the GitHub Docker registry and managing packages:\n\nSetting tercen.github.token\nThe GitHub token requires specific scopes to function properly with Tercen operator development:\n\n\n\n\n\n\nRequired GitHub Token Scopes\n\n\n\nWhen creating your GitHub Personal Access Token, ensure it includes these scopes: - repo: Full control of private repositories - packages:read: Read packages from GitHub Docker registry - packages:write: Write packages to GitHub Docker registry (if publishing) - workflow: Update GitHub Action workflows\n\n\n# Add to your Tercen configuration\ntercen.github.token: 'ghp_your_github_personal_access_token_here'\nSteps to create the token:\n\nGo to GitHub Settings → Developer settings → Personal access tokens\nClick “Generate new token (classic)”\nSelect the required scopes listed above\nCopy the generated token and add it to your Tercen configuration\n\n\n\nSetting tercen.library.urls\nConfigure library URLs if you want to manage the Main Library of your local Tercen instance:\n# Configure library management URLs\ntercen.library.urls:\n  - 'https://your-library-server.com/api'\nThis configuration allows you to: - Manage operator libraries on your local instance - Control which operators are available to users - Maintain custom operator repositories",
+    "crumbs": [
+      "Appendices",
+      "Organisation setup"
+    ]
+  },
+  {
     "objectID": "99-appendices/3-tercen-studio.html",
     "href": "99-appendices/3-tercen-studio.html",
     "title": "Setting up Tercen Studio",
