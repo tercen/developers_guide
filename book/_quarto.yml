@@ -25,11 +25,12 @@ book:
         - 02-operator-development/3-development-environment.qmd
         - 02-operator-development/4-basic-implementation.qmd
         - 02-operator-development/5-advanced-features.qmd
-        - 02-operator-development/6-documentation-deployment.qmd
-        - 02-operator-development/7-ci.qmd
-        - 02-operator-development/8-installation.qmd
-        - 02-operator-development/9-input-output-patterns.qmd
-        - 02-operator-development/10-operator-improvements.qmd
+        - 02-operator-development/6-operator-specifications.qmd
+        - 02-operator-development/7-documentation-deployment.qmd
+        - 02-operator-development/8-ci.qmd
+        - 02-operator-development/9-installation.qmd
+        - 02-operator-development/10-input-output-patterns.qmd
+        - 02-operator-development/11-operator-improvements.qmd
     
     - part: "Workflow Template Development"
       chapters:
