@@ -1,0 +1,232 @@
+# Operator Improvements and Best Practices
+
+This chapter covers advanced techniques for improving operator quality, reliability, and maintainability. You'll learn essential practices for logging, error handling, testing, and optimization that ensure your operators work robustly in production environments.
+
+::: {.callout-note}
+## Learning Objectives
+By the end of this chapter, you will be able to:
+- Implement comprehensive logging and debugging strategies
+- Build robust error handling and input validation
+- Create comprehensive test suites for operators
+- Apply performance optimization techniques
+- Follow best practices for production-ready operators
+:::
+
+::: {.callout-note}
+## Prerequisites
+Before proceeding, ensure you've completed:
+- [Basic Implementation](4-basic-implementation.qmd) chapter for core operator concepts
+- [Advanced Features](5-advanced-features.qmd) chapter for complex functionality
+- [Data Input and Output Patterns](10-input-output-patterns.qmd) for data handling
+:::
+
+## Logging and Debugging
+
+Effective logging is essential for monitoring operator behavior and diagnosing issues in production environments.
+
+### Basic Logging
+
+Implement logging for production operators:
+
+::: {.panel-tabset}
+
+### R
+
+```r
+ctx$log("Your message.")
+```
+
+### Python
+
+```python
+ctx.log("Your message.")
+```
+
+:::
+
+::: {.callout-tip}
+## Logging Best Practices
+- **Log key milestones**: Start/end of major operations
+- **Include data metrics**: Row counts, processing times, memory usage
+- **Log parameter values**: Help reproduce issues with specific inputs
+- **Use structured formats**: Enable easier log parsing and analysis
+- **Avoid logging sensitive data**: Protect user privacy and security
+:::
+
+## Error Handling
+
+Implement comprehensive error handling that provides helpful feedback to users:
+
+::: {.panel-tabset}
+
+### R
+
+```r
+# Comprehensive error handling with user-friendly messages
+robust_operator <- function(ctx) {
+  tryCatch({
+    # Validate inputs first
+    validate_inputs(ctx)
+    
+    # Main processing with progress logging
+    ctx$log(paste("[INFO]", Sys.time(), "- Beginning data analysis"))
+    
+    # Check for edge cases
+    data <- ctx$select(.ri, .ci, .y)
+    
+    if (any(is.infinite(data$.y))) {
+      ctx$log(paste("[WARNING]", Sys.time(), "- Infinite values detected, removing them"))
+      data <- data[is.finite(data$.y), ]
+    }
+    
+    if (nrow(data) == 0) {
+      stop("No valid data remaining after cleaning")
+    }
+    
+    # Perform analysis
+    result <- perform_analysis(data)
+    
+    ctx$log(paste("[INFO]", Sys.time(), "- Analysis completed successfully"))
+    return(result)
+    
+  }, error = function(e) {
+    # Log the technical error
+    ctx$log(paste("[ERROR]", Sys.time(), "- Technical error:", e$message))
+    
+    # Provide user-friendly error message
+    if (grepl("projection.*required", e$message)) {
+      stop("Please ensure you have dragged the required data columns to the appropriate axes.")
+    } else if (grepl("data points required", e$message)) {
+      stop("This analysis requires at least 3 data points. Please check your data selection.")
+    } else if (grepl("values must vary", e$message)) {
+      stop("The data values do not vary enough for this analysis. Please check your input data.")
+    } else {
+      stop(paste("An error occurred during analysis:", e$message))
+    }
+  })
+}
+```
+
+### Python
+
+```python
+def robust_operator(tercen_ctx):
+    """Operator with comprehensive error handling"""
+    
+    try:
+        # Validate inputs first
+        validate_inputs(tercen_ctx)
+        
+        # Main processing with progress logging
+        tercen_ctx.log(f"[INFO] {datetime.now()} - Beginning data analysis")
+        
+        # Check for edge cases
+        df = tercen_ctx.select(['.ri', '.ci', '.y'], df_lib="polars")
+        
+        # Handle infinite values
+        infinite_count = df.filter(pl.col('.y').is_infinite()).height
+        if infinite_count > 0:
+            tercen_ctx.log(f"[WARNING] {datetime.now()} - Infinite values detected ({infinite_count}), removing them")
+            df = df.filter(pl.col('.y').is_finite())
+        
+        if len(df) == 0:
+            raise ValueError("No valid data remaining after cleaning")
+        
+        # Perform analysis
+        result = perform_analysis(df)
+        
+        tercen_ctx.log(f"[INFO] {datetime.now()} - Analysis completed successfully")
+        return result
+        
+    except ValueError as ve:
+        tercen_ctx.log(f"[ERROR] {datetime.now()} - Validation error: {str(ve)}")
+        
+        # Provide user-friendly error messages
+        if "projection" in str(ve) and "required" in str(ve):
+            raise ValueError("Please ensure you have dragged the required data columns to the appropriate axes.")
+        elif "data points required" in str(ve):
+            raise ValueError("This analysis requires at least 3 data points. Please check your data selection.")
+        elif "values must vary" in str(ve):
+            raise ValueError("The data values do not vary enough for this analysis. Please check your input data.")
+        else:
+            raise ValueError(f"An error occurred during analysis: {str(ve)}")
+            
+    except Exception as e:
+        tercen_ctx.log(f"[ERROR] {datetime.now()} - Unexpected error: {str(e)}")
+        raise ValueError(f"An unexpected error occurred. Please check your data and try again. Error: {str(e)}")
+```
+
+:::
+
+::: {.callout-warning}
+## Error Handling Guidelines
+- **Validate early**: Check inputs before expensive computations
+- **Fail gracefully**: Provide clear, actionable error messages
+- **Log technical details**: Help with debugging while keeping user messages simple
+- **Handle edge cases**: Account for missing data, infinite values, empty datasets
+- **Test error scenarios**: Ensure error handling works as expected
+:::
+
+## Testing and Validation
+
+Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.
+
+::: {.callout-note}
+## Testing Approaches
+Tercen supports two main testing frameworks:
+1. **Unit Tests**: Simple data files with expected input/output and test specifications
+2. **Integration Tests**: Actual Tercen workflows triggered to perform computations
+:::
+
+### Unit Test Structure
+
+Create a `tests` directory in your operator repository with the following structure:
+
+```
+tests/
+├── input.csv          # Sample input data
+├── output.csv         # Expected output data  
+├── test.json          # Test configuration
+```
+
+For multiple test scenarios, use numbered files:
+- `test_1.json`, `test_2.json` for different parameter settings
+- `input_1.csv`, `input_2.csv` for different data scenarios
+
+### Creating Comprehensive Test Data
+
+Design test cases that cover various scenarios:
+
+| Test Scenario | Purpose | Example Data |
+|---------------|---------|--------------|
+| **Normal Case** | Standard operation | Regular numeric data with good distribution |
+| **Edge Cases** | Boundary conditions | Minimum data points, extreme values |
+| **Error Cases** | Invalid inputs | Missing data, wrong data types |
+
+### Test Configuration File
+
+Create comprehensive `test.json` files to specify how Tercen should run your tests:
+
+**Basic Test Configuration:**
+
+```json
+{
+  "kind": "OperatorUnitTest",
+  "name": "regression_test_basic",
+  "namespace": "test",
+  "inputDataUri": "input.csv",
+  "outputDataUri": ["output.csv"],
+  "columns": [],
+  "rows": [],
+  "colors": [],
+  "labels": [],
+  "yAxis": ".y",
+  "xAxis": ".x",
+  "properties": {
+    "intercept.omit": false,
+    "confidence.level": 0.95
+  }
+}
+```
+
+This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!
