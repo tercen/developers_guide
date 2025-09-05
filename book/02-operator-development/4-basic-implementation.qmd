@@ -1,0 +1,380 @@
+# Basic Implementation Patterns
+
+This chapter introduces the fundamental implementation patterns for Tercen operators. You'll learn how to connect to Tercen's data API, understand the context system, and implement the core computational logic that forms the foundation of every operator.
+
+::: {.callout-note}
+## What You'll Learn
+- Tercen Context system and data connection
+- Core operator implementation patterns
+- Data selection and manipulation techniques
+- Basic computation workflows
+- Result preparation and output formatting
+:::
+
+## Understanding Tercen Context
+
+The **Tercen Context** is your operator's gateway to the platform. It provides access to:
+
+- Input data based on the current projection
+- Metadata about the analysis workflow  
+- Functions for data selection and result submission
+- Access to user-defined parameters
+- Error handling and logging capabilities
+
+### Connection Identifiers
+
+Every data step in Tercen has unique identifiers that your operator uses to connect:
+
+::: {.callout-info}
+## Required Identifiers
+- **Workflow ID**: Identifies the specific workflow containing your data
+- **Step ID**: Identifies the specific data step within that workflow
+
+These can be found in the data step URL: `/w/{workflowId}/ds/{stepId}`
+
+**Example URL**: `https://tercen.com/w/12345abc/ds/67890def`
+- Workflow ID: `12345abc`
+- Step ID: `67890def`
+:::
+
+### Establishing Connection
+
+::: {.panel-tabset}
+
+### R
+
+```r
+library(tercen)
+library(dplyr)
+
+# Establish context
+ctx <- tercenCtx(
+    workflowId = "YOUR_WORKFLOW_ID",
+    stepId = "YOUR_STEP_ID",
+    username = "admin",        # for local instance
+    password = "admin",        # for local instance  
+    serviceUri = "http://tercen:5400/"  # for local instance
+)
+
+# For cloud instance, use:
+ctx <- tercenCtx(
+    workflowId="YOUR_WORKFLOW_ID",
+    stepId="YOUR_STEP_ID",
+    authToken="YOUR_TERCEN_TOKEN",
+    serviceUri="https://tercen.com/api/v1/"
+)
+```
+
+### Python
+
+```python
+from tercen.client import context as ctx
+import numpy as np
+
+# Establish context
+tercenCtx = ctx.TercenContext(
+    workflowId="YOUR_WORKFLOW_ID",
+    stepId="YOUR_STEP_ID",
+    username="admin",        # for local instance
+    password="admin",        # for local instance  
+    serviceUri="http://tercen:5400/"  # for local instance
+)
+
+# For cloud instance (for example, on tercen.com), use:
+tercenCtx = ctx.TercenContext(
+    workflowId="YOUR_WORKFLOW_ID",
+    stepId="YOUR_STEP_ID",
+    authToken="YOUR_TERCEN_TOKEN",
+    serviceUri="https://tercen.com/api/v1/"
+)
+```
+
+:::
+
+## Data Exploration and Selection
+
+Once connected, explore the available data structure:
+
+::: {.panel-tabset}
+
+### R
+
+```r
+# Basic data selection
+ctx %>% select(.y)                    # Get y-axis values
+ctx %>% select(.y, .ci, .ri)         # Get y values with indices
+
+# Explore projection components  
+ctx %>% cselect()                     # Column factors
+ctx %>% rselect()                     # Row factors
+ctx %>% colors()                      # Color factors
+ctx %>% labels()                      # Label factors
+
+# Get factor names
+ctx$cnames                            # Column factor names
+ctx$rnames                            # Row factor names
+
+# Convert to matrix format (if applicable)
+ctx %>% as.matrix()                   # Matrix representation
+```
+
+### Python
+
+```python
+# Basic data selection
+tercenCtx.select(['.y'])              # Get y-axis values
+tercenCtx.select(['.y', '.ci', '.ri']) # Get y values with indices
+
+# Explore projection components
+tercenCtx.cselect()                   # Column factors
+tercenCtx.rselect()                   # Row factors  
+tercenCtx.colors()                    # Color factors
+tercenCtx.labels()                    # Label factors
+
+# Get factor names
+tercenCtx.cnames                      # Column factor names
+tercenCtx.rnames                      # Row factor names
+
+# Use different dataframe libraries
+tercenCtx.select(['.y'], df_lib="pandas")   # Pandas DataFrame
+tercenCtx.select(['.y'], df_lib="polars")   # Polars DataFrame
+```
+
+:::
+
+### Key API Functions
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `select()` | Get specific data columns | DataFrame with selected columns |
+| `cselect()` | Get column factor data | DataFrame with column factors |
+| `rselect()` | Get row factor data | DataFrame with row factors |
+| `as.matrix()` | Convert to matrix format | Matrix (y-values as matrix) |
+| `colors()` | Get color factor data | DataFrame with color factors |
+| `labels()` | Get label factor data | DataFrame with label factors |
+| `addNamespace()` | Add unique column names | Modified DataFrame |
+| `save()` | Send results back to Tercen | Success confirmation |
+
+
+## Standard Operator Workflow
+
+Every operator follows this fundamental pattern:
+
+1. **Connect** to Tercen using context
+2. **Select** required data components 
+3. **Compute** your analytical results
+4. **Save** results with proper formatting
+
+::: {.callout-tip}
+## Development Tip
+Start by exploring your data interactively using the selection functions. Understanding the data structure is crucial before implementing your computational logic.
+:::
+
+## Core Implementation Patterns
+
+### Pattern 1: Cell-wise Operations
+
+The most common pattern computes results for each unique combination of row and column factors:
+
+::: {.panel-tabset}
+
+### R Implementation
+
+```r
+library(tercen)
+library(dplyr)
+
+# Connect to Tercen
+ctx <- tercenCtx(workflowId = "YOUR_WORKFLOW_ID", stepId = "YOUR_STEP_ID")
+
+# Cell-wise computation pattern
+result <- ctx %>%
+  # Step 1: Select required data components
+  select(.y, .ci, .ri) %>%           # y-values with cell indices
+  
+  # Step 2: Group by projection components (per-cell grouping)
+  group_by(.ri, .ci) %>%             # Group by row and column indices
+  
+  # Step 3: Compute your analysis
+  summarise(
+    mean_value = mean(.y, na.rm = TRUE),
+    count = n(),
+    .groups = 'drop'
+  ) %>%
+  
+  # Step 4: Handle edge cases
+  mutate(
+    mean_value = ifelse(count == 0, NA_real_, mean_value)
+  )
+
+# Step 5: Prepare output and save
+result <- ctx$addNamespace(result)
+ctx$save(result)
+```
+
+### Python Implementation
+
+```python
+from tercen.client import context as ctx
+import polars as pl
+
+# Connect to Tercen
+tercenCtx = ctx.TercenContext(workflowId="YOUR_WORKFLOW_ID", stepId="YOUR_STEP_ID")
+
+# Cell-wise computation pattern
+df = (
+    tercenCtx
+    # Step 1: Select required data components
+    .select(['.y', '.ci', '.ri'], df_lib="polars")
+    
+    # Step 2: Group by projection components (per-cell grouping)
+    .group_by(['.ci', '.ri'])
+    
+    # Step 3: Compute your analysis
+    .agg([
+        pl.col('.y').mean().alias('mean_value'),
+        pl.col('.y').count().alias('count')
+    ])
+    
+    # Step 4: Handle edge cases
+    .with_columns([
+        pl.when(pl.col('count') == 0)
+          .then(None)
+          .otherwise(pl.col('mean_value'))
+          .alias('mean_value')
+    ])
+)
+
+# Step 5: Prepare output and save
+df = tercenCtx.add_namespace(df)
+tercenCtx.save(df)
+```
+
+:::
+
+### Pattern 2: Row-wise Operations
+
+Compute results across columns for each row:
+
+::: {.panel-tabset}
+
+### R Implementation
+
+```r
+# Row-wise computation pattern
+result <- ctx %>%
+  select(.y, .ri) %>%                 # y-values with row indices
+  group_by(.ri) %>%                   # Group by row indices only
+  summarise(
+    row_sum = sum(.y, na.rm = TRUE),
+    row_mean = mean(.y, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+result <- ctx$addNamespace(result)
+ctx$save(result)
+```
+
+### Python Implementation
+
+```python
+# Row-wise computation pattern
+df = (
+    tercenCtx
+    .select(['.y', '.ri'], df_lib="polars")
+    .group_by(['.ri'])
+    .agg([
+        pl.col('.y').sum().alias('row_sum'),
+        pl.col('.y').mean().alias('row_mean')
+    ])
+)
+
+df = tercenCtx.add_namespace(df)
+tercenCtx.save(df)
+```
+
+:::
+
+### Pattern 3: Column-wise Operations
+
+Compute results across rows for each column:
+
+::: {.panel-tabset}
+
+### R Implementation
+
+```r
+# Column-wise computation pattern
+result <- ctx %>%
+  select(.y, .ci) %>%                 # y-values with column indices
+  group_by(.ci) %>%                   # Group by column indices only
+  summarise(
+    col_var = var(.y, na.rm = TRUE),
+    col_max = max(.y, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+result <- ctx$addNamespace(result)
+ctx$save(result)
+```
+
+### Python Implementation
+
+```python
+# Column-wise computation pattern
+df = (
+    tercenCtx
+    .select(['.y', '.ci'], df_lib="polars")
+    .group_by(['.ci'])
+    .agg([
+        pl.col('.y').var().alias('col_var'),
+        pl.col('.y').max().alias('col_max')
+    ])
+)
+
+df = tercenCtx.add_namespace(df)
+tercenCtx.save(df)
+```
+
+:::
+
+
+## Handling Factor Data
+
+When working with categorical data from row/column factors:
+
+::: {.panel-tabset}
+
+### R
+
+```r
+# Working with factors
+factor_data <- ctx %>% 
+  select(.y, .ci, .ri) %>%
+  left_join(ctx %>% cselect(), by = ".ci") %>%  # Join column factors
+  left_join(ctx %>% rselect(), by = ".ri")      # Join row factors
+
+# Now you have access to the actual factor values, not just indices
+```
+
+### Python
+
+```python
+# Working with factors
+y_data = tercenCtx.select(['.y', '.ci', '.ri'], df_lib="polars")
+col_factors = tercenCtx.cselect(df_lib="polars")
+row_factors = tercenCtx.rselect(df_lib="polars")
+
+# Join to get factor values
+df = (
+    y_data
+    .join(col_factors, on=".ci", how="left")
+    .join(row_factors, on=".ri", how="left")
+)
+```
+
+:::
+
+## Next Steps
+
+Now that you understand the basic implementation patterns, the next chapter will cover advanced features including error handling, parameter management, and comprehensive testing strategies. These techniques are essential for creating robust, production-ready operators.
