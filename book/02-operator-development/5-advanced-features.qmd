@@ -1,0 +1,277 @@
+# Parameter Management and Configuration
+
+Building on the basic implementation patterns, this chapter focuses on parameter management and configuration. You'll learn how to create user-configurable operators through properties, settings, and parameter validation that make your operators flexible and user-friendly.
+
+::: {.callout-note}
+## What You'll Learn
+- Parameter configuration and validation
+- Property types and usage patterns
+- Advanced parameter patterns and best practices
+- User experience considerations for parameter design
+- Integration between operator.json and operator code
+:::
+
+## Understanding Operator Parameters
+
+Parameters allow users to customize operator behavior without modifying code. They bridge the gap between the flexibility needed for different use cases and the standardization required for reliable operation.
+
+Well-designed parameters provide:
+
+- **Flexibility**: Users can adapt operators to different datasets and requirements
+- **Reusability**: Single operators can handle multiple analytical scenarios
+- **User Control**: Domain experts can fine-tune analysis without programming
+- **Standardization**: Consistent interface patterns across operators
+
+Parameters flow through your operator in this sequence:
+
+1. **Definition**: Declared in `operator.json` with types and defaults
+2. **User Input**: Configured through Tercen's UI when adding operators
+3. **Validation**: Checked for type safety and constraint compliance
+4. **Access**: Retrieved in operator code for computational use
+5. **Application**: Used to modify operator behavior and outputs
+
+## Parameter Configuration
+
+Parameters are defined in your `operator.json` file and accessed programmatically in your operator code.
+
+### Basic Parameter Definition
+
+Each parameter requires several key properties:
+
+```json
+{
+  "properties": [
+    {
+      "kind": "BooleanProperty",
+      "name": "parameter.name",
+      "defaultValue": true,
+      "description": "Clear description of what this parameter controls"
+    }
+  ]
+}
+```
+
+### Parameter Types and Usage
+
+Tercen supports several parameter types, each with specific use cases:
+
+| Parameter Type | Purpose | Example Use Cases |
+|----------------|---------|-------------------|
+| `BooleanProperty` | True/false options | Enable/disable features, toggle algorithms |
+| `DoubleProperty` | Decimal number inputs | Thresholds, cutoffs, scaling factors |
+| `StringProperty` | Text inputs | Method names, file paths, custom labels |
+| `EnumeratedProperty` | Dropdown selections | Algorithm choices, predefined options |
+
+## Parameter Examples
+
+::: {.panel-tabset}
+
+### Boolean Parameters
+
+```json
+{
+  "kind": "BooleanProperty",
+  "name": "normalize.data",
+  "defaultValue": false,
+  "description": "Apply z-score normalization before analysis"
+},
+{
+  "kind": "BooleanProperty",
+  "name": "remove.outliers",
+  "defaultValue": true,
+  "description": "Automatically detect and exclude statistical outliers"
+}
+```
+
+### Double Parameters
+
+```json
+{
+  "kind": "DoubleProperty",
+  "name": "significance.threshold",
+  "defaultValue": 0.05,
+  "description": "P-value threshold for statistical significance"
+},
+{
+  "kind": "DoubleProperty",
+  "name": "outlier.threshold",
+  "defaultValue": 1.5,
+  "description": "IQR multiplier for outlier detection"
+}
+```
+
+### String Parameters
+
+```json
+{
+  "kind": "StringProperty",
+  "name": "plot.title",
+  "defaultValue": "My Plot",
+  "description": "Title to be given to the plot."
+}
+```
+
+### Enumerated Parameters
+
+```json
+{
+  "kind": "EnumeratedProperty",
+  "name": "clustering.algorithm",
+  "defaultValue": "kmeans",
+  "description": "Clustering algorithm to use for analysis",
+  "values": ["kmeans", "hierarchical", "dbscan", "spectral"]
+},
+{
+  "kind": "EnumeratedProperty",
+  "name": "distance.metric",
+  "defaultValue": "euclidean",
+  "description": "Distance metric for similarity calculations",
+  "values": ["euclidean", "manhattan", "cosine", "jaccard"]
+}
+```
+
+:::
+
+## Specifying settings in the operator.json
+
+```json
+{
+  "kind": "DataStep",
+  "version": "1.0.0",
+  "name": "Cell Statistics",
+  "description": "Calculate statistical summaries (mean, std dev, count) for each cell in the data projection",
+  "tags": ["statistics", "summary", "descriptive"],
+  "authors": ["Your Name"],
+  "urls": ["https://github.com/YOUR_ORGANISATION/cell_statistics_operator"],
+  "properties": [
+    {
+      "kind": "BooleanProperty",
+      "name": "include.std.dev",
+      "defaultValue": true,
+      "description": "Include standard deviation in the output statistics"
+    },
+    {
+      "kind": "IntegerProperty",
+      "name": "min.observations",
+      "defaultValue": 1,
+      "description": "Minimum number of observations required per cell to compute statistics"
+    },
+    {
+      "kind": "BooleanProperty",
+      "name": "exclude.outliers",
+      "defaultValue": false,
+      "description": "Exclude outliers using IQR method before computing statistics"
+    },
+    {
+      "kind": "DoubleProperty",
+      "name": "outlier.threshold",
+      "defaultValue": 1.5,
+      "description": "IQR multiplier for outlier detection (only used if exclude.outliers is true)"
+    }
+  ]
+}
+```
+
+
+## Advanced Parameter Patterns
+
+::: {.panel-tabset}
+
+### R Parameter Access
+
+```r
+# Accessing different parameter types
+method <- ctx$op.value('method', as.character, 'mean')
+threshold <- ctx$op.value('threshold', as.numeric, 0.05)
+iterations <- ctx$op.value('iterations', as.integer, 100L)
+enabled <- ctx$op.value('enabled', as.logical, TRUE)
+
+# Parameter validation
+valid_methods <- c('mean', 'median', 'trimmed')
+if (!method %in% valid_methods) {
+  stop(paste("Invalid method:", method, ". Must be one of:", paste(valid_methods, collapse=", ")))
+}
+
+if (threshold < 0 || threshold > 1) {
+  stop("Threshold must be between 0 and 1")
+}
+```
+
+### Python Parameter Access
+
+```python
+# Accessing different parameter types
+method = tercenCtx.op.value('method', 'mean')
+threshold = float(tercenCtx.op.value('threshold', 0.05))
+iterations = int(tercenCtx.op.value('iterations', 100))
+enabled = tercenCtx.op.value('enabled', True)
+
+# Parameter validation
+valid_methods = ['mean', 'median', 'trimmed']
+if method not in valid_methods:
+    raise ValueError(f"Invalid method: {method}. Must be one of: {', '.join(valid_methods)}")
+
+if not 0 <= threshold <= 1:
+    raise ValueError("Threshold must be between 0 and 1")
+```
+
+:::
+
+## Parameter Grouping and Organization
+
+For complex operators with many parameters, organize them logically:
+
+```json
+{
+  "name": "advanced-analysis",
+  "properties": [
+    {
+      "comment": "=== Data Processing Options ===",
+      "kind": "StringProperty",
+      "name": "preprocessing.method",
+      "value": "standardize",
+      "enumValues": ["none", "normalize", "standardize", "robust"]
+    },
+    {
+      "kind": "BooleanProperty",
+      "name": "preprocessing.remove_outliers",
+      "defaultValue": false
+    },
+    {
+      "comment": "=== Analysis Parameters ===",
+      "kind": "EnumeratedProperty",
+      "name": "analysis.algorithm",
+      "defaultValue": "pca",
+      "enumValues": ["pca", "ica", "factor", "cluster"]
+    },
+    {
+      "kind": "IntegerProperty",
+      "name": "analysis.components",
+      "defaultValue": 2,
+      "minValue": 1,
+      "maxValue": 50
+    },
+    {
+      "comment": "=== Output Options ===",
+      "kind": "BooleanProperty",
+      "name": "output.include_variance",
+      "defaultValue": true
+    },
+    {
+      "kind": "BooleanProperty",
+      "name": "output.include_loadings",
+      "defaultValue": false
+    }
+  ]
+}
+```
+
+## Best Practices for Parameter Design
+
+1. **Provide Sensible Defaults**: Most users should be able to run your operator without changing parameters
+2. **Use Clear Names**: Parameter names should be self-explanatory (`threshold` not `t`, `min_samples` not `ms`)
+3. **Group Related Parameters**: Use prefixes to group parameters (`output.format`, `output.precision`)
+
+## Next Steps
+
+With comprehensive parameter management in place, you're ready to learn about operator specifications and formal metadata requirements. The next chapter covers the `operator.json` file, which defines your operator's complete specifications and integration requirements.
