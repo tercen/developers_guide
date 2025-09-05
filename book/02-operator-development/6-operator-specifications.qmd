@@ -1,0 +1,320 @@
+# Operator Metadata and Specifications
+
+This chapter covers the `operator.json` file, which defines your operator's metadata, parameters, and formal specifications. This file is crucial for operator discovery, parameter configuration, and ensuring proper integration with Tercen's type system and ontology.
+
+::: {.callout-note}
+## What You'll Learn
+- Structure and purpose of operator.json
+- Metadata configuration best practices
+- Parameter property definitions
+- Input and output specifications
+- Ontology mapping and semantic descriptions
+- Validation and testing of specifications
+:::
+
+## Overview of operator.json
+
+The `operator.json` file serves multiple critical functions:
+
+- **Metadata**: Provides name, description, tags, and authorship information
+- **Parameters**: Defines user-configurable properties with types and defaults
+- **Specifications**: Formally describes input requirements and output guarantees
+- **Discovery**: Enables search and categorization in operator libraries
+- **Validation**: Ensures type safety and proper data flow
+
+## Basic Structure
+
+Every `operator.json` file follows this fundamental structure:
+
+```json
+{
+  "name": "Your Operator Name",
+  "description": "Brief description of what the operator does",
+  "tags": ["category1", "category2"],
+  "authors": ["author"],
+  "urls": ["https://github.com/username/repository"],
+  "properties": [
+    // Parameter definitions
+  ],
+  "operatorSpec": {
+    // Formal input/output specifications
+  }
+}
+```
+
+## Metadata Configuration
+
+### Basic Metadata Fields
+
+The metadata section provides essential information about your operator:
+
+```json
+{
+  "name": "Cell Statistics",
+  "description": "Calculate comprehensive statistical summaries (mean, std dev, count) for each cell in the data projection",
+  "tags": [
+    "statistics",
+    "descriptive statistics", 
+    "summary",
+    "quality control"
+  ],
+  "authors": [
+    "Your Name"
+  ],
+  "urls": [
+    "https://github.com/yourusername/cell_statistics_operator"
+  ]
+}
+```
+
+### Metadata Best Practices
+
+| Field | Guidelines | Examples |
+|-------|------------|----------|
+| **name** | Concise, descriptive, title case | "Linear Regression", "PCA Analysis", "Data Quality Check" |
+| **description** | One sentence explaining purpose | "Calculate..." "Perform..." "Identify..." |
+| **tags** | Relevant categories for discovery | "statistics", "machine learning", "visualization" |
+| **authors** | Name and email format | "John Doe <john@example.com>" |
+| **urls** | Repository and documentation links | GitHub repo, documentation sites |
+
+::: {.callout-tip}
+## Tagging Strategy
+Use a mix of broad categories ("statistics", "visualization") and specific terms ("regression", "clustering") to improve discoverability while maintaining precision.
+:::
+
+## Parameter Properties
+
+Parameters allow users to customize operator behavior. Each parameter is defined as a property with specific type, default value, and validation rules. If you're not familiar with operator properties, they were covered in the previous chapter.
+
+## Operator Specifications
+
+The `operatorSpec` section formally describes your operator's input requirements using Tercen's ontology system.
+
+### Basic Specification Structure
+
+```json
+{
+  "operatorSpec": {
+    "kind": "OperatorSpec",
+    "ontologyUri": "https://tercen.com/_ontology/tercen",
+    "ontologyVersion": "0.0.1",
+    "inputSpecs": [
+      // Input specifications
+    ],
+    "outputSpecs": [
+      // Output specifications  
+    ]
+  }
+}
+```
+
+### Input Specifications
+
+Input specs define what data your operator expects using the crosstab projection model:
+
+```json
+{
+  "inputSpecs": [
+    {
+      "kind": "CrosstabSpec",
+      "metaFactors": [
+        {
+          "kind": "MetaFactor",
+          "name": "Sample",
+          "type": "",
+          "description": "Sample identifiers for grouping observations",
+          "ontologyMapping": "sample",
+          "crosstabMapping": "row",
+          "cardinality": "1..n",
+          "factors": []
+        },
+        {
+          "kind": "MetaFactor", 
+          "name": "Variable",
+          "type": "",
+          "description": "Variable identifiers for measurement types",
+          "ontologyMapping": "variable",
+          "crosstabMapping": "column",
+          "cardinality": "1..n",
+          "factors": []
+        }
+      ],
+      "axis": [
+        {
+          "kind": "AxisSpec",
+          "metaFactors": [
+            {
+              "kind": "MetaFactor",
+              "name": "Measurement",
+              "type": "numeric",
+              "description": "Numeric values for statistical computation",
+              "ontologyMapping": "measurement",
+              "crosstabMapping": "y",
+              "cardinality": "1..n",
+              "factors": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Understanding MetaFactors
+
+MetaFactors define the semantic meaning of data elements:
+
+| Field | Purpose | Examples |
+|-------|---------|----------|
+| **name** | Human-readable identifier | "Sample", "Gene", "Time Point" |
+| **type** | Data type constraint | "numeric", "categorical", "" (any) |
+| **description** | Detailed explanation | "Gene expression measurements" |
+| **ontologyMapping** | Semantic category | "sample", "variable", "measurement" |
+| **crosstabMapping** | Projection component | "row", "column", "y", "x", "color", "label" |
+| **cardinality** | Required quantity | "1" (exactly one), "1..n" (one or more), "0..1" (optional) |
+
+### Crosstab Mapping Options
+
+| Mapping | Purpose | Typical Use |
+|---------|---------|-------------|
+| **row** | Row factors | Sample IDs, conditions, time points |
+| **column** | Column factors | Variables, genes, features |
+| **y** | Y-axis values | Primary measurements |
+| **x** | X-axis values | Secondary measurements |
+| **color** | Color factors | Additional grouping variables |
+| **label** | Label factors | Annotations, metadata |
+
+
+## Complete Example: Mean Operator
+
+Here's the complete `operator.json` for a mean calculation operator:
+
+```json
+{
+  "name": "Mean",
+  "description": "Calculate the mathematical average of the data points in a cell.",
+  "tags": [
+    "descriptive statistics",
+    "summary statistics", 
+    "basic statistics"
+  ],
+  "authors": [
+    "tercen"
+  ],
+  "urls": [
+    "https://github.com/tercen/mean_operator"
+  ],
+  "properties": [
+    {
+      "kind": "BooleanProperty",
+      "name": "exclude.na",
+      "defaultValue": true,
+      "description": "Exclude missing values from calculation"
+    },
+    {
+      "kind": "IntegerProperty",
+      "name": "min.observations", 
+      "defaultValue": 1,
+      "description": "Minimum number of non-missing observations required",
+      "minimum": 1
+    }
+  ],
+  "operatorSpec": {
+    "kind": "OperatorSpec",
+    "ontologyUri": "https://tercen.com/_ontology/tercen",
+    "ontologyVersion": "0.0.1",
+    "inputSpecs": [
+      {
+        "kind": "CrosstabSpec",
+        "metaFactors": [
+          {
+            "kind": "MetaFactor",
+            "name": "Sample",
+            "type": "",
+            "description": "Sample identifiers",
+            "ontologyMapping": "sample",
+            "crosstabMapping": "row",
+            "cardinality": "1..n",
+            "factors": []
+          },
+          {
+            "kind": "MetaFactor",
+            "name": "Variable", 
+            "type": "",
+            "description": "Variable identifiers",
+            "ontologyMapping": "variable",
+            "crosstabMapping": "column",
+            "cardinality": "1..n",
+            "factors": []
+          }
+        ],
+        "axis": [
+          {
+            "kind": "AxisSpec",
+            "metaFactors": [
+              {
+                "kind": "MetaFactor",
+                "name": "Y-Axis Measurement",
+                "type": "numeric",
+                "description": "Measurement value, per cell",
+                "ontologyMapping": "measurement",
+                "crosstabMapping": "y",
+                "cardinality": "1..n",
+                "factors": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "outputSpecs": []
+  }
+}
+```
+
+## Optional Inputs
+
+Define optional inputs using cardinality:
+
+```json
+{
+  "kind": "AxisSpec",
+  "metaFactors": [
+    {
+      "kind": "MetaFactor",
+      "name": "X-Axis Measurement (Optional)",
+      "type": "numeric", 
+      "description": "Second measurement value, per cell (optional)",
+      "ontologyMapping": "measurement",
+      "crosstabMapping": "x",
+      "cardinality": "0..1",
+      "factors": []
+    }
+  ]
+}
+```
+
+## Best Practices
+
+1. **Start Simple**: Begin with basic specs and add complexity gradually
+2. **Be Specific**: Provide detailed descriptions for all components
+3. **Use Standards**: Follow established ontology mappings
+
+Ensure your specifications align with your documentation:
+
+- Parameter descriptions match README explanations
+- Input specs reflect actual requirements
+
+
+## Next Steps
+
+With a complete `operator.json` file, your operator is properly specified and ready for integration with Tercen's ecosystem. The next chapter covers comprehensive documentation and deployment strategies to make your operator production-ready.
+
+::: {.callout-success}
+## Key Takeaways
+- operator.json is crucial for operator discovery and validation
+- Specifications provide type safety and semantic meaning
+- Properties enable user customization with proper validation
+- Complete specifications improve operator reliability and usability
+:::
