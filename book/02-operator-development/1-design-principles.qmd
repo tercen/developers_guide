@@ -27,39 +27,55 @@ This design ensures that operators can be chained together in complex analytical
 
 Creating a Tercen operator follows a structured, iterative workflow designed to ensure reliability, maintainability, and user-friendliness. The development process consists of eight key phases, with continuous iteration between implementation, testing, and maintenance:
 
+
 ```{mermaid}
-graph TD
-    A["Design<br/>Define input/output<br/>Choose projection type<br/>Plan computations"] --> B["Repository Setup<br/>Create GitHub repo<br/>Configure structure<br/>Set up templates"]
-    B --> C["Development Environment<br/>Set up Tercen Studio<br/>Install dependencies<br/>Configure IDE"]
-    C --> D["Data Connection<br/>Connect to Tercen data<br/>Understand context<br/>Test projections"]
-    D --> E["Implementation<br/>Write computational functions<br/>Handle edge cases<br/>Optimize performance"]
-    E --> F["Testing<br/>Create unit tests<br/>Validate with sample data<br/>Test error scenarios"]
-    F --> G["Documentation<br/>Write usage instructions<br/>Document parameters<br/>Create examples"]
-    G --> H["Deployment<br/>Package dependencies<br/>Create releases<br/>Publish to library"]
-    
-    H --> I["Maintenance<br/>Monitor performance<br/>Fix bugs<br/>Add features"]
-    I --> E
-    
-    classDef designStyle fill:#e3f2fd,color:#000000,font-weight:bold
-    classDef repoStyle fill:#f3e5f5,color:#000000,font-weight:bold
-    classDef envStyle fill:#e8f5e8,color:#000000,font-weight:bold
-    classDef dataStyle fill:#fff3e0,color:#000000,font-weight:bold
-    classDef implStyle fill:#fce4ec,color:#000000,font-weight:bold
-    classDef testStyle fill:#e0f2f1,color:#000000,font-weight:bold
-    classDef docStyle fill:#f1f8e9,color:#000000,font-weight:bold
-    classDef deployStyle fill:#e8eaf6,color:#000000,font-weight:bold
-    classDef maintStyle fill:#fafafa,color:#000000,font-weight:bold
-    
-    class A designStyle
-    class B repoStyle
-    class C envStyle
-    class D dataStyle
-    class E implStyle
-    class F testStyle
-    class G docStyle
-    class H deployStyle
-    class I maintStyle
+classDiagram
+        class Design {
+            Define input-output
+            Choose projection
+            Plan computations
+        }
+        class RepositorySetup {
+            Initialise GitHub repo
+        }
+        class DevelopmentEnvironment {
+            Load repo
+            Prepare Tercen step
+        }
+        class Implementation {
+            Connect to Tercen data
+            Write computational functions
+        }
+        class Testing {
+            Create unit tests
+            Validate with sample data
+        }
+        class Documentation {
+            Write usage instructions
+            Populate operator metadata and specs
+        }
+        class Deployment {
+            Control dependencies
+            Release to library
+        }
+        class Maintenance {
+            Get feedback
+            Fix bugs
+            Add features
+        }
+
+        Design --> RepositorySetup
+        RepositorySetup --> DevelopmentEnvironment
+        DevelopmentEnvironment --> Implementation
+        Implementation --> Testing
+        Testing --> Documentation
+        Documentation --> Deployment
+        Deployment --> Maintenance
+        Maintenance --> Implementation
+
 ```
+
+
 
 ## Input Projection Design
 
