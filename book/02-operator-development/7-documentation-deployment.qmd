@@ -1,0 +1,185 @@
+# Documentation and Deployment
+
+This chapter covers creating comprehensive documentation and deploying your operator to production. Building on the operator specifications from the previous chapter, you'll learn how to create user-friendly documentation and manage the deployment process. Good documentation is essential for user adoption, while proper deployment ensures reliability and maintainability.
+
+::: {.callout-note}
+## What You'll Learn
+- Comprehensive documentation strategies
+- README.md best practices
+- Dependency management techniques
+- Deployment preparation and release management
+- Version control and maintenance workflows
+:::
+
+## Documentation Best Practices
+
+Comprehensive documentation is crucial for operator adoption and maintenance. Users need to understand what your operator does, how to use it, and how to interpret the results.
+
+### README.md Structure
+
+Your README should follow this proven structure:
+
+```markdown
+# [Operator Name]
+
+[One-sentence description of what the operator does]
+
+## Description
+
+[Detailed explanation of the operator's purpose and computational approach]
+
+This operator implements [specific algorithm/method] for [use case]. It is useful for:
+
+- [Primary use case 1]
+- [Primary use case 2]
+- [Primary use case 3]
+
+## Input Projection
+
+- **Y-axis**: [Description of required y-axis data]
+- **Row factors**: [How row factors are used]
+- **Column factors**: [How column factors are used]
+- **Color factors**: [Usage or "Not used"]
+- **Label factors**: [Usage or "Not used"]
+
+## Output
+
+- **Output relation**: [Per cell/per row/per column/global]
+- **Output columns**:
+  - `column1`: [Description and data type]
+  - `column2`: [Description and data type]
+- **Data types**: [Summary of output data types]
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| param1 | Boolean | true | [Detailed description] |
+| param2 | Double | 10 | [Detailed description] |
+
+## Usage Example
+
+[Step-by-step usage instructions with screenshots if helpful]
+
+## Implementation Notes
+
+[Important technical details, limitations, assumptions]
+
+## References
+
+[Academic references or links to relevant documentation]
+```
+
+## Dependency Management
+
+Proper dependency management ensures your operator works reliably across different environments.
+
+### R
+
+::: {.panel-tabset}
+
+### Using renv
+
+```r
+# In your operator's main directory, initialize renv
+renv::init()
+
+# Snapshot the environment
+renv::snapshot()
+
+# Your renv.lock file will be automatically created and should be committed
+```
+
+### Python Dependency Management
+
+```bash
+# Create requirements.txt with essential packages
+pip freeze > requirements.txt
+```
+
+:::
+
+## Version Control Best Practices
+
+### Git Workflow
+
+Implement a clean git workflow for your operator development:
+
+```bash
+# Feature development workflow
+git checkout -b feature/add-outlier-detection
+# Make your changes
+git add .
+git commit -m "Add outlier detection with IQR method"
+
+# Create pull request for review
+git push origin feature/add-outlier-detection
+
+# After review and merge
+git checkout main
+git pull origin main
+git branch -d feature/add-outlier-detection
+```
+
+### Semantic Versioning
+
+Use semantic versioning for your releases:
+
+- **MAJOR.MINOR.PATCH** (e.g., 1.2.3)
+- **MAJOR**: Breaking changes to operator interface
+- **MINOR**: New features, backward compatible
+- **PATCH**: Bug fixes, backward compatible
+
+### Release Management
+
+Create structured releases with proper documentation:
+
+```bash
+# Prepare release
+git checkout main
+git pull origin main
+
+# Update version in operator.json
+# Update CHANGELOG.md with release notes
+
+# Commit version changes
+git add .
+git commit -m "Release version 1.2.0"
+
+# Create and push tag
+git tag v1.2.0
+git push origin main
+git push origin v1.2.0
+```
+
+## Deployment Preparation
+
+### Repository Structure Final Check
+
+Ensure your complete operator repository has this structure:
+
+```
+your_operator_repository/
+├── .github/
+│   └── workflows/          # CI/CD automation
+├── main.R                  # Main operator implementation (R)
+├── main.py                 # Main operator implementation (Python)
+├── operator.json           # Operator metadata and parameters
+├── README.md               # Comprehensive documentation
+├── requirements.txt        # Python dependencies
+├── renv.lock              # R dependencies snapshot
+└── test/                  # Test files and data (recommended)
+    ├── input.csv
+    ├── output.csv
+    ├── test.json
+    └── README.md
+```
+
+::: {.callout-success}
+## Congratulations!
+You've successfully learned the complete operator development workflow! Your operator is now ready for release and installation in a Tercen environment.
+:::
+
+## Next Steps
+
+The next chapters in this guide cover these advanced topics and specialized development scenarios.
