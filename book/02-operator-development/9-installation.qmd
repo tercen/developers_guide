@@ -1,0 +1,140 @@
+# Installing an Operator
+
+Once your operator is tested and documented, the final step is making it available to users through Tercen's library system. This chapter covers the installation process, library management, and best practices for deploying operators to production environments.
+
+::: {.callout-note}
+## What You'll Learn
+- Understanding Tercen's library system
+- Creating and managing custom libraries
+- Installing operators from Git repositories
+- Library access control and permissions
+- Operator versioning and updates
+:::
+
+## Understanding Tercen Libraries
+
+Tercen uses a library system to organize and distribute computational modules. Libraries provide a structured way to manage operators, templates, apps, and datasets while controlling access and maintaining quality standards.
+
+### Library Types
+
+| Library Type | Description | Use Case | Access |
+|--------------|-------------|----------|---------|
+| **Tercen Library** | Official curated collection | Production-ready operators | Public |
+| **Custom Libraries** | Team or organization specific | Internal/specialized operators | Controlled |
+| **Personal Libraries** | Individual developer libraries | Development and testing | Private |
+
+::: {.callout-important}
+## Library Architecture
+
+Libraries in Tercen are implemented as **specialized teams** where:
+- The team itself represents the library
+- Projects within the team become available operators
+- Team permissions control library access
+- Git integration enables automated updates
+:::
+
+## Setting Up a Custom Library
+
+### Library Creation Process
+
+1. **Create a New Team**
+   - Navigate to your Tercen account dashboard
+   - Click "Teams" → "Create New Team"
+   - Choose a descriptive name (e.g., "MyOrganization Operators")
+
+2. **Configure as Library Team**
+   - Go to team settings
+   - Enable "Library team" option
+   - Configure team visibility and permissions
+
+3. **Set Access Permissions**
+   - Add team members as needed
+   - Configure read/write permissions
+   - Set up approval workflows if required
+
+::: {.callout-tip}
+## Library Naming Best Practices
+- Use organization or project names for clarity
+- Include purpose in the name (e.g., "BioinformaticsLab Operators")
+- Avoid generic names like "MyLibrary" or "TestLib"
+- Consider future growth and additional content types
+:::
+
+## Installing Operators
+
+### Git Integration Method
+
+Tercen's preferred method for operator installation uses direct Git integration:
+
+1. **Navigate to Your Library**
+   - Access your custom library (team)
+   - Ensure you have appropriate permissions
+
+2. **Add New Project**
+   - Click "New Project"
+   - Select "From Git"
+
+3. **Configure Repository Details**
+   ```
+   Name:       my_analysis_operator
+   URL:        https://github.com/myorg/my_analysis_operator
+   Tag:        1.0.0 (optional - for specific versions)
+   Auth Token: github_pat_xxxxx (if repository is private)
+   ```
+
+4. **Complete Installation**
+   - Review settings
+   - Click "Create Project"
+   - Wait for repository cloning and validation
+
+::: {.callout-warning}
+## Authentication Requirements
+For **private repositories**, you'll need:
+- Personal Access Token (PAT) for GitHub
+- Appropriate repository permissions
+- Token with `repo` scope for full access
+:::
+
+## Operator Availability and Testing
+
+### Verification Steps
+
+After installation, verify your operator is working correctly:
+
+1. **Check Library Listing**
+   - Confirm operator appears in library
+   - Verify metadata is displayed correctly
+
+2. **Test in Workflow**
+   - Create a new workflow
+   - Add a data step
+   - Search for your operator
+   - Test with sample data
+
+3. **Validate Functionality**
+   - Run with different input configurations
+   - Verify output correctness
+   - Check error handling
+
+## Version Management
+
+### Operator Updates
+
+To update an installed operator:
+
+1. **Push changes to Git repository**
+2. **Tag new version** (recommended)
+3. **Trigger library refresh** in Tercen
+
+### Version Control Best Practices
+
+- Use semantic versioning (e.g., 1.0.1)
+- Tag stable releases in Git
+
+## Next Steps
+
+With your operator successfully installed and available to users, consider:
+
+- Monitoring usage patterns and feedback
+- Planning feature enhancements based on user needs
+- Exploring advanced deployment automation
