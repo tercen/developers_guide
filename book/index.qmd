@@ -2,12 +2,6 @@
 title: "Tercen developer's guide"
 ---
 
-<center>
-![](./images/cover.png){width="100%"}
-</center>
-
-\
-
 Welcome to the Tercen Developer's Guide! This comprehensive resource will help you design, develop, and share **modules** for the **Tercen** platform.
 
 ## What is Tercen?
@@ -16,19 +10,6 @@ Tercen is a collaborative data analysis platform that bridges the gap between da
 
 - **Domain experts** (e.g., biologists, researchers) to explore and analyze their data using intuitive visual interfaces
 - **Developers** (e.g., bioinformaticians, data scientists) to create and share reusable analytical tools and web applications
-
-## Our Mission
-
-Tercen promotes collaboration for data analysis because not everyone can code—nor should they need to. Everyone should benefit from the explosion of data and computational tools currently available.
-
-By connecting non-programmers with programmers, Tercen creates a powerful ecosystem where:
-
-- **Biologists** gain direct access to sophisticated analytical tools without needing programming expertise
-- **Bioinformaticians** can focus on algorithm development rather than operational details and repetitive analysis requests
-
-This symbiotic relationship empowers both communities and democratizes data analysis.
-
-> Tercen **empowers** the biologist and **liberates** the bioinformatician.
 
 ## What You'll Learn
 
@@ -42,5 +23,14 @@ This guide covers everything you need to know about developing for Tercen:
 - **Troubleshooting** common issues and debugging techniques
 
 Whether you're a seasoned developer or new to the Tercen ecosystem, this guide will help you create impactful analytical tools that serve the scientific community.
+
+## Guidelines
+
+We want developers to have a great experience building on the Tercen Platform. Building a vibrant developer ecosystem benefits everyone and helps make data analysis accessible to a wider community.
+
+These guidelines show you how to use Tercen's products, services, and APIs effectively, sharing best practices for building new products and services.
+
+While we need some rules of engagement, we've kept these guidelines as simple as possible. These guidelines work alongside our [Terms of Service](https://github.com/tercen/Policy/blob/main/terms-of-service.md) and [Privacy Policy](https://github.com/tercen/Policy/blob/main/Privacy.md). Please read and understand these documents. We reserve the right to withdraw access if our products or services are misused.
+
 
 Let's get started building the future of collaborative data analysis!

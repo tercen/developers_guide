@@ -14,7 +14,6 @@ book:
     
     - part: "Getting Started"
       chapters:
-        - 01-getting-started/0-intro_guidelines.qmd
         - 01-getting-started/1-core-concepts.qmd
         - 01-getting-started/2-environment-setup.qmd
     
