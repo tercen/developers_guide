@@ -48,7 +48,11 @@ book:
       chapters:
         - 05-troubleshooting/1-common-issues.qmd
         - 05-troubleshooting/2-ci.qmd
-    
+
+    - part: "AI-Assisted Development"
+      chapters:
+        - 06-ai/1-ai-operator-dev.qmd
+
     - part: "Appendices"
       chapters:
         - 99-appendices/1-glossary.qmd

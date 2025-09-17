@@ -1,0 +1,150 @@
+# Spec-Driven Development with Tercen Agents
+
+This chapter provides a comprehensive tutorial on **spec-driven development using Tercen Agents**, an approach that leverages AI and the VSCode integrated development environment (IDE) to streamline the creation of Tercen operators. 
+
+::: {.callout-note}
+## Learning Objectives
+By the end of this chapter, you will be able to:
+
+- Set up and configure AI development tools for Tercen operators
+
+- Use Tercen-specific AI agents for code generation
+
+- Apply AI-assisted testing and debugging techniques
+
+- Implement AI-powered code review and optimization
+
+- Follow best practices for AI-assisted development workflows
+:::
+
+::: {.callout-note}
+## Prerequisites
+Before proceeding, ensure you've completed:
+
+- [Repository Setup](../02-operator-development/2-repository-setup.qmd) for project initialization
+
+- [Development Environment](../02-operator-development/3-development-environment.qmd) for environment setup
+
+- [Basic Implementation](../02-operator-development/4-basic-implementation.qmd) for core concepts
+:::
+
+**Spec-driven development** is a methodology where the development process begins by writing detailed specifications that precisely describe the desired functionality of a software component. In the context of Tercen, these specifications guide the creation of operators.
+
+**Tercen Agents** are AI-powered tools designed to automate and assist in various stages of operator development. They read the written specifications and, in conjunction with large language models (LLMs) through GitHub Copilot, help implement the operators. The core idea is that developers write down specifications, and Tercen Agents then read these specifications to implement the appropriate operators.
+
+## Setting up Your Development Environment
+
+A well-configured development environment is crucial for an efficient spec-driven workflow. The recommended setup integrates **VS Code with Dev containers** and a local Tercen instance.
+
+### Recommended Environment: VS Code with Dev Containers
+
+*   **VS Code (Visual Studio Code):** It is recommended to use VS Code installed on your computer. This IDE offers a good way to integrate R and Python development tools and interact with Tercen Agents and Docker.
+*   **Dev Containers:** The principle of this workflow is to use **Dev containers**, which provide a consistent and isolated runtime environment. A Dev container contains the runtime environment where Tercen operators are executed.
+    *   **Benefits:** Dev containers ensure consistency, meaning what you compute locally will be the same as what is computed in production. They help avoid issues related to installing packages and managing volumes, especially on different operating systems like Windows.
+    *   **Initial Setup:** When you open a templated project, the first step is to **reopen it in a container**. The initial configuration of the Dev container happens only once and may take some time.
+    *   **Extensions:** The Dev container setup includes recommended extensions for working with R and Python in VS Code. You can also create your own images to include custom runtime environments or packages.
+
+## The Spec-Driven Development Workflow with Tercen Agents
+
+The spec-driven development process with Tercen Agents can be broken down into several phases: defining specifications, agent-assisted implementation, validation and testing, and finalization.
+
+### Phase 1: Defining Specifications
+
+The first and most critical step is to clearly define the operator's specifications.
+
+*   **Location:** Specifications are primarily written in the **`README.md` file** of your project.
+*   **Content:** It is important to specify the **input and output** of the operator, including any cross-projections, and to define the **settings** that the operator will use. While output specifications are often developed later, it is considered good practice to write them down beforehand. The **computation** itself should be described as precisely as possible.
+*   **Flexibility:** The specification file is flexible; you are free to develop further or update it based on your needs. You can include specific inputs or instructions, and add examples.
+
+### Phase 2: Agent-Assisted Operator Implementation
+
+Once specifications are in place, Tercen Agents, powered by LLMs, take over to assist in implementing the operator.
+
+*   **Introducing Tercen Agents:**
+    *   The workflow uses **two dedicated Tercen Agents**: one for development and one for review.
+    *   These agents interact with large language models (LLMs) to understand the specifications and generate code.
+    *   **GitHub Copilot** is the recommended tool due to its integration with GitHub. It offers different modes for interacting with your code, including asking questions or leveraging more advanced features.
+*   **The Implementation Process:**
+    *   The agents read the specifications from the `README.md` file.
+    *   They then proceed to implement the operator based on these specifications.
+    *   **Example Output:** The agents start by creating the **`operator.json`** file, defining the operator's name, description, documentation URL, container image, and settings, along with meaningful descriptions for properties. They work based on the requirements and can even get started with specific examples provided in the instructions. The agents perform their "magic" by processing the context and instructions.
+
+::: {.callout-note}
+## Example Prompt
+
+Select the "TercenDeveloper" mode in the chat window.
+
+Prompt: "Implement the Tercen operator based on the specifications outlined in the README file."
+:::
+
+### Phase 3: Validation and Testing
+
+After the agents generate the initial operator code, a rigorous validation and testing phase is essential.
+
+*   **Step-by-Step Validation:** It is **highly recommended to validate all changes step-by-step**, as agents can make mistakes. Developers should check, validate, reject, or manually edit changes before committing anything.
+
+*   **Connecting to Data for Testing:**
+    *   To test the operator with real data, you connect to a Tercen instance, which can be local or cloud-based.
+    *   The `tercen-agent` simplifies this workflow by allowing you to connect to a specific dataset for development.
+    *   This connection requires a **Tercen token**, which must be provided manually.
+    *   Once connected, you can directly run the operator functions on your data.
+
+::: {.callout-note}
+## Example Prompt
+
+Select the "TercenDeveloper" mode in the chat window.
+
+Prompt: "Add a development tercenCtx() call to connect to the following data step: YOUR_DATA_STEP_URL."
+:::
+
+*   **Agent-Assisted Review:**
+    *   A **dedicated Tercen review agent** is used to review the developed operator.
+    *   This agent operates based on **custom instructions** that can be updated to fit specific needs.
+    *   It goes through a **checklist**, verifying the presence of required files, specific content within files (e.g., in `operator.json`), and adherence to guidelines.
+    *   The review agent provides feedback and suggestions for improvement. Examples of feedback include:
+        *   Issues with the `development context call`.
+        *   Adherence to file naming conventions.
+        *   Suggestions for handling errors and data types (e.g., checking for empty or `NA` columns).
+
+::: {.callout-note}
+## Example Prompt
+
+Select the "TercenReviewer" mode in the chat window.
+
+Prompt: "Review the Tercen operator project."
+:::
+
+### Phase 4: Finalizing and Versioning
+
+The final phase involves making any necessary manual adjustments and properly versioning the operator.
+
+*   **Manual Review and Edits:**
+    *   After agent review, it's crucial to perform a **final human check** to review what has changed.
+    *   VS Code provides tools for comparing and managing changes, allowing you to manually accept, reject, or edit them. The goal is **not to push everything blindly** but to ensure quality and correctness.
+
+*   **Committing and Pushing Changes:**
+    *   Once satisfied, you can commit and push the changes from the command line or user-friendly git interface.
+    *   You can also instruct the Tercen Agents to **increment the operator's version** during this stage.
+
+## Best Practices
+
+*   **Consistent Environment:** Always use **Dev containers** to ensure a consistent runtime environment across all development stages, avoiding dependency conflicts and environment-specific bugs.
+*   **Precise Specifications:** Invest time in writing **clear, detailed, and precise specifications** in your `README.md`. The quality of the agent-generated code heavily relies on the clarity of your input.
+*   **Leverage Examples:** Include **specific examples** in your instructions and specifications to give the agents better context for implementation.
+*   **Step-by-Step Validation:** Do not rely solely on the agents. **Validate all changes incrementally** and manually review the generated code.
+*   **Regular Agent Review:** Utilize the **dedicated review agent** frequently to catch potential issues early and ensure adherence to best practices and guidelines.
+*   **Human Oversight:** Always perform a **manual review before committing** and pushing code. Use VS Code's version control features to manage changes effectively.
+*   **Understand LLM Capabilities:** Be aware of the different modes and capabilities of the LLM you are using to maximize its assistance.
+
+## Conclusion
+
+AI-assisted development significantly accelerates Tercen operator creation while maintaining high quality standards. By following these practices and workflows, you can:
+
+- **Reduce development time** for standard operators
+- **Improve code quality** through AI-powered review and testing
+- **Enhance documentation** with comprehensive, user-friendly guides
+- **Minimize bugs** through systematic validation and testing
+
+The key to success is treating AI as a powerful assistant that amplifies your expertise rather than replacing careful engineering practices.
+
+You should now be ready to accelerate and improve your operator development process with AI assistance!
