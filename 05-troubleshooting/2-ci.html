@@ -2,14 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>22&nbsp; CI and Github Actions – Tercen Developer's Guide</title>
+<title>23&nbsp; CI and Github Actions – Tercen Developer's Guide</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -70,15 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../05-troubleshooting/1-common-issues.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a6e161b2431e1f94a14e0f5d32135a3c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7ab5621a234943702e64db92ddbeda14.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d0a9bd43e23e722707adaef9c1064f63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -120,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/2-ci.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/2-ci.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -133,9 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Tercen Developer’s Guide</a> 
         <div class="sidebar-tools-main">
@@ -312,6 +312,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -326,13 +332,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -349,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
       </ul>
@@ -393,23 +399,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#test-not-found" id="toc-test-not-found" class="nav-link active" data-scroll-target="#test-not-found"><span class="header-section-number">22.1</span> Test not found</a></li>
-  <li><a href="#wrong-relations" id="toc-wrong-relations" class="nav-link" data-scroll-target="#wrong-relations"><span class="header-section-number">22.2</span> Wrong relations</a></li>
-  <li><a href="#wrong-ncols-nrows" id="toc-wrong-ncols-nrows" class="nav-link" data-scroll-target="#wrong-ncols-nrows"><span class="header-section-number">22.3</span> Wrong nCols / nRows</a></li>
-  <li><a href="#wrong-column-names" id="toc-wrong-column-names" class="nav-link" data-scroll-target="#wrong-column-names"><span class="header-section-number">22.4</span> Wrong column names</a></li>
-  <li><a href="#wrong-column-type" id="toc-wrong-column-type" class="nav-link" data-scroll-target="#wrong-column-type"><span class="header-section-number">22.5</span> Wrong column type</a></li>
-  <li><a href="#wrong-values" id="toc-wrong-values" class="nav-link" data-scroll-target="#wrong-values"><span class="header-section-number">22.6</span> Wrong values</a></li>
-  <li><a href="#wrong-correlation" id="toc-wrong-correlation" class="nav-link" data-scroll-target="#wrong-correlation"><span class="header-section-number">22.7</span> Wrong correlation</a></li>
-  <li><a href="#untrusted-git" id="toc-untrusted-git" class="nav-link" data-scroll-target="#untrusted-git"><span class="header-section-number">22.8</span> Untrusted git</a></li>
+  <li><a href="#test-not-found" id="toc-test-not-found" class="nav-link active" data-scroll-target="#test-not-found"><span class="header-section-number">23.1</span> Test not found</a></li>
+  <li><a href="#wrong-relations" id="toc-wrong-relations" class="nav-link" data-scroll-target="#wrong-relations"><span class="header-section-number">23.2</span> Wrong relations</a></li>
+  <li><a href="#wrong-ncols-nrows" id="toc-wrong-ncols-nrows" class="nav-link" data-scroll-target="#wrong-ncols-nrows"><span class="header-section-number">23.3</span> Wrong nCols / nRows</a></li>
+  <li><a href="#wrong-column-names" id="toc-wrong-column-names" class="nav-link" data-scroll-target="#wrong-column-names"><span class="header-section-number">23.4</span> Wrong column names</a></li>
+  <li><a href="#wrong-column-type" id="toc-wrong-column-type" class="nav-link" data-scroll-target="#wrong-column-type"><span class="header-section-number">23.5</span> Wrong column type</a></li>
+  <li><a href="#wrong-values" id="toc-wrong-values" class="nav-link" data-scroll-target="#wrong-values"><span class="header-section-number">23.6</span> Wrong values</a></li>
+  <li><a href="#wrong-correlation" id="toc-wrong-correlation" class="nav-link" data-scroll-target="#wrong-correlation"><span class="header-section-number">23.7</span> Wrong correlation</a></li>
+  <li><a href="#untrusted-git" id="toc-untrusted-git" class="nav-link" data-scroll-target="#untrusted-git"><span class="header-section-number">23.8</span> Untrusted git</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/05-troubleshooting/2-ci.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/2-ci.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/2-ci.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -426,47 +432,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="test-not-found" class="level2" data-number="22.1">
-<h2 data-number="22.1" class="anchored" data-anchor-id="test-not-found"><span class="header-section-number">22.1</span> Test not found</h2>
+<section id="test-not-found" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="test-not-found"><span class="header-section-number">23.1</span> Test not found</h2>
 <p><code>operator.run.test.not.found</code></p>
 <p>This error happens when none of the <code>test</code>, <code>tests</code> or <code>workflow_tests</code> have been found at the repository root.</p>
 </section>
-<section id="wrong-relations" class="level2" data-number="22.2">
-<h2 data-number="22.2" class="anchored" data-anchor-id="wrong-relations"><span class="header-section-number">22.2</span> Wrong relations</h2>
+<section id="wrong-relations" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="wrong-relations"><span class="header-section-number">23.2</span> Wrong relations</h2>
 <p><code>task.test.operator.bad.nRelations</code></p>
 <p>This error happens when there are not as many tables (relations) between the computed and expected outputs.</p>
 </section>
-<section id="wrong-ncols-nrows" class="level2" data-number="22.3">
-<h2 data-number="22.3" class="anchored" data-anchor-id="wrong-ncols-nrows"><span class="header-section-number">22.3</span> Wrong nCols / nRows</h2>
+<section id="wrong-ncols-nrows" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="wrong-ncols-nrows"><span class="header-section-number">23.3</span> Wrong nCols / nRows</h2>
 <p><code>task.test.operator.bad.nCols</code> <code>task.test.operator.bad.nRows</code></p>
 <p>This error happens when there are not as many columns or rows between the computed and expected output relations.</p>
 </section>
-<section id="wrong-column-names" class="level2" data-number="22.4">
-<h2 data-number="22.4" class="anchored" data-anchor-id="wrong-column-names"><span class="header-section-number">22.4</span> Wrong column names</h2>
+<section id="wrong-column-names" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="wrong-column-names"><span class="header-section-number">23.4</span> Wrong column names</h2>
 <p><code>task.test.operator.bad.column.names</code></p>
 <p>This error happens when the computed and expected output relations do not have the exact same column names.</p>
 <p>Maybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.</p>
 </section>
-<section id="wrong-column-type" class="level2" data-number="22.5">
-<h2 data-number="22.5" class="anchored" data-anchor-id="wrong-column-type"><span class="header-section-number">22.5</span> Wrong column type</h2>
+<section id="wrong-column-type" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="wrong-column-type"><span class="header-section-number">23.5</span> Wrong column type</h2>
 <p><code>task.test.operator.bad.column.type</code></p>
 <ul>
 <li>Check that .ri and .ci factors are output as integers in your operators.</li>
 <li>If another factor (for example, a cluster ID), tercen test will expect is to be a double. In that case, you need to provide a schema file. If you use tim to genenerate your test, you can use the XXX argument to the build_test_data function.</li>
 </ul>
 </section>
-<section id="wrong-values" class="level2" data-number="22.6">
-<h2 data-number="22.6" class="anchored" data-anchor-id="wrong-values"><span class="header-section-number">22.6</span> Wrong values</h2>
+<section id="wrong-values" class="level2" data-number="23.6">
+<h2 data-number="23.6" class="anchored" data-anchor-id="wrong-values"><span class="header-section-number">23.6</span> Wrong values</h2>
 <p><code>task.test.operator.bad.value</code></p>
 <p>This error occurs when a value is different between the reference table and the computed table. It gives you the row number and both values to help finding the issue.</p>
 </section>
-<section id="wrong-correlation" class="level2" data-number="22.7">
-<h2 data-number="22.7" class="anchored" data-anchor-id="wrong-correlation"><span class="header-section-number">22.7</span> Wrong correlation</h2>
+<section id="wrong-correlation" class="level2" data-number="23.7">
+<h2 data-number="23.7" class="anchored" data-anchor-id="wrong-correlation"><span class="header-section-number">23.7</span> Wrong correlation</h2>
 <p><code>task.test.operator.bad.correlation</code></p>
 <p>This error occurs when the correlation between the reference table and the computed table values is not high enough.</p>
 </section>
-<section id="untrusted-git" class="level2" data-number="22.8">
-<h2 data-number="22.8" class="anchored" data-anchor-id="untrusted-git"><span class="header-section-number">22.8</span> Untrusted git</h2>
+<section id="untrusted-git" class="level2" data-number="23.8">
+<h2 data-number="23.8" class="anchored" data-anchor-id="untrusted-git"><span class="header-section-number">23.8</span> Untrusted git</h2>
 <p><code>tercen.forbidden.untrusted.git</code></p>
 <p>This error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator should be added to your Tercen instance configuration file.</p>
 
@@ -930,12 +936,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../05-troubleshooting/1-common-issues.html" class="pagination-link" aria-label="Common development issues">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../06-ai/1-ai-operator-dev.html" class="pagination-link" aria-label="Spec-Driven Development with Tercen Agents">
-        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

@@ -8,7 +8,7 @@
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>16&nbsp; Continuous Integration Workflow – Tercen Developer's Guide</title>
+<title>21&nbsp; Exporting Operator Parameters – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -69,8 +69,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../03-workflow-templates/3-templates-installation.html" rel="next">
-<link href="../03-workflow-templates/1-templates.html" rel="prev">
+<link href="../05-troubleshooting/1-common-issues.html" rel="next">
+<link href="../04-advanced-topics/3-gpu-development.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/2-templates-ci.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/4-export-operator-parameters.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link active">
+  <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
   </div>
 </li>
@@ -314,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
   </div>
 </li>
@@ -399,18 +399,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link active" data-scroll-target="#inputs"><span class="header-section-number">16.0.1</span> Inputs</a></li>
-  <li><a href="#steps" id="toc-steps" class="nav-link" data-scroll-target="#steps"><span class="header-section-number">16.0.2</span> Steps</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.0.3</span> Summary</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">21.1</span> Prerequisites</a>
+  <ul class="collapse">
+  <li><a href="#generating-a-personal-access-token" id="toc-generating-a-personal-access-token" class="nav-link" data-scroll-target="#generating-a-personal-access-token"><span class="header-section-number">21.1.1</span> Generating a Personal Access Token</a></li>
+  <li><a href="#finding-your-workflow-id" id="toc-finding-your-workflow-id" class="nav-link" data-scroll-target="#finding-your-workflow-id"><span class="header-section-number">21.1.2</span> Finding Your Workflow ID</a></li>
+  </ul></li>
+  <li><a href="#r-script" id="toc-r-script" class="nav-link" data-scroll-target="#r-script"><span class="header-section-number">21.2</span> R Script</a></li>
+  <li><a href="#example-output" id="toc-example-output" class="nav-link" data-scroll-target="#example-output"><span class="header-section-number">21.3</span> Example Output</a></li>
+  <li><a href="#saving-to-csv" id="toc-saving-to-csv" class="nav-link" data-scroll-target="#saving-to-csv"><span class="header-section-number">21.4</span> Saving to CSV</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">21.5</span> How It Works</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/03-workflow-templates/2-templates-ci.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/04-advanced-topics/4-export-operator-parameters.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/2-templates-ci.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/4-export-operator-parameters.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -427,43 +433,165 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Here is a link to the <a href="https://github.com/tercen/actions/tree/main/workflow-CI">Workflow CI Action</a> that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.</p>
-<p>Here’s a breakdown of what each part of the workflow does:</p>
-<section id="inputs" class="level3" data-number="16.0.1">
-<h3 data-number="16.0.1" class="anchored" data-anchor-id="inputs"><span class="header-section-number">16.0.1</span> Inputs</h3>
-<p>The workflow accepts several inputs, which are parameters for the CI process:</p>
+<p>This chapter shows how to extract operator settings from a Tercen workflow for documentation purposes. The script connects to a Tercen instance via the R client, retrieves a workflow, and outputs a table of all operator parameters across every step.</p>
+<section id="prerequisites" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">21.1</span> Prerequisites</h2>
 <ul>
-<li><code>git-repository</code> (required): The GitHub repository containing the template to be tested.</li>
-<li><code>branch</code> (optional, defaults to main): The branch of the GitHub repository.</li>
-<li><code>tag</code> (optional): A commit or version tag for the GitHub repository.</li>
-<li><code>git-token</code> (required): GitHub access token used to authenticate and access the repository.</li>
-<li><code>service-uri</code> (optional): The URI of a service to which the workflow will connect.</li>
-<li><code>tercen-username</code> (optional): Tercen service username.</li>
-<li><code>tercen-password</code> (optional): Tercen service password.</li>
+<li>A running Tercen instance.</li>
+<li>The <code>tercen</code> R package installed. This is pre-installed in Tercen operator runtime containers. To install locally:</li>
 </ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tercen/teRcen"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>A Personal Access Token (PAT) for authentication.</li>
+</ul>
+<section id="generating-a-personal-access-token" class="level3" data-number="21.1.1">
+<h3 data-number="21.1.1" class="anchored" data-anchor-id="generating-a-personal-access-token"><span class="header-section-number">21.1.1</span> Generating a Personal Access Token</h3>
+<p>Navigate to <code>https://&lt;your-tercen-instance&gt;/_token</code> in your browser. This generates a token you can use for API access. Copy and store it securely.</p>
 </section>
-<section id="steps" class="level3" data-number="16.0.2">
-<h3 data-number="16.0.2" class="anchored" data-anchor-id="steps"><span class="header-section-number">16.0.2</span> Steps</h3>
-<p><strong>1. Start Tercen Services</strong></p>
-<p>Action: tercen/actions/start-tercen@main Starts necessary Tercen services to facilitate the test environment.</p>
-<p><strong>2. Log in to Docker Registry</strong></p>
-<p>Action: docker/login-action@v3.3.0 Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor’s credentials and the provided GitHub access token.</p>
-<p><strong>3. Install Template Runner</strong></p>
-<p>Run: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.</p>
-<p><strong>4. Test Template</strong></p>
-<p>Run: Executes the tercen/workflow_runner_operator Docker container. Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run. The –report flag is used to generate a test report.</p>
-<p><strong>5. Copy Result File</strong></p>
-<p>Run: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.</p>
-<p><strong>6. Read Runner Results</strong></p>
-<p>Run: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.</p>
-<p><strong>7. Check Runner Results</strong></p>
-<p>Condition: If the Status field in the JSON output is not “Success,” the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.</p>
-<p><strong>8. Upload Runner Results</strong></p>
-<p>Action: actions/upload-artifact@v3 The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.</p>
+<section id="finding-your-workflow-id" class="level3" data-number="21.1.2">
+<h3 data-number="21.1.2" class="anchored" data-anchor-id="finding-your-workflow-id"><span class="header-section-number">21.1.2</span> Finding Your Workflow ID</h3>
+<p>The workflow ID is in the URL when viewing a workflow:</p>
+<pre><code>https://&lt;your-instance&gt;/&lt;username&gt;/w/&lt;workflow-id&gt;</code></pre>
 </section>
-<section id="summary" class="level3" data-number="16.0.3">
-<h3 data-number="16.0.3" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.0.3</span> Summary</h3>
-<p>CI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.</p>
+</section>
+<section id="r-script" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="r-script"><span class="header-section-number">21.2</span> R Script</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tercen)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to your Tercen instance</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>client <span class="ot">&lt;-</span> TercenClient<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">serviceUri =</span> <span class="st">"https://&lt;your-instance&gt;/api/v1/"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">authToken  =</span> <span class="st">"&lt;your-token&gt;"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the workflow</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>workflow <span class="ot">&lt;-</span> client<span class="sc">$</span>workflowService<span class="sc">$</span><span class="fu">get</span>(<span class="st">"&lt;your-workflow-id&gt;"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract operator settings from each step</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(workflow<span class="sc">$</span>steps, <span class="cf">function</span>(step) {</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(step<span class="sc">$</span>model) <span class="sc">||</span> <span class="fu">is.null</span>(step<span class="sc">$</span>model<span class="sc">$</span>operatorSettings)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  opRef <span class="ot">&lt;-</span> step<span class="sc">$</span>model<span class="sc">$</span>operatorSettings<span class="sc">$</span>operatorRef</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(opRef) <span class="sc">||</span> <span class="fu">is.null</span>(opRef<span class="sc">$</span>name) <span class="sc">||</span> opRef<span class="sc">$</span>name <span class="sc">==</span> <span class="st">""</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  pvs <span class="ot">&lt;-</span> opRef<span class="sc">$</span>propertyValues</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(pvs) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">step_name =</span> step<span class="sc">$</span>name,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">operator  =</span> opRef<span class="sc">$</span>name,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">version   =</span> opRef<span class="sc">$</span>version,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameter =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">value     =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">step_name =</span> step<span class="sc">$</span>name,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">operator  =</span> opRef<span class="sc">$</span>name,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">version   =</span> opRef<span class="sc">$</span>version,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameter =</span> <span class="fu">sapply</span>(pvs, <span class="cf">function</span>(p) p<span class="sc">$</span>name),</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">value     =</span> <span class="fu">sapply</span>(pvs, <span class="cf">function</span>(p) p<span class="sc">$</span>value),</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(params)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="example-output" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="example-output"><span class="header-section-number">21.3</span> Example Output</h2>
+<p>Running the script against a workflow produces a table like this:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>step_name</th>
+<th>operator</th>
+<th>version</th>
+<th>parameter</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FCS</td>
+<td>FCS</td>
+<td>2.6.0</td>
+<td>which.lines</td>
+<td>5000</td>
+</tr>
+<tr class="even">
+<td>FCS</td>
+<td>FCS</td>
+<td>2.6.0</td>
+<td>gather_channels</td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td>FCS</td>
+<td>FCS</td>
+<td>2.6.0</td>
+<td>truncate_max_range</td>
+<td>true</td>
+</tr>
+<tr class="even">
+<td>PCA</td>
+<td>PCA</td>
+<td>1.4.2</td>
+<td>scale</td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td>PCA</td>
+<td>PCA</td>
+<td>1.4.2</td>
+<td>center</td>
+<td>true</td>
+</tr>
+<tr class="even">
+<td>PCA</td>
+<td>PCA</td>
+<td>1.4.2</td>
+<td>maxComp</td>
+<td>5.0</td>
+</tr>
+<tr class="odd">
+<td>ANOVA</td>
+<td>ANOVA</td>
+<td>1.1.2</td>
+<td>method</td>
+<td>one.way</td>
+</tr>
+<tr class="even">
+<td>Clustered Heatmap</td>
+<td>Clustered Heatmap</td>
+<td>master</td>
+<td>Cluster Rows</td>
+<td>true</td>
+</tr>
+<tr class="odd">
+<td>Clustered Heatmap</td>
+<td>Clustered Heatmap</td>
+<td>master</td>
+<td>Scale</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="saving-to-csv" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="saving-to-csv"><span class="header-section-number">21.4</span> Saving to CSV</h2>
+<p>To export the results to a CSV file, add the following line after <code>print(params)</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(params, <span class="st">"operator_parameters.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="how-it-works" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">21.5</span> How It Works</h2>
+<ol type="1">
+<li><code>TercenClient$new()</code> authenticates using a PAT and connects to the Tercen API.</li>
+<li><code>workflowService$get()</code> retrieves the full workflow object, including all steps.</li>
+<li>Each step’s <code>model$operatorSettings$operatorRef</code> contains the operator name, version, and a list of <code>propertyValues</code> — the parameter name-value pairs configured for that step.</li>
+<li>The script iterates over all steps, extracts these fields, and combines them into a single data frame.</li>
+</ol>
 
 
 <!-- -->
@@ -924,80 +1052,124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../03-workflow-templates/1-templates.html" class="pagination-link" aria-label="Templates">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Templates</span></span>
+      <a href="../04-advanced-topics/3-gpu-development.html" class="pagination-link" aria-label="GPU Development in Tercen Studio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../03-workflow-templates/3-templates-installation.html" class="pagination-link" aria-label="Installing a Template">
-        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../05-troubleshooting/1-common-issues.html" class="pagination-link" aria-label="Common development issues">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Continuous Integration Workflow</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Here is a link to the <span class="co">[</span><span class="ot">Workflow CI Action</span><span class="co">](https://github.com/tercen/actions/tree/main/workflow-CI)</span> that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Here’s a breakdown of what each part of the workflow does:</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inputs</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>The workflow accepts several inputs, which are parameters for the CI process:</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`git-repository`</span> (required): The GitHub repository containing the template to be tested.</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`branch`</span> (optional, defaults to main): The branch of the GitHub repository.</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tag`</span> (optional): A commit or version tag for the GitHub repository.</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`git-token`</span> (required): GitHub access token used to authenticate and access the repository.</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`service-uri`</span> (optional): The URI of a service to which the workflow will connect.</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tercen-username`</span> (optional): Tercen service username.</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tercen-password`</span> (optional): Tercen service password.</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### Steps</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>__1. Start Tercen Services__</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Action: tercen/actions/start-tercen@main</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>Starts necessary Tercen services to facilitate the test environment.</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>__2. Log in to Docker Registry__ </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>Action: docker/login-action@v3.3.0</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor's credentials and the provided GitHub access token.</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>__3. Install Template Runner__</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>Run: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>__4. Test Template__</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Run: Executes the tercen/workflow_runner_operator Docker container.</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run.</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>The --report flag is used to generate a test report.</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>__5. Copy Result File__</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Run: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>__6. Read Runner Results__</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>Run: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>__7. Check Runner Results__</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>Condition: If the Status field in the JSON output is not "Success," the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>__8. Upload Runner Results__</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>Action: actions/upload-artifact@v3</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### Summary</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>CI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Exporting Operator Parameters</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>This chapter shows how to extract operator settings from a Tercen workflow for documentation purposes. The script connects to a Tercen instance via the R client, retrieves a workflow, and outputs a table of all operator parameters across every step.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A running Tercen instance.</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The <span class="in">`tercen`</span> R package installed. This is pre-installed in Tercen operator runtime containers. To install locally:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"tercen/teRcen"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Personal Access Token (PAT) for authentication.</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generating a Personal Access Token</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Navigate to <span class="in">`https://&lt;your-tercen-instance&gt;/_token`</span> in your browser. This generates a token you can use for API access. Copy and store it securely.</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### Finding Your Workflow ID</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>The workflow ID is in the URL when viewing a workflow:</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="in">https://&lt;your-instance&gt;/&lt;username&gt;/w/&lt;workflow-id&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## R Script</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tercen)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to your Tercen instance</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>client <span class="ot">&lt;-</span> TercenClient<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">serviceUri =</span> <span class="st">"https://&lt;your-instance&gt;/api/v1/"</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">authToken  =</span> <span class="st">"&lt;your-token&gt;"</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the workflow</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>workflow <span class="ot">&lt;-</span> client<span class="sc">$</span>workflowService<span class="sc">$</span><span class="fu">get</span>(<span class="st">"&lt;your-workflow-id&gt;"</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract operator settings from each step</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(workflow<span class="sc">$</span>steps, <span class="cf">function</span>(step) {</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(step<span class="sc">$</span>model) <span class="sc">||</span> <span class="fu">is.null</span>(step<span class="sc">$</span>model<span class="sc">$</span>operatorSettings)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  opRef <span class="ot">&lt;-</span> step<span class="sc">$</span>model<span class="sc">$</span>operatorSettings<span class="sc">$</span>operatorRef</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(opRef) <span class="sc">||</span> <span class="fu">is.null</span>(opRef<span class="sc">$</span>name) <span class="sc">||</span> opRef<span class="sc">$</span>name <span class="sc">==</span> <span class="st">""</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  pvs <span class="ot">&lt;-</span> opRef<span class="sc">$</span>propertyValues</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(pvs) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">step_name =</span> step<span class="sc">$</span>name,</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">operator  =</span> opRef<span class="sc">$</span>name,</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">version   =</span> opRef<span class="sc">$</span>version,</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameter =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      <span class="at">value     =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">step_name =</span> step<span class="sc">$</span>name,</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">operator  =</span> opRef<span class="sc">$</span>name,</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">version   =</span> opRef<span class="sc">$</span>version,</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameter =</span> <span class="fu">sapply</span>(pvs, <span class="cf">function</span>(p) p<span class="sc">$</span>name),</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">value     =</span> <span class="fu">sapply</span>(pvs, <span class="cf">function</span>(p) p<span class="sc">$</span>value),</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(params)</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example Output</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>Running the script against a workflow produces a table like this:</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> step_name <span class="pp">|</span> operator <span class="pp">|</span> version <span class="pp">|</span> parameter <span class="pp">|</span> value <span class="pp">|</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------|---------|-----------|-------|</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FCS <span class="pp">|</span> FCS <span class="pp">|</span> 2.6.0 <span class="pp">|</span> which.lines <span class="pp">|</span> 5000 <span class="pp">|</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FCS <span class="pp">|</span> FCS <span class="pp">|</span> 2.6.0 <span class="pp">|</span> gather_channels <span class="pp">|</span> false <span class="pp">|</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FCS <span class="pp">|</span> FCS <span class="pp">|</span> 2.6.0 <span class="pp">|</span> truncate_max_range <span class="pp">|</span> true <span class="pp">|</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PCA <span class="pp">|</span> PCA <span class="pp">|</span> 1.4.2 <span class="pp">|</span> scale <span class="pp">|</span> false <span class="pp">|</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PCA <span class="pp">|</span> PCA <span class="pp">|</span> 1.4.2 <span class="pp">|</span> center <span class="pp">|</span> true <span class="pp">|</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PCA <span class="pp">|</span> PCA <span class="pp">|</span> 1.4.2 <span class="pp">|</span> maxComp <span class="pp">|</span> 5.0 <span class="pp">|</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> ANOVA <span class="pp">|</span> ANOVA <span class="pp">|</span> 1.1.2 <span class="pp">|</span> method <span class="pp">|</span> one.way <span class="pp">|</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Clustered Heatmap <span class="pp">|</span> Clustered Heatmap <span class="pp">|</span> master <span class="pp">|</span> Cluster Rows <span class="pp">|</span> true <span class="pp">|</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Clustered Heatmap <span class="pp">|</span> Clustered Heatmap <span class="pp">|</span> master <span class="pp">|</span> Scale <span class="pp">|</span> none <span class="pp">|</span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Saving to CSV</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>To export the results to a CSV file, add the following line after <span class="in">`print(params)`</span>:</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(params, <span class="st">"operator_parameters.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## How It Works</span></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`TercenClient$new()`</span> authenticates using a PAT and connects to the Tercen API.</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`workflowService$get()`</span> retrieves the full workflow object, including all steps.</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Each step's <span class="in">`model$operatorSettings$operatorRef`</span> contains the operator name, version, and a list of <span class="in">`propertyValues`</span> — the parameter name-value pairs configured for that step.</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The script iterates over all steps, extracts these fields, and combines them into a single data frame.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/03-workflow-templates/2-templates-ci.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/04-advanced-topics/4-export-operator-parameters.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

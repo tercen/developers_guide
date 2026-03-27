@@ -2,14 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>21&nbsp; Common development issues – Tercen Developer's Guide</title>
+<title>22&nbsp; Common development issues – Tercen Developer's Guide</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -67,18 +70,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../05-troubleshooting/2-ci.html" rel="next">
-<link href="../04-advanced-topics/3-gpu-development.html" rel="prev">
+<link href="../04-advanced-topics/4-export-operator-parameters.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a6e161b2431e1f94a14e0f5d32135a3c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7ab5621a234943702e64db92ddbeda14.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d0a9bd43e23e722707adaef9c1064f63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -120,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -133,9 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Tercen Developer’s Guide</a> 
         <div class="sidebar-tools-main">
@@ -312,6 +312,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -326,13 +332,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -349,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
       </ul>
@@ -393,17 +399,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">21.1</span> Where can I find my Tercen token?</a></li>
-  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">21.2</span> Failed to decode</a></li>
+  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">22.1</span> Where can I find my Tercen token?</a></li>
+  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">22.2</span> Failed to decode</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/05-troubleshooting/1-common-issues.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -420,15 +426,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="where-can-i-find-my-tercen-token" class="level2" data-number="21.1">
-<h2 data-number="21.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">21.1</span> Where can I find my Tercen token?</h2>
+<section id="where-can-i-find-my-tercen-token" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">22.1</span> Where can I find my Tercen token?</h2>
 <p>You can find your Tercen token by logging into your instance and navigating to:</p>
 <p><code>https://YOUR_INSTANCE_URL/_token</code></p>
 <p>For example: - If you work on tercen.com, go to: <code>https://tercen.com/_token</code> - If you work on a custom instance, replace <code>YOUR_INSTANCE_URL</code> with your actual domain</p>
 <p>The token will be displayed on this page and can be copied for use in your development environment.</p>
 </section>
-<section id="failed-to-decode" class="level2" data-number="21.2">
-<h2 data-number="21.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">21.2</span> Failed to decode</h2>
+<section id="failed-to-decode" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">22.2</span> Failed to decode</h2>
 <pre><code>tercen.http.HttpClientService.TercenError: unknown : failed to decode</code></pre>
 <p>When running the <code>TercenContext()</code> function in Python (or <code>tercenCtx()</code> in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run</p>
 <p>In order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.</p>
@@ -892,13 +898,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../04-advanced-topics/3-gpu-development.html" class="pagination-link" aria-label="GPU Development in Tercen Studio">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span>
+      <a href="../04-advanced-topics/4-export-operator-parameters.html" class="pagination-link" aria-label="Exporting Operator Parameters">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../05-troubleshooting/2-ci.html" class="pagination-link" aria-label="CI and Github Actions">
-        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
