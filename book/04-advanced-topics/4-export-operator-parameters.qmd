@@ -1,0 +1,104 @@
+# Exporting Operator Parameters
+
+This chapter shows how to extract operator settings from a Tercen workflow for documentation purposes. The script connects to a Tercen instance via the R client, retrieves a workflow, and outputs a table of all operator parameters across every step.
+
+## Prerequisites
+
+- A running Tercen instance.
+- The `tercen` R package installed. This is pre-installed in Tercen operator runtime containers. To install locally:
+
+```r
+install.packages("remotes")
+remotes::install_github("tercen/teRcen")
+```
+
+- A Personal Access Token (PAT) for authentication.
+
+### Generating a Personal Access Token
+
+Navigate to `https://<your-tercen-instance>/_token` in your browser. This generates a token you can use for API access. Copy and store it securely.
+
+### Finding Your Workflow ID
+
+The workflow ID is in the URL when viewing a workflow:
+
+```
+https://<your-instance>/<username>/w/<workflow-id>
+```
+
+## R Script
+
+```r
+library(tercen)
+
+# Connect to your Tercen instance
+client <- TercenClient$new(
+  serviceUri = "https://<your-instance>/api/v1/",
+  authToken  = "<your-token>"
+)
+
+# Get the workflow
+workflow <- client$workflowService$get("<your-workflow-id>")
+
+# Extract operator settings from each step
+params <- do.call(rbind, lapply(workflow$steps, function(step) {
+  if (is.null(step$model) || is.null(step$model$operatorSettings)) return(NULL)
+
+  opRef <- step$model$operatorSettings$operatorRef
+  if (is.null(opRef) || is.null(opRef$name) || opRef$name == "") return(NULL)
+
+  pvs <- opRef$propertyValues
+  if (length(pvs) == 0) {
+    data.frame(
+      step_name = step$name,
+      operator  = opRef$name,
+      version   = opRef$version,
+      parameter = NA_character_,
+      value     = NA_character_,
+      stringsAsFactors = FALSE
+    )
+  } else {
+    data.frame(
+      step_name = step$name,
+      operator  = opRef$name,
+      version   = opRef$version,
+      parameter = sapply(pvs, function(p) p$name),
+      value     = sapply(pvs, function(p) p$value),
+      stringsAsFactors = FALSE
+    )
+  }
+}))
+
+print(params)
+```
+
+## Example Output
+
+Running the script against a workflow produces a table like this:
+
+| step_name | operator | version | parameter | value |
+|-----------|----------|---------|-----------|-------|
+| FCS | FCS | 2.6.0 | which.lines | 5000 |
+| FCS | FCS | 2.6.0 | gather_channels | false |
+| FCS | FCS | 2.6.0 | truncate_max_range | true |
+| PCA | PCA | 1.4.2 | scale | false |
+| PCA | PCA | 1.4.2 | center | true |
+| PCA | PCA | 1.4.2 | maxComp | 5.0 |
+| ANOVA | ANOVA | 1.1.2 | method | one.way |
+| Clustered Heatmap | Clustered Heatmap | master | Cluster Rows | true |
+| Clustered Heatmap | Clustered Heatmap | master | Scale | none |
+
+## Saving to CSV
+
+To export the results to a CSV file, add the following line after `print(params)`:
+
+```r
+write.csv(params, "operator_parameters.csv", row.names = FALSE)
+```
+
+## How It Works
+
+1. `TercenClient$new()` authenticates using a PAT and connects to the Tercen API.
+2. `workflowService$get()` retrieves the full workflow object, including all steps.
+3. Each step's `model$operatorSettings$operatorRef` contains the operator name, version, and a list of `propertyValues` — the parameter name-value pairs configured for that step.
+4. The script iterates over all steps, extracts these fields, and combines them into a single data frame.
