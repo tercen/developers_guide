@@ -26,3 +26,26 @@ In order to fix the issue:
 * Reset the data step,
 * Save - Refresh - Save the data step,
 * Re-run the TercenContext call.
+
+
+## My operator doesn't appear in the picker / library
+
+You added your operator's Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step's operator picker.
+
+"Add from Git" only **installs** a searchable operator (registers the operator record the picker searches) when *all* of the following hold. If any fails, the repository's files are copied but no operator is registered — usually with no obvious error:
+
+1. **The repository name ends in `_operator`.** This is the gate that triggers operator installation. `uka_analysis` → not installed; `uka_analysis_operator` → installed. *(This is the most common cause.)*
+2. **The repository is in a trusted organization.** Managed instances only trust repositories under approved GitHub organizations (commonly `github.com/tercen/` and `github.com/pamgene/`). Repositories under a personal account or an untrusted organization fail with `tercen.forbidden.untrusted.git`. Ask your Tercen admin which organizations are trusted.
+3. **All names are lowercase.** Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. `My_Operator`) breaks the container build/pull, so no operator is registered.
+4. **The operator was installed, not just cloned.** Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.
+
+**Checklist**
+
+- [ ] Repository name ends in `_operator` and is entirely lowercase
+- [ ] Repository lives under a trusted organization
+- [ ] The container image built successfully and is pullable
+- [ ] You selected the correct **source library** in the picker
+
+::: {.callout-tip}
+To make a fork or renamed variant installable, rename the repository to a lowercase name ending in `_operator` (e.g. `my_variant_operator`) under a trusted organization, then add it to the library again.
+:::
