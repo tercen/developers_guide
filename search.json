@@ -865,6 +865,28 @@
     ]
   },
   {
+    "objectID": "02-operator-development/8-ci.html#publishing-to-a-different-organization-than-your-repository",
+    "href": "02-operator-development/8-ci.html#publishing-to-a-different-organization-than-your-repository",
+    "title": "11  Continuous Integration Workflow",
+    "section": "13.1 Publishing to a different organization than your repository",
+    "text": "13.1 Publishing to a different organization than your repository\nIf you need to publish to a different org’s namespace than the repository lives in (e.g. a pamgene/ repo publishing to ghcr.io/tercen/), the template defaults are not enough. You must:\n\nset IMAGE_NAME explicitly (not ${{ github.repository }});\nauthenticate with a Personal Access Token (PAT) that has write:packages on the target org, stored as a repository secret — the built-in GITHUB_TOKEN cannot push to another org;\nset the login username to the owner of that PAT — a mismatch between username and the PAT owner produces denied: denied at login/push. A stale or malformed secret value produces the same error.\n\nenv:\n  REGISTRY: ghcr.io\n  IMAGE_NAME: tercen/my_operator        # explicit, lowercase, trusted namespace\n\n    # ...\n    - name: Log in to the Container registry\n      uses: docker/login-action@v3\n      with:\n        registry: ${{ env.REGISTRY }}\n        username: your-pat-owner          # must match the PAT owner\n        password: ${{ secrets.GHCR_PAT }}",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/8-ci.html#a-few-more-ghcr-facts-worth-knowing",
+    "href": "02-operator-development/8-ci.html#a-few-more-ghcr-facts-worth-knowing",
+    "title": "11  Continuous Integration Workflow",
+    "section": "13.2 A few more ghcr facts worth knowing",
+    "text": "13.2 A few more ghcr facts worth knowing\n\nThe image is pulled when the operator is installed. If the tag referenced by operator.json’s container does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. :main, or :0.0.1).\nImages persist independently of git. Renaming or deleting a branch/tag does not rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.\nPrivate images are fine. Tercen can pull private operator images; the image does not need to be public to be installable.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
+    ]
+  },
+  {
     "objectID": "02-operator-development/9-installation.html",
     "href": "02-operator-development/9-installation.html",
     "title": "12  Installing an Operator",
@@ -902,7 +924,7 @@
     "href": "02-operator-development/9-installation.html#installing-operators",
     "title": "12  Installing an Operator",
     "section": "12.3 Installing Operators",
-    "text": "12.3 Installing Operators\n\n12.3.1 Git Integration Method\nTercen’s preferred method for operator installation uses direct Git integration:\n\nNavigate to Your Library\n\nAccess your custom library (team)\nEnsure you have appropriate permissions\n\nAdd New Project\n\nClick “New Project”\nSelect “From Git”\n\nConfigure Repository Details\nName:       my_analysis_operator\nURL:        https://github.com/myorg/my_analysis_operator\nTag:        1.0.0 (optional - for specific versions)\nAuth Token: github_pat_xxxxx (if repository is private)\nComplete Installation\n\nReview settings\nClick “Create Project”\nWait for repository cloning and validation\n\n\n\n\n\n\n\n\nWarningAuthentication Requirements\n\n\n\nFor private repositories, you’ll need: - Personal Access Token (PAT) for GitHub - Appropriate repository permissions - Token with repo scope for full access",
+    "text": "12.3 Installing Operators\n\n12.3.1 Git Integration Method\nTercen’s preferred method for operator installation uses direct Git integration:\n\nNavigate to Your Library\n\nAccess your custom library (team)\nEnsure you have appropriate permissions\n\nAdd New Project\n\nClick “New Project”\nSelect “From Git”\n\nConfigure Repository Details\nName:       my_analysis_operator\nURL:        https://github.com/myorg/my_analysis_operator\nTag:        1.0.0 (optional - for specific versions)\nAuth Token: github_pat_xxxxx (if repository is private)\nComplete Installation\n\nReview settings\nClick “Create Project”\nWait for repository cloning and validation\n\n\n\n\n\n\n\n\nWarningAuthentication Requirements\n\n\n\nFor private repositories, you’ll need: - Personal Access Token (PAT) for GitHub - Appropriate repository permissions - Token with repo scope for full access\n\n\n\n\n\n\n\n\nImportantTrusted Organization Requirement\n\n\n\nOn managed Tercen instances, the repository must live in a trusted GitHub organization (ask your Tercen admin which — commonly github.com/tercen/ and github.com/pamgene/). Repositories under personal accounts or untrusted organizations are rejected with tercen.forbidden.untrusted.git. The myorg placeholder above must be a trusted organization on such instances.\nNote also that “From Git” only installs a searchable operator when the repository name ends in _operator, is lowercase, and the container image is pullable. Otherwise the files are copied but the operator will not appear in the picker — see My operator doesn’t appear in the picker.",
     "crumbs": [
       "Operator Development",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Installing an Operator</span>"
