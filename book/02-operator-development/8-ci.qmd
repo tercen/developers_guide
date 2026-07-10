@@ -177,3 +177,53 @@ git push --tags
 
 The same way a workflow is triggered after each commit, tagging a repository will trigger another workflow, __release.yaml__. This workflow that will build and push the Docker image, tag it with the run the unit tests. 
 Once the workflow is run, you can verify it has been successful. If that is the case, you are now ready to install your operator in a __Library__.
+
+
+# GitHub Container Registry (ghcr): requirements & common pitfalls
+
+The template workflow above logs in with `${{ github.actor }}` + the built-in `GITHUB_TOKEN` and derives `IMAGE_NAME` from `${{ github.repository }}`. That is enough for the simple case — a lowercase-named repository publishing to its own organization. The points below cover the requirements and the pitfalls that most often leave a developer with "no image" (and therefore an operator that silently fails to install).
+
+::: {.callout-important}
+## The image name must be lowercase
+Docker/OCI image names must be **entirely lowercase**. If your repository name contains uppercase letters (e.g. `My_Operator` or `uka_operator_BN_UKAdb`), the default `IMAGE_NAME: ${{ github.repository }}` produces an invalid reference and the build fails with `repository name must be lowercase`. Use a lowercase repository name, or set `IMAGE_NAME` explicitly to a lowercase value.
+:::
+
+::: {.callout-important}
+## The image must live in a trusted registry namespace
+Managed Tercen instances only pull operator images from **trusted container namespaces** — commonly `ghcr.io/tercen/` and `ghcr.io/pamgene/`. An image published anywhere else is rejected at install time with `tercen.forbidden.untrusted.docker`. Make sure the `container` field in your `operator.json` points to an image under a trusted namespace (ask your admin which are configured).
+
+This means the **image organization can differ from the repository organization** — e.g. a repository under `pamgene/` typically publishes its image to `ghcr.io/tercen/`.
+:::
+
+::: {.callout-warning}
+## Forks have GitHub Actions disabled by default
+When you fork an operator repository, GitHub disables Actions on the fork, so CI never runs and **no image is ever built**. Installation then fails because the image does not exist. Enable workflows first (fork's **Actions** tab → "I understand my workflows, enable them") before pushing.
+:::
+
+## Publishing to a different organization than your repository
+
+If you need to publish to a different org's namespace than the repository lives in (e.g. a `pamgene/` repo publishing to `ghcr.io/tercen/`), the template defaults are not enough. You must:
+
+- set `IMAGE_NAME` **explicitly** (not `${{ github.repository }}`);
+- authenticate with a **Personal Access Token (PAT)** that has `write:packages` on the target org, stored as a repository secret — the built-in `GITHUB_TOKEN` cannot push to another org;
+- set the login `username` to the **owner of that PAT** — a mismatch between `username` and the PAT owner produces `denied: denied` at login/push. A stale or malformed secret value produces the same error.
+
+```yaml
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: tercen/my_operator        # explicit, lowercase, trusted namespace
+
+    # ...
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: your-pat-owner          # must match the PAT owner
+        password: ${{ secrets.GHCR_PAT }}
+```
+
+## A few more ghcr facts worth knowing
+
+- **The image is pulled when the operator is installed.** If the tag referenced by `operator.json`'s `container` does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. `:main`, or `:0.0.1`).
+- **Images persist independently of git.** Renaming or deleting a branch/tag does **not** rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.
+- **Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable.
