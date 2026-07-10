@@ -99,6 +99,24 @@ pip freeze > requirements.txt
 
 :::
 
+::: {.callout-important}
+## Operators run as a non-root user (UID 1000) — keep renv paths writable
+
+Since 2026-03, Tercen runs Docker operator containers as **user 1000**, not root. (Images built before then still run as root — which is why an older build can keep working while a fresh rebuild of the *same* code suddenly fails at startup with errors like `no package called 'dplyr'`.)
+
+If your `Dockerfile` installs R packages with `renv` **as root**, the operator user cannot write renv's activation cache or follow its package-cache symlinks at runtime, and R halts *before your code runs*. To avoid this, in your `Dockerfile`:
+
+- keep renv's cache **inside** the operator directory and point `RENV_PATHS_CACHE` there, and
+- `chown` the operator tree to UID 1000 so it stays readable and writable at runtime.
+
+```dockerfile
+ENV RENV_PATHS_CACHE=/operator/.renv-cache
+# ... copy sources, run renv::restore() ...
+RUN chown -R 1000:1000 /operator
+USER 1000
+```
+:::
+
 ## Version Control Best Practices
 
 ### Git Workflow
