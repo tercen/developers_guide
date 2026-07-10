@@ -95,6 +95,13 @@ For **private repositories**, you'll need:
 - Token with `repo` scope for full access
 :::
 
+::: {.callout-important}
+## Trusted Organization Requirement
+On managed Tercen instances, the repository must live in a **trusted GitHub organization** (ask your Tercen admin which — commonly `github.com/tercen/` and `github.com/pamgene/`). Repositories under personal accounts or untrusted organizations are rejected with `tercen.forbidden.untrusted.git`. The `myorg` placeholder above must be a trusted organization on such instances.
+
+Note also that "From Git" only **installs** a searchable operator when the repository name ends in `_operator`, is lowercase, and the container image is pullable. Otherwise the files are copied but the operator will not appear in the picker — see [My operator doesn't appear in the picker](../05-troubleshooting/1-common-issues.qmd).
+:::
+
 ## Operator Availability and Testing
 
 ### Verification Steps
