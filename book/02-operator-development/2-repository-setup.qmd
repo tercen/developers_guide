@@ -58,6 +58,10 @@ Follow these steps to set up your operator repository:
 - ❌ `my_operator`
 - ❌ `test123`
 - ❌ `linear_regression` (missing `_operator` suffix)
+
+**Also use lowercase only** (Docker/OCI image names must be lowercase), and prefer descriptive lowercase words separated by underscores.
+
+**Why this matters:** if the repository name does not end in `_operator`, adding it to a library **silently fails to install the operator** — the project files are copied but no searchable operator is registered, so it never appears in the data-step picker (with no obvious error). This is the most common reason a newly added operator is "missing". See [My operator doesn't appear in the picker](../05-troubleshooting/1-common-issues.qmd).
 :::
 
 ## Repository Structure Overview
