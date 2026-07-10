@@ -159,6 +159,11 @@ Once you are satisfied with your operator, you can release your operator by foll
 
 You should first edit the __container__ field of the __operator.json__ file so that it matched the version number you would like to push (here, __0.0.1__ for example).
 
+::: {.callout-warning}
+## Pin an immutable version tag, not `:main`
+Always point the `container` field at an **immutable, versioned** image tag (e.g. `:0.0.1`) — never a mutable tag like `:main` or `:master`. A mutable tag is overwritten by every new build, so a workflow step configured for "version 0.0.1" will silently pull whatever was built most recently. This means **rolling back to an older version does not actually roll back the image**, and a step that worked yesterday can break today with no change on your side. The release workflow below rewrites `container` to the pushed tag for exactly this reason.
+:::
+
 ## 2. Push your changes and tag the repository
 
 After pushing your latest commit, you can add the same version number as a tag from the command line as follows:
