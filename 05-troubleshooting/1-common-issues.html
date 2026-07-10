@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -77,10 +77,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d0a9bd43e23e722707adaef9c1064f63.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-215b16a4c87333eecbfc087721f4b364.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -401,6 +401,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">22.1</span> Where can I find my Tercen token?</a></li>
   <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">22.2</span> Failed to decode</a></li>
+  <li><a href="#my-operator-doesnt-appear-in-the-picker-library" id="toc-my-operator-doesnt-appear-in-the-picker-library" class="nav-link" data-scroll-target="#my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">22.3</span> My operator doesn’t appear in the picker / library</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/05-troubleshooting/1-common-issues.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -438,6 +439,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>tercen.http.HttpClientService.TercenError: unknown : failed to decode</code></pre>
 <p>When running the <code>TercenContext()</code> function in Python (or <code>tercenCtx()</code> in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run</p>
 <p>In order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.</p>
+</section>
+<section id="my-operator-doesnt-appear-in-the-picker-library" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">22.3</span> My operator doesn’t appear in the picker / library</h2>
+<p>You added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.</p>
+<p>“Add from Git” only <strong>installs</strong> a searchable operator (registers the operator record the picker searches) when <em>all</em> of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:</p>
+<ol type="1">
+<li><strong>The repository name ends in <code>_operator</code>.</strong> This is the gate that triggers operator installation. <code>uka_analysis</code> → not installed; <code>uka_analysis_operator</code> → installed. <em>(This is the most common cause.)</em></li>
+<li><strong>The repository is in a trusted organization.</strong> Managed instances only trust repositories under approved GitHub organizations (commonly <code>github.com/tercen/</code> and <code>github.com/pamgene/</code>). Repositories under a personal account or an untrusted organization fail with <code>tercen.forbidden.untrusted.git</code>. Ask your Tercen admin which organizations are trusted.</li>
+<li><strong>All names are lowercase.</strong> Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g.&nbsp;<code>My_Operator</code>) breaks the container build/pull, so no operator is registered.</li>
+<li><strong>The operator was installed, not just cloned.</strong> Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.</li>
+</ol>
+<p><strong>Checklist</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Repository name ends in <code>_operator</code> and is entirely lowercase</label></li>
+<li><label><input type="checkbox">Repository lives under a trusted organization</label></li>
+<li><label><input type="checkbox">The container image built successfully and is pullable</label></li>
+<li><label><input type="checkbox">You selected the correct <strong>source library</strong> in the picker</label></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <code>_operator</code> (e.g.&nbsp;<code>my_variant_operator</code>) under a trusted organization, then add it to the library again.</p>
+</div>
+</div>
 
 
 <!-- -->
@@ -935,7 +967,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>In order to fix the issue:</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Reset the data step,</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Save - Refresh - Save the data step,</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Re-run the TercenContext call.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Re-run the TercenContext call.</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## My operator doesn't appear in the picker / library</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>You added your operator's Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step's operator picker.</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>"Add from Git" only **installs** a searchable operator (registers the operator record the picker searches) when *all* of the following hold. If any fails, the repository's files are copied but no operator is registered — usually with no obvious error:</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The repository name ends in `_operator`.** This is the gate that triggers operator installation. <span class="in">`uka_analysis`</span> → not installed; <span class="in">`uka_analysis_operator`</span> → installed. *(This is the most common cause.)*</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The repository is in a trusted organization.** Managed instances only trust repositories under approved GitHub organizations (commonly <span class="in">`github.com/tercen/`</span> and <span class="in">`github.com/pamgene/`</span>). Repositories under a personal account or an untrusted organization fail with <span class="in">`tercen.forbidden.untrusted.git`</span>. Ask your Tercen admin which organizations are trusted.</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**All names are lowercase.** Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. <span class="in">`My_Operator`</span>) breaks the container build/pull, so no operator is registered.</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**The operator was installed, not just cloned.** Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>**Checklist**</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository name ends in <span class="in">`_operator`</span> and is entirely lowercase</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository lives under a trusted organization</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> The container image built successfully and is pullable</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> You selected the correct **source library** in the picker</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <span class="in">`_operator`</span> (e.g. <span class="in">`my_variant_operator`</span>) under a trusted organization, then add it to the library again.</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
