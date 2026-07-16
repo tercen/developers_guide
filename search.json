@@ -836,7 +836,7 @@
     "href": "02-operator-development/8-ci.html#edit-the-operator.json-file",
     "title": "11  Continuous Integration Workflow",
     "section": "12.1 1. Edit the operator.json file",
-    "text": "12.1 1. Edit the operator.json file\nYou should first edit the container field of the operator.json file so that it matched the version number you would like to push (here, 0.0.1 for example).",
+    "text": "12.1 1. Edit the operator.json file\nYou should first edit the container field of the operator.json file so that it matched the version number you would like to push (here, 0.0.1 for example).\n\n\n\n\n\n\nWarningPin an immutable version tag, not :main\n\n\n\nAlways point the container field at an immutable, versioned image tag (e.g. :0.0.1) — never a mutable tag like :main or :master. A mutable tag is overwritten by every new build, so a workflow step configured for “version 0.0.1” will silently pull whatever was built most recently. This means rolling back to an older version does not actually roll back the image, and a step that worked yesterday can break today with no change on your side. The release workflow below rewrites container to the pushed tag for exactly this reason.",
     "crumbs": [
       "Operator Development",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
