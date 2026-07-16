@@ -232,3 +232,40 @@ env:
 - **The image is pulled when the operator is installed.** If the tag referenced by `operator.json`'s `container` does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. `:main`, or `:0.0.1`).
 - **Images persist independently of git.** Renaming or deleting a branch/tag does **not** rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.
 - **Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable.
+
+# Private repos: release-workflow install step & tokens
+
+The `release.yml` optional **Install operator** step runs `tercenctl operator install`, which makes the **Tercen server download your repo's zipball from GitHub**. For a **private** repo this needs a token that can read the repo's contents — and the built-in `GITHUB_TOKEN` is **not** enough.
+
+::: {.callout-important}
+## The built-in `GITHUB_TOKEN` can't pull a private repo's zipball
+The install step commonly passes `-e GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}`. That token is scoped to the Actions runner; when the **external Tercen server** uses it to fetch `https://github.com/<org>/<repo>/zipball/<ref>` for a **private** repo, GitHub returns **404** (it returns 404 rather than 403 for an under-privileged token on a private repo):
+
+```
+task.git.operator.download.failed -- 404 : Request failed :
+https://github.com/<org>/<repo>/zipball/<sha>
+```
+
+This is **not** a "trusted repos" problem — that would surface as `tercen.forbidden.untrusted.git`, and only requires the repo be under a trusted org. It is purely a **token-permission** issue.
+
+**Fix:** pass a **Personal Access Token with `repo` scope** (classic) — or a fine-grained token with **Contents: Read** — instead of the built-in token:
+
+```yaml
+      - name: Install operator
+        run: |
+          docker run --rm \
+            -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \
+            -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
+            -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
+            -e GITHUB_TOKEN=${{ secrets.GH_PAT }} \   # PAT with repo/contents:read, NOT the built-in GITHUB_TOKEN
+            tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} \
+            --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+```
+
+**Public** repos don't need this — the zipball is fetchable without auth.
+:::
+
+::: {.callout-note}
+## The image build still succeeds
+This only affects the optional CI **install** step. The `build-and-push` of the versioned image runs *before* it and succeeds regardless — so the operator image exists and can be installed **via the library** even if this step is red. If you don't need the CI install/test-on-release, you can remove the Install step entirely and rely on the library add. (Reminder from earlier: the repo name must end in `_operator` for the library add to install it.)
+:::
