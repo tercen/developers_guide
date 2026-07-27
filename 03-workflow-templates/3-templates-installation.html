@@ -2,21 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>17&nbsp; Installing a Template – Tercen Developer's Guide</title>
+<title>18&nbsp; Installing a Template – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -77,10 +80,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2c0d7fd69a0b621d88a5e19f0a8bb3ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9ff133dfe68f0f7f3d56e0cb3d50e1ba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -122,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/3-templates-installation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/3-templates-installation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -254,6 +257,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Operator Improvements and Best Practices</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-operator-development/12-web-app-operators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Web App Operators</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -268,19 +277,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/1-templates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/3-templates-installation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
   </div>
 </li>
       </ul>
@@ -297,25 +306,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/1-patterns-plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/2-tercen-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/3-gpu-development.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
   </div>
 </li>
       </ul>
@@ -332,13 +341,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -355,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
       </ul>
@@ -399,18 +408,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tercen-libraries" id="toc-tercen-libraries" class="nav-link active" data-scroll-target="#tercen-libraries"><span class="header-section-number">17.1</span> Tercen Libraries</a></li>
-  <li><a href="#creating-a-custom-library" id="toc-creating-a-custom-library" class="nav-link" data-scroll-target="#creating-a-custom-library"><span class="header-section-number">17.2</span> Creating a Custom Library</a></li>
-  <li><a href="#installing-a-template-in-a-custom-library" id="toc-installing-a-template-in-a-custom-library" class="nav-link" data-scroll-target="#installing-a-template-in-a-custom-library"><span class="header-section-number">17.3</span> Installing a Template in a Custom Library</a></li>
+  <li><a href="#tercen-libraries" id="toc-tercen-libraries" class="nav-link active" data-scroll-target="#tercen-libraries"><span class="header-section-number">18.1</span> Tercen Libraries</a></li>
+  <li><a href="#creating-a-custom-library" id="toc-creating-a-custom-library" class="nav-link" data-scroll-target="#creating-a-custom-library"><span class="header-section-number">18.2</span> Creating a Custom Library</a></li>
+  <li><a href="#installing-a-template-in-a-custom-library" id="toc-installing-a-template-in-a-custom-library" class="nav-link" data-scroll-target="#installing-a-template-in-a-custom-library"><span class="header-section-number">18.3</span> Installing a Template in a Custom Library</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/03-workflow-templates/3-templates-installation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/3-templates-installation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/3-templates-installation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -427,16 +436,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="tercen-libraries" class="level2" data-number="17.1">
-<h2 data-number="17.1" class="anchored" data-anchor-id="tercen-libraries"><span class="header-section-number">17.1</span> Tercen Libraries</h2>
+<section id="tercen-libraries" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="tercen-libraries"><span class="header-section-number">18.1</span> Tercen Libraries</h2>
 <p>Tercen allows you to organize and manage modules (operators, templates, apps) and datasets within libraries. There are two types of libraries:</p>
 <ol type="1">
 <li>Tercen Library: A curated list of modules and datasets maintained by the Tercen team.</li>
 <li>Custom Libraries: Personal or team-shared libraries that you can create and manage.</li>
 </ol>
 </section>
-<section id="creating-a-custom-library" class="level2" data-number="17.2">
-<h2 data-number="17.2" class="anchored" data-anchor-id="creating-a-custom-library"><span class="header-section-number">17.2</span> Creating a Custom Library</h2>
+<section id="creating-a-custom-library" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="creating-a-custom-library"><span class="header-section-number">18.2</span> Creating a Custom Library</h2>
 <p>To install an operator, you first need to create a custom library. In Tercen, a library is a specialized type of team, and resources within the library (operators, templates, apps) are treated as specialized projects. This structure allows you to manage the library’s content and control access to your resources.</p>
 <p>Steps to Create a Custom Library:</p>
 <ol type="1">
@@ -444,8 +453,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Enable Library Team: Navigate to your team’s settings and select the “Library team” option to designate this team as a library.</li>
 </ol>
 </section>
-<section id="installing-a-template-in-a-custom-library" class="level2" data-number="17.3">
-<h2 data-number="17.3" class="anchored" data-anchor-id="installing-a-template-in-a-custom-library"><span class="header-section-number">17.3</span> Installing a Template in a Custom Library</h2>
+<section id="installing-a-template-in-a-custom-library" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="installing-a-template-in-a-custom-library"><span class="header-section-number">18.3</span> Installing a Template in a Custom Library</h2>
 <p>Once your custom library is set up, you can use Tercen’s git integration to install templates:</p>
 <ol type="1">
 <li>Go to your library (the team you created).</li>
@@ -558,16 +567,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -920,12 +929,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../03-workflow-templates/2-templates-ci.html" class="pagination-link" aria-label="Continuous Integration Workflow">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../04-advanced-topics/1-patterns-plots.html" class="pagination-link" aria-label="Patterns for Plot Operators">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

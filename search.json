@@ -847,7 +847,7 @@
     "href": "02-operator-development/8-ci.html#push-your-changes-and-tag-the-repository",
     "title": "11  Continuous Integration Workflow",
     "section": "12.2 2. Push your changes and tag the repository",
-    "text": "12.2 2. Push your changes and tag the repository\nAfter pushing your latest commit, you can add the same version number as a tag from the command line as follows:\ngit tag 0.0.1\nThen push it with this command:\ngit push --tags",
+    "text": "12.2 2. Push your changes and tag the repository\nAfter pushing your latest commit, you can add the same version number as a tag from the command line as follows:\ngit tag 0.0.1\nThen push it with this command:\ngit push --tags\n\n\n\n\n\n\nImportantNever move a released git tag — cut a new version instead\n\n\n\nOnce a tag has been released and installed anywhere, treat it as permanent. Do not delete and re-push it to point at a newer commit:\n# Don't do this on a tag that has already been installed\ngit tag -d 0.0.3\ngit push --delete origin 0.0.3\ngit tag 0.0.3 && git push --tags      # same name, different commit\nThe tag name will move on GitHub, but already-installed instances keep running the old code. Tercen resolves a version to a commit at first install and stores the operator under a directory named after that resolved commit (&lt;org&gt;-&lt;repo&gt;-&lt;short-sha&gt;). On subsequent runs it checks whether that directory already exists and, if so, skips the download entirely — so the tag is never re-resolved and the new commit is never fetched. The step keeps running the original code, with no error and nothing in the logs to suggest a stale version.\nThe fix is to cut a new version — 0.0.4 — and repoint the step at it. It costs one tag and saves an afternoon of debugging code that isn’t running.\n\n\n\n\n\n\n\n\nTipWhile iterating, pin a commit SHA rather than re-using a tag\n\n\n\nOperators are installed by downloading https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;version&gt;, and &lt;version&gt; may be a branch, a tag, or a full commit SHA. During rapid back-and-forth testing, pinning the SHA gives every build a distinct identity, so you never have to wonder whether you are looking at the new code:\nhttps://github.com/myorg/my_operator@2c23a2d1f0b...\nEach distinct SHA installs into its own directory, so the stale-directory problem above cannot occur. Switch back to a proper version tag before handing the operator to users.",
     "crumbs": [
       "Operator Development",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
@@ -1030,11 +1030,22 @@
     ]
   },
   {
+    "objectID": "02-operator-development/10-input-output-patterns.html#large-tables-the-1.6-million-row-limit",
+    "href": "02-operator-development/10-input-output-patterns.html#large-tables-the-1.6-million-row-limit",
+    "title": "13  Data Input and Output Patterns",
+    "section": "13.6 Large Tables: the 1.6 Million Row Limit",
+    "text": "13.6 Large Tables: the 1.6 Million Row Limit\nA single select call is capped server-side at 1,600,000 rows. Ask for more and the call is rejected with:\n400 {error: table.limit, reason: Bad limit}\nThis is a hard limit, not a warning, and it is easy to hit by accident: a step whose projection is only a few thousand rows wide in the UI can still produce millions of rows in the underlying main table once cells are multiplied out.\n\n\n\n\n\n\nImportantA rejected select can look like a hang, not an error\n\n\n\nIf your operator issues one unbounded ctx$select(...) and the table is over the limit, the step may appear to load forever rather than fail with a visible message — the error is returned to the caller, but an operator (or web app) that does not surface it simply never finishes. “It hangs on a big dataset but works on a small one” is the signature of this limit.\n\n\n\n13.6.1 The limit applies to R, but not to the Python client\nThe two clients reach different server endpoints, and only one of them is capped:\n\n\n\n\n\n\n\n\nClient\nCall\nBehaviour\n\n\n\n\nR (teRcen)\nctx$select()\nCapped at 1.6M rows — you must paginate\n\n\nPython (tercen_python_client)\nctx.select()\nRoutes to the streaming endpoint, which chunks internally — no 1.6M cap\n\n\n\nSo the pagination below is required in R. In Python, select() already streams and you can request the whole table; paginate there only if you want to bound peak memory.\n\n\n13.6.2 Paginating a large select in R\nRead the row count from the schema, then loop in chunks that stay under the cap. Note the third argument is nr (number of rows), not limit:\nlibrary(tercen)\nlibrary(dplyr)\n\nctx &lt;- tercenCtx()\n\nn_rows &lt;- ctx$schema$nRows   # total rows available in the main table\nchunk  &lt;- 1000000L           # comfortably under the 1.6M cap\n\npages  &lt;- list()\noffset &lt;- 0L\n\nwhile (offset &lt; n_rows) {\n  nr &lt;- min(chunk, n_rows - offset)\n  pages[[length(pages) + 1L]] &lt;- ctx$select(\n    c(\".ci\", \".ri\", \".y\"),\n    offset = offset,\n    nr     = nr\n  )\n  offset &lt;- offset + nr\n}\n\ndata &lt;- bind_rows(pages)\nThe same offset / nr arguments exist on ctx$cselect() and ctx$rselect(). Those address the column and row annotation tables, which are almost always far smaller than the main table — in practice only the main select needs paginating.\n\n\n\n\n\n\nTipSelect only the columns you need\n\n\n\nctx$select() with no names argument returns every column. Naming just the columns you use (e.g. c(\".ci\", \".ri\", \".y\")) reduces transferred data and memory substantially, and is worth doing regardless of table size.\n\n\n\n\n\n\n\n\nNotePrefer operating per cell where you can\n\n\n\nIf your computation is independent per cell or per column, the idiomatic Tercen approach — grouping by .ci / .ri and letting Tercen hand you one group at a time, as shown earlier in this chapter — avoids materialising the whole table and sidesteps this limit entirely. Pagination is for the cases that genuinely need the full table at once.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Data Input and Output Patterns</span>"
+    ]
+  },
+  {
     "objectID": "02-operator-development/10-input-output-patterns.html#next-steps",
     "href": "02-operator-development/10-input-output-patterns.html#next-steps",
     "title": "13  Data Input and Output Patterns",
-    "section": "13.6 Next Steps",
-    "text": "13.6 Next Steps\nWith these input and output patterns mastered, you can:\n\nCreate Complex Operators: Combine multiple patterns for sophisticated analyses\nHandle Edge Cases: Build robust operators that gracefully handle data issues\n\nOptimize Performance: Use efficient data processing techniques\nIntegrate with Workflows: Design operators that work seamlessly in Tercen pipelines\n\nThe next chapter covers continuous integration and deployment strategies for your operators.",
+    "section": "13.7 Next Steps",
+    "text": "13.7 Next Steps\nWith these input and output patterns mastered, you can:\n\nCreate Complex Operators: Combine multiple patterns for sophisticated analyses\nHandle Edge Cases: Build robust operators that gracefully handle data issues\n\nOptimize Performance: Use efficient data processing techniques\nIntegrate with Workflows: Design operators that work seamlessly in Tercen pipelines\n\nThe next chapter covers continuous integration and deployment strategies for your operators.",
     "crumbs": [
       "Operator Development",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>Data Input and Output Patterns</span>"
@@ -1085,531 +1096,630 @@
     ]
   },
   {
+    "objectID": "02-operator-development/12-web-app-operators.html",
+    "href": "02-operator-development/12-web-app-operators.html",
+    "title": "15  Web App Operators",
+    "section": "",
+    "text": "15.1 The Operator Kinds\nMost operators are headless: Tercen runs your R or Python code and stores the table it returns. A web app operator is different — it ships a browser application that Tercen serves inside the step, so the user interacts with a UI instead of only seeing a computed result. Interactive image checkers, grid editors, and custom viewers are all built this way.\nThis chapter covers what makes an operator a web app, how it is built and installed, and the Flutter-specific details that most often trip people up.\nTercen decides what kind of operator to install from operator.json. The relevant kinds:\nThe key consequence of isWebApp: true is that Tercen does not bootstrap an R environment for the operator. A normal git operator triggers an renv restore at install time; a web app skips that entirely. It also means none of the R packaging concerns from Documentation and Deployment — the UID 1000 renv caveat in particular — apply to a pure web app.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#the-operator-kinds",
+    "href": "02-operator-development/12-web-app-operators.html#the-operator-kinds",
+    "title": "15  Web App Operators",
+    "section": "",
+    "text": "Kind\nSelected by\nNotes\n\n\n\n\nWebAppOperator\nisWebApp: true\nStatic assets served from the repository\n\n\nDockerWebAppOperator\nisWebApp: true + container\nWeb app whose backend runs in a container\n\n\nShinyOperator\nShiny app\nAn R Shiny web app",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#the-operator.json-file",
+    "href": "02-operator-development/12-web-app-operators.html#the-operator.json-file",
+    "title": "15  Web App Operators",
+    "section": "15.2 The operator.json File",
+    "text": "15.2 The operator.json File\nA minimal, working web app operator.json:\n{\n  \"name\": \"Grid Checker\",\n  \"description\": \"Interactive grid placement checker\",\n  \"isWebApp\": true,\n  \"isViewOnly\": false,\n  \"entryType\": \"app\",\n  \"tags\": [\"workflow\"],\n  \"authors\": [\"tercen\"],\n  \"urls\": [\"https://github.com/myorg/my_web_operator\"],\n  \"serve\": \"build/web\",\n  \"properties\": [],\n  \"auth\": [\"\"]\n}\nThe web-app-specific fields:\n\nisWebApp (boolean) — set true. This is the switch that selects the web app install path. Without it your app is treated as a normal operator and will fail to start.\nserve (string) — the directory inside your repository containing the built, servable assets (the folder holding index.html). Must be a string; anything else is rejected at install with task.git.operator.serve.bad.format.\nisViewOnly (boolean) — whether the app only displays data rather than writing results back to the step.\nentryType (string) — the entry point kind; \"app\" for a full application UI.\ncommunicationProtocol (string, optional) — must be \"grpc\" or \"\". Empty means the default HTTP transport. Any other value fails install with task.git.operator.communicationProtocol.invalid.value.\n\n\n\n\n\n\n\nImportantThe built output must be committed to the repository\n\n\n\nThis is the single biggest difference from a normal operator, and the most common reason a web app installs but shows a blank page.\nTercen installs an operator by downloading a zipball of your repository — it does not run your build. serve points at a path inside that archive. If build/web is in .gitignore, it will not be in the zipball, and there is nothing to serve.\nSo your build output is a committed artifact:\nflutter build web\ngit add build/web/\ngit commit -m \"Rebuild web assets\"\nEvery functional change therefore needs two things committed together: the source change and the rebuilt output. Committing only the source ships an app that silently keeps its old behaviour.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#building-a-flutter-web-app-operator",
+    "href": "02-operator-development/12-web-app-operators.html#building-a-flutter-web-app-operator",
+    "title": "15  Web App Operators",
+    "section": "15.3 Building a Flutter Web App Operator",
+    "text": "15.3 Building a Flutter Web App Operator\n\n15.3.1 Do not use --wasm\n\n\n\n\n\n\nWarningBuild with plain flutter build web\n\n\n\nflutter build web          # correct\nflutter build web --wasm   # currently breaks image rendering\n--wasm builds with dart2wasm + the skwasm renderer. In that configuration Image.memory() fails to render PNGs decoded from TIFF sources — you get “Failed to load image” placeholders while the rest of the UI, including overlays drawn on top, renders correctly. That partial failure makes it look like a data problem rather than a renderer problem.\nPlain flutter build web produces dart2js + canvaskit, which is the configuration currently known to work in Tercen. If you inherit a repository whose instructions say --wasm, treat them as out of date.\n\n\n\n\n15.3.2 Keep the version in sync\nThe app version is typically read from pubspec.yaml at runtime and displayed in the UI, and Flutter also writes it into build/web/version.json at build time. Because the build output is committed, a version bump that is not followed by a rebuild leaves the UI reporting a stale version — a genuinely confusing state when you are trying to work out which build is live.\nRelease sequence:\n# 1. bump the version in pubspec.yaml\n# 2. rebuild so build/web/version.json is regenerated\nflutter build web\n# 3. commit source, pubspec, and the rebuilt output together\ngit add pubspec.yaml pubspec.lock build/web/\ngit commit -m \"Bump version to 0.0.4\"\n# 4. tag and push\ngit tag -a 0.0.4 -m \"Version 0.0.4\"\ngit push && git push origin 0.0.4\n\n\n\n\n\n\nImportantThe tagging rules from chapter 8 apply here too\n\n\n\nNever move a released tag to a new commit — already-installed instances will keep serving the old assets with no error. Always cut a new version. See Never move a released git tag.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#reading-data-in-a-web-app",
+    "href": "02-operator-development/12-web-app-operators.html#reading-data-in-a-web-app",
+    "title": "15  Web App Operators",
+    "section": "15.4 Reading Data in a Web App",
+    "text": "15.4 Reading Data in a Web App\nA web app reads step data through the same client API as any other operator, and is subject to the same server-side limits.\n\n\n\n\n\n\nWarningRespect the 1.6 million row select limit\n\n\n\nA single unbounded select of the main table fails once the table exceeds 1,600,000 rows. In a web app this is especially unpleasant: the rejected request usually surfaces as an app that loads forever rather than an error message, because nothing in the UI reports the failed call. Paginate the select, and surface errors in the UI rather than swallowing them. See Large Tables: the 1.6 Million Row Limit.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#debugging",
+    "href": "02-operator-development/12-web-app-operators.html#debugging",
+    "title": "15  Web App Operators",
+    "section": "15.5 Debugging",
+    "text": "15.5 Debugging\nA web app operator runs in the user’s browser, which changes where you look for output.\n\nYour print() / logging goes to the browser console, not to the Tercen task log. Open the browser’s developer tools (F12) → Console to see it. Looking in the step’s log output and finding nothing is expected, not a sign the code did not run.\nFailed data calls appear in the Network tab. A 400 carrying {error: table.limit, reason: Bad limit} is the row-limit problem above.\nCheck build/web/version.json in the browser to confirm which build is actually being served. This is the fastest way to catch a stale committed build or a moved tag.\nA blank page with no network activity usually means the assets were not found — verify serve matches a directory that is really committed, and that it contains index.html.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#checklist",
+    "href": "02-operator-development/12-web-app-operators.html#checklist",
+    "title": "15  Web App Operators",
+    "section": "15.6 Checklist",
+    "text": "15.6 Checklist\n\nisWebApp: true is set in operator.json\nserve points at a committed directory containing index.html\nThe built output (e.g. build/web/) is committed, not gitignored\nBuilt with flutter build web (no --wasm)\nVersion bumped in pubspec.yaml and rebuilt so version.json matches\nSource and rebuilt assets committed together\nReleased under a new version tag, never a moved one\nLarge selects are paginated, and errors are surfaced in the UI",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
+    "objectID": "02-operator-development/12-web-app-operators.html#next-steps",
+    "href": "02-operator-development/12-web-app-operators.html#next-steps",
+    "title": "15  Web App Operators",
+    "section": "15.7 Next Steps",
+    "text": "15.7 Next Steps\nWith a web app operator installed, you may want to revisit Operator Specifications to describe the data your app expects, and Installation for how it reaches a library.",
+    "crumbs": [
+      "Operator Development",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Web App Operators</span>"
+    ]
+  },
+  {
     "objectID": "03-workflow-templates/1-templates.html",
     "href": "03-workflow-templates/1-templates.html",
-    "title": "15  Templates",
+    "title": "16  Templates",
     "section": "",
-    "text": "16 Building a template",
+    "text": "17 Building a template",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Templates</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Templates</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/1-templates.html#what-is-a-template",
     "href": "03-workflow-templates/1-templates.html#what-is-a-template",
-    "title": "15  Templates",
-    "section": "16.1 What is a template?",
-    "text": "16.1 What is a template?\nA template is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.",
+    "title": "16  Templates",
+    "section": "17.1 What is a template?",
+    "text": "17.1 What is a template?\nA template is a reusable Tercen workflow. It is typically developed when you want to quickly reuse a data analysis workflow with a new dataset.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Templates</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Templates</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/1-templates.html#general-development-workflow",
     "href": "03-workflow-templates/1-templates.html#general-development-workflow",
-    "title": "15  Templates",
-    "section": "16.2 General development workflow",
-    "text": "16.2 General development workflow\nThe recommended test-driven development workflow is as follows:\n\nInitialise a GitHub repository for your workflow based on a template provided by Tercen\nClone this GitHub repository to your Tercen development instance\nLoad a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.\nDevelop your workflow on your example dataset.\nPrepare the workflow template.\nPush your changes and deploy.",
+    "title": "16  Templates",
+    "section": "17.2 General development workflow",
+    "text": "17.2 General development workflow\nThe recommended test-driven development workflow is as follows:\n\nInitialise a GitHub repository for your workflow based on a template provided by Tercen\nClone this GitHub repository to your Tercen development instance\nLoad a minimal dataset that will serve the purpose of unit testing. Be mindful that this dataset and everything that is computed by the workflow will be stored in your repository, hence they should remain small.\nDevelop your workflow on your example dataset.\nPrepare the workflow template.\nPush your changes and deploy.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Templates</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Templates</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/1-templates.html#detailed-workflow",
     "href": "03-workflow-templates/1-templates.html#detailed-workflow",
-    "title": "15  Templates",
-    "section": "16.3 Detailed workflow",
-    "text": "16.3 Detailed workflow\n1. Create the Template Repo\nCreate a new project based on the template repository.\n2. Import the repository into Tercen\nCreate a new project from Github.\n\n\n\n\n\n\n3. Create the Template Workflow\nCreate a standard Tercen workflow. Run the steps as needed.\nA finalized workflow might look like the one below.\n\n\n\n4. Clone and Rename\nClone the workflow to create the golden standard. Rename it with an unique **_gs** suffix (see naming convention).\n\n\n\n\n\n\nNaming Conventions\n\nA Template workflow is compared to its Golden Standard workflows based on a naming convention.\nA workflow is considered a Golden Standard if its name ends with **_gs**, where  is a set of letter and numbers. For example, Template_gs1, Template_gsA01 and Template_gsAA are all valid Golden Standard names, whereas Template_gs_01 is not.\nA Template and a Golden Standard are considered match if they have the same base name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.\n\nOnce cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named workflow_tests. To do so, rename the Golden Standard, adding workflow_tests/ before the name and pressing the Ok button.\n\n\n\n5. Reset the Template Workflow\nOpen the Template Workflow (the one without the _gs** suffix), reset and save it.\n6. Select which elements to publish\nYou should now have at least two workflows as part of your project: the template and the gold standard. As we do not want the gold standard to be published in the library, you should make sure the “Publish” check box is unchecked for this workflow.\n7. Commit the Changes to Github\nFinally, select the Git button.\n\n\n\nThen, add any desired commit message, your personal Github token and press Ok.",
+    "title": "16  Templates",
+    "section": "17.3 Detailed workflow",
+    "text": "17.3 Detailed workflow\n1. Create the Template Repo\nCreate a new project based on the template repository.\n2. Import the repository into Tercen\nCreate a new project from Github.\n\n\n\n\n\n\n3. Create the Template Workflow\nCreate a standard Tercen workflow. Run the steps as needed.\nA finalized workflow might look like the one below.\n\n\n\n4. Clone and Rename\nClone the workflow to create the golden standard. Rename it with an unique **_gs** suffix (see naming convention).\n\n\n\n\n\n\nNaming Conventions\n\nA Template workflow is compared to its Golden Standard workflows based on a naming convention.\nA workflow is considered a Golden Standard if its name ends with **_gs**, where  is a set of letter and numbers. For example, Template_gs1, Template_gsA01 and Template_gsAA are all valid Golden Standard names, whereas Template_gs_01 is not.\nA Template and a Golden Standard are considered match if they have the same base name, that is, everything before the _gs suffix. For example, Workflow, Workflow_gs01 and Workflow_gs02 refer to a template (Workflow) and its two Golden Standards.\n\nOnce cloned, both Template and Golden Standard will be in the same folder. We want to move the Golden Standard workflow to a folder named workflow_tests. To do so, rename the Golden Standard, adding workflow_tests/ before the name and pressing the Ok button.\n\n\n\n5. Reset the Template Workflow\nOpen the Template Workflow (the one without the _gs** suffix), reset and save it.\n6. Select which elements to publish\nYou should now have at least two workflows as part of your project: the template and the gold standard. As we do not want the gold standard to be published in the library, you should make sure the “Publish” check box is unchecked for this workflow.\n7. Commit the Changes to Github\nFinally, select the Git button.\n\n\n\nThen, add any desired commit message, your personal Github token and press Ok.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Templates</span>"
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Templates</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/2-templates-ci.html",
     "href": "03-workflow-templates/2-templates-ci.html",
-    "title": "16  Continuous Integration Workflow",
+    "title": "17  Continuous Integration Workflow",
     "section": "",
-    "text": "Here is a link to the Workflow CI Action that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.\nHere’s a breakdown of what each part of the workflow does:\n\n16.0.1 Inputs\nThe workflow accepts several inputs, which are parameters for the CI process:\n\ngit-repository (required): The GitHub repository containing the template to be tested.\nbranch (optional, defaults to main): The branch of the GitHub repository.\ntag (optional): A commit or version tag for the GitHub repository.\ngit-token (required): GitHub access token used to authenticate and access the repository.\nservice-uri (optional): The URI of a service to which the workflow will connect.\ntercen-username (optional): Tercen service username.\ntercen-password (optional): Tercen service password.\n\n\n\n16.0.2 Steps\n1. Start Tercen Services\nAction: tercen/actions/start-tercen@main Starts necessary Tercen services to facilitate the test environment.\n2. Log in to Docker Registry\nAction: docker/login-action@v3.3.0 Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor’s credentials and the provided GitHub access token.\n3. Install Template Runner\nRun: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.\n4. Test Template\nRun: Executes the tercen/workflow_runner_operator Docker container. Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run. The –report flag is used to generate a test report.\n5. Copy Result File\nRun: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.\n6. Read Runner Results\nRun: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.\n7. Check Runner Results\nCondition: If the Status field in the JSON output is not “Success,” the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.\n8. Upload Runner Results\nAction: actions/upload-artifact@v3 The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.\n\n\n16.0.3 Summary\nCI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.",
+    "text": "Here is a link to the Workflow CI Action that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.\nHere’s a breakdown of what each part of the workflow does:\n\n17.0.1 Inputs\nThe workflow accepts several inputs, which are parameters for the CI process:\n\ngit-repository (required): The GitHub repository containing the template to be tested.\nbranch (optional, defaults to main): The branch of the GitHub repository.\ntag (optional): A commit or version tag for the GitHub repository.\ngit-token (required): GitHub access token used to authenticate and access the repository.\nservice-uri (optional): The URI of a service to which the workflow will connect.\ntercen-username (optional): Tercen service username.\ntercen-password (optional): Tercen service password.\n\n\n\n17.0.2 Steps\n1. Start Tercen Services\nAction: tercen/actions/start-tercen@main Starts necessary Tercen services to facilitate the test environment.\n2. Log in to Docker Registry\nAction: docker/login-action@v3.3.0 Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor’s credentials and the provided GitHub access token.\n3. Install Template Runner\nRun: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.\n4. Test Template\nRun: Executes the tercen/workflow_runner_operator Docker container. Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run. The –report flag is used to generate a test report.\n5. Copy Result File\nRun: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.\n6. Read Runner Results\nRun: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.\n7. Check Runner Results\nCondition: If the Status field in the JSON output is not “Success,” the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.\n8. Upload Runner Results\nAction: actions/upload-artifact@v3 The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.\n\n\n17.0.3 Summary\nCI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Continuous Integration Workflow</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/3-templates-installation.html",
     "href": "03-workflow-templates/3-templates-installation.html",
-    "title": "17  Installing a Template",
+    "title": "18  Installing a Template",
     "section": "",
-    "text": "17.1 Tercen Libraries\nTercen allows you to organize and manage modules (operators, templates, apps) and datasets within libraries. There are two types of libraries:",
+    "text": "18.1 Tercen Libraries\nTercen allows you to organize and manage modules (operators, templates, apps) and datasets within libraries. There are two types of libraries:",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Installing a Template</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Installing a Template</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/3-templates-installation.html#tercen-libraries",
     "href": "03-workflow-templates/3-templates-installation.html#tercen-libraries",
-    "title": "17  Installing a Template",
+    "title": "18  Installing a Template",
     "section": "",
     "text": "Tercen Library: A curated list of modules and datasets maintained by the Tercen team.\nCustom Libraries: Personal or team-shared libraries that you can create and manage.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Installing a Template</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Installing a Template</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/3-templates-installation.html#creating-a-custom-library",
     "href": "03-workflow-templates/3-templates-installation.html#creating-a-custom-library",
-    "title": "17  Installing a Template",
-    "section": "17.2 Creating a Custom Library",
-    "text": "17.2 Creating a Custom Library\nTo install an operator, you first need to create a custom library. In Tercen, a library is a specialized type of team, and resources within the library (operators, templates, apps) are treated as specialized projects. This structure allows you to manage the library’s content and control access to your resources.\nSteps to Create a Custom Library:\n\nCreate a Team: Go to your Tercen account and create a new team (e.g., “MyLibrary”).\nEnable Library Team: Navigate to your team’s settings and select the “Library team” option to designate this team as a library.",
+    "title": "18  Installing a Template",
+    "section": "18.2 Creating a Custom Library",
+    "text": "18.2 Creating a Custom Library\nTo install an operator, you first need to create a custom library. In Tercen, a library is a specialized type of team, and resources within the library (operators, templates, apps) are treated as specialized projects. This structure allows you to manage the library’s content and control access to your resources.\nSteps to Create a Custom Library:\n\nCreate a Team: Go to your Tercen account and create a new team (e.g., “MyLibrary”).\nEnable Library Team: Navigate to your team’s settings and select the “Library team” option to designate this team as a library.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Installing a Template</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Installing a Template</span>"
     ]
   },
   {
     "objectID": "03-workflow-templates/3-templates-installation.html#installing-a-template-in-a-custom-library",
     "href": "03-workflow-templates/3-templates-installation.html#installing-a-template-in-a-custom-library",
-    "title": "17  Installing a Template",
-    "section": "17.3 Installing a Template in a Custom Library",
-    "text": "17.3 Installing a Template in a Custom Library\nOnce your custom library is set up, you can use Tercen’s git integration to install templates:\n\nGo to your library (the team you created).\nClick on “New Project” and choose “From Git.”\nFill in the required fields:\n\nName: The name of the template.\nURL: The Git repository URL of the template.\nTag: The specific version or tag (optional).\nAuth Token: If required, provide an authentication token.\n\n\nThis process will clone the template’s repository into your custom library. It should now be available when you want to create a new workflow.",
+    "title": "18  Installing a Template",
+    "section": "18.3 Installing a Template in a Custom Library",
+    "text": "18.3 Installing a Template in a Custom Library\nOnce your custom library is set up, you can use Tercen’s git integration to install templates:\n\nGo to your library (the team you created).\nClick on “New Project” and choose “From Git.”\nFill in the required fields:\n\nName: The name of the template.\nURL: The Git repository URL of the template.\nTag: The specific version or tag (optional).\nAuth Token: If required, provide an authentication token.\n\n\nThis process will clone the template’s repository into your custom library. It should now be available when you want to create a new workflow.",
     "crumbs": [
       "Workflow Template Development",
-      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Installing a Template</span>"
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Installing a Template</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html",
     "href": "04-advanced-topics/1-patterns-plots.html",
-    "title": "18  Patterns for Plot Operators",
+    "title": "19  Patterns for Plot Operators",
     "section": "",
-    "text": "18.1 Introduction\nThis tutorial demonstrates how to use Python with the tercen library to create custom plot operators. It covers:",
+    "text": "19.1 Introduction\nThis tutorial demonstrates how to use Python with the tercen library to create custom plot operators. It covers:",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#introduction",
     "href": "04-advanced-topics/1-patterns-plots.html#introduction",
-    "title": "18  Patterns for Plot Operators",
+    "title": "19  Patterns for Plot Operators",
     "section": "",
     "text": "Connecting to the Tercen workflow to select data.\nCreating plots with Seaborn.\nEnhancing plots with advanced techniques like facet grids.\nHandling metadata for rows and columns.\nSaving and exporting plots back to Tercen.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#basic-scatter-plot",
     "href": "04-advanced-topics/1-patterns-plots.html#basic-scatter-plot",
-    "title": "18  Patterns for Plot Operators",
-    "section": "18.2 Basic Scatter Plot",
-    "text": "18.2 Basic Scatter Plot\n\n18.2.1 Connecting to Tercen\nUse TercenContext to establish a connection with your Tercen workflow. Provide the required parameters, such as workflowId, stepId, authToken, and serviceUri.\nfrom tercen.client import context as ctx\n\ncontext = ctx.TercenContext(\n    workflowId=\"WORKFLOW_ID\",\n    stepId=\"STEP_ID\",\n    authToken=\"TOKEN\",\n    serviceUri=\"SERVICE_URI\"  \n)\n\n\n\n18.2.2 Accessing Operator Properties\nTercen allows custom operator configurations using properties. Here, the title property is retrieved with a default value:\nplot_title = context.operator_property(\"title\", str, default=\"My plot title\")\nYou can now use this property (e.g., as a plot title).\n\n\n\n18.2.3 Selecting Data\nThe select method retrieves data from Tercen’s workflow. For example, to extract x and y axis data:\ndf = context.select([\".x\", \".y\"], df_lib=\"pandas\")\nThe df_lib=\"pandas\" parameter specifies the data format, making it compatible with the Pandas library. The default setting will load a Polars data frame.\n\n\n\n18.2.4 Making the Plot\nVisualize the data using Seaborn:\nimport seaborn as sns\n\np = sns.scatterplot(data=df, x=\".x\", y=\".y\", linewidth=0, alpha=0.5, s=0.5)\np.set_xlabel(context.xAxis[0])\np.set_ylabel(context.yAxis[0])\nThis basic scatter plot uses .x and .y as coordinates and applies axis labels from the Tercen context.",
+    "title": "19  Patterns for Plot Operators",
+    "section": "19.2 Basic Scatter Plot",
+    "text": "19.2 Basic Scatter Plot\n\n19.2.1 Connecting to Tercen\nUse TercenContext to establish a connection with your Tercen workflow. Provide the required parameters, such as workflowId, stepId, authToken, and serviceUri.\nfrom tercen.client import context as ctx\n\ncontext = ctx.TercenContext(\n    workflowId=\"WORKFLOW_ID\",\n    stepId=\"STEP_ID\",\n    authToken=\"TOKEN\",\n    serviceUri=\"SERVICE_URI\"  \n)\n\n\n\n19.2.2 Accessing Operator Properties\nTercen allows custom operator configurations using properties. Here, the title property is retrieved with a default value:\nplot_title = context.operator_property(\"title\", str, default=\"My plot title\")\nYou can now use this property (e.g., as a plot title).\n\n\n\n19.2.3 Selecting Data\nThe select method retrieves data from Tercen’s workflow. For example, to extract x and y axis data:\ndf = context.select([\".x\", \".y\"], df_lib=\"pandas\")\nThe df_lib=\"pandas\" parameter specifies the data format, making it compatible with the Pandas library. The default setting will load a Polars data frame.\n\n\n\n19.2.4 Making the Plot\nVisualize the data using Seaborn:\nimport seaborn as sns\n\np = sns.scatterplot(data=df, x=\".x\", y=\".y\", linewidth=0, alpha=0.5, s=0.5)\np.set_xlabel(context.xAxis[0])\np.set_ylabel(context.yAxis[0])\nThis basic scatter plot uses .x and .y as coordinates and applies axis labels from the Tercen context.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#adding-color-to-plots",
     "href": "04-advanced-topics/1-patterns-plots.html#adding-color-to-plots",
-    "title": "18  Patterns for Plot Operators",
-    "section": "18.3 Adding Color to Plots",
-    "text": "18.3 Adding Color to Plots\nUse the colors attribute from Tercen to include a color dimension in your plot:\ndf = context.select([\".x\", \".y\"] + context.colors, df_lib=\"pandas\")\n\np = sns.scatterplot(\n    data=df,\n    x=\".x\",\n    y=\".y\",\n    hue=context.colors[0],\n    palette=\"deep\",\n    linewidth=0,\n    alpha=0.5,\n    s=2\n)\nThe hue parameter maps the first color channel to the scatter plot. Note that multiple color factors can be specified. Instead of using the first one only like above, one could concatenate all color factors and use the newly created factor as a “hue”.",
+    "title": "19  Patterns for Plot Operators",
+    "section": "19.3 Adding Color to Plots",
+    "text": "19.3 Adding Color to Plots\nUse the colors attribute from Tercen to include a color dimension in your plot:\ndf = context.select([\".x\", \".y\"] + context.colors, df_lib=\"pandas\")\n\np = sns.scatterplot(\n    data=df,\n    x=\".x\",\n    y=\".y\",\n    hue=context.colors[0],\n    palette=\"deep\",\n    linewidth=0,\n    alpha=0.5,\n    s=2\n)\nThe hue parameter maps the first color channel to the scatter plot. Note that multiple color factors can be specified. Instead of using the first one only like above, one could concatenate all color factors and use the newly created factor as a “hue”.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#faceted-plots",
     "href": "04-advanced-topics/1-patterns-plots.html#faceted-plots",
-    "title": "18  Patterns for Plot Operators",
-    "section": "18.4 Faceted Plots",
-    "text": "18.4 Faceted Plots\n\n18.4.1 Row/Column Facetting\nAs the crosstab can be stratified by row and column factors, we can do the same in our plot and create a faceted grid:\ndf = context.select([\".x\", \".y\", \".ci\", \".ri\"] + context.colors, df_lib=\"pandas\")\ng = sns.FacetGrid(df, col=\".ci\", row=\".ri\")\ng.map(sns.scatterplot, \".x\", \".y\")\ng.set_axis_labels(x_var=\"X axis\", y_var=\"Y axis\")\nHere: - .ci (column index) and .ri (row index) define the facets. - FacetGrid generates a grid of plots.\n\n\n\n18.4.2 Dynamic Column and Row Names\nInclude additional metadata to enhance your facets and not use the row and column indices only:\ndf_row = context.rselect(df_lib=\"pandas\")\ndf_row[\".ri\"] = range(len(df_row))\n\ndf_col = context.cselect(df_lib=\"pandas\")\ndf_col[\".ci\"] = range(len(df_col))\n\ndf_plot = df.merge(df_col, how=\"left\", on=\".ci\").merge(df_row, how=\"left\", on=\".ri\")\nThis creates enriched dataframes with merged metadata, suitable for more dynamic faceting.\nWe need to handle scenarios where column or row names are empty:\ncn = context.cnames[0]\nif cn == '':\n    cn = None\n\nrn = context.rnames[0]\nif rn == '':\n    rn = None\nThis ensures compatibility with workflows that lack row or column factors.\nWe can then produce our plot:\ng = sns.FacetGrid(df_plot, col=cn, row=rn)\ng.map(sns.scatterplot, \".x\", \".y\")\ng.set_axis_labels(x_var=\"X axis\", y_var=\"Y axis\")",
+    "title": "19  Patterns for Plot Operators",
+    "section": "19.4 Faceted Plots",
+    "text": "19.4 Faceted Plots\n\n19.4.1 Row/Column Facetting\nAs the crosstab can be stratified by row and column factors, we can do the same in our plot and create a faceted grid:\ndf = context.select([\".x\", \".y\", \".ci\", \".ri\"] + context.colors, df_lib=\"pandas\")\ng = sns.FacetGrid(df, col=\".ci\", row=\".ri\")\ng.map(sns.scatterplot, \".x\", \".y\")\ng.set_axis_labels(x_var=\"X axis\", y_var=\"Y axis\")\nHere: - .ci (column index) and .ri (row index) define the facets. - FacetGrid generates a grid of plots.\n\n\n\n19.4.2 Dynamic Column and Row Names\nInclude additional metadata to enhance your facets and not use the row and column indices only:\ndf_row = context.rselect(df_lib=\"pandas\")\ndf_row[\".ri\"] = range(len(df_row))\n\ndf_col = context.cselect(df_lib=\"pandas\")\ndf_col[\".ci\"] = range(len(df_col))\n\ndf_plot = df.merge(df_col, how=\"left\", on=\".ci\").merge(df_row, how=\"left\", on=\".ri\")\nThis creates enriched dataframes with merged metadata, suitable for more dynamic faceting.\nWe need to handle scenarios where column or row names are empty:\ncn = context.cnames[0]\nif cn == '':\n    cn = None\n\nrn = context.rnames[0]\nif rn == '':\n    rn = None\nThis ensures compatibility with workflows that lack row or column factors.\nWe can then produce our plot:\ng = sns.FacetGrid(df_plot, col=cn, row=rn)\ng.map(sns.scatterplot, \".x\", \".y\")\ng.set_axis_labels(x_var=\"X axis\", y_var=\"Y axis\")",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#saving-and-exporting-plots",
     "href": "04-advanced-topics/1-patterns-plots.html#saving-and-exporting-plots",
-    "title": "18  Patterns for Plot Operators",
-    "section": "18.5 Saving and Exporting Plots",
-    "text": "18.5 Saving and Exporting Plots\nFinally, you can save the plot as an image and upload it back to Tercen:\nfrom tempfile import NamedTemporaryFile\nfrom tercen.util.helper_functions import image_file_to_df, as_relation, as_join_operator\n\ntmp = NamedTemporaryFile(delete=True, suffix='.png')\ng.savefig(tmp)\n\ndf_out = image_file_to_df(tmp.name)\nrel_out = as_relation(df_out)\ncontext.save_relation(as_join_operator(rel_out, [], []))\nThis pattern uses helper functions to convert the plot into a Tercen-compatible format and save it as a relation.",
+    "title": "19  Patterns for Plot Operators",
+    "section": "19.5 Saving and Exporting Plots",
+    "text": "19.5 Saving and Exporting Plots\nFinally, you can save the plot as an image and upload it back to Tercen:\nfrom tempfile import NamedTemporaryFile\nfrom tercen.util.helper_functions import image_file_to_df, as_relation, as_join_operator\n\ntmp = NamedTemporaryFile(delete=True, suffix='.png')\ng.savefig(tmp)\n\ndf_out = image_file_to_df(tmp.name)\nrel_out = as_relation(df_out)\ncontext.save_relation(as_join_operator(rel_out, [], []))\nThis pattern uses helper functions to convert the plot into a Tercen-compatible format and save it as a relation.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/1-patterns-plots.html#conclusion",
     "href": "04-advanced-topics/1-patterns-plots.html#conclusion",
-    "title": "18  Patterns for Plot Operators",
-    "section": "18.6 Conclusion",
-    "text": "18.6 Conclusion\nThese development patterns allow you to:\n\nRetrieve and process data efficiently.\nCreate dynamic, customizable plots.\nLeverage Tercen metadata for advanced visualizations.\nSave and integrate results seamlessly back into Tercen workflows.\n\nBy mastering these techniques, you can build powerful, reusable visualization operators for collaborative data analysis in Tercen.",
+    "title": "19  Patterns for Plot Operators",
+    "section": "19.6 Conclusion",
+    "text": "19.6 Conclusion\nThese development patterns allow you to:\n\nRetrieve and process data efficiently.\nCreate dynamic, customizable plots.\nLeverage Tercen metadata for advanced visualizations.\nSave and integrate results seamlessly back into Tercen workflows.\n\nBy mastering these techniques, you can build powerful, reusable visualization operators for collaborative data analysis in Tercen.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Patterns for Plot Operators</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html",
     "href": "04-advanced-topics/2-tercen-cli.html",
-    "title": "19  Running Tercen from the CLI",
+    "title": "20  Running Tercen from the CLI",
     "section": "",
-    "text": "19.1 Prerequisites\nThis chapter provides an overview of workflows automation in Tercen using Python and the API. The script uses the Tercen Python client to interact with a local Tercen instance, create a temporary project, import a Git repository, and trigger workflow computations using predefined data.\nTo use the workflow runner script, ensure the following:",
+    "text": "20.1 Prerequisites\nThis chapter provides an overview of workflows automation in Tercen using Python and the API. The script uses the Tercen Python client to interact with a local Tercen instance, create a temporary project, import a Git repository, and trigger workflow computations using predefined data.\nTo use the workflow runner script, ensure the following:",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html#prerequisites",
     "href": "04-advanced-topics/2-tercen-cli.html#prerequisites",
-    "title": "19  Running Tercen from the CLI",
+    "title": "20  Running Tercen from the CLI",
     "section": "",
-    "text": "A local instance of Tercen is running (e.g., via Tercen Studio).\nThe Tercen Python client is installed (tercen package).\nA GitHub token is available as an environment variable (GITHUB_TOKEN) for repository access, if needed.\n\n\n19.1.1 Required Python Libraries\nimport sys\nimport string\nimport random\nimport os\nimport uuid\nfrom tercen.client import context as ctx\nfrom tercen.client.factory import TercenClient\nfrom tercen.model.impl import Project, GitProjectTask, InitState, TableStep, TableStepModel, SimpleRelation, StepState, DoneState, RunWorkflowTask, Pair\n\n\n19.1.2 Configuration Variables\nThe script uses the following configuration variables:\nuser = \"workflow_runner\"\npassw = \"workflow_runner\"\nservice_uri = \"http://tercen:5400\"\ntemplate_repo = \"https://github.com/tercen/dose_response_template\"\nbranch = \"main\"\ntag = \"\"\ngit_token = os.environ.get(\"GITHUB_TOKEN\", \"\")\ntemplate_folder = \"workflow_tests\"\n\nuser and passw: Credentials for authenticating with the Tercen instance.\nservice_uri: URL of the local Tercen instance.\ntemplate_repo: GitHub repository containing the workflow template.\nbranch: Git branch to use (e.g., main).\ntag: Optional Git tag (empty by default).\ngit_token: GitHub personal access token for repository access.\ntemplate_folder: Folder for workflow tests.",
+    "text": "A local instance of Tercen is running (e.g., via Tercen Studio).\nThe Tercen Python client is installed (tercen package).\nA GitHub token is available as an environment variable (GITHUB_TOKEN) for repository access, if needed.\n\n\n20.1.1 Required Python Libraries\nimport sys\nimport string\nimport random\nimport os\nimport uuid\nfrom tercen.client import context as ctx\nfrom tercen.client.factory import TercenClient\nfrom tercen.model.impl import Project, GitProjectTask, InitState, TableStep, TableStepModel, SimpleRelation, StepState, DoneState, RunWorkflowTask, Pair\n\n\n20.1.2 Configuration Variables\nThe script uses the following configuration variables:\nuser = \"workflow_runner\"\npassw = \"workflow_runner\"\nservice_uri = \"http://tercen:5400\"\ntemplate_repo = \"https://github.com/tercen/dose_response_template\"\nbranch = \"main\"\ntag = \"\"\ngit_token = os.environ.get(\"GITHUB_TOKEN\", \"\")\ntemplate_folder = \"workflow_tests\"\n\nuser and passw: Credentials for authenticating with the Tercen instance.\nservice_uri: URL of the local Tercen instance.\ntemplate_repo: GitHub repository containing the workflow template.\nbranch: Git branch to use (e.g., main).\ntag: Optional Git tag (empty by default).\ngit_token: GitHub personal access token for repository access.\ntemplate_folder: Folder for workflow tests.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html#script-workflow",
     "href": "04-advanced-topics/2-tercen-cli.html#script-workflow",
-    "title": "19  Running Tercen from the CLI",
-    "section": "19.2 Script Workflow",
-    "text": "19.2 Script Workflow\nThe script performs the following steps:\n\n19.2.1 1. Initialize the Tercen Client\nThe script initializes a connection to the Tercen instance using the provided credentials.\nclient = TercenClient(\"http://tercen:5400\")\nclient.userService.connect(user, passw)\n\n\n19.2.2 2. Create a Temporary Project\nA temporary project is created with a randomly generated name to serve as the workspace for the workflow.\nproject = Project()\nproject.name = 'WorkflowRunner_' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))\nproject.acl.owner = user\nproject = client.projectService.create(project)\nThe project name is prefixed with WorkflowRunner_ followed by a four-character random string.\n\n\n19.2.3 3. Import a Git Repository\nThe script sets up and triggers a GitProjectTask to clone the specified repository into the project.\nimport_task = GitProjectTask()\nimport_task.owner = user\nimport_task.state = InitState()\n\nimport_task.addMeta(\"PROJECT_ID\", project.id)\nimport_task.addMeta(\"PROJECT_REV\", project.rev)\nimport_task.addMeta(\"GIT_ACTION\", \"reset/pull\")\nimport_task.addMeta(\"GIT_PAT\", git_token)\nimport_task.addMeta(\"GIT_URL\", template_repo)\nimport_task.addMeta(\"GIT_BRANCH\", branch)\nimport_task.addMeta(\"GIT_MESSAGE\", \"\")\nif tag:\n    import_task.addMeta(\"GIT_TAG\", tag)\n\nimport_task = client.taskService.create(import_task)\nclient.taskService.runTask(import_task.id)\nimportTask = client.taskService.waitDone(import_task.id)\nKey metadata includes the project ID, Git URL, branch, and authentication token. The task clones the dose_response_template repository and waits for completion.\n\n\n19.2.4 4. Trigger Workflow Computation\nThe script retrieves a predefined workflow, table step, and dataset using hardcoded IDs, then triggers a computation.\nproject = client.projectService.get(\"9c44bf7ae873f33e0171dea4fd012375\")\nworkflow_id = \"9c44bf7ae873f33e0171dea4fd016344\"\nstep_id = \"1e0b619b-b8fa-43c3-aef8-6e0f5d8f80f8\"\nrelation_id = \"9c44bf7ae873f33e0171dea4fd015d70\"\nworkflow = client.workflowService.get(workflow_id)\ntable_step = next((step for step in workflow.steps if step.id == step_id), None)\nif not table_step:\n    raise ValueError(f\"No table step found with ID {step_id}\")\nThe script configures the table step with a SimpleRelation and marks it as complete.\ntable_step_model = TableStepModel()\nsimple_rel = SimpleRelation()\nsimple_rel.id = relation_id\ntable_step_model.relation = simple_rel\ntable_step.model = table_step_model\n\nstep_state = StepState()\nstep_state.taskState = DoneState()\ntable_step.state = step_state\n\nclient.workflowService.update(workflow)\nA RunWorkflowTask is then created and executed to run the workflow computation.\nrunTask = RunWorkflowTask()\nrunTask.state = InitState()\nrunTask.workflowId = workflow.id\nrunTask.workflowRev = workflow.rev\nrunTask.owner = project.acl.owner\nrunTask.projectId = project.id\n\nrunTask = client.taskService.create(obj=runTask)\nclient.taskService.runTask(taskId=runTask.id)\nrunTask = client.taskService.waitDone(taskId=runTask.id)\n\nclient.workflowService.update(workflow)\n\n\n19.2.5 5. Next Steps\nThe script includes suggestions for further exploration:\n\nReview the workflow runner’s capabilities.\nExplore the Tercen Python client unit tests for additional API usage examples.\nInvestigate GitHub Actions for integrating the workflow runner into a CI/CD pipeline.",
+    "title": "20  Running Tercen from the CLI",
+    "section": "20.2 Script Workflow",
+    "text": "20.2 Script Workflow\nThe script performs the following steps:\n\n20.2.1 1. Initialize the Tercen Client\nThe script initializes a connection to the Tercen instance using the provided credentials.\nclient = TercenClient(\"http://tercen:5400\")\nclient.userService.connect(user, passw)\n\n\n20.2.2 2. Create a Temporary Project\nA temporary project is created with a randomly generated name to serve as the workspace for the workflow.\nproject = Project()\nproject.name = 'WorkflowRunner_' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))\nproject.acl.owner = user\nproject = client.projectService.create(project)\nThe project name is prefixed with WorkflowRunner_ followed by a four-character random string.\n\n\n20.2.3 3. Import a Git Repository\nThe script sets up and triggers a GitProjectTask to clone the specified repository into the project.\nimport_task = GitProjectTask()\nimport_task.owner = user\nimport_task.state = InitState()\n\nimport_task.addMeta(\"PROJECT_ID\", project.id)\nimport_task.addMeta(\"PROJECT_REV\", project.rev)\nimport_task.addMeta(\"GIT_ACTION\", \"reset/pull\")\nimport_task.addMeta(\"GIT_PAT\", git_token)\nimport_task.addMeta(\"GIT_URL\", template_repo)\nimport_task.addMeta(\"GIT_BRANCH\", branch)\nimport_task.addMeta(\"GIT_MESSAGE\", \"\")\nif tag:\n    import_task.addMeta(\"GIT_TAG\", tag)\n\nimport_task = client.taskService.create(import_task)\nclient.taskService.runTask(import_task.id)\nimportTask = client.taskService.waitDone(import_task.id)\nKey metadata includes the project ID, Git URL, branch, and authentication token. The task clones the dose_response_template repository and waits for completion.\n\n\n20.2.4 4. Trigger Workflow Computation\nThe script retrieves a predefined workflow, table step, and dataset using hardcoded IDs, then triggers a computation.\nproject = client.projectService.get(\"9c44bf7ae873f33e0171dea4fd012375\")\nworkflow_id = \"9c44bf7ae873f33e0171dea4fd016344\"\nstep_id = \"1e0b619b-b8fa-43c3-aef8-6e0f5d8f80f8\"\nrelation_id = \"9c44bf7ae873f33e0171dea4fd015d70\"\nworkflow = client.workflowService.get(workflow_id)\ntable_step = next((step for step in workflow.steps if step.id == step_id), None)\nif not table_step:\n    raise ValueError(f\"No table step found with ID {step_id}\")\nThe script configures the table step with a SimpleRelation and marks it as complete.\ntable_step_model = TableStepModel()\nsimple_rel = SimpleRelation()\nsimple_rel.id = relation_id\ntable_step_model.relation = simple_rel\ntable_step.model = table_step_model\n\nstep_state = StepState()\nstep_state.taskState = DoneState()\ntable_step.state = step_state\n\nclient.workflowService.update(workflow)\nA RunWorkflowTask is then created and executed to run the workflow computation.\nrunTask = RunWorkflowTask()\nrunTask.state = InitState()\nrunTask.workflowId = workflow.id\nrunTask.workflowRev = workflow.rev\nrunTask.owner = project.acl.owner\nrunTask.projectId = project.id\n\nrunTask = client.taskService.create(obj=runTask)\nclient.taskService.runTask(taskId=runTask.id)\nrunTask = client.taskService.waitDone(taskId=runTask.id)\n\nclient.workflowService.update(workflow)\n\n\n20.2.5 5. Next Steps\nThe script includes suggestions for further exploration:\n\nReview the workflow runner’s capabilities.\nExplore the Tercen Python client unit tests for additional API usage examples.\nInvestigate GitHub Actions for integrating the workflow runner into a CI/CD pipeline.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html#available-tasks",
     "href": "04-advanced-topics/2-tercen-cli.html#available-tasks",
-    "title": "19  Running Tercen from the CLI",
-    "section": "19.3 Available Tasks",
-    "text": "19.3 Available Tasks\nThe Tercen platform supports various tasks for workflow and project management, including:\n\nCreateGitOperatorTask\nTestOperatorTask\nExportTableTask\nExportWorkflowTask\nImportWorkflowTask\nImportGitWorkflowTask\nImportGitDatasetTask\nRunWebAppTask\nCSVTask\nCubeQueryTask\nRunWorkflowTask\nRunComputationTask\nComputationTask\nSaveComputationResultTask\nGlTask\nGitProjectTask\nLibraryTask",
+    "title": "20  Running Tercen from the CLI",
+    "section": "20.3 Available Tasks",
+    "text": "20.3 Available Tasks\nThe Tercen platform supports various tasks for workflow and project management, including:\n\nCreateGitOperatorTask\nTestOperatorTask\nExportTableTask\nExportWorkflowTask\nImportWorkflowTask\nImportGitWorkflowTask\nImportGitDatasetTask\nRunWebAppTask\nCSVTask\nCubeQueryTask\nRunWorkflowTask\nRunComputationTask\nComputationTask\nSaveComputationResultTask\nGlTask\nGitProjectTask\nLibraryTask",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html#useful-resources",
     "href": "04-advanced-topics/2-tercen-cli.html#useful-resources",
-    "title": "19  Running Tercen from the CLI",
-    "section": "19.4 Useful Resources",
-    "text": "19.4 Useful Resources\n\nTercen Python Client: https://github.com/tercen/tercen_python_client – Check unit tests for API usage examples.\nTercen Workflow Runner: https://github.com/tercen/workflow_runner_operator\nTercen Developers Guide: https://tercen.github.io/developers_guide/\nDose-Response Curve Fit Template: https://github.com/tercen/dose_response_template",
+    "title": "20  Running Tercen from the CLI",
+    "section": "20.4 Useful Resources",
+    "text": "20.4 Useful Resources\n\nTercen Python Client: https://github.com/tercen/tercen_python_client – Check unit tests for API usage examples.\nTercen Workflow Runner: https://github.com/tercen/workflow_runner_operator\nTercen Developers Guide: https://tercen.github.io/developers_guide/\nDose-Response Curve Fit Template: https://github.com/tercen/dose_response_template",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/2-tercen-cli.html#notes",
     "href": "04-advanced-topics/2-tercen-cli.html#notes",
-    "title": "19  Running Tercen from the CLI",
-    "section": "19.5 Notes",
-    "text": "19.5 Notes\n\nThe script assumes a local Tercen instance is running. For CI/CD integration, refer to Tercen GitHub Actions for starting a local instance.\nHardcoded IDs (e.g., workflow_id, step_id) are used for demonstration. In production, these should be dynamically retrieved or passed as parameters.\nEnsure the GitHub token has appropriate permissions to access the target repository.\n\nThis script serves as a foundation for automating Tercen workflows and can be extended for more complex use cases, such as parameterized workflow execution or integration with external systems.",
+    "title": "20  Running Tercen from the CLI",
+    "section": "20.5 Notes",
+    "text": "20.5 Notes\n\nThe script assumes a local Tercen instance is running. For CI/CD integration, refer to Tercen GitHub Actions for starting a local instance.\nHardcoded IDs (e.g., workflow_id, step_id) are used for demonstration. In production, these should be dynamically retrieved or passed as parameters.\nEnsure the GitHub token has appropriate permissions to access the target repository.\n\nThis script serves as a foundation for automating Tercen workflows and can be extended for more complex use cases, such as parameterized workflow execution or integration with external systems.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>Running Tercen from the CLI</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/3-gpu-development.html",
     "href": "04-advanced-topics/3-gpu-development.html",
-    "title": "20  GPU Development in Tercen Studio",
+    "title": "21  GPU Development in Tercen Studio",
     "section": "",
-    "text": "20.1 Setup Instructions\nGPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.\nOnce the containers are up, you can access the GPU from Code Server.",
+    "text": "21.1 Setup Instructions\nGPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.\nOnce the containers are up, you can access the GPU from Code Server.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>20</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/3-gpu-development.html#setup-instructions",
     "href": "04-advanced-topics/3-gpu-development.html#setup-instructions",
-    "title": "20  GPU Development in Tercen Studio",
+    "title": "21  GPU Development in Tercen Studio",
     "section": "",
     "text": "Pull the latest version of the Tercen Studio repository:\nhttps://github.com/tercen/tercen_studio\nConfigure Docker for GPU support. Modify the docker-compose.yaml file as described below:\n\nComment out the default runtime-docker image.\n\n#image: docker:24.0.6-dind-alpine3.18\n\nUncomment GPU-related configuration.\n\nUnder the dind service:\nimage: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]\nUnder the VS Code service code-server:\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>20</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/3-gpu-development.html#changes-to-operators",
     "href": "04-advanced-topics/3-gpu-development.html#changes-to-operators",
-    "title": "20  GPU Development in Tercen Studio",
-    "section": "20.2 Changes to operators",
-    "text": "20.2 Changes to operators\n\nThe Dockerfile uses a GPU-enabled runtime:\n\nFROM tercen/runtime-tf:2.17.0-gpu\n\nThe operator.json declares GPU capability:\n\n\"capabilities\": [\"gpu\"]",
+    "title": "21  GPU Development in Tercen Studio",
+    "section": "21.2 Changes to operators",
+    "text": "21.2 Changes to operators\n\nThe Dockerfile uses a GPU-enabled runtime:\n\nFROM tercen/runtime-tf:2.17.0-gpu\n\nThe operator.json declares GPU capability:\n\n\"capabilities\": [\"gpu\"]",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>20</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/3-gpu-development.html#verifying-gpu-access",
     "href": "04-advanced-topics/3-gpu-development.html#verifying-gpu-access",
-    "title": "20  GPU Development in Tercen Studio",
-    "section": "20.3 Verifying GPU Access",
-    "text": "20.3 Verifying GPU Access\nOnce inside the container, verify GPU access using TensorFlow or PyTorch.\n\n20.3.1 TensorFlow\nimport tensorflow as tf\nprint(\"Num GPUs Available:\", len(tf.config.list_physical_devices('GPU')))\n\n\n20.3.2 PyTorch\nimport torch\nprint(\"Is CUDA available:\", torch.cuda.is_available())\nIf GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:\nhttps://docs.docker.com/desktop/features/gpu/",
+    "title": "21  GPU Development in Tercen Studio",
+    "section": "21.3 Verifying GPU Access",
+    "text": "21.3 Verifying GPU Access\nOnce inside the container, verify GPU access using TensorFlow or PyTorch.\n\n21.3.1 TensorFlow\nimport tensorflow as tf\nprint(\"Num GPUs Available:\", len(tf.config.list_physical_devices('GPU')))\n\n\n21.3.2 PyTorch\nimport torch\nprint(\"Is CUDA available:\", torch.cuda.is_available())\nIf GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:\nhttps://docs.docker.com/desktop/features/gpu/",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>20</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html",
     "href": "04-advanced-topics/4-export-operator-parameters.html",
-    "title": "21  Exporting Operator Parameters",
+    "title": "22  Exporting Operator Parameters",
     "section": "",
-    "text": "21.1 Prerequisites\nThis chapter shows how to extract operator settings from a Tercen workflow for documentation purposes. The script connects to a Tercen instance via the R client, retrieves a workflow, and outputs a table of all operator parameters across every step.",
+    "text": "22.1 Prerequisites\nThis chapter shows how to extract operator settings from a Tercen workflow for documentation purposes. The script connects to a Tercen instance via the R client, retrieves a workflow, and outputs a table of all operator parameters across every step.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html#prerequisites",
     "href": "04-advanced-topics/4-export-operator-parameters.html#prerequisites",
-    "title": "21  Exporting Operator Parameters",
+    "title": "22  Exporting Operator Parameters",
     "section": "",
-    "text": "A running Tercen instance.\nThe tercen R package installed. This is pre-installed in Tercen operator runtime containers. To install locally:\n\ninstall.packages(\"remotes\")\nremotes::install_github(\"tercen/teRcen\")\n\nA Personal Access Token (PAT) for authentication.\n\n\n21.1.1 Generating a Personal Access Token\nNavigate to https://&lt;your-tercen-instance&gt;/_token in your browser. This generates a token you can use for API access. Copy and store it securely.\n\n\n21.1.2 Finding Your Workflow ID\nThe workflow ID is in the URL when viewing a workflow:\nhttps://&lt;your-instance&gt;/&lt;username&gt;/w/&lt;workflow-id&gt;",
+    "text": "A running Tercen instance.\nThe tercen R package installed. This is pre-installed in Tercen operator runtime containers. To install locally:\n\ninstall.packages(\"remotes\")\nremotes::install_github(\"tercen/teRcen\")\n\nA Personal Access Token (PAT) for authentication.\n\n\n22.1.1 Generating a Personal Access Token\nNavigate to https://&lt;your-tercen-instance&gt;/_token in your browser. This generates a token you can use for API access. Copy and store it securely.\n\n\n22.1.2 Finding Your Workflow ID\nThe workflow ID is in the URL when viewing a workflow:\nhttps://&lt;your-instance&gt;/&lt;username&gt;/w/&lt;workflow-id&gt;",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html#r-script",
     "href": "04-advanced-topics/4-export-operator-parameters.html#r-script",
-    "title": "21  Exporting Operator Parameters",
-    "section": "21.2 R Script",
-    "text": "21.2 R Script\nlibrary(tercen)\n\n# Connect to your Tercen instance\nclient &lt;- TercenClient$new(\n  serviceUri = \"https://&lt;your-instance&gt;/api/v1/\",\n  authToken  = \"&lt;your-token&gt;\"\n)\n\n# Get the workflow\nworkflow &lt;- client$workflowService$get(\"&lt;your-workflow-id&gt;\")\n\n# Extract operator settings from each step\nparams &lt;- do.call(rbind, lapply(workflow$steps, function(step) {\n  if (is.null(step$model) || is.null(step$model$operatorSettings)) return(NULL)\n\n  opRef &lt;- step$model$operatorSettings$operatorRef\n  if (is.null(opRef) || is.null(opRef$name) || opRef$name == \"\") return(NULL)\n\n  pvs &lt;- opRef$propertyValues\n  if (length(pvs) == 0) {\n    data.frame(\n      step_name = step$name,\n      operator  = opRef$name,\n      version   = opRef$version,\n      parameter = NA_character_,\n      value     = NA_character_,\n      stringsAsFactors = FALSE\n    )\n  } else {\n    data.frame(\n      step_name = step$name,\n      operator  = opRef$name,\n      version   = opRef$version,\n      parameter = sapply(pvs, function(p) p$name),\n      value     = sapply(pvs, function(p) p$value),\n      stringsAsFactors = FALSE\n    )\n  }\n}))\n\nprint(params)",
+    "title": "22  Exporting Operator Parameters",
+    "section": "22.2 R Script",
+    "text": "22.2 R Script\nlibrary(tercen)\n\n# Connect to your Tercen instance\nclient &lt;- TercenClient$new(\n  serviceUri = \"https://&lt;your-instance&gt;/api/v1/\",\n  authToken  = \"&lt;your-token&gt;\"\n)\n\n# Get the workflow\nworkflow &lt;- client$workflowService$get(\"&lt;your-workflow-id&gt;\")\n\n# Extract operator settings from each step\nparams &lt;- do.call(rbind, lapply(workflow$steps, function(step) {\n  if (is.null(step$model) || is.null(step$model$operatorSettings)) return(NULL)\n\n  opRef &lt;- step$model$operatorSettings$operatorRef\n  if (is.null(opRef) || is.null(opRef$name) || opRef$name == \"\") return(NULL)\n\n  pvs &lt;- opRef$propertyValues\n  if (length(pvs) == 0) {\n    data.frame(\n      step_name = step$name,\n      operator  = opRef$name,\n      version   = opRef$version,\n      parameter = NA_character_,\n      value     = NA_character_,\n      stringsAsFactors = FALSE\n    )\n  } else {\n    data.frame(\n      step_name = step$name,\n      operator  = opRef$name,\n      version   = opRef$version,\n      parameter = sapply(pvs, function(p) p$name),\n      value     = sapply(pvs, function(p) p$value),\n      stringsAsFactors = FALSE\n    )\n  }\n}))\n\nprint(params)",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html#example-output",
     "href": "04-advanced-topics/4-export-operator-parameters.html#example-output",
-    "title": "21  Exporting Operator Parameters",
-    "section": "21.3 Example Output",
-    "text": "21.3 Example Output\nRunning the script against a workflow produces a table like this:\n\n\n\nstep_name\noperator\nversion\nparameter\nvalue\n\n\n\n\nFCS\nFCS\n2.6.0\nwhich.lines\n5000\n\n\nFCS\nFCS\n2.6.0\ngather_channels\nfalse\n\n\nFCS\nFCS\n2.6.0\ntruncate_max_range\ntrue\n\n\nPCA\nPCA\n1.4.2\nscale\nfalse\n\n\nPCA\nPCA\n1.4.2\ncenter\ntrue\n\n\nPCA\nPCA\n1.4.2\nmaxComp\n5.0\n\n\nANOVA\nANOVA\n1.1.2\nmethod\none.way\n\n\nClustered Heatmap\nClustered Heatmap\nmaster\nCluster Rows\ntrue\n\n\nClustered Heatmap\nClustered Heatmap\nmaster\nScale\nnone",
+    "title": "22  Exporting Operator Parameters",
+    "section": "22.3 Example Output",
+    "text": "22.3 Example Output\nRunning the script against a workflow produces a table like this:\n\n\n\nstep_name\noperator\nversion\nparameter\nvalue\n\n\n\n\nFCS\nFCS\n2.6.0\nwhich.lines\n5000\n\n\nFCS\nFCS\n2.6.0\ngather_channels\nfalse\n\n\nFCS\nFCS\n2.6.0\ntruncate_max_range\ntrue\n\n\nPCA\nPCA\n1.4.2\nscale\nfalse\n\n\nPCA\nPCA\n1.4.2\ncenter\ntrue\n\n\nPCA\nPCA\n1.4.2\nmaxComp\n5.0\n\n\nANOVA\nANOVA\n1.1.2\nmethod\none.way\n\n\nClustered Heatmap\nClustered Heatmap\nmaster\nCluster Rows\ntrue\n\n\nClustered Heatmap\nClustered Heatmap\nmaster\nScale\nnone",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html#saving-to-csv",
     "href": "04-advanced-topics/4-export-operator-parameters.html#saving-to-csv",
-    "title": "21  Exporting Operator Parameters",
-    "section": "21.4 Saving to CSV",
-    "text": "21.4 Saving to CSV\nTo export the results to a CSV file, add the following line after print(params):\nwrite.csv(params, \"operator_parameters.csv\", row.names = FALSE)",
+    "title": "22  Exporting Operator Parameters",
+    "section": "22.4 Saving to CSV",
+    "text": "22.4 Saving to CSV\nTo export the results to a CSV file, add the following line after print(params):\nwrite.csv(params, \"operator_parameters.csv\", row.names = FALSE)",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "04-advanced-topics/4-export-operator-parameters.html#how-it-works",
     "href": "04-advanced-topics/4-export-operator-parameters.html#how-it-works",
-    "title": "21  Exporting Operator Parameters",
-    "section": "21.5 How It Works",
-    "text": "21.5 How It Works\n\nTercenClient$new() authenticates using a PAT and connects to the Tercen API.\nworkflowService$get() retrieves the full workflow object, including all steps.\nEach step’s model$operatorSettings$operatorRef contains the operator name, version, and a list of propertyValues — the parameter name-value pairs configured for that step.\nThe script iterates over all steps, extracts these fields, and combines them into a single data frame.",
+    "title": "22  Exporting Operator Parameters",
+    "section": "22.5 How It Works",
+    "text": "22.5 How It Works\n\nTercenClient$new() authenticates using a PAT and connects to the Tercen API.\nworkflowService$get() retrieves the full workflow object, including all steps.\nEach step’s model$operatorSettings$operatorRef contains the operator name, version, and a list of propertyValues — the parameter name-value pairs configured for that step.\nThe script iterates over all steps, extracts these fields, and combines them into a single data frame.",
     "crumbs": [
       "Advanced Topics",
-      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Exporting Operator Parameters</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html",
     "href": "05-troubleshooting/1-common-issues.html",
-    "title": "22  Common development issues",
+    "title": "23  Common development issues",
     "section": "",
-    "text": "22.1 Where can I find my Tercen token?\nYou can find your Tercen token by logging into your instance and navigating to:\nhttps://YOUR_INSTANCE_URL/_token\nFor example: - If you work on tercen.com, go to: https://tercen.com/_token - If you work on a custom instance, replace YOUR_INSTANCE_URL with your actual domain\nThe token will be displayed on this page and can be copied for use in your development environment.",
+    "text": "23.1 Where can I find my Tercen token?\nYou can find your Tercen token by logging into your instance and navigating to:\nhttps://YOUR_INSTANCE_URL/_token\nFor example: - If you work on tercen.com, go to: https://tercen.com/_token - If you work on a custom instance, replace YOUR_INSTANCE_URL with your actual domain\nThe token will be displayed on this page and can be copied for use in your development environment.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#failed-to-decode",
     "href": "05-troubleshooting/1-common-issues.html#failed-to-decode",
-    "title": "22  Common development issues",
-    "section": "22.2 Failed to decode",
-    "text": "22.2 Failed to decode\ntercen.http.HttpClientService.TercenError: unknown : failed to decode\nWhen running the TercenContext() function in Python (or tercenCtx() in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run\nIn order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.",
+    "title": "23  Common development issues",
+    "section": "23.2 Failed to decode",
+    "text": "23.2 Failed to decode\ntercen.http.HttpClientService.TercenError: unknown : failed to decode\nWhen running the TercenContext() function in Python (or tercenCtx() in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run\nIn order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#my-operator-doesnt-appear-in-the-picker-library",
     "href": "05-troubleshooting/1-common-issues.html#my-operator-doesnt-appear-in-the-picker-library",
-    "title": "22  Common development issues",
-    "section": "22.3 My operator doesn’t appear in the picker / library",
-    "text": "22.3 My operator doesn’t appear in the picker / library\nYou added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.\n“Add from Git” only installs a searchable operator (registers the operator record the picker searches) when all of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:\n\nThe repository name ends in _operator. This is the gate that triggers operator installation. uka_analysis → not installed; uka_analysis_operator → installed. (This is the most common cause.)\nThe repository is in a trusted organization. Managed instances only trust repositories under approved GitHub organizations (commonly github.com/tercen/ and github.com/pamgene/). Repositories under a personal account or an untrusted organization fail with tercen.forbidden.untrusted.git. Ask your Tercen admin which organizations are trusted.\nAll names are lowercase. Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. My_Operator) breaks the container build/pull, so no operator is registered.\nThe operator was installed, not just cloned. Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.\n\nChecklist\n\nRepository name ends in _operator and is entirely lowercase\nRepository lives under a trusted organization\nThe container image built successfully and is pullable\nYou selected the correct source library in the picker\n\n\n\n\n\n\n\nTip\n\n\n\nTo make a fork or renamed variant installable, rename the repository to a lowercase name ending in _operator (e.g. my_variant_operator) under a trusted organization, then add it to the library again.",
+    "title": "23  Common development issues",
+    "section": "23.3 My operator doesn’t appear in the picker / library",
+    "text": "23.3 My operator doesn’t appear in the picker / library\nYou added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.\n“Add from Git” only installs a searchable operator (registers the operator record the picker searches) when all of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:\n\nThe repository name ends in _operator. This is the gate that triggers operator installation. uka_analysis → not installed; uka_analysis_operator → installed. (This is the most common cause.)\nThe repository is in a trusted organization. Managed instances only trust repositories under approved GitHub organizations (commonly github.com/tercen/ and github.com/pamgene/). Repositories under a personal account or an untrusted organization fail with tercen.forbidden.untrusted.git. Ask your Tercen admin which organizations are trusted.\nAll names are lowercase. Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. My_Operator) breaks the container build/pull, so no operator is registered.\nThe operator was installed, not just cloned. Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.\n\nChecklist\n\nRepository name ends in _operator and is entirely lowercase\nRepository lives under a trusted organization\nThe container image built successfully and is pullable\nYou selected the correct source library in the picker\n\n\n\n\n\n\n\nTip\n\n\n\nTo make a fork or renamed variant installable, rename the repository to a lowercase name ending in _operator (e.g. my_variant_operator) under a trusted organization, then add it to the library again.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+    ]
+  },
+  {
+    "objectID": "05-troubleshooting/1-common-issues.html#i-pushed-a-fix-but-the-operator-still-runs-the-old-code",
+    "href": "05-troubleshooting/1-common-issues.html#i-pushed-a-fix-but-the-operator-still-runs-the-old-code",
+    "title": "23  Common development issues",
+    "section": "23.4 I pushed a fix but the operator still runs the old code",
+    "text": "23.4 I pushed a fix but the operator still runs the old code\nYou committed a fix, rebuilt, and the step behaves exactly as before — same output, same error, no sign your change took effect.\nThe usual cause is a reused version identifier. Check which of these applies:\n\nYou moved a git tag. If you deleted and re-pushed a tag (e.g. 0.0.3) so it points at a new commit, already-installed instances will not pick up the new commit. Tercen resolves a version to a commit at first install, stores the operator in a directory named after that commit, and on later runs skips the download when that directory already exists — so the tag is never re-resolved. Fix: release a new version (0.0.4) and repoint the step at it.\nYour container points at a mutable image tag. With :main or :master, the image that gets pulled depends on what was built last, and a cached image may not be re-pulled at all. Fix: use an immutable versioned tag (:0.0.4).\nThe step is pinned to an older version than you think. Open the step’s operator settings and confirm the exact version string it references — a workflow keeps whatever version it was configured with, and does not follow later releases.\n\n\n\n\n\n\n\nNoteThis failure is silent by design\n\n\n\nThere is no error for any of the above — the operator runs successfully, just not the code you expected. If you need to confirm which commit is actually running, add a temporary log line containing the version (e.g. message(\"operator version 0.0.4\")) and release it under a new version number. If the line doesn’t appear, the old install is still being used.\n\n\nSee Pin an immutable version tag and the tagging guidance in the same chapter.",
+    "crumbs": [
+      "Troubleshooting",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html",
     "href": "05-troubleshooting/2-ci.html",
-    "title": "23  CI and Github Actions",
+    "title": "24  CI and Github Actions",
     "section": "",
-    "text": "23.1 Test not found\noperator.run.test.not.found\nThis error happens when none of the test, tests or workflow_tests have been found at the repository root.",
+    "text": "24.1 Test not found\noperator.run.test.not.found\nThis error happens when none of the test, tests or workflow_tests have been found at the repository root.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-relations",
     "href": "05-troubleshooting/2-ci.html#wrong-relations",
-    "title": "23  CI and Github Actions",
-    "section": "23.2 Wrong relations",
-    "text": "23.2 Wrong relations\ntask.test.operator.bad.nRelations\nThis error happens when there are not as many tables (relations) between the computed and expected outputs.",
+    "title": "24  CI and Github Actions",
+    "section": "24.2 Wrong relations",
+    "text": "24.2 Wrong relations\ntask.test.operator.bad.nRelations\nThis error happens when there are not as many tables (relations) between the computed and expected outputs.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-ncols-nrows",
     "href": "05-troubleshooting/2-ci.html#wrong-ncols-nrows",
-    "title": "23  CI and Github Actions",
-    "section": "23.3 Wrong nCols / nRows",
-    "text": "23.3 Wrong nCols / nRows\ntask.test.operator.bad.nCols task.test.operator.bad.nRows\nThis error happens when there are not as many columns or rows between the computed and expected output relations.",
+    "title": "24  CI and Github Actions",
+    "section": "24.3 Wrong nCols / nRows",
+    "text": "24.3 Wrong nCols / nRows\ntask.test.operator.bad.nCols task.test.operator.bad.nRows\nThis error happens when there are not as many columns or rows between the computed and expected output relations.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-column-names",
     "href": "05-troubleshooting/2-ci.html#wrong-column-names",
-    "title": "23  CI and Github Actions",
-    "section": "23.4 Wrong column names",
-    "text": "23.4 Wrong column names\ntask.test.operator.bad.column.names\nThis error happens when the computed and expected output relations do not have the exact same column names.\nMaybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.",
+    "title": "24  CI and Github Actions",
+    "section": "24.4 Wrong column names",
+    "text": "24.4 Wrong column names\ntask.test.operator.bad.column.names\nThis error happens when the computed and expected output relations do not have the exact same column names.\nMaybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-column-type",
     "href": "05-troubleshooting/2-ci.html#wrong-column-type",
-    "title": "23  CI and Github Actions",
-    "section": "23.5 Wrong column type",
-    "text": "23.5 Wrong column type\ntask.test.operator.bad.column.type\n\nCheck that .ri and .ci factors are output as integers in your operators.\nIf another factor (for example, a cluster ID), tercen test will expect is to be a double. In that case, you need to provide a schema file. If you use tim to genenerate your test, you can use the XXX argument to the build_test_data function.",
+    "title": "24  CI and Github Actions",
+    "section": "24.5 Wrong column type",
+    "text": "24.5 Wrong column type\ntask.test.operator.bad.column.type\n\nCheck that .ri and .ci factors are output as integers in your operators.\nIf another factor (for example, a cluster ID), tercen test will expect is to be a double. In that case, you need to provide a schema file. If you use tim to genenerate your test, you can use the XXX argument to the build_test_data function.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-values",
     "href": "05-troubleshooting/2-ci.html#wrong-values",
-    "title": "23  CI and Github Actions",
-    "section": "23.6 Wrong values",
-    "text": "23.6 Wrong values\ntask.test.operator.bad.value\nThis error occurs when a value is different between the reference table and the computed table. It gives you the row number and both values to help finding the issue.",
+    "title": "24  CI and Github Actions",
+    "section": "24.6 Wrong values",
+    "text": "24.6 Wrong values\ntask.test.operator.bad.value\nThis error occurs when a value is different between the reference table and the computed table. It gives you the row number and both values to help finding the issue.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-correlation",
     "href": "05-troubleshooting/2-ci.html#wrong-correlation",
-    "title": "23  CI and Github Actions",
-    "section": "23.7 Wrong correlation",
-    "text": "23.7 Wrong correlation\ntask.test.operator.bad.correlation\nThis error occurs when the correlation between the reference table and the computed table values is not high enough.",
+    "title": "24  CI and Github Actions",
+    "section": "24.7 Wrong correlation",
+    "text": "24.7 Wrong correlation\ntask.test.operator.bad.correlation\nThis error occurs when the correlation between the reference table and the computed table values is not high enough.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#untrusted-git",
     "href": "05-troubleshooting/2-ci.html#untrusted-git",
-    "title": "23  CI and Github Actions",
-    "section": "23.8 Untrusted git",
-    "text": "23.8 Untrusted git\ntercen.forbidden.untrusted.git\nThis error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator should be added to your Tercen instance configuration file.",
+    "title": "24  CI and Github Actions",
+    "section": "24.8 Untrusted git",
+    "text": "24.8 Untrusted git\ntercen.forbidden.untrusted.git\nThis error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator should be added to your Tercen instance configuration file.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html",
     "href": "06-ai/1-ai-operator-dev.html",
-    "title": "24  Spec-Driven Development with Tercen Agents",
+    "title": "25  Spec-Driven Development with Tercen Agents",
     "section": "",
-    "text": "24.1 Setting up Your Development Environment\nThis chapter provides a comprehensive tutorial on spec-driven development using Tercen Agents, an approach that leverages AI and the VSCode integrated development environment (IDE) to streamline the creation of Tercen operators.\nSpec-driven development is a methodology where the development process begins by writing detailed specifications that precisely describe the desired functionality of a software component. In the context of Tercen, these specifications guide the creation of operators.\nTercen Agents are AI-powered tools designed to automate and assist in various stages of operator development. They read the written specifications and, in conjunction with large language models (LLMs) through GitHub Copilot, help implement the operators. The core idea is that developers write down specifications, and Tercen Agents then read these specifications to implement the appropriate operators.\nA well-configured development environment is crucial for an efficient spec-driven workflow. The recommended setup integrates VS Code with Dev containers and a local Tercen instance.",
+    "text": "25.1 Setting up Your Development Environment\nThis chapter provides a comprehensive tutorial on spec-driven development using Tercen Agents, an approach that leverages AI and the VSCode integrated development environment (IDE) to streamline the creation of Tercen operators.\nSpec-driven development is a methodology where the development process begins by writing detailed specifications that precisely describe the desired functionality of a software component. In the context of Tercen, these specifications guide the creation of operators.\nTercen Agents are AI-powered tools designed to automate and assist in various stages of operator development. They read the written specifications and, in conjunction with large language models (LLMs) through GitHub Copilot, help implement the operators. The core idea is that developers write down specifications, and Tercen Agents then read these specifications to implement the appropriate operators.\nA well-configured development environment is crucial for an efficient spec-driven workflow. The recommended setup integrates VS Code with Dev containers and a local Tercen instance.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#setting-up-your-development-environment",
     "href": "06-ai/1-ai-operator-dev.html#setting-up-your-development-environment",
-    "title": "24  Spec-Driven Development with Tercen Agents",
+    "title": "25  Spec-Driven Development with Tercen Agents",
     "section": "",
-    "text": "24.1.1 Recommended Environment: VS Code with Dev Containers\n\nVS Code (Visual Studio Code): It is recommended to use VS Code installed on your computer. This IDE offers a good way to integrate R and Python development tools and interact with Tercen Agents and Docker.\nDev Containers: The principle of this workflow is to use Dev containers, which provide a consistent and isolated runtime environment. A Dev container contains the runtime environment where Tercen operators are executed.\n\nBenefits: Dev containers ensure consistency, meaning what you compute locally will be the same as what is computed in production. They help avoid issues related to installing packages and managing volumes, especially on different operating systems like Windows.\nInitial Setup: When you open a templated project, the first step is to reopen it in a container. The initial configuration of the Dev container happens only once and may take some time.\nExtensions: The Dev container setup includes recommended extensions for working with R and Python in VS Code. You can also create your own images to include custom runtime environments or packages.",
+    "text": "25.1.1 Recommended Environment: VS Code with Dev Containers\n\nVS Code (Visual Studio Code): It is recommended to use VS Code installed on your computer. This IDE offers a good way to integrate R and Python development tools and interact with Tercen Agents and Docker.\nDev Containers: The principle of this workflow is to use Dev containers, which provide a consistent and isolated runtime environment. A Dev container contains the runtime environment where Tercen operators are executed.\n\nBenefits: Dev containers ensure consistency, meaning what you compute locally will be the same as what is computed in production. They help avoid issues related to installing packages and managing volumes, especially on different operating systems like Windows.\nInitial Setup: When you open a templated project, the first step is to reopen it in a container. The initial configuration of the Dev container happens only once and may take some time.\nExtensions: The Dev container setup includes recommended extensions for working with R and Python in VS Code. You can also create your own images to include custom runtime environments or packages.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#the-spec-driven-development-workflow-with-tercen-agents",
     "href": "06-ai/1-ai-operator-dev.html#the-spec-driven-development-workflow-with-tercen-agents",
-    "title": "24  Spec-Driven Development with Tercen Agents",
-    "section": "24.2 The Spec-Driven Development Workflow with Tercen Agents",
-    "text": "24.2 The Spec-Driven Development Workflow with Tercen Agents\nThe spec-driven development process with Tercen Agents can be broken down into several phases: defining specifications, agent-assisted implementation, validation and testing, and finalization.\n\n24.2.1 Phase 1: Defining Specifications\nThe first and most critical step is to clearly define the operator’s specifications.\n\nLocation: Specifications are primarily written in the README.md file of your project.\nContent: It is important to specify the input and output of the operator, including any cross-projections, and to define the settings that the operator will use. While output specifications are often developed later, it is considered good practice to write them down beforehand. The computation itself should be described as precisely as possible.\nFlexibility: The specification file is flexible; you are free to develop further or update it based on your needs. You can include specific inputs or instructions, and add examples.\n\n\n\n24.2.2 Phase 2: Agent-Assisted Operator Implementation\nOnce specifications are in place, Tercen Agents, powered by LLMs, take over to assist in implementing the operator.\n\nIntroducing Tercen Agents:\n\nThe workflow uses two dedicated Tercen Agents: one for development and one for review.\nThese agents interact with large language models (LLMs) to understand the specifications and generate code.\nGitHub Copilot is the recommended tool due to its integration with GitHub. It offers different modes for interacting with your code, including asking questions or leveraging more advanced features.\n\nThe Implementation Process:\n\nThe agents read the specifications from the README.md file.\nThey then proceed to implement the operator based on these specifications.\nExample Output: The agents start by creating the operator.json file, defining the operator’s name, description, documentation URL, container image, and settings, along with meaningful descriptions for properties. They work based on the requirements and can even get started with specific examples provided in the instructions. The agents perform their “magic” by processing the context and instructions.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Implement the Tercen operator based on the specifications outlined in the README file.”\n\n\n\n\n24.2.3 Phase 3: Validation and Testing\nAfter the agents generate the initial operator code, a rigorous validation and testing phase is essential.\n\nStep-by-Step Validation: It is highly recommended to validate all changes step-by-step, as agents can make mistakes. Developers should check, validate, reject, or manually edit changes before committing anything.\nConnecting to Data for Testing:\n\nTo test the operator with real data, you connect to a Tercen instance, which can be local or cloud-based.\nThe tercen-agent simplifies this workflow by allowing you to connect to a specific dataset for development.\nThis connection requires a Tercen token, which must be provided manually.\nOnce connected, you can directly run the operator functions on your data.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Add a development tercenCtx() call to connect to the following data step: YOUR_DATA_STEP_URL.”\n\n\n\nAgent-Assisted Review:\n\nA dedicated Tercen review agent is used to review the developed operator.\nThis agent operates based on custom instructions that can be updated to fit specific needs.\nIt goes through a checklist, verifying the presence of required files, specific content within files (e.g., in operator.json), and adherence to guidelines.\nThe review agent provides feedback and suggestions for improvement. Examples of feedback include:\n\nIssues with the development context call.\nAdherence to file naming conventions.\nSuggestions for handling errors and data types (e.g., checking for empty or NA columns).\n\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenReviewer” mode in the chat window.\nPrompt: “Review the Tercen operator project.”\n\n\n\n\n24.2.4 Phase 4: Finalizing and Versioning\nThe final phase involves making any necessary manual adjustments and properly versioning the operator.\n\nManual Review and Edits:\n\nAfter agent review, it’s crucial to perform a final human check to review what has changed.\nVS Code provides tools for comparing and managing changes, allowing you to manually accept, reject, or edit them. The goal is not to push everything blindly but to ensure quality and correctness.\n\nCommitting and Pushing Changes:\n\nOnce satisfied, you can commit and push the changes from the command line or user-friendly git interface.\nYou can also instruct the Tercen Agents to increment the operator’s version during this stage.",
+    "title": "25  Spec-Driven Development with Tercen Agents",
+    "section": "25.2 The Spec-Driven Development Workflow with Tercen Agents",
+    "text": "25.2 The Spec-Driven Development Workflow with Tercen Agents\nThe spec-driven development process with Tercen Agents can be broken down into several phases: defining specifications, agent-assisted implementation, validation and testing, and finalization.\n\n25.2.1 Phase 1: Defining Specifications\nThe first and most critical step is to clearly define the operator’s specifications.\n\nLocation: Specifications are primarily written in the README.md file of your project.\nContent: It is important to specify the input and output of the operator, including any cross-projections, and to define the settings that the operator will use. While output specifications are often developed later, it is considered good practice to write them down beforehand. The computation itself should be described as precisely as possible.\nFlexibility: The specification file is flexible; you are free to develop further or update it based on your needs. You can include specific inputs or instructions, and add examples.\n\n\n\n25.2.2 Phase 2: Agent-Assisted Operator Implementation\nOnce specifications are in place, Tercen Agents, powered by LLMs, take over to assist in implementing the operator.\n\nIntroducing Tercen Agents:\n\nThe workflow uses two dedicated Tercen Agents: one for development and one for review.\nThese agents interact with large language models (LLMs) to understand the specifications and generate code.\nGitHub Copilot is the recommended tool due to its integration with GitHub. It offers different modes for interacting with your code, including asking questions or leveraging more advanced features.\n\nThe Implementation Process:\n\nThe agents read the specifications from the README.md file.\nThey then proceed to implement the operator based on these specifications.\nExample Output: The agents start by creating the operator.json file, defining the operator’s name, description, documentation URL, container image, and settings, along with meaningful descriptions for properties. They work based on the requirements and can even get started with specific examples provided in the instructions. The agents perform their “magic” by processing the context and instructions.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Implement the Tercen operator based on the specifications outlined in the README file.”\n\n\n\n\n25.2.3 Phase 3: Validation and Testing\nAfter the agents generate the initial operator code, a rigorous validation and testing phase is essential.\n\nStep-by-Step Validation: It is highly recommended to validate all changes step-by-step, as agents can make mistakes. Developers should check, validate, reject, or manually edit changes before committing anything.\nConnecting to Data for Testing:\n\nTo test the operator with real data, you connect to a Tercen instance, which can be local or cloud-based.\nThe tercen-agent simplifies this workflow by allowing you to connect to a specific dataset for development.\nThis connection requires a Tercen token, which must be provided manually.\nOnce connected, you can directly run the operator functions on your data.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Add a development tercenCtx() call to connect to the following data step: YOUR_DATA_STEP_URL.”\n\n\n\nAgent-Assisted Review:\n\nA dedicated Tercen review agent is used to review the developed operator.\nThis agent operates based on custom instructions that can be updated to fit specific needs.\nIt goes through a checklist, verifying the presence of required files, specific content within files (e.g., in operator.json), and adherence to guidelines.\nThe review agent provides feedback and suggestions for improvement. Examples of feedback include:\n\nIssues with the development context call.\nAdherence to file naming conventions.\nSuggestions for handling errors and data types (e.g., checking for empty or NA columns).\n\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenReviewer” mode in the chat window.\nPrompt: “Review the Tercen operator project.”\n\n\n\n\n25.2.4 Phase 4: Finalizing and Versioning\nThe final phase involves making any necessary manual adjustments and properly versioning the operator.\n\nManual Review and Edits:\n\nAfter agent review, it’s crucial to perform a final human check to review what has changed.\nVS Code provides tools for comparing and managing changes, allowing you to manually accept, reject, or edit them. The goal is not to push everything blindly but to ensure quality and correctness.\n\nCommitting and Pushing Changes:\n\nOnce satisfied, you can commit and push the changes from the command line or user-friendly git interface.\nYou can also instruct the Tercen Agents to increment the operator’s version during this stage.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#best-practices",
     "href": "06-ai/1-ai-operator-dev.html#best-practices",
-    "title": "24  Spec-Driven Development with Tercen Agents",
-    "section": "24.3 Best Practices",
-    "text": "24.3 Best Practices\n\nConsistent Environment: Always use Dev containers to ensure a consistent runtime environment across all development stages, avoiding dependency conflicts and environment-specific bugs.\nPrecise Specifications: Invest time in writing clear, detailed, and precise specifications in your README.md. The quality of the agent-generated code heavily relies on the clarity of your input.\nLeverage Examples: Include specific examples in your instructions and specifications to give the agents better context for implementation.\nStep-by-Step Validation: Do not rely solely on the agents. Validate all changes incrementally and manually review the generated code.\nRegular Agent Review: Utilize the dedicated review agent frequently to catch potential issues early and ensure adherence to best practices and guidelines.\nHuman Oversight: Always perform a manual review before committing and pushing code. Use VS Code’s version control features to manage changes effectively.\nUnderstand LLM Capabilities: Be aware of the different modes and capabilities of the LLM you are using to maximize its assistance.",
+    "title": "25  Spec-Driven Development with Tercen Agents",
+    "section": "25.3 Best Practices",
+    "text": "25.3 Best Practices\n\nConsistent Environment: Always use Dev containers to ensure a consistent runtime environment across all development stages, avoiding dependency conflicts and environment-specific bugs.\nPrecise Specifications: Invest time in writing clear, detailed, and precise specifications in your README.md. The quality of the agent-generated code heavily relies on the clarity of your input.\nLeverage Examples: Include specific examples in your instructions and specifications to give the agents better context for implementation.\nStep-by-Step Validation: Do not rely solely on the agents. Validate all changes incrementally and manually review the generated code.\nRegular Agent Review: Utilize the dedicated review agent frequently to catch potential issues early and ensure adherence to best practices and guidelines.\nHuman Oversight: Always perform a manual review before committing and pushing code. Use VS Code’s version control features to manage changes effectively.\nUnderstand LLM Capabilities: Be aware of the different modes and capabilities of the LLM you are using to maximize its assistance.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#conclusion",
     "href": "06-ai/1-ai-operator-dev.html#conclusion",
-    "title": "24  Spec-Driven Development with Tercen Agents",
-    "section": "24.4 Conclusion",
-    "text": "24.4 Conclusion\nAI-assisted development significantly accelerates Tercen operator creation while maintaining high quality standards. By following these practices and workflows, you can:\n\nReduce development time for standard operators\nImprove code quality through AI-powered review and testing\nEnhance documentation with comprehensive, user-friendly guides\nMinimize bugs through systematic validation and testing\n\nThe key to success is treating AI as a powerful assistant that amplifies your expertise rather than replacing careful engineering practices.\nYou should now be ready to accelerate and improve your operator development process with AI assistance!",
+    "title": "25  Spec-Driven Development with Tercen Agents",
+    "section": "25.4 Conclusion",
+    "text": "25.4 Conclusion\nAI-assisted development significantly accelerates Tercen operator creation while maintaining high quality standards. By following these practices and workflows, you can:\n\nReduce development time for standard operators\nImprove code quality through AI-powered review and testing\nEnhance documentation with comprehensive, user-friendly guides\nMinimize bugs through systematic validation and testing\n\nThe key to success is treating AI as a powerful assistant that amplifies your expertise rather than replacing careful engineering practices.\nYou should now be ready to accelerate and improve your operator development process with AI assistance!",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {

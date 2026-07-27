@@ -2,21 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>22&nbsp; Common development issues – Tercen Developer's Guide</title>
+<title>23&nbsp; Common development issues – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -77,10 +80,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2c0d7fd69a0b621d88a5e19f0a8bb3ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9ff133dfe68f0f7f3d56e0cb3d50e1ba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -122,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -254,6 +257,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Operator Improvements and Best Practices</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-operator-development/12-web-app-operators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Web App Operators</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -268,19 +277,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/1-templates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/3-templates-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
   </div>
 </li>
       </ul>
@@ -297,25 +306,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/1-patterns-plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/2-tercen-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/3-gpu-development.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
   </div>
 </li>
       </ul>
@@ -332,13 +341,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -355,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
       </ul>
@@ -399,18 +408,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">22.1</span> Where can I find my Tercen token?</a></li>
-  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">22.2</span> Failed to decode</a></li>
-  <li><a href="#my-operator-doesnt-appear-in-the-picker-library" id="toc-my-operator-doesnt-appear-in-the-picker-library" class="nav-link" data-scroll-target="#my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">22.3</span> My operator doesn’t appear in the picker / library</a></li>
+  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">23.1</span> Where can I find my Tercen token?</a></li>
+  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">23.2</span> Failed to decode</a></li>
+  <li><a href="#my-operator-doesnt-appear-in-the-picker-library" id="toc-my-operator-doesnt-appear-in-the-picker-library" class="nav-link" data-scroll-target="#my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">23.3</span> My operator doesn’t appear in the picker / library</a></li>
+  <li><a href="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code" id="toc-i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="nav-link" data-scroll-target="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">23.4</span> I pushed a fix but the operator still runs the old code</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/05-troubleshooting/1-common-issues.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -427,21 +437,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="where-can-i-find-my-tercen-token" class="level2" data-number="22.1">
-<h2 data-number="22.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">22.1</span> Where can I find my Tercen token?</h2>
+<section id="where-can-i-find-my-tercen-token" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">23.1</span> Where can I find my Tercen token?</h2>
 <p>You can find your Tercen token by logging into your instance and navigating to:</p>
 <p><code>https://YOUR_INSTANCE_URL/_token</code></p>
 <p>For example: - If you work on tercen.com, go to: <code>https://tercen.com/_token</code> - If you work on a custom instance, replace <code>YOUR_INSTANCE_URL</code> with your actual domain</p>
 <p>The token will be displayed on this page and can be copied for use in your development environment.</p>
 </section>
-<section id="failed-to-decode" class="level2" data-number="22.2">
-<h2 data-number="22.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">22.2</span> Failed to decode</h2>
+<section id="failed-to-decode" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">23.2</span> Failed to decode</h2>
 <pre><code>tercen.http.HttpClientService.TercenError: unknown : failed to decode</code></pre>
 <p>When running the <code>TercenContext()</code> function in Python (or <code>tercenCtx()</code> in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run</p>
 <p>In order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.</p>
 </section>
-<section id="my-operator-doesnt-appear-in-the-picker-library" class="level2" data-number="22.3">
-<h2 data-number="22.3" class="anchored" data-anchor-id="my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">22.3</span> My operator doesn’t appear in the picker / library</h2>
+<section id="my-operator-doesnt-appear-in-the-picker-library" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">23.3</span> My operator doesn’t appear in the picker / library</h2>
 <p>You added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.</p>
 <p>“Add from Git” only <strong>installs</strong> a searchable operator (registers the operator record the picker searches) when <em>all</em> of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:</p>
 <ol type="1">
@@ -470,6 +480,30 @@ Tip
 <p>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <code>_operator</code> (e.g.&nbsp;<code>my_variant_operator</code>) under a trusted organization, then add it to the library again.</p>
 </div>
 </div>
+</section>
+<section id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">23.4</span> I pushed a fix but the operator still runs the old code</h2>
+<p>You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error, no sign your change took effect.</p>
+<p><strong>The usual cause is a reused version identifier.</strong> Check which of these applies:</p>
+<ol type="1">
+<li><strong>You moved a git tag.</strong> If you deleted and re-pushed a tag (e.g.&nbsp;<code>0.0.3</code>) so it points at a new commit, already-installed instances will <strong>not</strong> pick up the new commit. Tercen resolves a version to a commit at first install, stores the operator in a directory named after that commit, and on later runs skips the download when that directory already exists — so the tag is never re-resolved. <strong>Fix:</strong> release a new version (<code>0.0.4</code>) and repoint the step at it.</li>
+<li><strong>Your <code>container</code> points at a mutable image tag.</strong> With <code>:main</code> or <code>:master</code>, the image that gets pulled depends on what was built last, and a cached image may not be re-pulled at all. <strong>Fix:</strong> use an immutable versioned tag (<code>:0.0.4</code>).</li>
+<li><strong>The step is pinned to an older version than you think.</strong> Open the step’s operator settings and confirm the exact version string it references — a workflow keeps whatever version it was configured with, and does not follow later releases.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>This failure is silent by design
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is no error for any of the above — the operator runs successfully, just not the code you expected. If you need to confirm <em>which</em> commit is actually running, add a temporary log line containing the version (e.g.&nbsp;<code>message("operator version 0.0.4")</code>) and release it under a <strong>new</strong> version number. If the line doesn’t appear, the old install is still being used.</p>
+</div>
+</div>
+<p>See <a href="../02-operator-development/8-ci.html">Pin an immutable version tag</a> and the tagging guidance in the same chapter.</p>
 
 
 <!-- -->
@@ -569,16 +603,16 @@ Tip
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -931,12 +965,12 @@ Tip
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../04-advanced-topics/4-export-operator-parameters.html" class="pagination-link" aria-label="Exporting Operator Parameters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../05-troubleshooting/2-ci.html" class="pagination-link" aria-label="CI and Github Actions">
-        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -990,7 +1024,39 @@ Tip
 <span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <span class="in">`_operator`</span> (e.g. <span class="in">`my_variant_operator`</span>) under a trusted organization, then add it to the library again.</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## I pushed a fix but the operator still runs the old code</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>no sign your change took effect.</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>**The usual cause is a reused version identifier.** Check which of these applies:</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**You moved a git tag.** If you deleted and re-pushed a tag (e.g. <span class="in">`0.0.3`</span>) so it points at a</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>   new commit, already-installed instances will **not** pick up the new commit. Tercen resolves</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>   a version to a commit at first install, stores the operator in a directory named after that</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>   commit, and on later runs skips the download when that directory already exists — so the tag</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>   is never re-resolved. **Fix:** release a new version (<span class="in">`0.0.4`</span>) and repoint the step at it.</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Your `container` points at a mutable image tag.** With <span class="in">`:main`</span> or <span class="in">`:master`</span>, the image that</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>   gets pulled depends on what was built last, and a cached image may not be re-pulled at all.</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>   **Fix:** use an immutable versioned tag (<span class="in">`:0.0.4`</span>).</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The step is pinned to an older version than you think.** Open the step's operator settings</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>   and confirm the exact version string it references — a workflow keeps whatever version it was</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>   configured with, and does not follow later releases.</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## This failure is silent by design</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>There is no error for any of the above — the operator runs successfully, just not the code you</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>expected. If you need to confirm *which* commit is actually running, add a temporary log line</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>containing the version (e.g. <span class="in">`message("operator version 0.0.4")`</span>) and release it under a **new**</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>version number. If the line doesn't appear, the old install is still being used.</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>See <span class="co">[</span><span class="ot">Pin an immutable version tag</span><span class="co">](../02-operator-development/8-ci.qmd)</span> and the tagging guidance</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>in the same chapter.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
