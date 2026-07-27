@@ -178,6 +178,46 @@ Then push it with this command:
 git push --tags
 ```
 
+::: {.callout-important}
+## Never move a released git tag — cut a new version instead
+
+Once a tag has been released and installed anywhere, treat it as **permanent**. Do not delete
+and re-push it to point at a newer commit:
+
+```bash
+# Don't do this on a tag that has already been installed
+git tag -d 0.0.3
+git push --delete origin 0.0.3
+git tag 0.0.3 && git push --tags      # same name, different commit
+```
+
+The tag name will move on GitHub, but **already-installed instances keep running the old
+code**. Tercen resolves a version to a commit at *first* install and stores the operator under
+a directory named after that resolved commit (`<org>-<repo>-<short-sha>`). On subsequent runs
+it checks whether that directory already exists and, if so, **skips the download entirely** —
+so the tag is never re-resolved and the new commit is never fetched. The step keeps running
+the original code, with no error and nothing in the logs to suggest a stale version.
+
+The fix is to **cut a new version** — `0.0.4` — and repoint the step at it. It costs one tag
+and saves an afternoon of debugging code that isn't running.
+:::
+
+::: {.callout-tip}
+## While iterating, pin a commit SHA rather than re-using a tag
+
+Operators are installed by downloading `https://github.com/<org>/<repo>/zipball/<version>`,
+and `<version>` may be a branch, a tag, **or a full commit SHA**. During rapid
+back-and-forth testing, pinning the SHA gives every build a distinct identity, so you never
+have to wonder whether you are looking at the new code:
+
+```
+https://github.com/myorg/my_operator@2c23a2d1f0b...
+```
+
+Each distinct SHA installs into its own directory, so the stale-directory problem above cannot
+occur. Switch back to a proper version tag before handing the operator to users.
+:::
+
 ## 3. Wait and check the results of the release workflow
 
 The same way a workflow is triggered after each commit, tagging a repository will trigger another workflow, __release.yaml__. This workflow that will build and push the Docker image, tag it with the run the unit tests. 

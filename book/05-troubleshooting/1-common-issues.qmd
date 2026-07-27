@@ -49,3 +49,35 @@ You added your operator's Git repository to a library, the clone succeeded, but 
 ::: {.callout-tip}
 To make a fork or renamed variant installable, rename the repository to a lowercase name ending in `_operator` (e.g. `my_variant_operator`) under a trusted organization, then add it to the library again.
 :::
+
+
+## I pushed a fix but the operator still runs the old code
+
+You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error,
+no sign your change took effect.
+
+**The usual cause is a reused version identifier.** Check which of these applies:
+
+1. **You moved a git tag.** If you deleted and re-pushed a tag (e.g. `0.0.3`) so it points at a
+   new commit, already-installed instances will **not** pick up the new commit. Tercen resolves
+   a version to a commit at first install, stores the operator in a directory named after that
+   commit, and on later runs skips the download when that directory already exists — so the tag
+   is never re-resolved. **Fix:** release a new version (`0.0.4`) and repoint the step at it.
+2. **Your `container` points at a mutable image tag.** With `:main` or `:master`, the image that
+   gets pulled depends on what was built last, and a cached image may not be re-pulled at all.
+   **Fix:** use an immutable versioned tag (`:0.0.4`).
+3. **The step is pinned to an older version than you think.** Open the step's operator settings
+   and confirm the exact version string it references — a workflow keeps whatever version it was
+   configured with, and does not follow later releases.
+
+::: {.callout-note}
+## This failure is silent by design
+
+There is no error for any of the above — the operator runs successfully, just not the code you
+expected. If you need to confirm *which* commit is actually running, add a temporary log line
+containing the version (e.g. `message("operator version 0.0.4")`) and release it under a **new**
+version number. If the line doesn't appear, the old install is still being used.
+:::
+
+See [Pin an immutable version tag](../02-operator-development/8-ci.qmd) and the tagging guidance
+in the same chapter.
