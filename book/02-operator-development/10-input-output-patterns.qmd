@@ -446,6 +446,93 @@ Avoid manual file retrieval when possible. Instead, include files directly in th
 :::
 
 
+## Large Tables: the 1.6 Million Row Limit
+
+A single `select` call is capped server-side at **1,600,000 rows**. Ask for more and the call
+is rejected with:
+
+```
+400 {error: table.limit, reason: Bad limit}
+```
+
+This is a hard limit, not a warning, and it is easy to hit by accident: a step whose
+projection is only a few thousand rows wide in the UI can still produce millions of rows in
+the underlying main table once cells are multiplied out.
+
+::: {.callout-important}
+## A rejected select can look like a hang, not an error
+
+If your operator issues one unbounded `ctx$select(...)` and the table is over the limit, the
+step may appear to **load forever** rather than fail with a visible message — the error is
+returned to the caller, but an operator (or web app) that does not surface it simply never
+finishes. "It hangs on a big dataset but works on a small one" is the signature of this
+limit.
+:::
+
+### The limit applies to R, but not to the Python client
+
+The two clients reach different server endpoints, and only one of them is capped:
+
+| Client | Call | Behaviour |
+|---|---|---|
+| R (`teRcen`) | `ctx$select()` | Capped at 1.6M rows — **you must paginate** |
+| Python (`tercen_python_client`) | `ctx.select()` | Routes to the streaming endpoint, which chunks internally — no 1.6M cap |
+
+So the pagination below is required in R. In Python, `select()` already streams and you can
+request the whole table; paginate there only if you want to bound peak memory.
+
+### Paginating a large select in R
+
+Read the row count from the schema, then loop in chunks that stay under the cap. Note the
+third argument is `nr` (number of rows), not `limit`:
+
+```r
+library(tercen)
+library(dplyr)
+
+ctx <- tercenCtx()
+
+n_rows <- ctx$schema$nRows   # total rows available in the main table
+chunk  <- 1000000L           # comfortably under the 1.6M cap
+
+pages  <- list()
+offset <- 0L
+
+while (offset < n_rows) {
+  nr <- min(chunk, n_rows - offset)
+  pages[[length(pages) + 1L]] <- ctx$select(
+    c(".ci", ".ri", ".y"),
+    offset = offset,
+    nr     = nr
+  )
+  offset <- offset + nr
+}
+
+data <- bind_rows(pages)
+```
+
+The same `offset` / `nr` arguments exist on `ctx$cselect()` and `ctx$rselect()`. Those
+address the column and row *annotation* tables, which are almost always far smaller than the
+main table — in practice only the main `select` needs paginating.
+
+::: {.callout-tip}
+## Select only the columns you need
+
+`ctx$select()` with no `names` argument returns **every** column. Naming just the columns you
+use (e.g. `c(".ci", ".ri", ".y")`) reduces transferred data and memory substantially, and is
+worth doing regardless of table size.
+:::
+
+::: {.callout-note}
+## Prefer operating per cell where you can
+
+If your computation is independent per cell or per column, the idiomatic Tercen approach —
+grouping by `.ci` / `.ri` and letting Tercen hand you one group at a time, as shown earlier
+in this chapter — avoids materialising the whole table and sidesteps this limit entirely.
+Pagination is for the cases that genuinely need the full table at once.
+:::
+
+
 ## Next Steps
 
 With these input and output patterns mastered, you can:
