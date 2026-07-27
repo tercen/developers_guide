@@ -1,0 +1,185 @@
+# Web App Operators
+
+Most operators are headless: Tercen runs your R or Python code and stores the table it
+returns. A **web app operator** is different — it ships a browser application that Tercen
+serves inside the step, so the user interacts with a UI instead of only seeing a computed
+result. Interactive image checkers, grid editors, and custom viewers are all built this way.
+
+This chapter covers what makes an operator a web app, how it is built and installed, and the
+Flutter-specific details that most often trip people up.
+
+::: {.callout-note}
+## Prerequisites
+- You have read [Repository Setup](2-repository-setup.qmd) and [Continuous Integration](8-ci.qmd)
+- You are comfortable with the `operator.json` file
+- For the Flutter sections: a working Flutter SDK
+:::
+
+## The Operator Kinds
+
+Tercen decides what kind of operator to install from `operator.json`. The relevant kinds:
+
+| Kind | Selected by | Notes |
+|---|---|---|
+| `WebAppOperator` | `isWebApp: true` | Static assets served from the repository |
+| `DockerWebAppOperator` | `isWebApp: true` + `container` | Web app whose backend runs in a container |
+| `ShinyOperator` | Shiny app | An R Shiny web app |
+
+The key consequence of `isWebApp: true` is that **Tercen does not bootstrap an R environment
+for the operator**. A normal git operator triggers an `renv` restore at install time; a web app
+skips that entirely. It also means none of the R packaging concerns from
+[Documentation and Deployment](7-documentation-deployment.qmd) — the UID 1000 renv caveat in
+particular — apply to a pure web app.
+
+## The `operator.json` File
+
+A minimal, working web app `operator.json`:
+
+```json
+{
+  "name": "Grid Checker",
+  "description": "Interactive grid placement checker",
+  "isWebApp": true,
+  "isViewOnly": false,
+  "entryType": "app",
+  "tags": ["workflow"],
+  "authors": ["tercen"],
+  "urls": ["https://github.com/myorg/my_web_operator"],
+  "serve": "build/web",
+  "properties": [],
+  "auth": [""]
+}
+```
+
+The web-app-specific fields:
+
+- **`isWebApp`** (boolean) — set `true`. This is the switch that selects the web app install
+  path. Without it your app is treated as a normal operator and will fail to start.
+- **`serve`** (string) — the directory **inside your repository** containing the built,
+  servable assets (the folder holding `index.html`). Must be a string; anything else is
+  rejected at install with `task.git.operator.serve.bad.format`.
+- **`isViewOnly`** (boolean) — whether the app only displays data rather than writing results
+  back to the step.
+- **`entryType`** (string) — the entry point kind; `"app"` for a full application UI.
+- **`communicationProtocol`** (string, optional) — must be `"grpc"` or `""`. Empty means the
+  default HTTP transport. Any other value fails install with
+  `task.git.operator.communicationProtocol.invalid.value`.
+
+::: {.callout-important}
+## The built output must be committed to the repository
+
+This is the single biggest difference from a normal operator, and the most common reason a web
+app installs but shows a blank page.
+
+Tercen installs an operator by **downloading a zipball of your repository** — it does not run
+your build. `serve` points at a path *inside that archive*. If `build/web` is in
+`.gitignore`, it will not be in the zipball, and there is nothing to serve.
+
+So your build output is a **committed artifact**:
+
+```bash
+flutter build web
+git add build/web/
+git commit -m "Rebuild web assets"
+```
+
+Every functional change therefore needs two things committed together: the source change *and*
+the rebuilt output. Committing only the source ships an app that silently keeps its old
+behaviour.
+:::
+
+## Building a Flutter Web App Operator
+
+### Do not use `--wasm`
+
+::: {.callout-warning}
+## Build with plain `flutter build web`
+
+```bash
+flutter build web          # correct
+flutter build web --wasm   # currently breaks image rendering
+```
+
+`--wasm` builds with `dart2wasm` + the `skwasm` renderer. In that configuration
+`Image.memory()` fails to render PNGs decoded from TIFF sources — you get "Failed to load
+image" placeholders while the rest of the UI, including overlays drawn on top, renders
+correctly. That partial failure makes it look like a data problem rather than a renderer
+problem.
+
+Plain `flutter build web` produces `dart2js` + `canvaskit`, which is the configuration
+currently known to work in Tercen. If you inherit a repository whose instructions say
+`--wasm`, treat them as out of date.
+:::
+
+### Keep the version in sync
+
+The app version is typically read from `pubspec.yaml` at runtime and displayed in the UI, and
+Flutter also writes it into `build/web/version.json` at build time. Because the build output
+is committed, a version bump that is not followed by a rebuild leaves the UI reporting a stale
+version — a genuinely confusing state when you are trying to work out which build is live.
+
+Release sequence:
+
+```bash
+# 1. bump the version in pubspec.yaml
+# 2. rebuild so build/web/version.json is regenerated
+flutter build web
+# 3. commit source, pubspec, and the rebuilt output together
+git add pubspec.yaml pubspec.lock build/web/
+git commit -m "Bump version to 0.0.4"
+# 4. tag and push
+git tag -a 0.0.4 -m "Version 0.0.4"
+git push && git push origin 0.0.4
+```
+
+::: {.callout-important}
+## The tagging rules from chapter 8 apply here too
+Never move a released tag to a new commit — already-installed instances will keep serving the
+old assets with no error. Always cut a new version. See
+[Never move a released git tag](8-ci.qmd).
+:::
+
+## Reading Data in a Web App
+
+A web app reads step data through the same client API as any other operator, and is subject to
+the same server-side limits.
+
+::: {.callout-warning}
+## Respect the 1.6 million row select limit
+A single unbounded `select` of the main table fails once the table exceeds 1,600,000 rows. In a
+web app this is especially unpleasant: the rejected request usually surfaces as an app that
+**loads forever** rather than an error message, because nothing in the UI reports the failed
+call. Paginate the select, and surface errors in the UI rather than swallowing them. See
+[Large Tables: the 1.6 Million Row Limit](10-input-output-patterns.qmd).
+:::
+
+## Debugging
+
+A web app operator runs in the user's browser, which changes where you look for output.
+
+- **Your `print()` / logging goes to the browser console**, not to the Tercen task log. Open
+  the browser's developer tools (F12) → Console to see it. Looking in the step's log output and
+  finding nothing is expected, not a sign the code did not run.
+- **Failed data calls appear in the Network tab.** A `400` carrying
+  `{error: table.limit, reason: Bad limit}` is the row-limit problem above.
+- **Check `build/web/version.json`** in the browser to confirm which build is actually being
+  served. This is the fastest way to catch a stale committed build or a moved tag.
+- **A blank page with no network activity** usually means the assets were not found — verify
+  `serve` matches a directory that is really committed, and that it contains `index.html`.
+
+## Checklist
+
+- [ ] `isWebApp: true` is set in `operator.json`
+- [ ] `serve` points at a committed directory containing `index.html`
+- [ ] The built output (e.g. `build/web/`) is committed, not gitignored
+- [ ] Built with `flutter build web` (no `--wasm`)
+- [ ] Version bumped in `pubspec.yaml` **and** rebuilt so `version.json` matches
+- [ ] Source and rebuilt assets committed together
+- [ ] Released under a **new** version tag, never a moved one
+- [ ] Large selects are paginated, and errors are surfaced in the UI
+
+## Next Steps
+
+With a web app operator installed, you may want to revisit
+[Operator Specifications](6-operator-specifications.qmd) to describe the data your app expects,
+and [Installation](9-installation.qmd) for how it reaches a library.

@@ -30,6 +30,7 @@ book:
         - 02-operator-development/9-installation.qmd
         - 02-operator-development/10-input-output-patterns.qmd
         - 02-operator-development/11-operator-improvements.qmd
+        - 02-operator-development/12-web-app-operators.qmd
     
     - part: "Workflow Template Development"
       chapters:
