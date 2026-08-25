@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9ff133dfe68f0f7f3d56e0cb3d50e1ba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d4a8b15a3225db039fdc9185e4bb97cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -745,14 +745,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>task.git.operator.download.failed -- 404 : Request failed :
 https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 <p>This is <strong>not</strong> a “trusted repos” problem — that would surface as <code>tercen.forbidden.untrusted.git</code>, and only requires the repo be under a trusted org. It is purely a <strong>token-permission</strong> issue.</p>
-<p><strong>Fix:</strong> pass a <strong>Personal Access Token with <code>repo</code> scope</strong> (classic) — or a fine-grained token with <strong>Contents: Read</strong> — instead of the built-in token:</p>
+<p><strong>Fix:</strong> pass a <strong>classic Personal Access Token with <code>repo</code> scope</strong> instead of the built-in token. <strong>A fine-grained token (<code>github_pat_...</code>) will NOT work</strong> — even with Contents: Read correctly set, the <code>github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;ref&gt;</code> endpoint the Tercen server calls only accepts classic (<code>ghp_</code>) and OAuth tokens; a fine-grained token yields the same 404. (Verified 2026-08: a fine-grained token that fetched the same zipball successfully via <code>api.github.com</code> was rejected on the <code>github.com</code> URL.) Store the classic PAT as an <strong>organization secret named <code>TERCEN_GITHUB_TOKEN</code></strong> so all operator repos share it:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install operator</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>          docker run --rm \</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>            -e GITHUB_TOKEN=${{ secrets.GH_PAT }} \   # PAT with repo/contents:read, NOT the built-in GITHUB_TOKEN</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>            -e GITHUB_TOKEN=${{ secrets.TERCEN_GITHUB_TOKEN }} \   # CLASSIC repo-scoped PAT (org secret), NOT the built-in GITHUB_TOKEN, NOT a fine-grained token</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>            tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} \</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>            --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Public</strong> repos don’t need this — the zipball is fetchable without auth.</p>
@@ -768,7 +768,7 @@ https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This only affects the optional CI <strong>install</strong> step. The <code>build-and-push</code> of the versioned image runs <em>before</em> it and succeeds regardless — so the operator image exists and can be installed <strong>via the library</strong> even if this step is red. If you don’t need the CI install/test-on-release, you can remove the Install step entirely and rely on the library add. (Reminder from earlier: the repo name must end in <code>_operator</code> for the library add to install it.)</p>
+<p>This only affects the optional CI <strong>install</strong> step. The <code>build-and-push</code> of the versioned image runs <em>before</em> it and succeeds regardless — so the operator image exists and can be installed <strong>via the library</strong> even if this step is red. Prefer keeping the Install step <strong>blocking</strong>: a release whose operator cannot be installed and tested is not a release you want published (do not use <code>continue-on-error</code> to silence it — that ships unverified releases and hides real breakage, as happened with <code>uka_operator</code>, broken silently for four months). If a repo genuinely has no install-test yet, fix that by adding a <code>tests/test.json</code> rather than by removing the check. (Reminder from earlier: the repo name must end in <code>_operator</code> for the library add to install it.)</p>
 </div>
 </div>
 
@@ -1531,7 +1531,7 @@ https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 <span id="cb16-288"><a href="#cb16-288" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-289"><a href="#cb16-289" aria-hidden="true" tabindex="-1"></a>This is **not** a "trusted repos" problem — that would surface as `tercen.forbidden.untrusted.git`, and only requires the repo be under a trusted org. It is purely a **token-permission** issue.</span>
 <span id="cb16-290"><a href="#cb16-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-291"><a href="#cb16-291" aria-hidden="true" tabindex="-1"></a>**Fix:** pass a **Personal Access Token with `repo` scope** (classic) — or a fine-grained token with **Contents: Read** — instead of the built-in token:</span>
+<span id="cb16-291"><a href="#cb16-291" aria-hidden="true" tabindex="-1"></a>**Fix:** pass a **classic Personal Access Token with `repo` scope** instead of the built-in token. **A fine-grained token (`github_pat_...`) will NOT work** — even with Contents: Read correctly set, the `github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;ref&gt;` endpoint the Tercen server calls only accepts classic (`ghp_`) and OAuth tokens; a fine-grained token yields the same 404. (Verified 2026-08: a fine-grained token that fetched the same zipball successfully via `api.github.com` was rejected on the `github.com` URL.) Store the classic PAT as an **organization secret named `TERCEN_GITHUB_TOKEN`** so all operator repos share it:</span>
 <span id="cb16-292"><a href="#cb16-292" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-293"><a href="#cb16-293" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
 <span id="cb16-294"><a href="#cb16-294" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install operator</span></span>
@@ -1540,7 +1540,7 @@ https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 <span id="cb16-297"><a href="#cb16-297" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \</span>
 <span id="cb16-298"><a href="#cb16-298" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \</span>
 <span id="cb16-299"><a href="#cb16-299" aria-hidden="true" tabindex="-1"></a>            -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \</span>
-<span id="cb16-300"><a href="#cb16-300" aria-hidden="true" tabindex="-1"></a>            -e GITHUB_TOKEN=${{ secrets.GH_PAT }} \   # PAT with repo/contents:read, NOT the built-in GITHUB_TOKEN</span>
+<span id="cb16-300"><a href="#cb16-300" aria-hidden="true" tabindex="-1"></a>            -e GITHUB_TOKEN=${{ secrets.TERCEN_GITHUB_TOKEN }} \   # CLASSIC repo-scoped PAT (org secret), NOT the built-in GITHUB_TOKEN, NOT a fine-grained token</span>
 <span id="cb16-301"><a href="#cb16-301" aria-hidden="true" tabindex="-1"></a>            tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} \</span>
 <span id="cb16-302"><a href="#cb16-302" aria-hidden="true" tabindex="-1"></a>            --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}</span>
 <span id="cb16-303"><a href="#cb16-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1550,7 +1550,7 @@ https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 <span id="cb16-307"><a href="#cb16-307" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-308"><a href="#cb16-308" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb16-309"><a href="#cb16-309" aria-hidden="true" tabindex="-1"></a><span class="fu">## The image build still succeeds</span></span>
-<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a>This only affects the optional CI **install** step. The `build-and-push` of the versioned image runs *before* it and succeeds regardless — so the operator image exists and can be installed **via the library** even if this step is red. If you don't need the CI install/test-on-release, you can remove the Install step entirely and rely on the library add. (Reminder from earlier: the repo name must end in <span class="in">`_operator`</span> for the library add to install it.)</span>
+<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a>This only affects the optional CI **install** step. The `build-and-push` of the versioned image runs *before* it and succeeds regardless — so the operator image exists and can be installed **via the library** even if this step is red. Prefer keeping the Install step **blocking**: a release whose operator cannot be installed and tested is not a release you want published (do not use <span class="in">`continue-on-error`</span> to silence it — that ships unverified releases and hides real breakage, as happened with <span class="in">`uka_operator`</span>, broken silently for four months). If a repo genuinely has no install-test yet, fix that by adding a <span class="in">`tests/test.json`</span> rather than by removing the check. (Reminder from earlier: the repo name must end in <span class="in">`_operator`</span> for the library add to install it.)</span>
 <span id="cb16-311"><a href="#cb16-311" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
