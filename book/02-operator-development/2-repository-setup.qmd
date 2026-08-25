@@ -23,8 +23,8 @@ Tercen provides several repository templates optimized for different operator ty
 
 | Template | Best For | Features |
 |----------|----------|----------|
-| [**R Operator**](https://github.com/tercen/template_R_operator) | Most R operators | Full feature set, examples |
-| [**Python Operator**](https://github.com/tercen/template_python_operator) | All Python operators | Modern Python, poetry support |
+| [**R Operator**](https://github.com/tercen/template-R-operator) | Most R operators | Full feature set, examples |
+| [**Python Operator**](https://github.com/tercen/template-python-operator) | All Python operators | Modern Python, poetry support |
 
 ## Repository Creation Process
 

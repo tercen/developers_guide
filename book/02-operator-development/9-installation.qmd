@@ -79,8 +79,13 @@ Tercen's preferred method for operator installation uses direct Git integration:
    Name:       my_analysis_operator
    URL:        https://github.com/myorg/my_analysis_operator
    Tag:        1.0.0 (optional - for specific versions)
-   Auth Token: github_pat_xxxxx (if repository is private)
+   Auth Token: ghp_xxxxx (classic PAT, only if repository is private)
    ```
+
+::: {.callout-important}
+## Private repos: use a *classic* token here
+The Auth Token is used by the **Tercen server** to download the repo's zipball from `github.com`. That endpoint accepts **classic** tokens (`ghp_...`, `repo` scope) but **rejects fine-grained tokens** (`github_pat_...`) — a fine-grained token fails with a 404 even when its permissions are correct.
+:::
 
 4. **Complete Installation**
    - Review settings

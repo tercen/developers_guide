@@ -288,7 +288,7 @@ https://github.com/<org>/<repo>/zipball/<sha>
 
 This is **not** a "trusted repos" problem — that would surface as `tercen.forbidden.untrusted.git`, and only requires the repo be under a trusted org. It is purely a **token-permission** issue.
 
-**Fix:** pass a **Personal Access Token with `repo` scope** (classic) — or a fine-grained token with **Contents: Read** — instead of the built-in token:
+**Fix:** pass a **classic Personal Access Token with `repo` scope** instead of the built-in token. **A fine-grained token (`github_pat_...`) will NOT work** — even with Contents: Read correctly set, the `github.com/<org>/<repo>/zipball/<ref>` endpoint the Tercen server calls only accepts classic (`ghp_`) and OAuth tokens; a fine-grained token yields the same 404. (Verified 2026-08: a fine-grained token that fetched the same zipball successfully via `api.github.com` was rejected on the `github.com` URL.) Store the classic PAT as an **organization secret named `TERCEN_GITHUB_TOKEN`** so all operator repos share it:
 
 ```yaml
       - name: Install operator
@@ -297,7 +297,7 @@ This is **not** a "trusted repos" problem — that would surface as `tercen.forb
             -e TERCEN_USERNAME=${{ secrets.TERCEN_TEST_OPERATOR_USERNAME }} \
             -e TERCEN_PASSWORD=${{ secrets.TERCEN_TEST_OPERATOR_PASSWORD }} \
             -e TERCEN_URI=${{ secrets.TERCEN_TEST_OPERATOR_URI }} \
-            -e GITHUB_TOKEN=${{ secrets.GH_PAT }} \   # PAT with repo/contents:read, NOT the built-in GITHUB_TOKEN
+            -e GITHUB_TOKEN=${{ secrets.TERCEN_GITHUB_TOKEN }} \   # CLASSIC repo-scoped PAT (org secret), NOT the built-in GITHUB_TOKEN, NOT a fine-grained token
             tercen/tercenctl:release operator install --rm --tag ${GITHUB_SHA} \
             --repo ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
 ```
@@ -307,5 +307,5 @@ This is **not** a "trusted repos" problem — that would surface as `tercen.forb
 
 ::: {.callout-note}
 ## The image build still succeeds
-This only affects the optional CI **install** step. The `build-and-push` of the versioned image runs *before* it and succeeds regardless — so the operator image exists and can be installed **via the library** even if this step is red. If you don't need the CI install/test-on-release, you can remove the Install step entirely and rely on the library add. (Reminder from earlier: the repo name must end in `_operator` for the library add to install it.)
+This only affects the optional CI **install** step. The `build-and-push` of the versioned image runs *before* it and succeeds regardless — so the operator image exists and can be installed **via the library** even if this step is red. Prefer keeping the Install step **blocking**: a release whose operator cannot be installed and tested is not a release you want published (do not use `continue-on-error` to silence it — that ships unverified releases and hides real breakage, as happened with `uka_operator`, broken silently for four months). If a repo genuinely has no install-test yet, fix that by adding a `tests/test.json` rather than by removing the check. (Reminder from earlier: the repo name must end in `_operator` for the library add to install it.)
 :::
