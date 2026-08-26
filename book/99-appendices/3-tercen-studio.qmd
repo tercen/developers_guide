@@ -28,12 +28,6 @@ git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
 ```
 
-You then need to create the `tercen` network by running the following command.
-
-```
-docker network create tercen
-```
-
 The latest instructions on how to install Tercen Studio can be found in the 
 README of the [Tercen Studio GitHub repository](https://github.com/tercen/tercen_studio).
 
@@ -42,8 +36,25 @@ README of the [Tercen Studio GitHub repository](https://github.com/tercen/tercen
 Once `docker-compose` is installed and the `tercen-studio` repository cloned, you can __start tercen__ by running:
 
 ```bash
-docker-compose up -d
+# optional but recommended: lets the studio install operators from private
+# GitHub repositories and pull private ghcr.io images. Use a CLASSIC personal
+# access token with `repo` scope (fine-grained github_pat_… tokens are not
+# accepted by the git zipball endpoint).
+export GITHUB_TOKEN=ghp_your_token_here
+
+docker compose up -d
 ```
+
+Since 2026-08 the studio runs the same released images and architecture as
+production: `tercen` main + a separate worker (each running podman
+internally — the main manages the `sarno` table engine, the worker executes
+operator containers), `ha-scheduler`, `redis` and `couchdb`. The bundled
+RStudio ships **R 4.4.3 — the same version as the `runtime-r44` operator base
+image**, so results computed in RStudio are trustworthy against CI. Image
+versions are pinned in `docker-compose.yaml`; to update, bump them to the
+currently deployed production versions. **Upgrading from a pre-2026-08
+studio:** the architecture changed — run `docker compose down -v` (wipes
+local data) and start fresh.
 
 You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402).
 
@@ -57,7 +68,9 @@ You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8
 
 * _Password_: tercen
 
-You can run **VS Code** by going to  [http://127.0.0.1:8443/](http://127.0.0.1:8443/).
+VS Code (Python development) is optional; start it with
+`docker compose --profile python up -d` and open
+[http://127.0.0.1:8443/](http://127.0.0.1:8443/).
  
 * _Password_: tercen
 

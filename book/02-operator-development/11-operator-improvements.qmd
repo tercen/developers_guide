@@ -205,28 +205,82 @@ Design test cases that cover various scenarios:
 
 ### Test Configuration File
 
-Create comprehensive `test.json` files to specify how Tercen should run your tests:
-
-**Basic Test Configuration:**
+Create a `tests/test.json` in `OperatorUnitTest` format. This is what the
+release install-check and the library gate execute; R/`testthat` scripts do
+not count for the gate. A complete, battle-tested reference:
+[`pamgene/cs_uka_operator/tests/`](https://github.com/pamgene/cs_uka_operator/tree/main/tests).
 
 ```json
 {
   "kind": "OperatorUnitTest",
-  "name": "regression_test_basic",
-  "namespace": "test",
-  "inputDataUri": "input.csv",
-  "outputDataUri": ["output.csv"],
-  "columns": [],
-  "rows": [],
+  "name": "default_params",
+  "namespace": "ds0",
+  "inputDataUri": "test_in.csv",
+  "outputDataUri": ["test_out_1.csv", "test_out_2.csv"],
+  "columns": ["Supergroup"],
+  "rows": ["ID"],
   "colors": [],
-  "labels": [],
-  "yAxis": ".y",
-  "xAxis": ".x",
-  "properties": {
-    "intercept.omit": false,
-    "confidence.level": 0.95
-  }
+  "labels": ["colSeq"],
+  "yAxis": "value",
+  "xAxis": "grp",
+  "equalityMethod": "R2",
+  "r2": 0.99,
+  "propertyValues": [
+    {"kind": "PropertyValue", "name": "UkaDbVersion", "value": "0.6"},
+    {"kind": "PropertyValue", "name": "Seed", "value": "42.0"}
+  ]
 }
 ```
+
+Rules that each come from a real gate failure:
+
+- **Pin every operator property** via `propertyValues` (a list of
+  `PropertyValue` objects — values as strings). A fully pinned test never
+  breaks when a bundled database or a default changes; it only changes when
+  you change it. (Note: the field is `propertyValues`, not `properties`.)
+- **`equalityMethod: "R2"` for computed floats.** The default `equals`
+  compares doubles near-exactly and fails on floating-point noise
+  (`task.test.operator.bad.value`). Reserve `equals` for exact
+  integer/string outputs.
+- **One entry in `outputDataUri` per output relation** — a result joined to
+  the crosstab typically yields 2+ relations; a count mismatch fails with
+  `task.test.operator.bad.nRelations`.
+- **Pin column types with `.schema` sidecars**: for each expected CSV also
+  commit `<name>.csv.schema` — the result relation's `TableSchema` JSON
+  (columns with name+type, `id`/`rev` stripped). Without it the gate
+  re-infers types from CSV text and fails with
+  `task.test.operator.bad.column.type — expected double found int32` on
+  columns of whole numbers. Write doubles type-faithfully too (`58.0`, not
+  `58`).
+
+### Determinism first: the Seed rule
+
+A golden test is impossible if two runs differ. **Any operator using
+randomness** (permutations, sampling, clustering) **must seed the RNG**,
+best as a visible setting:
+
+```r
+seed <- ctx$op.value("Seed", as.double, 42)
+if (seed >= 0) set.seed(seed)
+```
+
+with a matching `Seed` `DoubleProperty` (default 42; `-1` = unseeded).
+Acceptance test: run twice, outputs byte-identical.
+
+### Generating and regenerating the expected output
+
+The expected CSVs are **golden files from a real run of the exact code being
+released** — they cannot be hand-written. Generate them on
+**Tercen Studio** (see the appendix), never on a production instance:
+install the operator from the release branch, import the small input, run the
+step with the projection and pinned settings from `test.json`, run it twice
+(determinism), export each output relation and its schema.
+
+When a bundled database or intended behaviour changes, the release
+install-check goes **red — that is the alarm**: re-run the same input with
+the new settings, replace the expected files, update the changed
+`propertyValues`, bump the version, release. Ship this recipe in the
+operator repo itself as a `CLAUDE.md` (the `create-operator` skill provides
+a template), so any future maintenance session knows the drill.
 
 This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!
