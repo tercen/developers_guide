@@ -1,37 +1,45 @@
 # GPU Development in Tercen Studio
 
-::: {.callout-warning}
-## These instructions target the pre-2026-08 studio
-The 2026-08 studio modernization removed the `runtime-docker` (dind) service —
-operator containers now run inside the `tercen-worker` service's internal
-podman, and GPU passthrough for that path has not been wired up yet. To follow
-this chapter today, check out the last pre-modernization revision of
-[tercen_studio](https://github.com/tercen/tercen_studio) (commit `72e3bdc`)
-and use its `docker-compose.yaml`.
+**Validated end-to-end 2026-08-26** (GCP T4, driver 580, toolkit 1.20): a
+`gpu`-capability operator installed through Tercen ran with `--gpus=all`
+added automatically by the worker, and saw the GPU from inside its container.
 
-**The new-architecture design (verified against the worker source, awaiting
-validation on an NVIDIA host):** an operator whose `operator.json` declares
-the `gpu` capability is run by the worker with `--gpus=all` — but only if the
-worker's *internal* podman reports a runtime named `nvidia`
-(`ExeRunner.hasGpuCapability()` checks `podman info` runtimes). What that
-requires:
+## The modernized studio (2026-08+): the GPU overlay
 
-1. Host: NVIDIA driver + `nvidia-container-toolkit`, and the GPU reserved for
-   the worker service in `docker-compose.yaml`
-   (`deploy.resources.reservations.devices: [{driver: nvidia, count: 1,
-   capabilities: [gpu]}]`).
-2. Inside the `tercen-worker` container: the NVIDIA container runtime
-   installed and registered with podman (`nvidia-ctk runtime configure`),
-   so `podman info` lists a `nvidia` runtime — the released image does not
-   ship it, so this means a GPU variant image or a startup-time install.
-3. Validation: install a `gpu`-capability operator, run it, and confirm
-   `nvidia-smi` output from inside the operator container.
+Requirements on the **host**: an NVIDIA GPU, the NVIDIA driver, and
+`nvidia-container-toolkit` configured for docker
+(`sudo nvidia-ctk runtime configure --runtime=docker`).
 
-This has not yet been executed end-to-end on the modernized studio — it needs
-a machine with an NVIDIA GPU. On production (GKE), GPU operators take a
-different, working path: k8s Jobs with `nvidia.com/gpu` limits
-(`tercen.allow.k8s.job`).
-:::
+Start the studio with the GPU overlay:
+
+```bash
+cd tercen_studio
+docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d
+```
+
+That overlay (in the tercen_studio repo) reserves the GPU for the
+`tercen-worker` service and runs a boot-time setup script inside it which
+installs the NVIDIA container toolkit, generates the CDI spec, and registers
+the `nvidia` runtime with podman via a `containers.conf.d` drop-in. With the
+runtime registered, `ExeRunner.hasGpuCapability()` returns true and the
+worker adds **`--gpus=all`** to every operator whose `operator.json` declares:
+
+```json
+"capabilities": ["gpu"]
+```
+
+To verify a setup, install and run
+[`fnaji/gpu_smoke_operator`](https://github.com/fnaji/gpu_smoke_operator) —
+it prints the GPUs visible inside the operator container
+(`GPU 0: Tesla T4 …`) into its output and exits.
+
+On production (GKE), GPU operators take a different, independent path:
+Kubernetes Jobs with `nvidia.com/gpu` limits (`tercen.allow.k8s.job`).
+
+## The pre-2026-08 studio (legacy)
+
+The instructions below target the old studio architecture (dind-based). To
+follow them, check out revision `72e3bdc` of tercen_studio.
 
 GPU support is available in **Tercen Studio**. Follow the steps below to enable and test GPU access in your local setup.
 
