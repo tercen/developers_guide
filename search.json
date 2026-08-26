@@ -1441,7 +1441,7 @@
     "href": "04-advanced-topics/3-gpu-development.html",
     "title": "21  GPU Development in Tercen Studio",
     "section": "",
-    "text": "21.1 Setup Instructions\nGPU support is now available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.\nOnce the containers are up, you can access the GPU from Code Server.",
+    "text": "21.1 Setup Instructions\nGPU support is available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.\nOnce the containers are up, you can access the GPU from Code Server.",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
