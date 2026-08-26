@@ -101,17 +101,16 @@ git clone https://github.com/tercen/tercen_studio.git
 cd tercen_studio
 ```
 
-2. **Create Docker network:**
+2. **Start Tercen Studio:**
 ```bash
-docker network create tercen
+# optional: enables installing operators from private GitHub repositories
+# (classic PAT with `repo` scope — fine-grained tokens are not accepted)
+export GITHUB_TOKEN=ghp_your_token_here
+
+docker compose up -d
 ```
 
-3. **Start Tercen Studio:**
-```bash
-docker-compose up -d
-```
-
-4. **Access local instance:**
+3. **Access local instance:**
    - URL: [http://127.0.0.1:5402](http://127.0.0.1:5402)
    - Username: `admin`
    - Password: `admin`
@@ -123,6 +122,10 @@ docker-compose up -d
 
 Most developers start with cloud development and move to local setup for advanced use cases.
 :::
+
+See the **Tercen Studio appendix** for the full details: architecture, RStudio
+(R 4.4.3, matching the operator runtime), updating pinned versions, and
+upgrading from a pre-2026-08 studio.
 
 ### Troubleshooting Common Issues
 
