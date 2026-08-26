@@ -29,7 +29,7 @@ worker adds **`--gpus=all`** to every operator whose `operator.json` declares:
 ```
 
 To verify a setup, install and run
-[`fnaji/gpu_smoke_operator`](https://github.com/fnaji/gpu_smoke_operator) —
+[`tercen/gpu_smoke_operator`](https://github.com/tercen/gpu_smoke_operator) —
 it prints the GPUs visible inside the operator container
 (`GPU 0: Tesla T4 …`) into its output and exits.
 

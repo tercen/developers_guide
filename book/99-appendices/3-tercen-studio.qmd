@@ -54,7 +54,9 @@ image**, so results computed in RStudio are trustworthy against CI. Image
 versions are pinned in `docker-compose.yaml`; to update, bump them to the
 currently deployed production versions. **Upgrading from a pre-2026-08
 studio:** the architecture changed — run `docker compose down -v` (wipes
-local data) and start fresh.
+local data) and start fresh. For GPU operator development see the GPU chapter
+— and use [`tercen/gpu_smoke_operator`](https://github.com/tercen/gpu_smoke_operator)
+to verify GPU passthrough on any Tercen instance.
 
 You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402).
 
