@@ -1441,7 +1441,29 @@
     "href": "04-advanced-topics/3-gpu-development.html",
     "title": "21  GPU Development in Tercen Studio",
     "section": "",
-    "text": "21.1 Setup Instructions\nGPU support is available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.\nOnce the containers are up, you can access the GPU from Code Server.",
+    "text": "21.1 The modernized studio (2026-08+): the GPU overlay\nValidated end-to-end 2026-08-26 (GCP T4, driver 580, toolkit 1.20): a gpu-capability operator installed through Tercen ran with --gpus=all added automatically by the worker, and saw the GPU from inside its container.\nRequirements on the host: an NVIDIA GPU, the NVIDIA driver, and nvidia-container-toolkit configured for docker (sudo nvidia-ctk runtime configure --runtime=docker).\nStart the studio with the GPU overlay:\nThat overlay (in the tercen_studio repo) reserves the GPU for the tercen-worker service and runs a boot-time setup script inside it which installs the NVIDIA container toolkit, generates the CDI spec, and registers the nvidia runtime with podman via a containers.conf.d drop-in. With the runtime registered, ExeRunner.hasGpuCapability() returns true and the worker adds --gpus=all to every operator whose operator.json declares:\nTo verify a setup, install and run fnaji/gpu_smoke_operator — it prints the GPUs visible inside the operator container (GPU 0: Tesla T4 …) into its output and exits.\nOn production (GKE), GPU operators take a different, independent path: Kubernetes Jobs with nvidia.com/gpu limits (tercen.allow.k8s.job).",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/3-gpu-development.html#the-modernized-studio-2026-08-the-gpu-overlay",
+    "href": "04-advanced-topics/3-gpu-development.html#the-modernized-studio-2026-08-the-gpu-overlay",
+    "title": "21  GPU Development in Tercen Studio",
+    "section": "",
+    "text": "cd tercen_studio\ndocker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d\n\n\"capabilities\": [\"gpu\"]",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/3-gpu-development.html#the-pre-2026-08-studio-legacy",
+    "href": "04-advanced-topics/3-gpu-development.html#the-pre-2026-08-studio-legacy",
+    "title": "21  GPU Development in Tercen Studio",
+    "section": "21.2 The pre-2026-08 studio (legacy)",
+    "text": "21.2 The pre-2026-08 studio (legacy)\nThe instructions below target the old studio architecture (dind-based). To follow them, check out revision 72e3bdc of tercen_studio.\nGPU support is available in Tercen Studio. Follow the steps below to enable and test GPU access in your local setup.",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
@@ -1451,8 +1473,8 @@
     "objectID": "04-advanced-topics/3-gpu-development.html#setup-instructions",
     "href": "04-advanced-topics/3-gpu-development.html#setup-instructions",
     "title": "21  GPU Development in Tercen Studio",
-    "section": "",
-    "text": "Pull the latest version of the Tercen Studio repository:\nhttps://github.com/tercen/tercen_studio\nConfigure Docker for GPU support. Modify the docker-compose.yaml file as described below:\n\nComment out the default runtime-docker image.\n\n#image: docker:24.0.6-dind-alpine3.18\n\nUncomment GPU-related configuration.\n\nUnder the dind service:\nimage: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]\nUnder the VS Code service code-server:\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]",
+    "section": "21.3 Setup Instructions",
+    "text": "21.3 Setup Instructions\n\nPull the latest version of the Tercen Studio repository:\nhttps://github.com/tercen/tercen_studio\nConfigure Docker for GPU support. Modify the docker-compose.yaml file as described below:\n\nComment out the default runtime-docker image.\n\n#image: docker:24.0.6-dind-alpine3.18\n\nUncomment GPU-related configuration.\n\nUnder the dind service:\nimage: tercen/nvidia-dind:12.1.0-runtime-ubuntu22.04\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]\nUnder the VS Code service code-server:\ndeploy:\n  resources:\n    reservations:\n      devices:\n        - driver: nvidia\n          count: 1\n          capabilities: [ gpu ]\n\nOnce the containers are up, you can access the GPU from Code Server.",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
@@ -1462,8 +1484,8 @@
     "objectID": "04-advanced-topics/3-gpu-development.html#changes-to-operators",
     "href": "04-advanced-topics/3-gpu-development.html#changes-to-operators",
     "title": "21  GPU Development in Tercen Studio",
-    "section": "21.2 Changes to operators",
-    "text": "21.2 Changes to operators\n\nThe Dockerfile uses a GPU-enabled runtime:\n\nFROM tercen/runtime-tf:2.17.0-gpu\n\nThe operator.json declares GPU capability:\n\n\"capabilities\": [\"gpu\"]",
+    "section": "21.4 Changes to operators",
+    "text": "21.4 Changes to operators\n\nThe Dockerfile uses a GPU-enabled runtime:\n\nFROM tercen/runtime-tf:2.17.0-gpu\n\nThe operator.json declares GPU capability:\n\n\"capabilities\": [\"gpu\"]",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
@@ -1473,8 +1495,8 @@
     "objectID": "04-advanced-topics/3-gpu-development.html#verifying-gpu-access",
     "href": "04-advanced-topics/3-gpu-development.html#verifying-gpu-access",
     "title": "21  GPU Development in Tercen Studio",
-    "section": "21.3 Verifying GPU Access",
-    "text": "21.3 Verifying GPU Access\nOnce inside the container, verify GPU access using TensorFlow or PyTorch.\n\n21.3.1 TensorFlow\nimport tensorflow as tf\nprint(\"Num GPUs Available:\", len(tf.config.list_physical_devices('GPU')))\n\n\n21.3.2 PyTorch\nimport torch\nprint(\"Is CUDA available:\", torch.cuda.is_available())\nIf GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:\nhttps://docs.docker.com/desktop/features/gpu/",
+    "section": "21.5 Verifying GPU Access",
+    "text": "21.5 Verifying GPU Access\nOnce inside the container, verify GPU access using TensorFlow or PyTorch.\n\n21.5.1 TensorFlow\nimport tensorflow as tf\nprint(\"Num GPUs Available:\", len(tf.config.list_physical_devices('GPU')))\n\n\n21.5.2 PyTorch\nimport torch\nprint(\"Is CUDA available:\", torch.cuda.is_available())\nIf GPU is not detected, you might need to install some drivers and dependencies on your machine. Please refer to Docker’s GPU support documentation:\nhttps://docs.docker.com/desktop/features/gpu/",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>GPU Development in Tercen Studio</span>"
