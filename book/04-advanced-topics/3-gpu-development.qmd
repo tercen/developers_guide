@@ -1,6 +1,18 @@
 # GPU Development in Tercen Studio
 
-GPU support is now available in **Tercen Studio**. Follow the steps below to enable and test GPU access in your local setup.
+::: {.callout-warning}
+## These instructions target the pre-2026-08 studio
+The 2026-08 studio modernization removed the `runtime-docker` (dind) service —
+operator containers now run inside the `tercen-worker` service's internal
+podman, and GPU passthrough for that path has not been wired up yet. To follow
+this chapter today, check out the last pre-modernization revision of
+[tercen_studio](https://github.com/tercen/tercen_studio) (commit `72e3bdc`)
+and use its `docker-compose.yaml`. A GPU recipe for the new architecture
+(nvidia device reservation on the worker service + nvidia runtime inside its
+podman) is on the backlog.
+:::
+
+GPU support is available in **Tercen Studio**. Follow the steps below to enable and test GPU access in your local setup.
 
 ## Setup Instructions
 
