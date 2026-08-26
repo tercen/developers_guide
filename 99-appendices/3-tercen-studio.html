@@ -460,7 +460,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">GITHUB_TOKEN</span><span class="op">=</span>ghp_your_token_here</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Since 2026-08 the studio runs the same released images and architecture as production: <code>tercen</code> main + a separate worker (each running podman internally — the main manages the <code>sarno</code> table engine, the worker executes operator containers), <code>ha-scheduler</code>, <code>redis</code> and <code>couchdb</code>. The bundled RStudio ships <strong>R 4.4.3 — the same version as the <code>runtime-r44</code> operator base image</strong>, so results computed in RStudio are trustworthy against CI. Image versions are pinned in <code>docker-compose.yaml</code>; to update, bump them to the currently deployed production versions. <strong>Upgrading from a pre-2026-08 studio:</strong> the architecture changed — run <code>docker compose down -v</code> (wipes local data) and start fresh.</p>
+<p>Since 2026-08 the studio runs the same released images and architecture as production: <code>tercen</code> main + a separate worker (each running podman internally — the main manages the <code>sarno</code> table engine, the worker executes operator containers), <code>ha-scheduler</code>, <code>redis</code> and <code>couchdb</code>. The bundled RStudio ships <strong>R 4.4.3 — the same version as the <code>runtime-r44</code> operator base image</strong>, so results computed in RStudio are trustworthy against CI. Image versions are pinned in <code>docker-compose.yaml</code>; to update, bump them to the currently deployed production versions. <strong>Upgrading from a pre-2026-08 studio:</strong> the architecture changed — run <code>docker compose down -v</code> (wipes local data) and start fresh. For GPU operator development see the GPU chapter — and use <a href="https://github.com/tercen/gpu_smoke_operator"><code>tercen/gpu_smoke_operator</code></a> to verify GPU passthrough on any Tercen instance.</p>
 <p>You can run <strong>Tercen</strong> by going to <a href="http://127.0.0.1:5402">http://127.0.0.1:5402</a>.</p>
 <ul>
 <li><p><em>Username</em>: admin</p></li>
@@ -999,28 +999,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>versions are pinned in <span class="in">`docker-compose.yaml`</span>; to update, bump them to the</span>
 <span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>currently deployed production versions. **Upgrading from a pre-2026-08</span>
 <span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>studio:** the architecture changed — run <span class="in">`docker compose down -v`</span> (wipes</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>local data) and start fresh.</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>You can run **Tercen** by going to <span class="co">[</span><span class="ot">http://127.0.0.1:5402</span><span class="co">](http://127.0.0.1:5402)</span>.</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>local data) and start fresh. For GPU operator development see the GPU chapter</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>— and use <span class="co">[</span><span class="ot">`tercen/gpu_smoke_operator`</span><span class="co">](https://github.com/tercen/gpu_smoke_operator)</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>to verify GPU passthrough on any Tercen instance.</span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Username_: admin</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>You can run **Tercen** by going to <span class="co">[</span><span class="ot">http://127.0.0.1:5402</span><span class="co">](http://127.0.0.1:5402)</span>.</span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: admin</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Username_: admin</span>
 <span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>You can run **RStudio** by going to  <span class="co">[</span><span class="ot">http://127.0.0.1:8787/</span><span class="co">](http://127.0.0.1:8787/)</span>.</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Username_: rstudio</span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: tercen</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: admin</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>You can run **RStudio** by going to  <span class="co">[</span><span class="ot">http://127.0.0.1:8787/</span><span class="co">](http://127.0.0.1:8787/)</span>.</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Username_: rstudio</span>
 <span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>VS Code (Python development) is optional; start it with</span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="in">`docker compose --profile python up -d`</span> and open</span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">http://127.0.0.1:8443/</span><span class="co">](http://127.0.0.1:8443/)</span>.</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: tercen</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>Now you're all set!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: tercen</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>VS Code (Python development) is optional; start it with</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="in">`docker compose --profile python up -d`</span> and open</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">http://127.0.0.1:8443/</span><span class="co">](http://127.0.0.1:8443/)</span>.</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>_Password_: tercen</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>Now you're all set!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

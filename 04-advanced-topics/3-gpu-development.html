@@ -451,7 +451,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">-f</span> docker-compose.yaml <span class="at">-f</span> docker-compose.gpu.yaml up <span class="at">-d</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That overlay (in the tercen_studio repo) reserves the GPU for the <code>tercen-worker</code> service and runs a boot-time setup script inside it which installs the NVIDIA container toolkit, generates the CDI spec, and registers the <code>nvidia</code> runtime with podman via a <code>containers.conf.d</code> drop-in. With the runtime registered, <code>ExeRunner.hasGpuCapability()</code> returns true and the worker adds <strong><code>--gpus=all</code></strong> to every operator whose <code>operator.json</code> declares:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="st">"capabilities"</span><span class="er">:</span> <span class="ot">[</span><span class="st">"gpu"</span><span class="ot">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To verify a setup, install and run <a href="https://github.com/fnaji/gpu_smoke_operator"><code>fnaji/gpu_smoke_operator</code></a> — it prints the GPUs visible inside the operator container (<code>GPU 0: Tesla T4 …</code>) into its output and exits.</p>
+<p>To verify a setup, install and run <a href="https://github.com/tercen/gpu_smoke_operator"><code>tercen/gpu_smoke_operator</code></a> — it prints the GPUs visible inside the operator container (<code>GPU 0: Tesla T4 …</code>) into its output and exits.</p>
 <p>On production (GKE), GPU operators take a different, independent path: Kubernetes Jobs with <code>nvidia.com/gpu</code> limits (<code>tercen.allow.k8s.job</code>).</p>
 </section>
 <section id="the-pre-2026-08-studio-legacy" class="level2" data-number="21.2">
@@ -1019,7 +1019,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>To verify a setup, install and run</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`fnaji/gpu_smoke_operator`</span><span class="co">](https://github.com/fnaji/gpu_smoke_operator)</span> —</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`tercen/gpu_smoke_operator`</span><span class="co">](https://github.com/tercen/gpu_smoke_operator)</span> —</span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>it prints the GPUs visible inside the operator container</span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>(<span class="in">`GPU 0: Tesla T4 …`</span>) into its output and exits.</span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
