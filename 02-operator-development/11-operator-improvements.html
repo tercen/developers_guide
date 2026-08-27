@@ -413,13 +413,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#basic-logging" id="toc-basic-logging" class="nav-link" data-scroll-target="#basic-logging"><span class="header-section-number">14.1.1</span> Basic Logging</a></li>
   </ul></li>
   <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">14.2</span> Error Handling</a></li>
-  <li><a href="#testing-and-validation" id="toc-testing-and-validation" class="nav-link" data-scroll-target="#testing-and-validation"><span class="header-section-number">14.3</span> Testing and Validation</a>
+  <li><a href="#memory-tell-tercen-what-your-operator-needs" id="toc-memory-tell-tercen-what-your-operator-needs" class="nav-link" data-scroll-target="#memory-tell-tercen-what-your-operator-needs"><span class="header-section-number">14.3</span> Memory: tell Tercen what your operator needs</a>
   <ul class="collapse">
-  <li><a href="#unit-test-structure" id="toc-unit-test-structure" class="nav-link" data-scroll-target="#unit-test-structure"><span class="header-section-number">14.3.1</span> Unit Test Structure</a></li>
-  <li><a href="#creating-comprehensive-test-data" id="toc-creating-comprehensive-test-data" class="nav-link" data-scroll-target="#creating-comprehensive-test-data"><span class="header-section-number">14.3.2</span> Creating Comprehensive Test Data</a></li>
-  <li><a href="#test-configuration-file" id="toc-test-configuration-file" class="nav-link" data-scroll-target="#test-configuration-file"><span class="header-section-number">14.3.3</span> Test Configuration File</a></li>
-  <li><a href="#determinism-first-the-seed-rule" id="toc-determinism-first-the-seed-rule" class="nav-link" data-scroll-target="#determinism-first-the-seed-rule"><span class="header-section-number">14.3.4</span> Determinism first: the Seed rule</a></li>
-  <li><a href="#generating-and-regenerating-the-expected-output" id="toc-generating-and-regenerating-the-expected-output" class="nav-link" data-scroll-target="#generating-and-regenerating-the-expected-output"><span class="header-section-number">14.3.5</span> Generating and regenerating the expected output</a></li>
+  <li><a href="#the-quick-fix-no-release-needed" id="toc-the-quick-fix-no-release-needed" class="nav-link" data-scroll-target="#the-quick-fix-no-release-needed"><span class="header-section-number">14.3.1</span> The quick fix (no release needed)</a></li>
+  <li><a href="#the-durable-fix-memory_model.json" id="toc-the-durable-fix-memory_model.json" class="nav-link" data-scroll-target="#the-durable-fix-memory_model.json"><span class="header-section-number">14.3.2</span> The durable fix: <code>memory_model.json</code></a></li>
+  <li><a href="#fit-it-from-real-runs-dont-guess" id="toc-fit-it-from-real-runs-dont-guess" class="nav-link" data-scroll-target="#fit-it-from-real-runs-dont-guess"><span class="header-section-number">14.3.3</span> Fit it from real runs, don’t guess</a></li>
+  </ul></li>
+  <li><a href="#testing-and-validation" id="toc-testing-and-validation" class="nav-link" data-scroll-target="#testing-and-validation"><span class="header-section-number">14.4</span> Testing and Validation</a>
+  <ul class="collapse">
+  <li><a href="#unit-test-structure" id="toc-unit-test-structure" class="nav-link" data-scroll-target="#unit-test-structure"><span class="header-section-number">14.4.1</span> Unit Test Structure</a></li>
+  <li><a href="#creating-comprehensive-test-data" id="toc-creating-comprehensive-test-data" class="nav-link" data-scroll-target="#creating-comprehensive-test-data"><span class="header-section-number">14.4.2</span> Creating Comprehensive Test Data</a></li>
+  <li><a href="#test-configuration-file" id="toc-test-configuration-file" class="nav-link" data-scroll-target="#test-configuration-file"><span class="header-section-number">14.4.3</span> Test Configuration File</a></li>
+  <li><a href="#determinism-first-the-seed-rule" id="toc-determinism-first-the-seed-rule" class="nav-link" data-scroll-target="#determinism-first-the-seed-rule"><span class="header-section-number">14.4.4</span> Determinism first: the Seed rule</a></li>
+  <li><a href="#generating-and-regenerating-the-expected-output" id="toc-generating-and-regenerating-the-expected-output" class="nav-link" data-scroll-target="#generating-and-regenerating-the-expected-output"><span class="header-section-number">14.4.5</span> Generating and regenerating the expected output</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/02-operator-development/11-operator-improvements.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -630,8 +636,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="testing-and-validation" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="testing-and-validation"><span class="header-section-number">14.3</span> Testing and Validation</h2>
+<section id="memory-tell-tercen-what-your-operator-needs" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="memory-tell-tercen-what-your-operator-needs"><span class="header-section-number">14.3</span> Memory: tell Tercen what your operator needs</h2>
+<p>When Tercen runs your operator it puts the container under a hard memory limit. <strong>If the operator doesn’t declare its needs, the limit defaults to about 500 MiB.</strong> An operator whose real usage sits near or above that will fail <em>intermittently</em> with:</p>
+<pre><code>Failed to run operator, please increase memory resources.   (exit code 137)</code></pre>
+<p>“Intermittently” is the tell: the run sits exactly on its ceiling, and whether the kernel can reclaim enough cache decides its fate. Same data, different outcome.</p>
+<section id="the-quick-fix-no-release-needed" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="the-quick-fix-no-release-needed"><span class="header-section-number">14.3.1</span> The quick fix (no release needed)</h3>
+<p>On the failing workflow step, add the environment setting <code>ram</code> with the value in bytes (for example <code>2000000000</code> for 2 GB), reset the step and rerun. A user-defined value is always respected verbatim.</p>
+</section>
+<section id="the-durable-fix-memory_model.json" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="the-durable-fix-memory_model.json"><span class="header-section-number">14.3.2</span> The durable fix: <code>memory_model.json</code></h3>
+<p>Ship a <code>memory_model.json</code> at the repository root. Tercen reads it at install/update time and books memory per run based on the projected data:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"OperatorEstimateModel"</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"intercept"</span><span class="fu">:</span> <span class="fl">1.0</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"offset"</span><span class="fu">:</span> <span class="fl">500.0</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"features"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"Feature"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"n_main"</span><span class="fu">,</span> <span class="dt">"coefficient"</span><span class="fu">:</span> <span class="fl">0.02</span><span class="fu">,</span> <span class="dt">"exponent"</span><span class="fu">:</span> <span class="fl">1.0</span> <span class="fu">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The estimate, in <strong>MB</strong>, is <code>intercept × Π(coefficient × feature^exponent) + 1.5 × offset</code> — the example books 750 MB plus 0.02 MB per projected cell.</p>
+<p>Available features:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n_main</code></td>
+<td>number of projected crosstab cells</td>
+</tr>
+<tr class="even">
+<td><code>n_cols</code></td>
+<td>rows of the column table</td>
+</tr>
+<tr class="odd">
+<td><code>n_rows</code></td>
+<td>rows of the row table</td>
+</tr>
+<tr class="even">
+<td><code>settings.&lt;Name&gt;</code></td>
+<td>numeric value of an operator setting</td>
+</tr>
+<tr class="odd">
+<td><code>a_||_b</code></td>
+<td>interaction: product of two features</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prefer the schema features. A <code>settings.*</code> feature whose setting is left blank evaluates to 0, which can silently disable the whole model (an infinite or zero estimate is discarded).</p>
+</div>
+</div>
+</section>
+<section id="fit-it-from-real-runs-dont-guess" class="level3" data-number="14.3.3">
+<h3 data-number="14.3.3" class="anchored" data-anchor-id="fit-it-from-real-runs-dont-guess"><span class="header-section-number">14.3.3</span> Fit it from real runs, don’t guess</h3>
+<p>Tercen records the actual memory peak of every operator run on the task document (<code>stats_d_actual_ram_peak</code>, plus <code>…_anon</code> for operator-allocated bytes only). Fit the coefficients against that history, then verify the model predicts <strong>at or above every observed peak with 1.3–2× headroom</strong>. Working examples: <code>tercen/fast_tSNE_operator</code> (fitted power-law over <code>n_cols</code>/<code>n_rows</code>) and <code>tercen/plot_operator</code> (linear in <code>n_main</code>, plus an <code>estimate-memory.yml</code> workflow that automates the fit).</p>
+<p>Because the file is read from git at install time, shipping or changing it is a normal release (bump the container pin, tag) — but it touches no code: results, the unit test, and the image content are unchanged.</p>
+</section>
+</section>
+<section id="testing-and-validation" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="testing-and-validation"><span class="header-section-number">14.4</span> Testing and Validation</h2>
 <p>Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -646,8 +724,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Tercen supports two main testing frameworks: 1. <strong>Unit Tests</strong>: Simple data files with expected input/output and test specifications 2. <strong>Integration Tests</strong>: Actual Tercen workflows triggered to perform computations</p>
 </div>
 </div>
-<section id="unit-test-structure" class="level3" data-number="14.3.1">
-<h3 data-number="14.3.1" class="anchored" data-anchor-id="unit-test-structure"><span class="header-section-number">14.3.1</span> Unit Test Structure</h3>
+<section id="unit-test-structure" class="level3" data-number="14.4.1">
+<h3 data-number="14.4.1" class="anchored" data-anchor-id="unit-test-structure"><span class="header-section-number">14.4.1</span> Unit Test Structure</h3>
 <p>Create a <code>tests</code> directory in your operator repository with the following structure:</p>
 <pre><code>tests/
 ├── input.csv          # Sample input data
@@ -655,8 +733,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ├── test.json          # Test configuration</code></pre>
 <p>For multiple test scenarios, use numbered files: - <code>test_1.json</code>, <code>test_2.json</code> for different parameter settings - <code>input_1.csv</code>, <code>input_2.csv</code> for different data scenarios</p>
 </section>
-<section id="creating-comprehensive-test-data" class="level3" data-number="14.3.2">
-<h3 data-number="14.3.2" class="anchored" data-anchor-id="creating-comprehensive-test-data"><span class="header-section-number">14.3.2</span> Creating Comprehensive Test Data</h3>
+<section id="creating-comprehensive-test-data" class="level3" data-number="14.4.2">
+<h3 data-number="14.4.2" class="anchored" data-anchor-id="creating-comprehensive-test-data"><span class="header-section-number">14.4.2</span> Creating Comprehensive Test Data</h3>
 <p>Design test cases that cover various scenarios:</p>
 <table class="caption-top table">
 <colgroup>
@@ -690,28 +768,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="test-configuration-file" class="level3" data-number="14.3.3">
-<h3 data-number="14.3.3" class="anchored" data-anchor-id="test-configuration-file"><span class="header-section-number">14.3.3</span> Test Configuration File</h3>
+<section id="test-configuration-file" class="level3" data-number="14.4.3">
+<h3 data-number="14.4.3" class="anchored" data-anchor-id="test-configuration-file"><span class="header-section-number">14.4.3</span> Test Configuration File</h3>
 <p>Create a <code>tests/test.json</code> in <code>OperatorUnitTest</code> format. This is what the release install-check and the library gate execute; R/<code>testthat</code> scripts do not count for the gate. A complete, battle-tested reference: <a href="https://github.com/pamgene/cs_uka_operator/tree/main/tests"><code>pamgene/cs_uka_operator/tests/</code></a>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"OperatorUnitTest"</span><span class="fu">,</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"default_params"</span><span class="fu">,</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"namespace"</span><span class="fu">:</span> <span class="st">"ds0"</span><span class="fu">,</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"inputDataUri"</span><span class="fu">:</span> <span class="st">"test_in.csv"</span><span class="fu">,</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"outputDataUri"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"test_out_1.csv"</span><span class="ot">,</span> <span class="st">"test_out_2.csv"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"columns"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Supergroup"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"rows"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"ID"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"colors"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"labels"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"colSeq"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"yAxis"</span><span class="fu">:</span> <span class="st">"value"</span><span class="fu">,</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"xAxis"</span><span class="fu">:</span> <span class="st">"grp"</span><span class="fu">,</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"equalityMethod"</span><span class="fu">:</span> <span class="st">"R2"</span><span class="fu">,</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"r2"</span><span class="fu">:</span> <span class="fl">0.99</span><span class="fu">,</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"propertyValues"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"PropertyValue"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"UkaDbVersion"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"0.6"</span><span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"PropertyValue"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Seed"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"42.0"</span><span class="fu">}</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"OperatorUnitTest"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"default_params"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"namespace"</span><span class="fu">:</span> <span class="st">"ds0"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"inputDataUri"</span><span class="fu">:</span> <span class="st">"test_in.csv"</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"outputDataUri"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"test_out_1.csv"</span><span class="ot">,</span> <span class="st">"test_out_2.csv"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"columns"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Supergroup"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"rows"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"ID"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"colors"</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"labels"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"colSeq"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"yAxis"</span><span class="fu">:</span> <span class="st">"value"</span><span class="fu">,</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"xAxis"</span><span class="fu">:</span> <span class="st">"grp"</span><span class="fu">,</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"equalityMethod"</span><span class="fu">:</span> <span class="st">"R2"</span><span class="fu">,</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"r2"</span><span class="fu">:</span> <span class="fl">0.99</span><span class="fu">,</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"propertyValues"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"PropertyValue"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"UkaDbVersion"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"0.6"</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"kind"</span><span class="fu">:</span> <span class="st">"PropertyValue"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Seed"</span><span class="fu">,</span> <span class="dt">"value"</span><span class="fu">:</span> <span class="st">"42.0"</span><span class="fu">}</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Rules that each come from a real gate failure:</p>
 <ul>
 <li><strong>Pin every operator property</strong> via <code>propertyValues</code> (a list of <code>PropertyValue</code> objects — values as strings). A fully pinned test never breaks when a bundled database or a default changes; it only changes when you change it. (Note: the field is <code>propertyValues</code>, not <code>properties</code>.)</li>
@@ -720,15 +798,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Pin column types with <code>.schema</code> sidecars</strong>: for each expected CSV also commit <code>&lt;name&gt;.csv.schema</code> — the result relation’s <code>TableSchema</code> JSON (columns with name+type, <code>id</code>/<code>rev</code> stripped). Without it the gate re-infers types from CSV text and fails with <code>task.test.operator.bad.column.type — expected double found int32</code> on columns of whole numbers. Write doubles type-faithfully too (<code>58.0</code>, not <code>58</code>).</li>
 </ul>
 </section>
-<section id="determinism-first-the-seed-rule" class="level3" data-number="14.3.4">
-<h3 data-number="14.3.4" class="anchored" data-anchor-id="determinism-first-the-seed-rule"><span class="header-section-number">14.3.4</span> Determinism first: the Seed rule</h3>
+<section id="determinism-first-the-seed-rule" class="level3" data-number="14.4.4">
+<h3 data-number="14.4.4" class="anchored" data-anchor-id="determinism-first-the-seed-rule"><span class="header-section-number">14.4.4</span> Determinism first: the Seed rule</h3>
 <p>A golden test is impossible if two runs differ. <strong>Any operator using randomness</strong> (permutations, sampling, clustering) <strong>must seed the RNG</strong>, best as a visible setting:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>with a matching <code>Seed</code> <code>DoubleProperty</code> (default 42; <code>-1</code> = unseeded). Acceptance test: run twice, outputs byte-identical.</p>
 </section>
-<section id="generating-and-regenerating-the-expected-output" class="level3" data-number="14.3.5">
-<h3 data-number="14.3.5" class="anchored" data-anchor-id="generating-and-regenerating-the-expected-output"><span class="header-section-number">14.3.5</span> Generating and regenerating the expected output</h3>
+<section id="generating-and-regenerating-the-expected-output" class="level3" data-number="14.4.5">
+<h3 data-number="14.4.5" class="anchored" data-anchor-id="generating-and-regenerating-the-expected-output"><span class="header-section-number">14.4.5</span> Generating and regenerating the expected output</h3>
 <p>The expected CSVs are <strong>golden files from a real run of the exact code being released</strong> — they cannot be hand-written. Generate them on <strong>Tercen Studio</strong> (see the appendix), never on a production instance: install the operator from the release branch, import the small input, run the step with the projection and pinned settings from <code>test.json</code>, run it twice (determinism), export each output relation and its schema.</p>
 <p>When a bundled database or intended behaviour changes, the release install-check goes <strong>red — that is the alarm</strong>: re-run the same input with the new settings, replace the expected files, update the changed <code>propertyValues</code>, bump the version, release. Ship this recipe in the operator repo itself as a <code>CLAUDE.md</code> (the <code>create-operator</code> skill provides a template), so any future maintenance session knows the drill.</p>
 <p>This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen’s analytical capabilities!</p>
@@ -1203,292 +1281,363 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Operator Improvements and Best Practices</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>This chapter covers advanced techniques for improving operator quality, reliability, and maintainability. You'll learn essential practices for logging, error handling, testing, and optimization that ensure your operators work robustly in production environments.</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning Objectives</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Implement comprehensive logging and debugging strategies</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Build robust error handling and input validation</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Create comprehensive test suites for operators</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply performance optimization techniques</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Follow best practices for production-ready operators</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>Before proceeding, ensure you've completed:</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Basic Implementation</span><span class="co">](4-basic-implementation.qmd)</span> chapter for core operator concepts</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Advanced Features</span><span class="co">](5-advanced-features.qmd)</span> chapter for complex functionality</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Data Input and Output Patterns</span><span class="co">](10-input-output-patterns.qmd)</span> for data handling</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logging and Debugging</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>Effective logging is essential for monitoring operator behavior and diagnosing issues in production environments.</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Logging</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>Implement logging for production operators:</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### R</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>ctx<span class="sc">$</span><span class="fu">log</span>(<span class="st">"Your message."</span>)</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### Python</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>ctx.log(<span class="st">"Your message."</span>)</span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logging Best Practices</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log key milestones**: Start/end of major operations</span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Include data metrics**: Row counts, processing times, memory usage</span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log parameter values**: Help reproduce issues with specific inputs</span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use structured formats**: Enable easier log parsing and analysis</span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Avoid logging sensitive data**: Protect user privacy and security</span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>Implement comprehensive error handling that provides helpful feedback to users:</span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### R</span></span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Comprehensive error handling with user-friendly messages</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>robust_operator <span class="ot">&lt;-</span> <span class="cf">function</span>(ctx) {</span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate inputs first</span></span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">validate_inputs</span>(ctx)</span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Main processing with progress logging</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[INFO]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Beginning data analysis"</span>))</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for edge cases</span></span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">select</span>(.ri, .ci, .y)</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.infinite</span>(data<span class="sc">$</span>.y))) {</span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>      ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[WARNING]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Infinite values detected, removing them"</span>))</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>      data <span class="ot">&lt;-</span> data[<span class="fu">is.finite</span>(data<span class="sc">$</span>.y), ]</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">nrow</span>(data) <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"No valid data remaining after cleaning"</span>)</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Perform analysis</span></span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">perform_analysis</span>(data)</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[INFO]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Analysis completed successfully"</span>))</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Log the technical error</span></span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[ERROR]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Technical error:"</span>, e<span class="sc">$</span>message))</span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Provide user-friendly error message</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"projection.*required"</span>, e<span class="sc">$</span>message)) {</span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Please ensure you have dragged the required data columns to the appropriate axes."</span>)</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"data points required"</span>, e<span class="sc">$</span>message)) {</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"This analysis requires at least 3 data points. Please check your data selection."</span>)</span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"values must vary"</span>, e<span class="sc">$</span>message)) {</span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The data values do not vary enough for this analysis. Please check your input data."</span>)</span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"An error occurred during analysis:"</span>, e<span class="sc">$</span>message))</span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### Python</span></span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> robust_operator(tercen_ctx):</span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Operator with comprehensive error handling"""</span></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Validate inputs first</span></span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>        validate_inputs(tercen_ctx)</span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Main processing with progress logging</span></span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[INFO] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Beginning data analysis"</span>)</span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check for edge cases</span></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> tercen_ctx.select([<span class="st">'.ri'</span>, <span class="st">'.ci'</span>, <span class="st">'.y'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Handle infinite values</span></span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>        infinite_count <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">'.y'</span>).is_infinite()).height</span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> infinite_count <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>            tercen_ctx.log(<span class="ss">f"[WARNING] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Infinite values detected (</span><span class="sc">{</span>infinite_count<span class="sc">}</span><span class="ss">), removing them"</span>)</span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">'.y'</span>).is_finite())</span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(df) <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"No valid data remaining after cleaning"</span>)</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Perform analysis</span></span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> perform_analysis(df)</span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[INFO] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Analysis completed successfully"</span>)</span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result</span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> ve:</span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[ERROR] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Validation error: </span><span class="sc">{</span><span class="bu">str</span>(ve)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Provide user-friendly error messages</span></span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">"projection"</span> <span class="kw">in</span> <span class="bu">str</span>(ve) <span class="kw">and</span> <span class="st">"required"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Please ensure you have dragged the required data columns to the appropriate axes."</span>)</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="st">"data points required"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"This analysis requires at least 3 data points. Please check your data selection."</span>)</span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="st">"values must vary"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"The data values do not vary enough for this analysis. Please check your input data."</span>)</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"An error occurred during analysis: </span><span class="sc">{</span><span class="bu">str</span>(ve)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[ERROR] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Unexpected error: </span><span class="sc">{</span><span class="bu">str</span>(e)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"An unexpected error occurred. Please check your data and try again. Error: </span><span class="sc">{</span><span class="bu">str</span>(e)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling Guidelines</span></span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Validate early**: Check inputs before expensive computations</span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fail gracefully**: Provide clear, actionable error messages</span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log technical details**: Help with debugging while keeping user messages simple</span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Handle edge cases**: Account for missing data, infinite values, empty datasets</span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Test error scenarios**: Ensure error handling works as expected</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing and Validation</span></span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.</span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Approaches</span></span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>Tercen supports two main testing frameworks:</span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unit Tests**: Simple data files with expected input/output and test specifications</span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Integration Tests**: Actual Tercen workflows triggered to perform computations</span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Test Structure</span></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests`</span> directory in your operator repository with the following structure:</span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="in">tests/</span></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="in">├── input.csv          # Sample input data</span></span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a><span class="in">├── output.csv         # Expected output data  </span></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="in">├── test.json          # Test configuration</span></span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>For multiple test scenarios, use numbered files:</span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`test_1.json`</span>, <span class="in">`test_2.json`</span> for different parameter settings</span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`input_1.csv`</span>, <span class="in">`input_2.csv`</span> for different data scenarios</span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Comprehensive Test Data</span></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>Design test cases that cover various scenarios:</span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Test Scenario <span class="pp">|</span> Purpose <span class="pp">|</span> Example Data <span class="pp">|</span></span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------------|</span></span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Normal Case** <span class="pp">|</span> Standard operation <span class="pp">|</span> Regular numeric data with good distribution <span class="pp">|</span></span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edge Cases** <span class="pp">|</span> Boundary conditions <span class="pp">|</span> Minimum data points, extreme values <span class="pp">|</span></span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Error Cases** <span class="pp">|</span> Invalid inputs <span class="pp">|</span> Missing data, wrong data types <span class="pp">|</span></span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a><span class="fu">### Test Configuration File</span></span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests/test.json`</span> in <span class="in">`OperatorUnitTest`</span> format. This is what the</span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>release install-check and the library gate execute; R/<span class="in">`testthat`</span> scripts do</span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>not count for the gate. A complete, battle-tested reference:</span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`pamgene/cs_uka_operator/tests/`</span><span class="co">](https://github.com/pamgene/cs_uka_operator/tree/main/tests)</span>.</span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorUnitTest"</span><span class="op">,</span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>  <span class="st">"name"</span><span class="op">:</span> <span class="st">"default_params"</span><span class="op">,</span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>  <span class="st">"namespace"</span><span class="op">:</span> <span class="st">"ds0"</span><span class="op">,</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>  <span class="st">"inputDataUri"</span><span class="op">:</span> <span class="st">"test_in.csv"</span><span class="op">,</span></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputDataUri"</span><span class="op">:</span> [<span class="st">"test_out_1.csv"</span><span class="op">,</span> <span class="st">"test_out_2.csv"</span>]<span class="op">,</span></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>  <span class="st">"columns"</span><span class="op">:</span> [<span class="st">"Supergroup"</span>]<span class="op">,</span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rows"</span><span class="op">:</span> [<span class="st">"ID"</span>]<span class="op">,</span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>  <span class="st">"colors"</span><span class="op">:</span> []<span class="op">,</span></span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>  <span class="st">"labels"</span><span class="op">:</span> [<span class="st">"colSeq"</span>]<span class="op">,</span></span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yAxis"</span><span class="op">:</span> <span class="st">"value"</span><span class="op">,</span></span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xAxis"</span><span class="op">:</span> <span class="st">"grp"</span><span class="op">,</span></span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>  <span class="st">"equalityMethod"</span><span class="op">:</span> <span class="st">"R2"</span><span class="op">,</span></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r2"</span><span class="op">:</span> <span class="fl">0.99</span><span class="op">,</span></span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>  <span class="st">"propertyValues"</span><span class="op">:</span> [</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"UkaDbVersion"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"0.6"</span>}<span class="op">,</span></span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"Seed"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"42.0"</span>}</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>Rules that each come from a real gate failure:</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin every operator property** via <span class="in">`propertyValues`</span> (a list of</span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>  <span class="in">`PropertyValue`</span> objects — values as strings). A fully pinned test never</span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>  breaks when a bundled database or a default changes; it only changes when</span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>  you change it. (Note: the field is <span class="in">`propertyValues`</span>, not <span class="in">`properties`</span>.)</span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`equalityMethod: "R2"` for computed floats.** The default <span class="in">`equals`</span></span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>  compares doubles near-exactly and fails on floating-point noise</span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>  (<span class="in">`task.test.operator.bad.value`</span>). Reserve <span class="in">`equals`</span> for exact</span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a>  integer/string outputs.</span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One entry in `outputDataUri` per output relation** — a result joined to</span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a>  the crosstab typically yields 2+ relations; a count mismatch fails with</span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.nRelations`</span>.</span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin column types with `.schema` sidecars**: for each expected CSV also</span>
-<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a>  commit <span class="in">`&lt;name&gt;.csv.schema`</span> — the result relation's <span class="in">`TableSchema`</span> JSON</span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>  (columns with name+type, <span class="in">`id`</span>/<span class="in">`rev`</span> stripped). Without it the gate</span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>  re-infers types from CSV text and fails with</span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.column.type — expected double found int32`</span> on</span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>  columns of whole numbers. Write doubles type-faithfully too (<span class="in">`58.0`</span>, not</span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a>  <span class="in">`58`</span>).</span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="fu">### Determinism first: the Seed rule</span></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a>A golden test is impossible if two runs differ. **Any operator using</span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>randomness** (permutations, sampling, clustering) **must seed the RNG**,</span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a>best as a visible setting:</span>
-<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
-<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>with a matching <span class="in">`Seed`</span> <span class="in">`DoubleProperty`</span> (default 42; <span class="in">`-1`</span> = unseeded).</span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>Acceptance test: run twice, outputs byte-identical.</span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generating and regenerating the expected output</span></span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>The expected CSVs are **golden files from a real run of the exact code being</span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>released** — they cannot be hand-written. Generate them on</span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>**Tercen Studio** (see the appendix), never on a production instance:</span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a>install the operator from the release branch, import the small input, run the</span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>step with the projection and pinned settings from <span class="in">`test.json`</span>, run it twice</span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>(determinism), export each output relation and its schema.</span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>When a bundled database or intended behaviour changes, the release</span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>install-check goes **red — that is the alarm**: re-run the same input with</span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>the new settings, replace the expected files, update the changed</span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a><span class="in">`propertyValues`</span>, bump the version, release. Ship this recipe in the</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>operator repo itself as a <span class="in">`CLAUDE.md`</span> (the <span class="in">`create-operator`</span> skill provides</span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a>a template), so any future maintenance session knows the drill.</span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a>This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Operator Improvements and Best Practices</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>This chapter covers advanced techniques for improving operator quality, reliability, and maintainability. You'll learn essential practices for logging, error handling, testing, and optimization that ensure your operators work robustly in production environments.</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning Objectives</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Implement comprehensive logging and debugging strategies</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Build robust error handling and input validation</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Create comprehensive test suites for operators</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply performance optimization techniques</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Follow best practices for production-ready operators</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>Before proceeding, ensure you've completed:</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Basic Implementation</span><span class="co">](4-basic-implementation.qmd)</span> chapter for core operator concepts</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Advanced Features</span><span class="co">](5-advanced-features.qmd)</span> chapter for complex functionality</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Data Input and Output Patterns</span><span class="co">](10-input-output-patterns.qmd)</span> for data handling</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logging and Debugging</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>Effective logging is essential for monitoring operator behavior and diagnosing issues in production environments.</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Logging</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>Implement logging for production operators:</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### R</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>ctx<span class="sc">$</span><span class="fu">log</span>(<span class="st">"Your message."</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### Python</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>ctx.log(<span class="st">"Your message."</span>)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logging Best Practices</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log key milestones**: Start/end of major operations</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Include data metrics**: Row counts, processing times, memory usage</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log parameter values**: Help reproduce issues with specific inputs</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use structured formats**: Enable easier log parsing and analysis</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Avoid logging sensitive data**: Protect user privacy and security</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>Implement comprehensive error handling that provides helpful feedback to users:</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a><span class="fu">### R</span></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Comprehensive error handling with user-friendly messages</span></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>robust_operator <span class="ot">&lt;-</span> <span class="cf">function</span>(ctx) {</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>({</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validate inputs first</span></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">validate_inputs</span>(ctx)</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Main processing with progress logging</span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[INFO]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Beginning data analysis"</span>))</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for edge cases</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">select</span>(.ri, .ci, .y)</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.infinite</span>(data<span class="sc">$</span>.y))) {</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>      ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[WARNING]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Infinite values detected, removing them"</span>))</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>      data <span class="ot">&lt;-</span> data[<span class="fu">is.finite</span>(data<span class="sc">$</span>.y), ]</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">nrow</span>(data) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"No valid data remaining after cleaning"</span>)</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Perform analysis</span></span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">perform_analysis</span>(data)</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[INFO]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Analysis completed successfully"</span>))</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(result)</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Log the technical error</span></span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>    ctx<span class="sc">$</span><span class="fu">log</span>(<span class="fu">paste</span>(<span class="st">"[ERROR]"</span>, <span class="fu">Sys.time</span>(), <span class="st">"- Technical error:"</span>, e<span class="sc">$</span>message))</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Provide user-friendly error message</span></span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"projection.*required"</span>, e<span class="sc">$</span>message)) {</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Please ensure you have dragged the required data columns to the appropriate axes."</span>)</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"data points required"</span>, e<span class="sc">$</span>message)) {</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"This analysis requires at least 3 data points. Please check your data selection."</span>)</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"values must vary"</span>, e<span class="sc">$</span>message)) {</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The data values do not vary enough for this analysis. Please check your input data."</span>)</span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="fu">paste</span>(<span class="st">"An error occurred during analysis:"</span>, e<span class="sc">$</span>message))</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### Python</span></span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> robust_operator(tercen_ctx):</span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Operator with comprehensive error handling"""</span></span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Validate inputs first</span></span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>        validate_inputs(tercen_ctx)</span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Main processing with progress logging</span></span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[INFO] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Beginning data analysis"</span>)</span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check for edge cases</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> tercen_ctx.select([<span class="st">'.ri'</span>, <span class="st">'.ci'</span>, <span class="st">'.y'</span>], df_lib<span class="op">=</span><span class="st">"polars"</span>)</span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Handle infinite values</span></span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a>        infinite_count <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">'.y'</span>).is_infinite()).height</span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> infinite_count <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a>            tercen_ctx.log(<span class="ss">f"[WARNING] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Infinite values detected (</span><span class="sc">{</span>infinite_count<span class="sc">}</span><span class="ss">), removing them"</span>)</span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">'.y'</span>).is_finite())</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(df) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"No valid data remaining after cleaning"</span>)</span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Perform analysis</span></span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> perform_analysis(df)</span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[INFO] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Analysis completed successfully"</span>)</span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result</span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> ve:</span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[ERROR] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Validation error: </span><span class="sc">{</span><span class="bu">str</span>(ve)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Provide user-friendly error messages</span></span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">"projection"</span> <span class="kw">in</span> <span class="bu">str</span>(ve) <span class="kw">and</span> <span class="st">"required"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Please ensure you have dragged the required data columns to the appropriate axes."</span>)</span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="st">"data points required"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"This analysis requires at least 3 data points. Please check your data selection."</span>)</span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="st">"values must vary"</span> <span class="kw">in</span> <span class="bu">str</span>(ve):</span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"The data values do not vary enough for this analysis. Please check your input data."</span>)</span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"An error occurred during analysis: </span><span class="sc">{</span><span class="bu">str</span>(ve)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a>        tercen_ctx.log(<span class="ss">f"[ERROR] </span><span class="sc">{</span>datetime<span class="sc">.</span>now()<span class="sc">}</span><span class="ss"> - Unexpected error: </span><span class="sc">{</span><span class="bu">str</span>(e)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"An unexpected error occurred. Please check your data and try again. Error: </span><span class="sc">{</span><span class="bu">str</span>(e)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling Guidelines</span></span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Validate early**: Check inputs before expensive computations</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fail gracefully**: Provide clear, actionable error messages</span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Log technical details**: Help with debugging while keeping user messages simple</span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Handle edge cases**: Account for missing data, infinite values, empty datasets</span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Test error scenarios**: Ensure error handling works as expected</span>
+<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## Memory: tell Tercen what your operator needs</span></span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a>When Tercen runs your operator it puts the container under a hard memory</span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a>limit. **If the operator doesn't declare its needs, the limit defaults to</span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a>about 500 MiB.** An operator whose real usage sits near or above that will</span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a>fail *intermittently* with:</span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="in">Failed to run operator, please increase memory resources.   (exit code 137)</span></span>
+<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a>"Intermittently" is the tell: the run sits exactly on its ceiling, and whether</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>the kernel can reclaim enough cache decides its fate. Same data, different</span>
+<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a>outcome.</span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a><span class="fu">### The quick fix (no release needed)</span></span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a>On the failing workflow step, add the environment setting <span class="in">`ram`</span> with the</span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a>value in bytes (for example <span class="in">`2000000000`</span> for 2 GB), reset the step and rerun.</span>
+<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a>A user-defined value is always respected verbatim.</span>
+<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### The durable fix: `memory_model.json`</span></span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a>Ship a <span class="in">`memory_model.json`</span> at the repository root. Tercen reads it at</span>
+<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a>install/update time and books memory per run based on the projected data:</span>
+<span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
+<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span></span>
+<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">500.0</span><span class="op">,</span></span>
+<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
+<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
+<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a>The estimate, in **MB**, is</span>
+<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a><span class="in">`intercept × Π(coefficient × feature^exponent) + 1.5 × offset`</span> —</span>
+<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a>the example books 750 MB plus 0.02 MB per projected cell.</span>
+<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a>Available features:</span>
+<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Feature <span class="pp">|</span> Value <span class="pp">|</span></span>
+<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_main`</span> <span class="pp">|</span> number of projected crosstab cells <span class="pp">|</span></span>
+<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_cols`</span> <span class="pp">|</span> rows of the column table <span class="pp">|</span></span>
+<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_rows`</span> <span class="pp">|</span> rows of the row table <span class="pp">|</span></span>
+<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`settings.&lt;Name&gt;`</span> <span class="pp">|</span> numeric value of an operator setting <span class="pp">|</span></span>
+<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`a_||_b`</span> <span class="pp">|</span> interaction: product of two features <span class="pp">|</span></span>
+<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a>Prefer the schema features. A <span class="in">`settings.*`</span> feature whose setting is left blank</span>
+<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a>evaluates to 0, which can silently disable the whole model (an infinite or</span>
+<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a>zero estimate is discarded).</span>
+<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fit it from real runs, don't guess</span></span>
+<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a>Tercen records the actual memory peak of every operator run on the task</span>
+<span id="cb10-230"><a href="#cb10-230" aria-hidden="true" tabindex="-1"></a>document (<span class="in">`stats_d_actual_ram_peak`</span>, plus <span class="in">`…_anon`</span> for operator-allocated</span>
+<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a>bytes only). Fit the coefficients against that history, then verify the model</span>
+<span id="cb10-232"><a href="#cb10-232" aria-hidden="true" tabindex="-1"></a>predicts **at or above every observed peak with 1.3–2× headroom**. Working</span>
+<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a>examples: <span class="in">`tercen/fast_tSNE_operator`</span> (fitted power-law over <span class="in">`n_cols`</span>/<span class="in">`n_rows`</span>)</span>
+<span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a>and <span class="in">`tercen/plot_operator`</span> (linear in <span class="in">`n_main`</span>, plus an <span class="in">`estimate-memory.yml`</span></span>
+<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a>workflow that automates the fit).</span>
+<span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a>Because the file is read from git at install time, shipping or changing it is</span>
+<span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a>a normal release (bump the container pin, tag) — but it touches no code:</span>
+<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a>results, the unit test, and the image content are unchanged.</span>
+<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing and Validation</span></span>
+<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a>Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.</span>
+<span id="cb10-244"><a href="#cb10-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-245"><a href="#cb10-245" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Approaches</span></span>
+<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a>Tercen supports two main testing frameworks:</span>
+<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unit Tests**: Simple data files with expected input/output and test specifications</span>
+<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Integration Tests**: Actual Tercen workflows triggered to perform computations</span>
+<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-251"><a href="#cb10-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Test Structure</span></span>
+<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests`</span> directory in your operator repository with the following structure:</span>
+<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a><span class="in">tests/</span></span>
+<span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a><span class="in">├── input.csv          # Sample input data</span></span>
+<span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a><span class="in">├── output.csv         # Expected output data  </span></span>
+<span id="cb10-260"><a href="#cb10-260" aria-hidden="true" tabindex="-1"></a><span class="in">├── test.json          # Test configuration</span></span>
+<span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a>For multiple test scenarios, use numbered files:</span>
+<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`test_1.json`</span>, <span class="in">`test_2.json`</span> for different parameter settings</span>
+<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`input_1.csv`</span>, <span class="in">`input_2.csv`</span> for different data scenarios</span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Comprehensive Test Data</span></span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a>Design test cases that cover various scenarios:</span>
+<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Test Scenario <span class="pp">|</span> Purpose <span class="pp">|</span> Example Data <span class="pp">|</span></span>
+<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------------|</span></span>
+<span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Normal Case** <span class="pp">|</span> Standard operation <span class="pp">|</span> Regular numeric data with good distribution <span class="pp">|</span></span>
+<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edge Cases** <span class="pp">|</span> Boundary conditions <span class="pp">|</span> Minimum data points, extreme values <span class="pp">|</span></span>
+<span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Error Cases** <span class="pp">|</span> Invalid inputs <span class="pp">|</span> Missing data, wrong data types <span class="pp">|</span></span>
+<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a><span class="fu">### Test Configuration File</span></span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests/test.json`</span> in <span class="in">`OperatorUnitTest`</span> format. This is what the</span>
+<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>release install-check and the library gate execute; R/<span class="in">`testthat`</span> scripts do</span>
+<span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a>not count for the gate. A complete, battle-tested reference:</span>
+<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`pamgene/cs_uka_operator/tests/`</span><span class="co">](https://github.com/pamgene/cs_uka_operator/tree/main/tests)</span>.</span>
+<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorUnitTest"</span><span class="op">,</span></span>
+<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a>  <span class="st">"name"</span><span class="op">:</span> <span class="st">"default_params"</span><span class="op">,</span></span>
+<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a>  <span class="st">"namespace"</span><span class="op">:</span> <span class="st">"ds0"</span><span class="op">,</span></span>
+<span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a>  <span class="st">"inputDataUri"</span><span class="op">:</span> <span class="st">"test_in.csv"</span><span class="op">,</span></span>
+<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputDataUri"</span><span class="op">:</span> [<span class="st">"test_out_1.csv"</span><span class="op">,</span> <span class="st">"test_out_2.csv"</span>]<span class="op">,</span></span>
+<span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a>  <span class="st">"columns"</span><span class="op">:</span> [<span class="st">"Supergroup"</span>]<span class="op">,</span></span>
+<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rows"</span><span class="op">:</span> [<span class="st">"ID"</span>]<span class="op">,</span></span>
+<span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a>  <span class="st">"colors"</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a>  <span class="st">"labels"</span><span class="op">:</span> [<span class="st">"colSeq"</span>]<span class="op">,</span></span>
+<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yAxis"</span><span class="op">:</span> <span class="st">"value"</span><span class="op">,</span></span>
+<span id="cb10-296"><a href="#cb10-296" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xAxis"</span><span class="op">:</span> <span class="st">"grp"</span><span class="op">,</span></span>
+<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a>  <span class="st">"equalityMethod"</span><span class="op">:</span> <span class="st">"R2"</span><span class="op">,</span></span>
+<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r2"</span><span class="op">:</span> <span class="fl">0.99</span><span class="op">,</span></span>
+<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a>  <span class="st">"propertyValues"</span><span class="op">:</span> [</span>
+<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"UkaDbVersion"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"0.6"</span>}<span class="op">,</span></span>
+<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"Seed"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"42.0"</span>}</span>
+<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-304"><a href="#cb10-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a>Rules that each come from a real gate failure:</span>
+<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin every operator property** via <span class="in">`propertyValues`</span> (a list of</span>
+<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a>  <span class="in">`PropertyValue`</span> objects — values as strings). A fully pinned test never</span>
+<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a>  breaks when a bundled database or a default changes; it only changes when</span>
+<span id="cb10-311"><a href="#cb10-311" aria-hidden="true" tabindex="-1"></a>  you change it. (Note: the field is <span class="in">`propertyValues`</span>, not <span class="in">`properties`</span>.)</span>
+<span id="cb10-312"><a href="#cb10-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`equalityMethod: "R2"` for computed floats.** The default <span class="in">`equals`</span></span>
+<span id="cb10-313"><a href="#cb10-313" aria-hidden="true" tabindex="-1"></a>  compares doubles near-exactly and fails on floating-point noise</span>
+<span id="cb10-314"><a href="#cb10-314" aria-hidden="true" tabindex="-1"></a>  (<span class="in">`task.test.operator.bad.value`</span>). Reserve <span class="in">`equals`</span> for exact</span>
+<span id="cb10-315"><a href="#cb10-315" aria-hidden="true" tabindex="-1"></a>  integer/string outputs.</span>
+<span id="cb10-316"><a href="#cb10-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One entry in `outputDataUri` per output relation** — a result joined to</span>
+<span id="cb10-317"><a href="#cb10-317" aria-hidden="true" tabindex="-1"></a>  the crosstab typically yields 2+ relations; a count mismatch fails with</span>
+<span id="cb10-318"><a href="#cb10-318" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.nRelations`</span>.</span>
+<span id="cb10-319"><a href="#cb10-319" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin column types with `.schema` sidecars**: for each expected CSV also</span>
+<span id="cb10-320"><a href="#cb10-320" aria-hidden="true" tabindex="-1"></a>  commit <span class="in">`&lt;name&gt;.csv.schema`</span> — the result relation's <span class="in">`TableSchema`</span> JSON</span>
+<span id="cb10-321"><a href="#cb10-321" aria-hidden="true" tabindex="-1"></a>  (columns with name+type, <span class="in">`id`</span>/<span class="in">`rev`</span> stripped). Without it the gate</span>
+<span id="cb10-322"><a href="#cb10-322" aria-hidden="true" tabindex="-1"></a>  re-infers types from CSV text and fails with</span>
+<span id="cb10-323"><a href="#cb10-323" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.column.type — expected double found int32`</span> on</span>
+<span id="cb10-324"><a href="#cb10-324" aria-hidden="true" tabindex="-1"></a>  columns of whole numbers. Write doubles type-faithfully too (<span class="in">`58.0`</span>, not</span>
+<span id="cb10-325"><a href="#cb10-325" aria-hidden="true" tabindex="-1"></a>  <span class="in">`58`</span>).</span>
+<span id="cb10-326"><a href="#cb10-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-327"><a href="#cb10-327" aria-hidden="true" tabindex="-1"></a><span class="fu">### Determinism first: the Seed rule</span></span>
+<span id="cb10-328"><a href="#cb10-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-329"><a href="#cb10-329" aria-hidden="true" tabindex="-1"></a>A golden test is impossible if two runs differ. **Any operator using</span>
+<span id="cb10-330"><a href="#cb10-330" aria-hidden="true" tabindex="-1"></a>randomness** (permutations, sampling, clustering) **must seed the RNG**,</span>
+<span id="cb10-331"><a href="#cb10-331" aria-hidden="true" tabindex="-1"></a>best as a visible setting:</span>
+<span id="cb10-332"><a href="#cb10-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-333"><a href="#cb10-333" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb10-334"><a href="#cb10-334" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
+<span id="cb10-335"><a href="#cb10-335" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span>
+<span id="cb10-336"><a href="#cb10-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-337"><a href="#cb10-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-338"><a href="#cb10-338" aria-hidden="true" tabindex="-1"></a>with a matching <span class="in">`Seed`</span> <span class="in">`DoubleProperty`</span> (default 42; <span class="in">`-1`</span> = unseeded).</span>
+<span id="cb10-339"><a href="#cb10-339" aria-hidden="true" tabindex="-1"></a>Acceptance test: run twice, outputs byte-identical.</span>
+<span id="cb10-340"><a href="#cb10-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-341"><a href="#cb10-341" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generating and regenerating the expected output</span></span>
+<span id="cb10-342"><a href="#cb10-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-343"><a href="#cb10-343" aria-hidden="true" tabindex="-1"></a>The expected CSVs are **golden files from a real run of the exact code being</span>
+<span id="cb10-344"><a href="#cb10-344" aria-hidden="true" tabindex="-1"></a>released** — they cannot be hand-written. Generate them on</span>
+<span id="cb10-345"><a href="#cb10-345" aria-hidden="true" tabindex="-1"></a>**Tercen Studio** (see the appendix), never on a production instance:</span>
+<span id="cb10-346"><a href="#cb10-346" aria-hidden="true" tabindex="-1"></a>install the operator from the release branch, import the small input, run the</span>
+<span id="cb10-347"><a href="#cb10-347" aria-hidden="true" tabindex="-1"></a>step with the projection and pinned settings from <span class="in">`test.json`</span>, run it twice</span>
+<span id="cb10-348"><a href="#cb10-348" aria-hidden="true" tabindex="-1"></a>(determinism), export each output relation and its schema.</span>
+<span id="cb10-349"><a href="#cb10-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-350"><a href="#cb10-350" aria-hidden="true" tabindex="-1"></a>When a bundled database or intended behaviour changes, the release</span>
+<span id="cb10-351"><a href="#cb10-351" aria-hidden="true" tabindex="-1"></a>install-check goes **red — that is the alarm**: re-run the same input with</span>
+<span id="cb10-352"><a href="#cb10-352" aria-hidden="true" tabindex="-1"></a>the new settings, replace the expected files, update the changed</span>
+<span id="cb10-353"><a href="#cb10-353" aria-hidden="true" tabindex="-1"></a><span class="in">`propertyValues`</span>, bump the version, release. Ship this recipe in the</span>
+<span id="cb10-354"><a href="#cb10-354" aria-hidden="true" tabindex="-1"></a>operator repo itself as a <span class="in">`CLAUDE.md`</span> (the <span class="in">`create-operator`</span> skill provides</span>
+<span id="cb10-355"><a href="#cb10-355" aria-hidden="true" tabindex="-1"></a>a template), so any future maintenance session knows the drill.</span>
+<span id="cb10-356"><a href="#cb10-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-357"><a href="#cb10-357" aria-hidden="true" tabindex="-1"></a>This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
