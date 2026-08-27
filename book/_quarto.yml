@@ -72,5 +72,6 @@ format:
     code-fold: false
     code-tools: true
     search: true
+    include-in-header: gtm-head.html
 
 csl: https://www.zotero.org/styles/apa
