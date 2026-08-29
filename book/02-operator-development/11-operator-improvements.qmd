@@ -170,17 +170,39 @@ def robust_operator(tercen_ctx):
 ## Memory: tell Tercen what your operator needs
 
 When Tercen runs your operator it puts the container under a hard memory
-limit. **If the operator doesn't declare its needs, the limit defaults to
-about 500 MiB.** An operator whose real usage sits near or above that will
-fail *intermittently* with:
+limit. That limit is decided before the run starts, from the first of these
+that applies:
+
+1. a **user-set `ram`** on the step — always respected verbatim;
+2. the operator's own **`memory_model.json`**, evaluated against this run's
+   data;
+3. a **generic platform estimate** when the operator ships no model.
+
+Only the second option knows anything about your operator. An operator whose
+real usage sits near or above whatever it is given will fail — and it does so
+with two different signatures, which is what makes this confusing to diagnose:
 
 ```
 Failed to run operator, please increase memory resources.   (exit code 137)
 ```
 
-"Intermittently" is the tell: the run sits exactly on its ceiling, and whether
-the kernel can reclaim enough cache decides its fate. Same data, different
-outcome.
+is the operator process itself being killed at the limit. But when the
+operator *shells out* — an R or Python wrapper invoking a compiled binary
+(`system2()`, `subprocess`) — the kernel kills the **child**, the wrapper only
+sees "the thing I called failed", and the platform reports:
+
+```
+Failed to run operator, exit code = 1
+```
+
+with stderr that simply **stops mid-progress** — a progress bar frozen at 11%,
+a half-written log, no error message. There is no "memory" in that text
+anywhere. Treat *truncated output with no real error* as an OOM until proven
+otherwise; the fix is identical.
+
+Near-ceiling runs also fail *intermittently*: the run sits exactly on its
+limit, and whether the kernel can reclaim enough cache decides its fate. Same
+data, different outcome.
 
 ### The quick fix (no release needed)
 
@@ -347,6 +369,99 @@ Failed (exit-137) runs are *censored* observations: they tell you the true
 need exceeded that run's limit, not what it was. Fit on successful runs, then
 check the model clears every failed run's limit at its recorded dimensions.
 :::
+
+### Verify the model against a real run
+
+Once a model ships, one successful run tells you whether it is honest. Read
+the two numbers back off the task and divide:
+
+```
+booked  = stats_d_estimated_ram          (the hard limit the model asked for)
+actual  = stats_d_actual_ram_peak_anon   (what the run really allocated)
+headroom = booked / actual
+```
+
+A production example: `tercen/fast_tSNE_operator` 0.2.1 on 695 052
+observations × 8 variables booked **3.95 GB** and peaked at **2.61 GB** —
+**1.51× headroom**, comfortably inside the 1.3–2× target, on a dataset ~7×
+larger than anything in the original fitting sweep. That is what a healthy
+model looks like at unfamiliar scale.
+
+The same dataset run through an *earlier* release of that operator, which
+shipped no model at all, was booked 2.13 GB by the generic estimate and died
+part-way through with `exit code = 1` and a frozen progress bar. Same code,
+same data — the model was the entire difference.
+
+### CPU is booked too, and it gates your threads
+
+Memory gets the attention, but the step also books CPUs (`cpu`), and **the
+booking confines your threads**. Code written to use every available core —
+`nthreads = 0` in a FIt-SNE wrapper, `mclapply`, a Rust operator on Rayon —
+still runs single-threaded when the task was booked one CPU. Nothing errors;
+it is simply several times slower.
+
+Measured on the same t-SNE dataset: **6 minutes** with `cpu = 4` versus
+**20 minutes** at the default `cpu = 1`. If your operator scales with cores,
+say so — declare a CPU need or document the setting — otherwise users get the
+slow path by default and conclude the operator is slow.
+
+### Memory your model cannot see: file inputs
+
+`memory_model.json` features describe the **crosstab**: projected cells,
+column-table rows, row-table rows. That is the right vocabulary for an
+operator whose memory follows its table — and the wrong one for an operator
+whose memory follows something else entirely.
+
+The clearest case is a **file input**. An operator that takes a `documentId`
+and downloads an archive — instrument exports, image bundles, reference
+data — has memory driven by *bytes on the wire*, while the model can only see
+"one row, one column". Ten rows of image metadata and a 2 GB archive look
+identical to every available feature. No fit, however careful, can close that
+gap.
+
+The fix is not a better model, it is **not holding the file in memory**:
+
+::: {.callout-important}
+## Stream file inputs; never buffer a whole archive
+Download to a temp file, read from the file, and process entries one at a
+time. Peak memory then depends on your buffer size, not on the input size —
+and the flat `offset` in your model becomes truthful for every dataset,
+however large.
+:::
+
+`tercen/ps12image_rust_operator` is a worked before/after. It originally
+accumulated the download into a `Vec<u8>`, kept that buffer resident while
+unpacking, and allocated a second buffer per archive entry — peak memory
+≈ *archive size + largest entry*. Fine for a 100 MB test export; a 1–2 GB
+instrument export would blow straight past a 400 MB booking that, by
+construction, could never anticipate it.
+
+The 0.1.2 rewrite streams instead: gRPC chunks are written straight to a temp
+file, the ZIP reader works from that file (it needs only `Read + Seek`), and
+each entry is extracted with a fixed-size copy rather than a per-entry
+buffer:
+
+```rust
+// before — peak grows with the archive
+let bytes = stream_file_bytes(ctx, doc_id).await?;   // whole archive in RAM
+let mut archive = ZipArchive::new(Cursor::new(&bytes))?;
+let mut data = Vec::with_capacity(entry.size() as usize);
+entry.read_to_end(&mut data)?;                       // + largest entry
+out.write_all(&data)?;
+
+// after — peak is constant
+stream_file_to(ctx, doc_id, &archive_path).await?;   // chunks -> disk
+let mut archive = ZipArchive::new(File::open(&archive_path)?)?;
+std::io::copy(&mut entry, &mut out)?;                // fixed buffer
+```
+
+Peak dropped from O(archive) to O(64 KB), with byte-identical output — the
+golden unit test proved the change was purely mechanical. About thirty lines,
+and the operator became indifferent to input size forever.
+
+The general principle: **before fitting a model, ask what actually drives the
+memory.** If the answer is not visible in the crosstab dimensions, fix the
+code rather than the model.
 
 Because the file is read from git at install/update time, shipping or
 changing it is a normal release (bump the container pin, tag) — but it

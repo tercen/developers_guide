@@ -28,6 +28,39 @@ In order to fix the issue:
 * Re-run the TercenContext call.
 
 
+## My operator dies part-way through with `exit code = 1`
+
+The step fails, and the error text is the operator's own output cut off
+mid-stream — a progress bar frozen at some percentage, a half-written log —
+with no R/Python error, no traceback, and no mention of memory.
+
+This is almost always the memory limit, not a bug in the operator. When an
+operator shells out to a compiled binary (`system2()` in R, `subprocess` in
+Python), the kernel kills the **child process** at the container's memory
+ceiling. The wrapper only sees "the command I ran failed" and exits 1, so the
+usual exit-137 / "please increase memory resources" message never appears.
+
+To confirm and fix:
+
+1. Re-run the step with a generous `ram` override (step → operator settings →
+   environment → `ram`, in bytes; e.g. `16000000000`). If it now completes,
+   the diagnosis is confirmed.
+2. Read what it actually needed from the successful task: `stats_d_actual_ram_peak_anon`.
+3. Report that number, plus the run's data dimensions, to the operator's
+   maintainer so the operator can ship or fix its `memory_model.json` — the
+   override is a per-step workaround, not a fix for other users.
+
+::: {.callout-note}
+Two failures of the same operator on the same day need not share a cause. A
+memory failure (truncated output) and a packaging failure (`does not exist or
+is not executable`) look equally like "the operator is broken" in the UI.
+Read each error before concluding.
+:::
+
+See [Memory: tell Tercen what your operator needs](../02-operator-development/11-operator-improvements.qmd)
+for the model that prevents this, and why an operator whose memory follows a
+*file input* needs streaming rather than a bigger booking.
+
 ## My operator doesn't appear in the picker / library
 
 You added your operator's Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step's operator picker.
