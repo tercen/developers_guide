@@ -466,9 +466,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>This is almost always the memory limit, not a bug in the operator. When an operator shells out to a compiled binary (<code>system2()</code> in R, <code>subprocess</code> in Python), the kernel kills the <strong>child process</strong> at the container’s memory ceiling. The wrapper only sees “the command I ran failed” and exits 1, so the usual exit-137 / “please increase memory resources” message never appears.</p>
 <p>To confirm and fix:</p>
 <ol type="1">
-<li>Re-run the step with a generous <code>ram</code> override (step → operator settings → environment → <code>ram</code>, in bytes; e.g.&nbsp;<code>16000000000</code>). If it now completes, the diagnosis is confirmed.</li>
-<li>Read what it actually needed from the successful task: <code>stats_d_actual_ram_peak_anon</code>.</li>
-<li>Report that number, plus the run’s data dimensions, to the operator’s maintainer so the operator can ship or fix its <code>memory_model.json</code> — the override is a per-step workaround, not a fix for other users.</li>
+<li><p>Re-run the step with a generous <code>ram</code> override (step → operator settings → environment → <code>ram</code>; type <code>16 GB</code>). If it now completes, the diagnosis is confirmed.</p>
+<p>The field takes human units — <code>16 GB</code>, <code>512 MB</code>, <code>1.5 GB</code>. A value with <strong>no unit is read as bytes</strong>, so <code>16</code> means sixteen bytes, not sixteen gigabytes. On instances older than tercen 1.0.23 the field is bytes only: write <code>16000000000</code>.</p></li>
+<li><p>Read what it actually needed from the successful task: <code>stats_d_actual_ram_peak_anon</code>.</p></li>
+<li><p>Report that number, plus the run’s data dimensions, to the operator’s maintainer so the operator can ship or fix its <code>memory_model.json</code> — the override is a per-step workaround, not a fix for other users.</p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1054,77 +1055,82 @@ Tip
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>To confirm and fix:</span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Re-run the step with a generous <span class="in">`ram`</span> override (step → operator settings →</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>   environment → <span class="in">`ram`</span>, in bytes; e.g. <span class="in">`16000000000`</span>). If it now completes,</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>   the diagnosis is confirmed.</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Read what it actually needed from the successful task: <span class="in">`stats_d_actual_ram_peak_anon`</span>.</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Report that number, plus the run's data dimensions, to the operator's</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>   maintainer so the operator can ship or fix its <span class="in">`memory_model.json`</span> — the</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>   override is a per-step workaround, not a fix for other users.</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>Two failures of the same operator on the same day need not share a cause. A</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>memory failure (truncated output) and a packaging failure (`does not exist or</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>is not executable`) look equally like "the operator is broken" in the UI.</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>Read each error before concluding.</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>See <span class="co">[</span><span class="ot">Memory: tell Tercen what your operator needs</span><span class="co">](../02-operator-development/11-operator-improvements.qmd)</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>for the model that prevents this, and why an operator whose memory follows a</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>*file input* needs streaming rather than a bigger booking.</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## My operator doesn't appear in the picker / library</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>You added your operator's Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step's operator picker.</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>"Add from Git" only **installs** a searchable operator (registers the operator record the picker searches) when *all* of the following hold. If any fails, the repository's files are copied but no operator is registered — usually with no obvious error:</span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The repository name ends in `_operator`.** This is the gate that triggers operator installation. <span class="in">`uka_analysis`</span> → not installed; <span class="in">`uka_analysis_operator`</span> → installed. *(This is the most common cause.)*</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The repository is in a trusted organization.** Managed instances only trust repositories under approved GitHub organizations (commonly <span class="in">`github.com/tercen/`</span> and <span class="in">`github.com/pamgene/`</span>). Repositories under a personal account or an untrusted organization fail with <span class="in">`tercen.forbidden.untrusted.git`</span>. Ask your Tercen admin which organizations are trusted.</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**All names are lowercase.** Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. <span class="in">`My_Operator`</span>) breaks the container build/pull, so no operator is registered.</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**The operator was installed, not just cloned.** Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>   environment → <span class="in">`ram`</span>; type <span class="in">`16 GB`</span>). If it now completes, the diagnosis is</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>   confirmed.</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>   The field takes human units — <span class="in">`16 GB`</span>, <span class="in">`512 MB`</span>, <span class="in">`1.5 GB`</span>. A value with</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>   **no unit is read as bytes**, so <span class="in">`16`</span> means sixteen bytes, not sixteen</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>   gigabytes. On instances older than tercen 1.0.23 the field is bytes only:</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>   write <span class="in">`16000000000`</span>.</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Read what it actually needed from the successful task: <span class="in">`stats_d_actual_ram_peak_anon`</span>.</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Report that number, plus the run's data dimensions, to the operator's</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>   maintainer so the operator can ship or fix its <span class="in">`memory_model.json`</span> — the</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>   override is a per-step workaround, not a fix for other users.</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>Two failures of the same operator on the same day need not share a cause. A</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>memory failure (truncated output) and a packaging failure (`does not exist or</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>is not executable`) look equally like "the operator is broken" in the UI.</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>Read each error before concluding.</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>See <span class="co">[</span><span class="ot">Memory: tell Tercen what your operator needs</span><span class="co">](../02-operator-development/11-operator-improvements.qmd)</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>for the model that prevents this, and why an operator whose memory follows a</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>*file input* needs streaming rather than a bigger booking.</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## My operator doesn't appear in the picker / library</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>You added your operator's Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step's operator picker.</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>"Add from Git" only **installs** a searchable operator (registers the operator record the picker searches) when *all* of the following hold. If any fails, the repository's files are copied but no operator is registered — usually with no obvious error:</span>
 <span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>**Checklist**</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository name ends in <span class="in">`_operator`</span> and is entirely lowercase</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository lives under a trusted organization</span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> The container image built successfully and is pullable</span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> You selected the correct **source library** in the picker</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The repository name ends in `_operator`.** This is the gate that triggers operator installation. <span class="in">`uka_analysis`</span> → not installed; <span class="in">`uka_analysis_operator`</span> → installed. *(This is the most common cause.)*</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The repository is in a trusted organization.** Managed instances only trust repositories under approved GitHub organizations (commonly <span class="in">`github.com/tercen/`</span> and <span class="in">`github.com/pamgene/`</span>). Repositories under a personal account or an untrusted organization fail with <span class="in">`tercen.forbidden.untrusted.git`</span>. Ask your Tercen admin which organizations are trusted.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**All names are lowercase.** Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. <span class="in">`My_Operator`</span>) breaks the container build/pull, so no operator is registered.</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**The operator was installed, not just cloned.** Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>**Checklist**</span>
 <span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <span class="in">`_operator`</span> (e.g. <span class="in">`my_variant_operator`</span>) under a trusted organization, then add it to the library again.</span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository name ends in <span class="in">`_operator`</span> and is entirely lowercase</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository lives under a trusted organization</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> The container image built successfully and is pullable</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> You selected the correct **source library** in the picker</span>
 <span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## I pushed a fix but the operator still runs the old code</span></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error,</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>no sign your change took effect.</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>To make a fork or renamed variant installable, rename the repository to a lowercase name ending in <span class="in">`_operator`</span> (e.g. <span class="in">`my_variant_operator`</span>) under a trusted organization, then add it to the library again.</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>**The usual cause is a reused version identifier.** Check which of these applies:</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## I pushed a fix but the operator still runs the old code</span></span>
 <span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**You moved a git tag.** If you deleted and re-pushed a tag (e.g. <span class="in">`0.0.3`</span>) so it points at a</span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>   new commit, already-installed instances will **not** pick up the new commit. Tercen resolves</span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>   a version to a commit at first install, stores the operator in a directory named after that</span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>   commit, and on later runs skips the download when that directory already exists — so the tag</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>   is never re-resolved. **Fix:** release a new version (<span class="in">`0.0.4`</span>) and repoint the step at it.</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Your `container` points at a mutable image tag.** With <span class="in">`:main`</span> or <span class="in">`:master`</span>, the image that</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>   gets pulled depends on what was built last, and a cached image may not be re-pulled at all.</span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>   **Fix:** use an immutable versioned tag (<span class="in">`:0.0.4`</span>).</span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The step is pinned to an older version than you think.** Open the step's operator settings</span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>   and confirm the exact version string it references — a workflow keeps whatever version it was</span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>   configured with, and does not follow later releases.</span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## This failure is silent by design</span></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>There is no error for any of the above — the operator runs successfully, just not the code you</span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>expected. If you need to confirm *which* commit is actually running, add a temporary log line</span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>containing the version (e.g. <span class="in">`message("operator version 0.0.4")`</span>) and release it under a **new**</span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>version number. If the line doesn't appear, the old install is still being used.</span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>See <span class="co">[</span><span class="ot">Pin an immutable version tag</span><span class="co">](../02-operator-development/8-ci.qmd)</span> and the tagging guidance</span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>in the same chapter.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error,</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>no sign your change took effect.</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>**The usual cause is a reused version identifier.** Check which of these applies:</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**You moved a git tag.** If you deleted and re-pushed a tag (e.g. <span class="in">`0.0.3`</span>) so it points at a</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>   new commit, already-installed instances will **not** pick up the new commit. Tercen resolves</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>   a version to a commit at first install, stores the operator in a directory named after that</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>   commit, and on later runs skips the download when that directory already exists — so the tag</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>   is never re-resolved. **Fix:** release a new version (<span class="in">`0.0.4`</span>) and repoint the step at it.</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Your `container` points at a mutable image tag.** With <span class="in">`:main`</span> or <span class="in">`:master`</span>, the image that</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>   gets pulled depends on what was built last, and a cached image may not be re-pulled at all.</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>   **Fix:** use an immutable versioned tag (<span class="in">`:0.0.4`</span>).</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The step is pinned to an older version than you think.** Open the step's operator settings</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>   and confirm the exact version string it references — a workflow keeps whatever version it was</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>   configured with, and does not follow later releases.</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## This failure is silent by design</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>There is no error for any of the above — the operator runs successfully, just not the code you</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>expected. If you need to confirm *which* commit is actually running, add a temporary log line</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>containing the version (e.g. <span class="in">`message("operator version 0.0.4")`</span>) and release it under a **new**</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>version number. If the line doesn't appear, the old install is still being used.</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>See <span class="co">[</span><span class="ot">Pin an immutable version tag</span><span class="co">](../02-operator-development/8-ci.qmd)</span> and the tagging guidance</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>in the same chapter.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

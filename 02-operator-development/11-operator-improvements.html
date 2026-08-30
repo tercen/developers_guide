@@ -666,7 +666,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Near-ceiling runs also fail <em>intermittently</em>: the run sits exactly on its limit, and whether the kernel can reclaim enough cache decides its fate. Same data, different outcome.</p>
 <section id="the-quick-fix-no-release-needed" class="level3" data-number="14.3.1">
 <h3 data-number="14.3.1" class="anchored" data-anchor-id="the-quick-fix-no-release-needed"><span class="header-section-number">14.3.1</span> The quick fix (no release needed)</h3>
-<p>On the failing workflow step, add the environment setting <code>ram</code> with the value in bytes (for example <code>2000000000</code> for 2 GB), reset the step and rerun. A user-defined value is always respected verbatim.</p>
+<p>On the failing workflow step, add the environment setting <code>ram</code> with the size you want — <code>2 GB</code>, <code>512 MB</code>, <code>16 GB</code> — then reset the step and rerun. A user-defined value is always respected verbatim, so pick generously: over-booking only means the task waits for a bigger worker, while under-booking fails the run.</p>
+<p>Two things to know about the field. A value with <strong>no unit is read as bytes</strong>, so <code>2</code> books two bytes rather than 2 GB. And human units need tercen 1.0.23 or newer; on older instances write the byte count (<code>2000000000</code>).</p>
 </section>
 <section id="the-durable-fix-memory_model.json" class="level3" data-number="14.3.2">
 <h3 data-number="14.3.2" class="anchored" data-anchor-id="the-durable-fix-memory_model.json"><span class="header-section-number">14.3.2</span> The durable fix: <code>memory_model.json</code></h3>
@@ -1678,414 +1679,421 @@ headroom = booked / actual</code></pre>
 <span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a><span class="fu">### The quick fix (no release needed)</span></span>
 <span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>On the failing workflow step, add the environment setting <span class="in">`ram`</span> with the</span>
-<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>value in bytes (for example <span class="in">`2000000000`</span> for 2 GB), reset the step and rerun.</span>
-<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>A user-defined value is always respected verbatim.</span>
-<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a><span class="fu">### The durable fix: `memory_model.json`</span></span>
+<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>size you want — <span class="in">`2 GB`</span>, <span class="in">`512 MB`</span>, <span class="in">`16 GB`</span> — then reset the step and rerun. A</span>
+<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>user-defined value is always respected verbatim, so pick generously:</span>
+<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>over-booking only means the task waits for a bigger worker, while</span>
+<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>under-booking fails the run.</span>
 <span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>Ship a <span class="in">`memory_model.json`</span> at the repository root. Tercen reads it at</span>
-<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>install/update time and books memory per run based on the projected data:</span>
-<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
-<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span></span>
-<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">500.0</span><span class="op">,</span></span>
-<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
-<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
-<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a>The estimate, in **MB**, is</span>
-<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a><span class="in">`intercept × Π(coefficient × feature^exponent) + 1.5 × offset`</span> —</span>
-<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a>the example books 750 MB plus 0.02 MB per projected cell.</span>
-<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a>Available features:</span>
-<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Feature <span class="pp">|</span> Value <span class="pp">|</span></span>
-<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_main`</span> <span class="pp">|</span> number of projected crosstab cells <span class="pp">|</span></span>
-<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_cols`</span> <span class="pp">|</span> rows of the column table <span class="pp">|</span></span>
-<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_rows`</span> <span class="pp">|</span> rows of the row table <span class="pp">|</span></span>
-<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`settings.&lt;Name&gt;`</span> <span class="pp">|</span> numeric value of an operator setting <span class="pp">|</span></span>
-<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`a_||_b`</span> <span class="pp">|</span> interaction: product of two features <span class="pp">|</span></span>
-<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a>Prefer the schema features. A <span class="in">`settings.*`</span> feature whose setting is left blank</span>
-<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a>evaluates to 0, which can silently disable the whole model (an infinite or</span>
-<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a>zero estimate is discarded).</span>
-<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a><span class="fu">### How the formula is evaluated — worked example</span></span>
-<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a>The model is **multiplicative in the features, plus a constant**:</span>
-<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-254"><a href="#cb19-254" aria-hidden="true" tabindex="-1"></a><span class="in">estimate_MB = intercept × ∏ ( coefficient_i × feature_i ^ exponent_i )  +  1.5 × offset</span></span>
-<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-256"><a href="#cb19-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a>Take the model above and a crosstab of 200 kinases × 12 samples, so</span>
-<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a><span class="in">`n_main = 2 400`</span> cells:</span>
+<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>Two things to know about the field. A value with **no unit is read as</span>
+<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>bytes**, so <span class="in">`2`</span> books two bytes rather than 2 GB. And human units need</span>
+<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>tercen 1.0.23 or newer; on older instances write the byte count</span>
+<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>(<span class="in">`2000000000`</span>).</span>
+<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### The durable fix: `memory_model.json`</span></span>
+<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>Ship a <span class="in">`memory_model.json`</span> at the repository root. Tercen reads it at</span>
+<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>install/update time and books memory per run based on the projected data:</span>
+<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
+<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span></span>
+<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">500.0</span><span class="op">,</span></span>
+<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
+<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
+<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>The estimate, in **MB**, is</span>
+<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a><span class="in">`intercept × Π(coefficient × feature^exponent) + 1.5 × offset`</span> —</span>
+<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>the example books 750 MB plus 0.02 MB per projected cell.</span>
+<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>Available features:</span>
+<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Feature <span class="pp">|</span> Value <span class="pp">|</span></span>
+<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_main`</span> <span class="pp">|</span> number of projected crosstab cells <span class="pp">|</span></span>
+<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_cols`</span> <span class="pp">|</span> rows of the column table <span class="pp">|</span></span>
+<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n_rows`</span> <span class="pp">|</span> rows of the row table <span class="pp">|</span></span>
+<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`settings.&lt;Name&gt;`</span> <span class="pp">|</span> numeric value of an operator setting <span class="pp">|</span></span>
+<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`a_||_b`</span> <span class="pp">|</span> interaction: product of two features <span class="pp">|</span></span>
+<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a>Prefer the schema features. A <span class="in">`settings.*`</span> feature whose setting is left blank</span>
+<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a>evaluates to 0, which can silently disable the whole model (an infinite or</span>
+<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a>zero estimate is discarded).</span>
+<span id="cb19-254"><a href="#cb19-254" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-256"><a href="#cb19-256" aria-hidden="true" tabindex="-1"></a><span class="fu">### How the formula is evaluated — worked example</span></span>
+<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a>The model is **multiplicative in the features, plus a constant**:</span>
 <span id="cb19-259"><a href="#cb19-259" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-260"><a href="#cb19-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a><span class="in">growth   = 1.0 × (0.02 × 2400^1.0) = 48 MB</span></span>
-<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a><span class="in">constant = 1.5 × 500               = 750 MB</span></span>
-<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a><span class="in">booked   = 48 + 750                = 798 MB</span></span>
-<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a>At 100 000 cells the same model books 750 + 2 000 = 2 750 MB — the booking</span>
-<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a>follows the data instead of being a fixed number.</span>
-<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a>Two structural consequences of this shape are worth internalising:</span>
-<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`offset`</span> is the **additive floor** (times 1.5). It represents everything</span>
-<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a>  that exists before your data does: the R or Python runtime, loaded</span>
-<span id="cb19-273"><a href="#cb19-273" aria-hidden="true" tabindex="-1"></a>  libraries, reference databases read into memory. For many operators this</span>
-<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a>  constant is the whole story.</span>
-<span id="cb19-275"><a href="#cb19-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`intercept`</span> and the features form the **growth term**. With several</span>
-<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a>  features the terms *multiply*, so two linear features model an <span class="in">`n × m`</span></span>
-<span id="cb19-277"><a href="#cb19-277" aria-hidden="true" tabindex="-1"></a>  surface, not a sum. If you want additive behaviour, put it in <span class="in">`offset`</span> and</span>
-<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a>  keep one feature.</span>
-<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a><span class="fu">### Three real models, three shapes</span></span>
-<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a>**Constant-dominated — `pamgene/cs_uka_operator`.** Measured production runs</span>
-<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a>peaked at 525–592 MB whether the crosstab had 600 cells or 12 000: the UKA</span>
-<span id="cb19-284"><a href="#cb19-284" aria-hidden="true" tabindex="-1"></a>reference database and the permutation machinery dominate; the projected data</span>
-<span id="cb19-285"><a href="#cb19-285" aria-hidden="true" tabindex="-1"></a>is a rounding error. The model is therefore mostly floor, with a token slope</span>
-<span id="cb19-286"><a href="#cb19-286" aria-hidden="true" tabindex="-1"></a>as insurance:</span>
-<span id="cb19-287"><a href="#cb19-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-288"><a href="#cb19-288" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb19-289"><a href="#cb19-289" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb19-290"><a href="#cb19-290" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
-<span id="cb19-291"><a href="#cb19-291" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span></span>
-<span id="cb19-292"><a href="#cb19-292" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">500.0</span><span class="op">,</span></span>
-<span id="cb19-293"><a href="#cb19-293" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
-<span id="cb19-294"><a href="#cb19-294" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
-<span id="cb19-295"><a href="#cb19-295" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-296"><a href="#cb19-296" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-297"><a href="#cb19-297" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-298"><a href="#cb19-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-299"><a href="#cb19-299" aria-hidden="true" tabindex="-1"></a><span class="in">`750 MB + 0.02 MB/cell`</span> — fitted against 203 recorded runs, covering every</span>
-<span id="cb19-300"><a href="#cb19-300" aria-hidden="true" tabindex="-1"></a>one with 1.3–1.9× headroom. (Before this model existed, the operator got the</span>
-<span id="cb19-301"><a href="#cb19-301" aria-hidden="true" tabindex="-1"></a>500 MiB default: every run sat exactly on its ceiling, and the intermittent</span>
-<span id="cb19-302"><a href="#cb19-302" aria-hidden="true" tabindex="-1"></a>exit-137 reports rolled in for months.)</span>
-<span id="cb19-303"><a href="#cb19-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-304"><a href="#cb19-304" aria-hidden="true" tabindex="-1"></a>**Linear in the data — `tercen/plot_operator`.** A plot's memory scales with</span>
-<span id="cb19-305"><a href="#cb19-305" aria-hidden="true" tabindex="-1"></a>the points drawn, on top of an R baseline:</span>
-<span id="cb19-306"><a href="#cb19-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-307"><a href="#cb19-307" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb19-308"><a href="#cb19-308" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb19-309"><a href="#cb19-309" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
-<span id="cb19-310"><a href="#cb19-310" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">0.0008</span><span class="op">,</span></span>
-<span id="cb19-311"><a href="#cb19-311" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">1000.0</span><span class="op">,</span></span>
-<span id="cb19-312"><a href="#cb19-312" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
-<span id="cb19-313"><a href="#cb19-313" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
-<span id="cb19-314"><a href="#cb19-314" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-315"><a href="#cb19-315" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-316"><a href="#cb19-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-317"><a href="#cb19-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-318"><a href="#cb19-318" aria-hidden="true" tabindex="-1"></a><span class="in">`1 500 MB + 0.0008 MB/point`</span>: a 1M-point scatter books ~2 300 MB, a 10M-point</span>
-<span id="cb19-319"><a href="#cb19-319" aria-hidden="true" tabindex="-1"></a>one ~9 500 MB. Note the coefficient/intercept split is arbitrary — only their</span>
-<span id="cb19-320"><a href="#cb19-320" aria-hidden="true" tabindex="-1"></a>product matters (<span class="in">`0.0008 × 1.0 ≡ 1.0 × 0.0008`</span>).</span>
-<span id="cb19-321"><a href="#cb19-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-322"><a href="#cb19-322" aria-hidden="true" tabindex="-1"></a>**Fitted power-law — `tercen/fast_tSNE_operator`.** t-SNE's footprint grows</span>
-<span id="cb19-323"><a href="#cb19-323" aria-hidden="true" tabindex="-1"></a>sub-linearly with observations and weakly with dimensions, so the fit found</span>
-<span id="cb19-324"><a href="#cb19-324" aria-hidden="true" tabindex="-1"></a>fractional exponents over two interacting features:</span>
-<span id="cb19-325"><a href="#cb19-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-326"><a href="#cb19-326" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb19-327"><a href="#cb19-327" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb19-328"><a href="#cb19-328" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
-<span id="cb19-329"><a href="#cb19-329" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">0.0076</span><span class="op">,</span></span>
-<span id="cb19-330"><a href="#cb19-330" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">238.5</span><span class="op">,</span></span>
-<span id="cb19-331"><a href="#cb19-331" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
-<span id="cb19-332"><a href="#cb19-332" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_cols"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">0.9189</span> }<span class="op">,</span></span>
-<span id="cb19-333"><a href="#cb19-333" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_rows"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">0.3136</span> }</span>
-<span id="cb19-334"><a href="#cb19-334" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-335"><a href="#cb19-335" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-336"><a href="#cb19-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-337"><a href="#cb19-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-338"><a href="#cb19-338" aria-hidden="true" tabindex="-1"></a>For 100 000 cells × 20 markers:</span>
-<span id="cb19-339"><a href="#cb19-339" aria-hidden="true" tabindex="-1"></a><span class="in">`0.0076 × 100000^0.9189 × 20^0.3136 + 1.5 × 238.5 ≈ 0.0076 × 39 000 × 2.56 + 358 ≈ 1 117 MB`</span>.</span>
-<span id="cb19-340"><a href="#cb19-340" aria-hidden="true" tabindex="-1"></a>The two features multiply — that is the interaction between how many</span>
-<span id="cb19-341"><a href="#cb19-341" aria-hidden="true" tabindex="-1"></a>observations you embed and how many dimensions each carries.</span>
-<span id="cb19-342"><a href="#cb19-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-343"><a href="#cb19-343" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fit it from real runs, don't guess</span></span>
+<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a><span class="in">estimate_MB = intercept × ∏ ( coefficient_i × feature_i ^ exponent_i )  +  1.5 × offset</span></span>
+<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a>Take the model above and a crosstab of 200 kinases × 12 samples, so</span>
+<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a><span class="in">`n_main = 2 400`</span> cells:</span>
+<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a><span class="in">growth   = 1.0 × (0.02 × 2400^1.0) = 48 MB</span></span>
+<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a><span class="in">constant = 1.5 × 500               = 750 MB</span></span>
+<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a><span class="in">booked   = 48 + 750                = 798 MB</span></span>
+<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-273"><a href="#cb19-273" aria-hidden="true" tabindex="-1"></a>At 100 000 cells the same model books 750 + 2 000 = 2 750 MB — the booking</span>
+<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a>follows the data instead of being a fixed number.</span>
+<span id="cb19-275"><a href="#cb19-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a>Two structural consequences of this shape are worth internalising:</span>
+<span id="cb19-277"><a href="#cb19-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`offset`</span> is the **additive floor** (times 1.5). It represents everything</span>
+<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a>  that exists before your data does: the R or Python runtime, loaded</span>
+<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a>  libraries, reference databases read into memory. For many operators this</span>
+<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a>  constant is the whole story.</span>
+<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`intercept`</span> and the features form the **growth term**. With several</span>
+<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a>  features the terms *multiply*, so two linear features model an <span class="in">`n × m`</span></span>
+<span id="cb19-284"><a href="#cb19-284" aria-hidden="true" tabindex="-1"></a>  surface, not a sum. If you want additive behaviour, put it in <span class="in">`offset`</span> and</span>
+<span id="cb19-285"><a href="#cb19-285" aria-hidden="true" tabindex="-1"></a>  keep one feature.</span>
+<span id="cb19-286"><a href="#cb19-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-287"><a href="#cb19-287" aria-hidden="true" tabindex="-1"></a><span class="fu">### Three real models, three shapes</span></span>
+<span id="cb19-288"><a href="#cb19-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-289"><a href="#cb19-289" aria-hidden="true" tabindex="-1"></a>**Constant-dominated — `pamgene/cs_uka_operator`.** Measured production runs</span>
+<span id="cb19-290"><a href="#cb19-290" aria-hidden="true" tabindex="-1"></a>peaked at 525–592 MB whether the crosstab had 600 cells or 12 000: the UKA</span>
+<span id="cb19-291"><a href="#cb19-291" aria-hidden="true" tabindex="-1"></a>reference database and the permutation machinery dominate; the projected data</span>
+<span id="cb19-292"><a href="#cb19-292" aria-hidden="true" tabindex="-1"></a>is a rounding error. The model is therefore mostly floor, with a token slope</span>
+<span id="cb19-293"><a href="#cb19-293" aria-hidden="true" tabindex="-1"></a>as insurance:</span>
+<span id="cb19-294"><a href="#cb19-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-295"><a href="#cb19-295" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb19-296"><a href="#cb19-296" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-297"><a href="#cb19-297" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
+<span id="cb19-298"><a href="#cb19-298" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span></span>
+<span id="cb19-299"><a href="#cb19-299" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">500.0</span><span class="op">,</span></span>
+<span id="cb19-300"><a href="#cb19-300" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
+<span id="cb19-301"><a href="#cb19-301" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">0.02</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
+<span id="cb19-302"><a href="#cb19-302" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-303"><a href="#cb19-303" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-304"><a href="#cb19-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-305"><a href="#cb19-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-306"><a href="#cb19-306" aria-hidden="true" tabindex="-1"></a><span class="in">`750 MB + 0.02 MB/cell`</span> — fitted against 203 recorded runs, covering every</span>
+<span id="cb19-307"><a href="#cb19-307" aria-hidden="true" tabindex="-1"></a>one with 1.3–1.9× headroom. (Before this model existed, the operator got the</span>
+<span id="cb19-308"><a href="#cb19-308" aria-hidden="true" tabindex="-1"></a>500 MiB default: every run sat exactly on its ceiling, and the intermittent</span>
+<span id="cb19-309"><a href="#cb19-309" aria-hidden="true" tabindex="-1"></a>exit-137 reports rolled in for months.)</span>
+<span id="cb19-310"><a href="#cb19-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-311"><a href="#cb19-311" aria-hidden="true" tabindex="-1"></a>**Linear in the data — `tercen/plot_operator`.** A plot's memory scales with</span>
+<span id="cb19-312"><a href="#cb19-312" aria-hidden="true" tabindex="-1"></a>the points drawn, on top of an R baseline:</span>
+<span id="cb19-313"><a href="#cb19-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-314"><a href="#cb19-314" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb19-315"><a href="#cb19-315" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-316"><a href="#cb19-316" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
+<span id="cb19-317"><a href="#cb19-317" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">0.0008</span><span class="op">,</span></span>
+<span id="cb19-318"><a href="#cb19-318" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">1000.0</span><span class="op">,</span></span>
+<span id="cb19-319"><a href="#cb19-319" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
+<span id="cb19-320"><a href="#cb19-320" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_main"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">1.0</span> }</span>
+<span id="cb19-321"><a href="#cb19-321" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-322"><a href="#cb19-322" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-323"><a href="#cb19-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-324"><a href="#cb19-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-325"><a href="#cb19-325" aria-hidden="true" tabindex="-1"></a><span class="in">`1 500 MB + 0.0008 MB/point`</span>: a 1M-point scatter books ~2 300 MB, a 10M-point</span>
+<span id="cb19-326"><a href="#cb19-326" aria-hidden="true" tabindex="-1"></a>one ~9 500 MB. Note the coefficient/intercept split is arbitrary — only their</span>
+<span id="cb19-327"><a href="#cb19-327" aria-hidden="true" tabindex="-1"></a>product matters (<span class="in">`0.0008 × 1.0 ≡ 1.0 × 0.0008`</span>).</span>
+<span id="cb19-328"><a href="#cb19-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-329"><a href="#cb19-329" aria-hidden="true" tabindex="-1"></a>**Fitted power-law — `tercen/fast_tSNE_operator`.** t-SNE's footprint grows</span>
+<span id="cb19-330"><a href="#cb19-330" aria-hidden="true" tabindex="-1"></a>sub-linearly with observations and weakly with dimensions, so the fit found</span>
+<span id="cb19-331"><a href="#cb19-331" aria-hidden="true" tabindex="-1"></a>fractional exponents over two interacting features:</span>
+<span id="cb19-332"><a href="#cb19-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-333"><a href="#cb19-333" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb19-334"><a href="#cb19-334" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-335"><a href="#cb19-335" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorEstimateModel"</span><span class="op">,</span></span>
+<span id="cb19-336"><a href="#cb19-336" aria-hidden="true" tabindex="-1"></a>  <span class="st">"intercept"</span><span class="op">:</span> <span class="fl">0.0076</span><span class="op">,</span></span>
+<span id="cb19-337"><a href="#cb19-337" aria-hidden="true" tabindex="-1"></a>  <span class="st">"offset"</span><span class="op">:</span> <span class="fl">238.5</span><span class="op">,</span></span>
+<span id="cb19-338"><a href="#cb19-338" aria-hidden="true" tabindex="-1"></a>  <span class="st">"features"</span><span class="op">:</span> [</span>
+<span id="cb19-339"><a href="#cb19-339" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_cols"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">0.9189</span> }<span class="op">,</span></span>
+<span id="cb19-340"><a href="#cb19-340" aria-hidden="true" tabindex="-1"></a>    { <span class="st">"kind"</span><span class="op">:</span> <span class="st">"Feature"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"n_rows"</span><span class="op">,</span> <span class="st">"coefficient"</span><span class="op">:</span> <span class="fl">1.0</span><span class="op">,</span> <span class="st">"exponent"</span><span class="op">:</span> <span class="fl">0.3136</span> }</span>
+<span id="cb19-341"><a href="#cb19-341" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-342"><a href="#cb19-342" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-343"><a href="#cb19-343" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb19-344"><a href="#cb19-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-345"><a href="#cb19-345" aria-hidden="true" tabindex="-1"></a>Tercen records ground truth for you: every operator run stores its actual</span>
-<span id="cb19-346"><a href="#cb19-346" aria-hidden="true" tabindex="-1"></a>memory peak on the task document — <span class="in">`stats_d_actual_ram_peak`</span> (total cgroup</span>
-<span id="cb19-347"><a href="#cb19-347" aria-hidden="true" tabindex="-1"></a>peak, includes reclaimable file cache) and <span class="in">`stats_d_actual_ram_peak_anon`</span></span>
-<span id="cb19-348"><a href="#cb19-348" aria-hidden="true" tabindex="-1"></a>(bytes the operator actually allocated; the better fitting target). The task</span>
-<span id="cb19-349"><a href="#cb19-349" aria-hidden="true" tabindex="-1"></a>also stores <span class="in">`stats_d_qt_nrows`</span>, <span class="in">`stats_d_col_nrows`</span>, <span class="in">`stats_d_row_nrows`</span> — the</span>
-<span id="cb19-350"><a href="#cb19-350" aria-hidden="true" tabindex="-1"></a>feature values. The recipe:</span>
+<span id="cb19-345"><a href="#cb19-345" aria-hidden="true" tabindex="-1"></a>For 100 000 cells × 20 markers:</span>
+<span id="cb19-346"><a href="#cb19-346" aria-hidden="true" tabindex="-1"></a><span class="in">`0.0076 × 100000^0.9189 × 20^0.3136 + 1.5 × 238.5 ≈ 0.0076 × 39 000 × 2.56 + 358 ≈ 1 117 MB`</span>.</span>
+<span id="cb19-347"><a href="#cb19-347" aria-hidden="true" tabindex="-1"></a>The two features multiply — that is the interaction between how many</span>
+<span id="cb19-348"><a href="#cb19-348" aria-hidden="true" tabindex="-1"></a>observations you embed and how many dimensions each carries.</span>
+<span id="cb19-349"><a href="#cb19-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-350"><a href="#cb19-350" aria-hidden="true" tabindex="-1"></a><span class="fu">### Fit it from real runs, don't guess</span></span>
 <span id="cb19-351"><a href="#cb19-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-352"><a href="#cb19-352" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Collect** the peaks and dimensions from historical runs (the more varied</span>
-<span id="cb19-353"><a href="#cb19-353" aria-hidden="true" tabindex="-1"></a>   the sizes, the better the fit).</span>
-<span id="cb19-354"><a href="#cb19-354" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Look at the scatter first.** Flat cloud → constant-dominated (fit the</span>
-<span id="cb19-355"><a href="#cb19-355" aria-hidden="true" tabindex="-1"></a>   floor, token slope). Straight line → linear. Bends on a log-log plot →</span>
-<span id="cb19-356"><a href="#cb19-356" aria-hidden="true" tabindex="-1"></a>   power law with fractional exponent.</span>
-<span id="cb19-357"><a href="#cb19-357" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Fit, then verify the safety property**: the model must predict **at or</span>
-<span id="cb19-358"><a href="#cb19-358" aria-hidden="true" tabindex="-1"></a>   above every observed peak**, with 1.3–2× headroom on the median. A memory</span>
-<span id="cb19-359"><a href="#cb19-359" aria-hidden="true" tabindex="-1"></a>   model that under-books reintroduces the exact failure it exists to</span>
-<span id="cb19-360"><a href="#cb19-360" aria-hidden="true" tabindex="-1"></a>   prevent; over-booking merely schedules conservatively.</span>
-<span id="cb19-361"><a href="#cb19-361" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Check the extrapolation** at 10× your largest observed run — the number</span>
-<span id="cb19-362"><a href="#cb19-362" aria-hidden="true" tabindex="-1"></a>   should be defensible, because one day someone will run it.</span>
-<span id="cb19-363"><a href="#cb19-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-364"><a href="#cb19-364" aria-hidden="true" tabindex="-1"></a><span class="in">`tercen/plot_operator`</span> ships an <span class="in">`estimate-memory.yml`</span> GitHub workflow that</span>
-<span id="cb19-365"><a href="#cb19-365" aria-hidden="true" tabindex="-1"></a>automates this fit — a good starting point if you want it continuous.</span>
-<span id="cb19-366"><a href="#cb19-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-367"><a href="#cb19-367" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb19-368"><a href="#cb19-368" aria-hidden="true" tabindex="-1"></a><span class="fu">## How long a task took: `completedDate`, never `lastModifiedDate`</span></span>
-<span id="cb19-369"><a href="#cb19-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-370"><a href="#cb19-370" aria-hidden="true" tabindex="-1"></a>Read a task's duration as</span>
-<span id="cb19-371"><a href="#cb19-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-372"><a href="#cb19-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-373"><a href="#cb19-373" aria-hidden="true" tabindex="-1"></a><span class="in">completedDate - createdDate</span></span>
-<span id="cb19-374"><a href="#cb19-374" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-375"><a href="#cb19-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-376"><a href="#cb19-376" aria-hidden="true" tabindex="-1"></a><span class="in">`lastModifiedDate`</span> is not when the work finished — it is when the document was</span>
-<span id="cb19-377"><a href="#cb19-377" aria-hidden="true" tabindex="-1"></a>last written, and plenty writes to it afterwards: the GC sweep marking the task,</span>
-<span id="cb19-378"><a href="#cb19-378" aria-hidden="true" tabindex="-1"></a>a web app's teardown when the user closes it, a clone of the task, a state</span>
-<span id="cb19-379"><a href="#cb19-379" aria-hidden="true" tabindex="-1"></a>correction. Subtracting it yields a number that is silently, wildly wrong.</span>
-<span id="cb19-380"><a href="#cb19-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-381"><a href="#cb19-381" aria-hidden="true" tabindex="-1"></a>Two real examples from the same instance, both on tasks that in fact took</span>
-<span id="cb19-382"><a href="#cb19-382" aria-hidden="true" tabindex="-1"></a>**about nine seconds**:</span>
-<span id="cb19-383"><a href="#cb19-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-384"><a href="#cb19-384" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Task <span class="pp">|</span> <span class="in">`lastModified − created`</span> <span class="pp">|</span> <span class="in">`completedDate − created`</span> <span class="pp">|</span> What touched it <span class="pp">|</span></span>
-<span id="cb19-385"><a href="#cb19-385" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb19-386"><a href="#cb19-386" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> An image operator <span class="pp">|</span> **523.8 s** | **8.8 s** <span class="pp">|</span> GC sweep, eight minutes later <span class="pp">|</span></span>
-<span id="cb19-387"><a href="#cb19-387" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A web app step <span class="pp">|</span> **77 983 s** <span class="pp">|</span> — <span class="pp">|</span> the app's teardown, a day later <span class="pp">|</span></span>
-<span id="cb19-388"><a href="#cb19-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-389"><a href="#cb19-389" aria-hidden="true" tabindex="-1"></a>The failure mode is the dangerous kind: the number looks plausible enough to</span>
-<span id="cb19-390"><a href="#cb19-390" aria-hidden="true" tabindex="-1"></a>report. A 523-second reading was very nearly written up as a 25× performance</span>
-<span id="cb19-391"><a href="#cb19-391" aria-hidden="true" tabindex="-1"></a>regression before the scheduler log showed the task had gone <span class="in">`running → done`</span></span>
-<span id="cb19-392"><a href="#cb19-392" aria-hidden="true" tabindex="-1"></a>nine seconds after it started.</span>
-<span id="cb19-393"><a href="#cb19-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-394"><a href="#cb19-394" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`completedDate`</span> for any timing comparison — A/B tests, before-and-after</span>
-<span id="cb19-395"><a href="#cb19-395" aria-hidden="true" tabindex="-1"></a>measurements, and the runtime half of a resource model.</span>
-<span id="cb19-396"><a href="#cb19-396" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-397"><a href="#cb19-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-398"><a href="#cb19-398" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb19-399"><a href="#cb19-399" aria-hidden="true" tabindex="-1"></a>Failed (exit-137) runs are *censored* observations: they tell you the true</span>
-<span id="cb19-400"><a href="#cb19-400" aria-hidden="true" tabindex="-1"></a>need exceeded that run's limit, not what it was. Fit on successful runs, then</span>
-<span id="cb19-401"><a href="#cb19-401" aria-hidden="true" tabindex="-1"></a>check the model clears every failed run's limit at its recorded dimensions.</span>
-<span id="cb19-402"><a href="#cb19-402" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-403"><a href="#cb19-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-404"><a href="#cb19-404" aria-hidden="true" tabindex="-1"></a><span class="fu">### Verify the model against a real run</span></span>
-<span id="cb19-405"><a href="#cb19-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-406"><a href="#cb19-406" aria-hidden="true" tabindex="-1"></a>Once a model ships, one successful run tells you whether it is honest. Read</span>
-<span id="cb19-407"><a href="#cb19-407" aria-hidden="true" tabindex="-1"></a>the two numbers back off the task and divide:</span>
-<span id="cb19-408"><a href="#cb19-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-409"><a href="#cb19-409" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-410"><a href="#cb19-410" aria-hidden="true" tabindex="-1"></a><span class="in">booked  = stats_d_estimated_ram          (the hard limit the model asked for)</span></span>
-<span id="cb19-411"><a href="#cb19-411" aria-hidden="true" tabindex="-1"></a><span class="in">actual  = stats_d_actual_ram_peak_anon   (what the run really allocated)</span></span>
-<span id="cb19-412"><a href="#cb19-412" aria-hidden="true" tabindex="-1"></a><span class="in">headroom = booked / actual</span></span>
-<span id="cb19-413"><a href="#cb19-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-414"><a href="#cb19-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-415"><a href="#cb19-415" aria-hidden="true" tabindex="-1"></a>A production example: <span class="in">`tercen/fast_tSNE_operator`</span> 0.2.1 on 695 052</span>
-<span id="cb19-416"><a href="#cb19-416" aria-hidden="true" tabindex="-1"></a>observations × 8 variables booked **3.95 GB** and peaked at **2.61 GB** —</span>
-<span id="cb19-417"><a href="#cb19-417" aria-hidden="true" tabindex="-1"></a>**1.51× headroom**, comfortably inside the 1.3–2× target, on a dataset ~7×</span>
-<span id="cb19-418"><a href="#cb19-418" aria-hidden="true" tabindex="-1"></a>larger than anything in the original fitting sweep. That is what a healthy</span>
-<span id="cb19-419"><a href="#cb19-419" aria-hidden="true" tabindex="-1"></a>model looks like at unfamiliar scale.</span>
-<span id="cb19-420"><a href="#cb19-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-421"><a href="#cb19-421" aria-hidden="true" tabindex="-1"></a>The same dataset run through an *earlier* release of that operator, which</span>
-<span id="cb19-422"><a href="#cb19-422" aria-hidden="true" tabindex="-1"></a>shipped no model at all, was booked 2.13 GB by the generic estimate and died</span>
-<span id="cb19-423"><a href="#cb19-423" aria-hidden="true" tabindex="-1"></a>part-way through with <span class="in">`exit code = 1`</span> and a frozen progress bar. Same code,</span>
-<span id="cb19-424"><a href="#cb19-424" aria-hidden="true" tabindex="-1"></a>same data — the model was the entire difference.</span>
-<span id="cb19-425"><a href="#cb19-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-426"><a href="#cb19-426" aria-hidden="true" tabindex="-1"></a><span class="fu">### CPU is booked too, and it gates your threads</span></span>
+<span id="cb19-352"><a href="#cb19-352" aria-hidden="true" tabindex="-1"></a>Tercen records ground truth for you: every operator run stores its actual</span>
+<span id="cb19-353"><a href="#cb19-353" aria-hidden="true" tabindex="-1"></a>memory peak on the task document — <span class="in">`stats_d_actual_ram_peak`</span> (total cgroup</span>
+<span id="cb19-354"><a href="#cb19-354" aria-hidden="true" tabindex="-1"></a>peak, includes reclaimable file cache) and <span class="in">`stats_d_actual_ram_peak_anon`</span></span>
+<span id="cb19-355"><a href="#cb19-355" aria-hidden="true" tabindex="-1"></a>(bytes the operator actually allocated; the better fitting target). The task</span>
+<span id="cb19-356"><a href="#cb19-356" aria-hidden="true" tabindex="-1"></a>also stores <span class="in">`stats_d_qt_nrows`</span>, <span class="in">`stats_d_col_nrows`</span>, <span class="in">`stats_d_row_nrows`</span> — the</span>
+<span id="cb19-357"><a href="#cb19-357" aria-hidden="true" tabindex="-1"></a>feature values. The recipe:</span>
+<span id="cb19-358"><a href="#cb19-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-359"><a href="#cb19-359" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Collect** the peaks and dimensions from historical runs (the more varied</span>
+<span id="cb19-360"><a href="#cb19-360" aria-hidden="true" tabindex="-1"></a>   the sizes, the better the fit).</span>
+<span id="cb19-361"><a href="#cb19-361" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Look at the scatter first.** Flat cloud → constant-dominated (fit the</span>
+<span id="cb19-362"><a href="#cb19-362" aria-hidden="true" tabindex="-1"></a>   floor, token slope). Straight line → linear. Bends on a log-log plot →</span>
+<span id="cb19-363"><a href="#cb19-363" aria-hidden="true" tabindex="-1"></a>   power law with fractional exponent.</span>
+<span id="cb19-364"><a href="#cb19-364" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Fit, then verify the safety property**: the model must predict **at or</span>
+<span id="cb19-365"><a href="#cb19-365" aria-hidden="true" tabindex="-1"></a>   above every observed peak**, with 1.3–2× headroom on the median. A memory</span>
+<span id="cb19-366"><a href="#cb19-366" aria-hidden="true" tabindex="-1"></a>   model that under-books reintroduces the exact failure it exists to</span>
+<span id="cb19-367"><a href="#cb19-367" aria-hidden="true" tabindex="-1"></a>   prevent; over-booking merely schedules conservatively.</span>
+<span id="cb19-368"><a href="#cb19-368" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Check the extrapolation** at 10× your largest observed run — the number</span>
+<span id="cb19-369"><a href="#cb19-369" aria-hidden="true" tabindex="-1"></a>   should be defensible, because one day someone will run it.</span>
+<span id="cb19-370"><a href="#cb19-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-371"><a href="#cb19-371" aria-hidden="true" tabindex="-1"></a><span class="in">`tercen/plot_operator`</span> ships an <span class="in">`estimate-memory.yml`</span> GitHub workflow that</span>
+<span id="cb19-372"><a href="#cb19-372" aria-hidden="true" tabindex="-1"></a>automates this fit — a good starting point if you want it continuous.</span>
+<span id="cb19-373"><a href="#cb19-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-374"><a href="#cb19-374" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb19-375"><a href="#cb19-375" aria-hidden="true" tabindex="-1"></a><span class="fu">## How long a task took: `completedDate`, never `lastModifiedDate`</span></span>
+<span id="cb19-376"><a href="#cb19-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-377"><a href="#cb19-377" aria-hidden="true" tabindex="-1"></a>Read a task's duration as</span>
+<span id="cb19-378"><a href="#cb19-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-379"><a href="#cb19-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-380"><a href="#cb19-380" aria-hidden="true" tabindex="-1"></a><span class="in">completedDate - createdDate</span></span>
+<span id="cb19-381"><a href="#cb19-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-382"><a href="#cb19-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-383"><a href="#cb19-383" aria-hidden="true" tabindex="-1"></a><span class="in">`lastModifiedDate`</span> is not when the work finished — it is when the document was</span>
+<span id="cb19-384"><a href="#cb19-384" aria-hidden="true" tabindex="-1"></a>last written, and plenty writes to it afterwards: the GC sweep marking the task,</span>
+<span id="cb19-385"><a href="#cb19-385" aria-hidden="true" tabindex="-1"></a>a web app's teardown when the user closes it, a clone of the task, a state</span>
+<span id="cb19-386"><a href="#cb19-386" aria-hidden="true" tabindex="-1"></a>correction. Subtracting it yields a number that is silently, wildly wrong.</span>
+<span id="cb19-387"><a href="#cb19-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-388"><a href="#cb19-388" aria-hidden="true" tabindex="-1"></a>Two real examples from the same instance, both on tasks that in fact took</span>
+<span id="cb19-389"><a href="#cb19-389" aria-hidden="true" tabindex="-1"></a>**about nine seconds**:</span>
+<span id="cb19-390"><a href="#cb19-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-391"><a href="#cb19-391" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Task <span class="pp">|</span> <span class="in">`lastModified − created`</span> <span class="pp">|</span> <span class="in">`completedDate − created`</span> <span class="pp">|</span> What touched it <span class="pp">|</span></span>
+<span id="cb19-392"><a href="#cb19-392" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb19-393"><a href="#cb19-393" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> An image operator <span class="pp">|</span> **523.8 s** | **8.8 s** <span class="pp">|</span> GC sweep, eight minutes later <span class="pp">|</span></span>
+<span id="cb19-394"><a href="#cb19-394" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A web app step <span class="pp">|</span> **77 983 s** <span class="pp">|</span> — <span class="pp">|</span> the app's teardown, a day later <span class="pp">|</span></span>
+<span id="cb19-395"><a href="#cb19-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-396"><a href="#cb19-396" aria-hidden="true" tabindex="-1"></a>The failure mode is the dangerous kind: the number looks plausible enough to</span>
+<span id="cb19-397"><a href="#cb19-397" aria-hidden="true" tabindex="-1"></a>report. A 523-second reading was very nearly written up as a 25× performance</span>
+<span id="cb19-398"><a href="#cb19-398" aria-hidden="true" tabindex="-1"></a>regression before the scheduler log showed the task had gone <span class="in">`running → done`</span></span>
+<span id="cb19-399"><a href="#cb19-399" aria-hidden="true" tabindex="-1"></a>nine seconds after it started.</span>
+<span id="cb19-400"><a href="#cb19-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-401"><a href="#cb19-401" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`completedDate`</span> for any timing comparison — A/B tests, before-and-after</span>
+<span id="cb19-402"><a href="#cb19-402" aria-hidden="true" tabindex="-1"></a>measurements, and the runtime half of a resource model.</span>
+<span id="cb19-403"><a href="#cb19-403" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-404"><a href="#cb19-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-405"><a href="#cb19-405" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb19-406"><a href="#cb19-406" aria-hidden="true" tabindex="-1"></a>Failed (exit-137) runs are *censored* observations: they tell you the true</span>
+<span id="cb19-407"><a href="#cb19-407" aria-hidden="true" tabindex="-1"></a>need exceeded that run's limit, not what it was. Fit on successful runs, then</span>
+<span id="cb19-408"><a href="#cb19-408" aria-hidden="true" tabindex="-1"></a>check the model clears every failed run's limit at its recorded dimensions.</span>
+<span id="cb19-409"><a href="#cb19-409" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-410"><a href="#cb19-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-411"><a href="#cb19-411" aria-hidden="true" tabindex="-1"></a><span class="fu">### Verify the model against a real run</span></span>
+<span id="cb19-412"><a href="#cb19-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-413"><a href="#cb19-413" aria-hidden="true" tabindex="-1"></a>Once a model ships, one successful run tells you whether it is honest. Read</span>
+<span id="cb19-414"><a href="#cb19-414" aria-hidden="true" tabindex="-1"></a>the two numbers back off the task and divide:</span>
+<span id="cb19-415"><a href="#cb19-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-416"><a href="#cb19-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-417"><a href="#cb19-417" aria-hidden="true" tabindex="-1"></a><span class="in">booked  = stats_d_estimated_ram          (the hard limit the model asked for)</span></span>
+<span id="cb19-418"><a href="#cb19-418" aria-hidden="true" tabindex="-1"></a><span class="in">actual  = stats_d_actual_ram_peak_anon   (what the run really allocated)</span></span>
+<span id="cb19-419"><a href="#cb19-419" aria-hidden="true" tabindex="-1"></a><span class="in">headroom = booked / actual</span></span>
+<span id="cb19-420"><a href="#cb19-420" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-421"><a href="#cb19-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-422"><a href="#cb19-422" aria-hidden="true" tabindex="-1"></a>A production example: <span class="in">`tercen/fast_tSNE_operator`</span> 0.2.1 on 695 052</span>
+<span id="cb19-423"><a href="#cb19-423" aria-hidden="true" tabindex="-1"></a>observations × 8 variables booked **3.95 GB** and peaked at **2.61 GB** —</span>
+<span id="cb19-424"><a href="#cb19-424" aria-hidden="true" tabindex="-1"></a>**1.51× headroom**, comfortably inside the 1.3–2× target, on a dataset ~7×</span>
+<span id="cb19-425"><a href="#cb19-425" aria-hidden="true" tabindex="-1"></a>larger than anything in the original fitting sweep. That is what a healthy</span>
+<span id="cb19-426"><a href="#cb19-426" aria-hidden="true" tabindex="-1"></a>model looks like at unfamiliar scale.</span>
 <span id="cb19-427"><a href="#cb19-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-428"><a href="#cb19-428" aria-hidden="true" tabindex="-1"></a>Memory gets the attention, but the step also books CPUs (<span class="in">`cpu`</span>), and **the</span>
-<span id="cb19-429"><a href="#cb19-429" aria-hidden="true" tabindex="-1"></a>booking confines your threads**. Code written to use every available core —</span>
-<span id="cb19-430"><a href="#cb19-430" aria-hidden="true" tabindex="-1"></a><span class="in">`nthreads = 0`</span> in a FIt-SNE wrapper, <span class="in">`mclapply`</span>, a Rust operator on Rayon —</span>
-<span id="cb19-431"><a href="#cb19-431" aria-hidden="true" tabindex="-1"></a>still runs single-threaded when the task was booked one CPU. Nothing errors;</span>
-<span id="cb19-432"><a href="#cb19-432" aria-hidden="true" tabindex="-1"></a>it is simply several times slower.</span>
-<span id="cb19-433"><a href="#cb19-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-434"><a href="#cb19-434" aria-hidden="true" tabindex="-1"></a>Measured on the same t-SNE dataset: **6 minutes** with <span class="in">`cpu = 4`</span> versus</span>
-<span id="cb19-435"><a href="#cb19-435" aria-hidden="true" tabindex="-1"></a>**20 minutes** at the default <span class="in">`cpu = 1`</span>. If your operator scales with cores,</span>
-<span id="cb19-436"><a href="#cb19-436" aria-hidden="true" tabindex="-1"></a>say so — declare a CPU need or document the setting — otherwise users get the</span>
-<span id="cb19-437"><a href="#cb19-437" aria-hidden="true" tabindex="-1"></a>slow path by default and conclude the operator is slow.</span>
-<span id="cb19-438"><a href="#cb19-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-439"><a href="#cb19-439" aria-hidden="true" tabindex="-1"></a><span class="fu">### Memory your model cannot see: file inputs</span></span>
+<span id="cb19-428"><a href="#cb19-428" aria-hidden="true" tabindex="-1"></a>The same dataset run through an *earlier* release of that operator, which</span>
+<span id="cb19-429"><a href="#cb19-429" aria-hidden="true" tabindex="-1"></a>shipped no model at all, was booked 2.13 GB by the generic estimate and died</span>
+<span id="cb19-430"><a href="#cb19-430" aria-hidden="true" tabindex="-1"></a>part-way through with <span class="in">`exit code = 1`</span> and a frozen progress bar. Same code,</span>
+<span id="cb19-431"><a href="#cb19-431" aria-hidden="true" tabindex="-1"></a>same data — the model was the entire difference.</span>
+<span id="cb19-432"><a href="#cb19-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-433"><a href="#cb19-433" aria-hidden="true" tabindex="-1"></a><span class="fu">### CPU is booked too, and it gates your threads</span></span>
+<span id="cb19-434"><a href="#cb19-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-435"><a href="#cb19-435" aria-hidden="true" tabindex="-1"></a>Memory gets the attention, but the step also books CPUs (<span class="in">`cpu`</span>), and **the</span>
+<span id="cb19-436"><a href="#cb19-436" aria-hidden="true" tabindex="-1"></a>booking confines your threads**. Code written to use every available core —</span>
+<span id="cb19-437"><a href="#cb19-437" aria-hidden="true" tabindex="-1"></a><span class="in">`nthreads = 0`</span> in a FIt-SNE wrapper, <span class="in">`mclapply`</span>, a Rust operator on Rayon —</span>
+<span id="cb19-438"><a href="#cb19-438" aria-hidden="true" tabindex="-1"></a>still runs single-threaded when the task was booked one CPU. Nothing errors;</span>
+<span id="cb19-439"><a href="#cb19-439" aria-hidden="true" tabindex="-1"></a>it is simply several times slower.</span>
 <span id="cb19-440"><a href="#cb19-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-441"><a href="#cb19-441" aria-hidden="true" tabindex="-1"></a><span class="in">`memory_model.json`</span> features describe the **crosstab**: projected cells,</span>
-<span id="cb19-442"><a href="#cb19-442" aria-hidden="true" tabindex="-1"></a>column-table rows, row-table rows. That is the right vocabulary for an</span>
-<span id="cb19-443"><a href="#cb19-443" aria-hidden="true" tabindex="-1"></a>operator whose memory follows its table — and the wrong one for an operator</span>
-<span id="cb19-444"><a href="#cb19-444" aria-hidden="true" tabindex="-1"></a>whose memory follows something else entirely.</span>
+<span id="cb19-441"><a href="#cb19-441" aria-hidden="true" tabindex="-1"></a>Measured on the same t-SNE dataset: **6 minutes** with <span class="in">`cpu = 4`</span> versus</span>
+<span id="cb19-442"><a href="#cb19-442" aria-hidden="true" tabindex="-1"></a>**20 minutes** at the default <span class="in">`cpu = 1`</span>. If your operator scales with cores,</span>
+<span id="cb19-443"><a href="#cb19-443" aria-hidden="true" tabindex="-1"></a>say so — declare a CPU need or document the setting — otherwise users get the</span>
+<span id="cb19-444"><a href="#cb19-444" aria-hidden="true" tabindex="-1"></a>slow path by default and conclude the operator is slow.</span>
 <span id="cb19-445"><a href="#cb19-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-446"><a href="#cb19-446" aria-hidden="true" tabindex="-1"></a>The clearest case is a **file input**. An operator that takes a <span class="in">`documentId`</span></span>
-<span id="cb19-447"><a href="#cb19-447" aria-hidden="true" tabindex="-1"></a>and downloads an archive — instrument exports, image bundles, reference</span>
-<span id="cb19-448"><a href="#cb19-448" aria-hidden="true" tabindex="-1"></a>data — has memory driven by *bytes on the wire*, while the model can only see</span>
-<span id="cb19-449"><a href="#cb19-449" aria-hidden="true" tabindex="-1"></a>"one row, one column". Ten rows of image metadata and a 2 GB archive look</span>
-<span id="cb19-450"><a href="#cb19-450" aria-hidden="true" tabindex="-1"></a>identical to every available feature. No fit, however careful, can close that</span>
-<span id="cb19-451"><a href="#cb19-451" aria-hidden="true" tabindex="-1"></a>gap.</span>
+<span id="cb19-446"><a href="#cb19-446" aria-hidden="true" tabindex="-1"></a><span class="fu">### Memory your model cannot see: file inputs</span></span>
+<span id="cb19-447"><a href="#cb19-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-448"><a href="#cb19-448" aria-hidden="true" tabindex="-1"></a><span class="in">`memory_model.json`</span> features describe the **crosstab**: projected cells,</span>
+<span id="cb19-449"><a href="#cb19-449" aria-hidden="true" tabindex="-1"></a>column-table rows, row-table rows. That is the right vocabulary for an</span>
+<span id="cb19-450"><a href="#cb19-450" aria-hidden="true" tabindex="-1"></a>operator whose memory follows its table — and the wrong one for an operator</span>
+<span id="cb19-451"><a href="#cb19-451" aria-hidden="true" tabindex="-1"></a>whose memory follows something else entirely.</span>
 <span id="cb19-452"><a href="#cb19-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-453"><a href="#cb19-453" aria-hidden="true" tabindex="-1"></a>The fix is not a better model, it is **not holding the file in memory**:</span>
-<span id="cb19-454"><a href="#cb19-454" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-455"><a href="#cb19-455" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb19-456"><a href="#cb19-456" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stream file inputs; never buffer a whole archive</span></span>
-<span id="cb19-457"><a href="#cb19-457" aria-hidden="true" tabindex="-1"></a>Download to a temp file, read from the file, and process entries one at a</span>
-<span id="cb19-458"><a href="#cb19-458" aria-hidden="true" tabindex="-1"></a>time. Peak memory then depends on your buffer size, not on the input size —</span>
-<span id="cb19-459"><a href="#cb19-459" aria-hidden="true" tabindex="-1"></a>and the flat <span class="in">`offset`</span> in your model becomes truthful for every dataset,</span>
-<span id="cb19-460"><a href="#cb19-460" aria-hidden="true" tabindex="-1"></a>however large.</span>
-<span id="cb19-461"><a href="#cb19-461" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-462"><a href="#cb19-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-463"><a href="#cb19-463" aria-hidden="true" tabindex="-1"></a><span class="in">`tercen/ps12image_rust_operator`</span> is a worked before/after. It originally</span>
-<span id="cb19-464"><a href="#cb19-464" aria-hidden="true" tabindex="-1"></a>accumulated the download into a <span class="in">`Vec&lt;u8&gt;`</span>, kept that buffer resident while</span>
-<span id="cb19-465"><a href="#cb19-465" aria-hidden="true" tabindex="-1"></a>unpacking, and allocated a second buffer per archive entry — peak memory</span>
-<span id="cb19-466"><a href="#cb19-466" aria-hidden="true" tabindex="-1"></a>≈ *archive size + largest entry*. Fine for a 100 MB test export; a 1–2 GB</span>
-<span id="cb19-467"><a href="#cb19-467" aria-hidden="true" tabindex="-1"></a>instrument export would blow straight past a 400 MB booking that, by</span>
-<span id="cb19-468"><a href="#cb19-468" aria-hidden="true" tabindex="-1"></a>construction, could never anticipate it.</span>
+<span id="cb19-453"><a href="#cb19-453" aria-hidden="true" tabindex="-1"></a>The clearest case is a **file input**. An operator that takes a <span class="in">`documentId`</span></span>
+<span id="cb19-454"><a href="#cb19-454" aria-hidden="true" tabindex="-1"></a>and downloads an archive — instrument exports, image bundles, reference</span>
+<span id="cb19-455"><a href="#cb19-455" aria-hidden="true" tabindex="-1"></a>data — has memory driven by *bytes on the wire*, while the model can only see</span>
+<span id="cb19-456"><a href="#cb19-456" aria-hidden="true" tabindex="-1"></a>"one row, one column". Ten rows of image metadata and a 2 GB archive look</span>
+<span id="cb19-457"><a href="#cb19-457" aria-hidden="true" tabindex="-1"></a>identical to every available feature. No fit, however careful, can close that</span>
+<span id="cb19-458"><a href="#cb19-458" aria-hidden="true" tabindex="-1"></a>gap.</span>
+<span id="cb19-459"><a href="#cb19-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-460"><a href="#cb19-460" aria-hidden="true" tabindex="-1"></a>The fix is not a better model, it is **not holding the file in memory**:</span>
+<span id="cb19-461"><a href="#cb19-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-462"><a href="#cb19-462" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb19-463"><a href="#cb19-463" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stream file inputs; never buffer a whole archive</span></span>
+<span id="cb19-464"><a href="#cb19-464" aria-hidden="true" tabindex="-1"></a>Download to a temp file, read from the file, and process entries one at a</span>
+<span id="cb19-465"><a href="#cb19-465" aria-hidden="true" tabindex="-1"></a>time. Peak memory then depends on your buffer size, not on the input size —</span>
+<span id="cb19-466"><a href="#cb19-466" aria-hidden="true" tabindex="-1"></a>and the flat <span class="in">`offset`</span> in your model becomes truthful for every dataset,</span>
+<span id="cb19-467"><a href="#cb19-467" aria-hidden="true" tabindex="-1"></a>however large.</span>
+<span id="cb19-468"><a href="#cb19-468" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb19-469"><a href="#cb19-469" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-470"><a href="#cb19-470" aria-hidden="true" tabindex="-1"></a>The 0.1.2 rewrite streams instead: gRPC chunks are written straight to a temp</span>
-<span id="cb19-471"><a href="#cb19-471" aria-hidden="true" tabindex="-1"></a>file, the ZIP reader works from that file (it needs only <span class="in">`Read + Seek`</span>), and</span>
-<span id="cb19-472"><a href="#cb19-472" aria-hidden="true" tabindex="-1"></a>each entry is extracted with a fixed-size copy rather than a per-entry</span>
-<span id="cb19-473"><a href="#cb19-473" aria-hidden="true" tabindex="-1"></a>buffer:</span>
-<span id="cb19-474"><a href="#cb19-474" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-475"><a href="#cb19-475" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb19-476"><a href="#cb19-476" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> before — peak grows with the archive</span>
-<span id="cb19-477"><a href="#cb19-477" aria-hidden="true" tabindex="-1"></a>let bytes <span class="ot">=</span> <span class="fu">stream_file_bytes</span>(ctx, doc_id).await?;   <span class="sc">/</span><span class="er">/</span> whole archive <span class="cf">in</span> RAM</span>
-<span id="cb19-478"><a href="#cb19-478" aria-hidden="true" tabindex="-1"></a>let mut archive <span class="ot">=</span> ZipArchive<span class="sc">::</span><span class="fu">new</span>(Cursor<span class="sc">::</span><span class="fu">new</span>(<span class="sc">&amp;</span>bytes))?;</span>
-<span id="cb19-479"><a href="#cb19-479" aria-hidden="true" tabindex="-1"></a>let mut data <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">with_capacity</span>(<span class="fu">entry.size</span>() as usize);</span>
-<span id="cb19-480"><a href="#cb19-480" aria-hidden="true" tabindex="-1"></a><span class="fu">entry.read_to_end</span>(<span class="sc">&amp;</span>mut data)?;                       <span class="sc">/</span><span class="er">/</span> <span class="sc">+</span> largest entry</span>
-<span id="cb19-481"><a href="#cb19-481" aria-hidden="true" tabindex="-1"></a><span class="fu">out.write_all</span>(<span class="sc">&amp;</span>data)?;</span>
-<span id="cb19-482"><a href="#cb19-482" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-483"><a href="#cb19-483" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> after — peak is constant</span>
-<span id="cb19-484"><a href="#cb19-484" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_file_to</span>(ctx, doc_id, <span class="sc">&amp;</span>archive_path).await?;   <span class="sc">/</span><span class="er">/</span> chunks <span class="ot">-&gt;</span> disk</span>
-<span id="cb19-485"><a href="#cb19-485" aria-hidden="true" tabindex="-1"></a>let mut archive <span class="ot">=</span> ZipArchive<span class="sc">::</span><span class="fu">new</span>(File<span class="sc">::</span><span class="fu">open</span>(<span class="sc">&amp;</span>archive_path)?)?;</span>
-<span id="cb19-486"><a href="#cb19-486" aria-hidden="true" tabindex="-1"></a>std<span class="sc">::</span>io<span class="sc">::</span><span class="fu">copy</span>(<span class="sc">&amp;</span>mut entry, <span class="sc">&amp;</span>mut out)?;                <span class="sc">/</span><span class="er">/</span> fixed buffer</span>
-<span id="cb19-487"><a href="#cb19-487" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-488"><a href="#cb19-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-489"><a href="#cb19-489" aria-hidden="true" tabindex="-1"></a>Peak dropped from O(archive) to O(64 KB), with byte-identical output — the</span>
-<span id="cb19-490"><a href="#cb19-490" aria-hidden="true" tabindex="-1"></a>golden unit test proved the change was purely mechanical. About thirty lines,</span>
-<span id="cb19-491"><a href="#cb19-491" aria-hidden="true" tabindex="-1"></a>and the operator became indifferent to input size forever.</span>
-<span id="cb19-492"><a href="#cb19-492" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-493"><a href="#cb19-493" aria-hidden="true" tabindex="-1"></a>The general principle: **before fitting a model, ask what actually drives the</span>
-<span id="cb19-494"><a href="#cb19-494" aria-hidden="true" tabindex="-1"></a>memory.** If the answer is not visible in the crosstab dimensions, fix the</span>
-<span id="cb19-495"><a href="#cb19-495" aria-hidden="true" tabindex="-1"></a>code rather than the model.</span>
-<span id="cb19-496"><a href="#cb19-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-497"><a href="#cb19-497" aria-hidden="true" tabindex="-1"></a>Because the file is read from git at install/update time, shipping or</span>
-<span id="cb19-498"><a href="#cb19-498" aria-hidden="true" tabindex="-1"></a>changing it is a normal release (bump the container pin, tag) — but it</span>
-<span id="cb19-499"><a href="#cb19-499" aria-hidden="true" tabindex="-1"></a>touches no code: results, the unit test, and the image content are unchanged.</span>
-<span id="cb19-500"><a href="#cb19-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-501"><a href="#cb19-501" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing and Validation</span></span>
-<span id="cb19-502"><a href="#cb19-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-503"><a href="#cb19-503" aria-hidden="true" tabindex="-1"></a>Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.</span>
-<span id="cb19-504"><a href="#cb19-504" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-505"><a href="#cb19-505" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb19-506"><a href="#cb19-506" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Approaches</span></span>
-<span id="cb19-507"><a href="#cb19-507" aria-hidden="true" tabindex="-1"></a>Tercen supports two main testing frameworks:</span>
-<span id="cb19-508"><a href="#cb19-508" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unit Tests**: Simple data files with expected input/output and test specifications</span>
-<span id="cb19-509"><a href="#cb19-509" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Integration Tests**: Actual Tercen workflows triggered to perform computations</span>
-<span id="cb19-510"><a href="#cb19-510" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-470"><a href="#cb19-470" aria-hidden="true" tabindex="-1"></a><span class="in">`tercen/ps12image_rust_operator`</span> is a worked before/after. It originally</span>
+<span id="cb19-471"><a href="#cb19-471" aria-hidden="true" tabindex="-1"></a>accumulated the download into a <span class="in">`Vec&lt;u8&gt;`</span>, kept that buffer resident while</span>
+<span id="cb19-472"><a href="#cb19-472" aria-hidden="true" tabindex="-1"></a>unpacking, and allocated a second buffer per archive entry — peak memory</span>
+<span id="cb19-473"><a href="#cb19-473" aria-hidden="true" tabindex="-1"></a>≈ *archive size + largest entry*. Fine for a 100 MB test export; a 1–2 GB</span>
+<span id="cb19-474"><a href="#cb19-474" aria-hidden="true" tabindex="-1"></a>instrument export would blow straight past a 400 MB booking that, by</span>
+<span id="cb19-475"><a href="#cb19-475" aria-hidden="true" tabindex="-1"></a>construction, could never anticipate it.</span>
+<span id="cb19-476"><a href="#cb19-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-477"><a href="#cb19-477" aria-hidden="true" tabindex="-1"></a>The 0.1.2 rewrite streams instead: gRPC chunks are written straight to a temp</span>
+<span id="cb19-478"><a href="#cb19-478" aria-hidden="true" tabindex="-1"></a>file, the ZIP reader works from that file (it needs only <span class="in">`Read + Seek`</span>), and</span>
+<span id="cb19-479"><a href="#cb19-479" aria-hidden="true" tabindex="-1"></a>each entry is extracted with a fixed-size copy rather than a per-entry</span>
+<span id="cb19-480"><a href="#cb19-480" aria-hidden="true" tabindex="-1"></a>buffer:</span>
+<span id="cb19-481"><a href="#cb19-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-482"><a href="#cb19-482" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb19-483"><a href="#cb19-483" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> before — peak grows with the archive</span>
+<span id="cb19-484"><a href="#cb19-484" aria-hidden="true" tabindex="-1"></a>let bytes <span class="ot">=</span> <span class="fu">stream_file_bytes</span>(ctx, doc_id).await?;   <span class="sc">/</span><span class="er">/</span> whole archive <span class="cf">in</span> RAM</span>
+<span id="cb19-485"><a href="#cb19-485" aria-hidden="true" tabindex="-1"></a>let mut archive <span class="ot">=</span> ZipArchive<span class="sc">::</span><span class="fu">new</span>(Cursor<span class="sc">::</span><span class="fu">new</span>(<span class="sc">&amp;</span>bytes))?;</span>
+<span id="cb19-486"><a href="#cb19-486" aria-hidden="true" tabindex="-1"></a>let mut data <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">with_capacity</span>(<span class="fu">entry.size</span>() as usize);</span>
+<span id="cb19-487"><a href="#cb19-487" aria-hidden="true" tabindex="-1"></a><span class="fu">entry.read_to_end</span>(<span class="sc">&amp;</span>mut data)?;                       <span class="sc">/</span><span class="er">/</span> <span class="sc">+</span> largest entry</span>
+<span id="cb19-488"><a href="#cb19-488" aria-hidden="true" tabindex="-1"></a><span class="fu">out.write_all</span>(<span class="sc">&amp;</span>data)?;</span>
+<span id="cb19-489"><a href="#cb19-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-490"><a href="#cb19-490" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> after — peak is constant</span>
+<span id="cb19-491"><a href="#cb19-491" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_file_to</span>(ctx, doc_id, <span class="sc">&amp;</span>archive_path).await?;   <span class="sc">/</span><span class="er">/</span> chunks <span class="ot">-&gt;</span> disk</span>
+<span id="cb19-492"><a href="#cb19-492" aria-hidden="true" tabindex="-1"></a>let mut archive <span class="ot">=</span> ZipArchive<span class="sc">::</span><span class="fu">new</span>(File<span class="sc">::</span><span class="fu">open</span>(<span class="sc">&amp;</span>archive_path)?)?;</span>
+<span id="cb19-493"><a href="#cb19-493" aria-hidden="true" tabindex="-1"></a>std<span class="sc">::</span>io<span class="sc">::</span><span class="fu">copy</span>(<span class="sc">&amp;</span>mut entry, <span class="sc">&amp;</span>mut out)?;                <span class="sc">/</span><span class="er">/</span> fixed buffer</span>
+<span id="cb19-494"><a href="#cb19-494" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-495"><a href="#cb19-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-496"><a href="#cb19-496" aria-hidden="true" tabindex="-1"></a>Peak dropped from O(archive) to O(64 KB), with byte-identical output — the</span>
+<span id="cb19-497"><a href="#cb19-497" aria-hidden="true" tabindex="-1"></a>golden unit test proved the change was purely mechanical. About thirty lines,</span>
+<span id="cb19-498"><a href="#cb19-498" aria-hidden="true" tabindex="-1"></a>and the operator became indifferent to input size forever.</span>
+<span id="cb19-499"><a href="#cb19-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-500"><a href="#cb19-500" aria-hidden="true" tabindex="-1"></a>The general principle: **before fitting a model, ask what actually drives the</span>
+<span id="cb19-501"><a href="#cb19-501" aria-hidden="true" tabindex="-1"></a>memory.** If the answer is not visible in the crosstab dimensions, fix the</span>
+<span id="cb19-502"><a href="#cb19-502" aria-hidden="true" tabindex="-1"></a>code rather than the model.</span>
+<span id="cb19-503"><a href="#cb19-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-504"><a href="#cb19-504" aria-hidden="true" tabindex="-1"></a>Because the file is read from git at install/update time, shipping or</span>
+<span id="cb19-505"><a href="#cb19-505" aria-hidden="true" tabindex="-1"></a>changing it is a normal release (bump the container pin, tag) — but it</span>
+<span id="cb19-506"><a href="#cb19-506" aria-hidden="true" tabindex="-1"></a>touches no code: results, the unit test, and the image content are unchanged.</span>
+<span id="cb19-507"><a href="#cb19-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-508"><a href="#cb19-508" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing and Validation</span></span>
+<span id="cb19-509"><a href="#cb19-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-510"><a href="#cb19-510" aria-hidden="true" tabindex="-1"></a>Comprehensive testing ensures your operator works correctly across different data scenarios and edge cases.</span>
 <span id="cb19-511"><a href="#cb19-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-512"><a href="#cb19-512" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Test Structure</span></span>
-<span id="cb19-513"><a href="#cb19-513" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-514"><a href="#cb19-514" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests`</span> directory in your operator repository with the following structure:</span>
-<span id="cb19-515"><a href="#cb19-515" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-516"><a href="#cb19-516" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-517"><a href="#cb19-517" aria-hidden="true" tabindex="-1"></a><span class="in">tests/</span></span>
-<span id="cb19-518"><a href="#cb19-518" aria-hidden="true" tabindex="-1"></a><span class="in">├── input.csv          # Sample input data</span></span>
-<span id="cb19-519"><a href="#cb19-519" aria-hidden="true" tabindex="-1"></a><span class="in">├── output.csv         # Expected output data  </span></span>
-<span id="cb19-520"><a href="#cb19-520" aria-hidden="true" tabindex="-1"></a><span class="in">├── test.json          # Test configuration</span></span>
-<span id="cb19-521"><a href="#cb19-521" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-512"><a href="#cb19-512" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb19-513"><a href="#cb19-513" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Approaches</span></span>
+<span id="cb19-514"><a href="#cb19-514" aria-hidden="true" tabindex="-1"></a>Tercen supports two main testing frameworks:</span>
+<span id="cb19-515"><a href="#cb19-515" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unit Tests**: Simple data files with expected input/output and test specifications</span>
+<span id="cb19-516"><a href="#cb19-516" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Integration Tests**: Actual Tercen workflows triggered to perform computations</span>
+<span id="cb19-517"><a href="#cb19-517" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-518"><a href="#cb19-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-519"><a href="#cb19-519" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Test Structure</span></span>
+<span id="cb19-520"><a href="#cb19-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-521"><a href="#cb19-521" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests`</span> directory in your operator repository with the following structure:</span>
 <span id="cb19-522"><a href="#cb19-522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-523"><a href="#cb19-523" aria-hidden="true" tabindex="-1"></a>For multiple test scenarios, use numbered files:</span>
-<span id="cb19-524"><a href="#cb19-524" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`test_1.json`</span>, <span class="in">`test_2.json`</span> for different parameter settings</span>
-<span id="cb19-525"><a href="#cb19-525" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`input_1.csv`</span>, <span class="in">`input_2.csv`</span> for different data scenarios</span>
-<span id="cb19-526"><a href="#cb19-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-527"><a href="#cb19-527" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Comprehensive Test Data</span></span>
-<span id="cb19-528"><a href="#cb19-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-529"><a href="#cb19-529" aria-hidden="true" tabindex="-1"></a>Design test cases that cover various scenarios:</span>
-<span id="cb19-530"><a href="#cb19-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-531"><a href="#cb19-531" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Test Scenario <span class="pp">|</span> Purpose <span class="pp">|</span> Example Data <span class="pp">|</span></span>
-<span id="cb19-532"><a href="#cb19-532" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------------|</span></span>
-<span id="cb19-533"><a href="#cb19-533" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Normal Case** <span class="pp">|</span> Standard operation <span class="pp">|</span> Regular numeric data with good distribution <span class="pp">|</span></span>
-<span id="cb19-534"><a href="#cb19-534" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edge Cases** <span class="pp">|</span> Boundary conditions <span class="pp">|</span> Minimum data points, extreme values <span class="pp">|</span></span>
-<span id="cb19-535"><a href="#cb19-535" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Error Cases** <span class="pp">|</span> Invalid inputs <span class="pp">|</span> Missing data, wrong data types <span class="pp">|</span></span>
-<span id="cb19-536"><a href="#cb19-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-537"><a href="#cb19-537" aria-hidden="true" tabindex="-1"></a><span class="fu">### Test Configuration File</span></span>
-<span id="cb19-538"><a href="#cb19-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-539"><a href="#cb19-539" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests/test.json`</span> in <span class="in">`OperatorUnitTest`</span> format. This is what the</span>
-<span id="cb19-540"><a href="#cb19-540" aria-hidden="true" tabindex="-1"></a>release install-check and the library gate execute; R/<span class="in">`testthat`</span> scripts do</span>
-<span id="cb19-541"><a href="#cb19-541" aria-hidden="true" tabindex="-1"></a>not count for the gate. A complete, battle-tested reference:</span>
-<span id="cb19-542"><a href="#cb19-542" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`pamgene/cs_uka_operator/tests/`</span><span class="co">](https://github.com/pamgene/cs_uka_operator/tree/main/tests)</span>.</span>
+<span id="cb19-523"><a href="#cb19-523" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-524"><a href="#cb19-524" aria-hidden="true" tabindex="-1"></a><span class="in">tests/</span></span>
+<span id="cb19-525"><a href="#cb19-525" aria-hidden="true" tabindex="-1"></a><span class="in">├── input.csv          # Sample input data</span></span>
+<span id="cb19-526"><a href="#cb19-526" aria-hidden="true" tabindex="-1"></a><span class="in">├── output.csv         # Expected output data  </span></span>
+<span id="cb19-527"><a href="#cb19-527" aria-hidden="true" tabindex="-1"></a><span class="in">├── test.json          # Test configuration</span></span>
+<span id="cb19-528"><a href="#cb19-528" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-529"><a href="#cb19-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-530"><a href="#cb19-530" aria-hidden="true" tabindex="-1"></a>For multiple test scenarios, use numbered files:</span>
+<span id="cb19-531"><a href="#cb19-531" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`test_1.json`</span>, <span class="in">`test_2.json`</span> for different parameter settings</span>
+<span id="cb19-532"><a href="#cb19-532" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`input_1.csv`</span>, <span class="in">`input_2.csv`</span> for different data scenarios</span>
+<span id="cb19-533"><a href="#cb19-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-534"><a href="#cb19-534" aria-hidden="true" tabindex="-1"></a><span class="fu">### Creating Comprehensive Test Data</span></span>
+<span id="cb19-535"><a href="#cb19-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-536"><a href="#cb19-536" aria-hidden="true" tabindex="-1"></a>Design test cases that cover various scenarios:</span>
+<span id="cb19-537"><a href="#cb19-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-538"><a href="#cb19-538" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Test Scenario <span class="pp">|</span> Purpose <span class="pp">|</span> Example Data <span class="pp">|</span></span>
+<span id="cb19-539"><a href="#cb19-539" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------------|</span></span>
+<span id="cb19-540"><a href="#cb19-540" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Normal Case** <span class="pp">|</span> Standard operation <span class="pp">|</span> Regular numeric data with good distribution <span class="pp">|</span></span>
+<span id="cb19-541"><a href="#cb19-541" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edge Cases** <span class="pp">|</span> Boundary conditions <span class="pp">|</span> Minimum data points, extreme values <span class="pp">|</span></span>
+<span id="cb19-542"><a href="#cb19-542" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Error Cases** <span class="pp">|</span> Invalid inputs <span class="pp">|</span> Missing data, wrong data types <span class="pp">|</span></span>
 <span id="cb19-543"><a href="#cb19-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-544"><a href="#cb19-544" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb19-545"><a href="#cb19-545" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb19-546"><a href="#cb19-546" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorUnitTest"</span><span class="op">,</span></span>
-<span id="cb19-547"><a href="#cb19-547" aria-hidden="true" tabindex="-1"></a>  <span class="st">"name"</span><span class="op">:</span> <span class="st">"default_params"</span><span class="op">,</span></span>
-<span id="cb19-548"><a href="#cb19-548" aria-hidden="true" tabindex="-1"></a>  <span class="st">"namespace"</span><span class="op">:</span> <span class="st">"ds0"</span><span class="op">,</span></span>
-<span id="cb19-549"><a href="#cb19-549" aria-hidden="true" tabindex="-1"></a>  <span class="st">"inputDataUri"</span><span class="op">:</span> <span class="st">"test_in.csv"</span><span class="op">,</span></span>
-<span id="cb19-550"><a href="#cb19-550" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputDataUri"</span><span class="op">:</span> [<span class="st">"test_out_1.csv"</span><span class="op">,</span> <span class="st">"test_out_2.csv"</span>]<span class="op">,</span></span>
-<span id="cb19-551"><a href="#cb19-551" aria-hidden="true" tabindex="-1"></a>  <span class="st">"columns"</span><span class="op">:</span> [<span class="st">"Supergroup"</span>]<span class="op">,</span></span>
-<span id="cb19-552"><a href="#cb19-552" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rows"</span><span class="op">:</span> [<span class="st">"ID"</span>]<span class="op">,</span></span>
-<span id="cb19-553"><a href="#cb19-553" aria-hidden="true" tabindex="-1"></a>  <span class="st">"colors"</span><span class="op">:</span> []<span class="op">,</span></span>
-<span id="cb19-554"><a href="#cb19-554" aria-hidden="true" tabindex="-1"></a>  <span class="st">"labels"</span><span class="op">:</span> [<span class="st">"colSeq"</span>]<span class="op">,</span></span>
-<span id="cb19-555"><a href="#cb19-555" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yAxis"</span><span class="op">:</span> <span class="st">"value"</span><span class="op">,</span></span>
-<span id="cb19-556"><a href="#cb19-556" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xAxis"</span><span class="op">:</span> <span class="st">"grp"</span><span class="op">,</span></span>
-<span id="cb19-557"><a href="#cb19-557" aria-hidden="true" tabindex="-1"></a>  <span class="st">"equalityMethod"</span><span class="op">:</span> <span class="st">"R2"</span><span class="op">,</span></span>
-<span id="cb19-558"><a href="#cb19-558" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r2"</span><span class="op">:</span> <span class="fl">0.99</span><span class="op">,</span></span>
-<span id="cb19-559"><a href="#cb19-559" aria-hidden="true" tabindex="-1"></a>  <span class="st">"propertyValues"</span><span class="op">:</span> [</span>
-<span id="cb19-560"><a href="#cb19-560" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"UkaDbVersion"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"0.6"</span>}<span class="op">,</span></span>
-<span id="cb19-561"><a href="#cb19-561" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"Seed"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"42.0"</span>}</span>
-<span id="cb19-562"><a href="#cb19-562" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-563"><a href="#cb19-563" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-564"><a href="#cb19-564" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-565"><a href="#cb19-565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-566"><a href="#cb19-566" aria-hidden="true" tabindex="-1"></a>Rules that each come from a real gate failure:</span>
-<span id="cb19-567"><a href="#cb19-567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-568"><a href="#cb19-568" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin every operator property** via <span class="in">`propertyValues`</span> (a list of</span>
-<span id="cb19-569"><a href="#cb19-569" aria-hidden="true" tabindex="-1"></a>  <span class="in">`PropertyValue`</span> objects — values as strings). A fully pinned test never</span>
-<span id="cb19-570"><a href="#cb19-570" aria-hidden="true" tabindex="-1"></a>  breaks when a bundled database or a default changes; it only changes when</span>
-<span id="cb19-571"><a href="#cb19-571" aria-hidden="true" tabindex="-1"></a>  you change it. (Note: the field is <span class="in">`propertyValues`</span>, not <span class="in">`properties`</span>.)</span>
-<span id="cb19-572"><a href="#cb19-572" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`equalityMethod: "R2"` for computed floats.** The default <span class="in">`equals`</span></span>
-<span id="cb19-573"><a href="#cb19-573" aria-hidden="true" tabindex="-1"></a>  compares doubles near-exactly and fails on floating-point noise</span>
-<span id="cb19-574"><a href="#cb19-574" aria-hidden="true" tabindex="-1"></a>  (<span class="in">`task.test.operator.bad.value`</span>). Reserve <span class="in">`equals`</span> for exact</span>
-<span id="cb19-575"><a href="#cb19-575" aria-hidden="true" tabindex="-1"></a>  integer/string outputs.</span>
-<span id="cb19-576"><a href="#cb19-576" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One entry in `outputDataUri` per output relation** — a result joined to</span>
-<span id="cb19-577"><a href="#cb19-577" aria-hidden="true" tabindex="-1"></a>  the crosstab typically yields 2+ relations; a count mismatch fails with</span>
-<span id="cb19-578"><a href="#cb19-578" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.nRelations`</span>.</span>
-<span id="cb19-579"><a href="#cb19-579" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin column types with `.schema` sidecars**: for each expected CSV also</span>
-<span id="cb19-580"><a href="#cb19-580" aria-hidden="true" tabindex="-1"></a>  commit <span class="in">`&lt;name&gt;.csv.schema`</span> — the result relation's <span class="in">`TableSchema`</span> JSON</span>
-<span id="cb19-581"><a href="#cb19-581" aria-hidden="true" tabindex="-1"></a>  (columns with name+type, <span class="in">`id`</span>/<span class="in">`rev`</span> stripped). Without it the gate</span>
-<span id="cb19-582"><a href="#cb19-582" aria-hidden="true" tabindex="-1"></a>  re-infers types from CSV text and fails with</span>
-<span id="cb19-583"><a href="#cb19-583" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.column.type — expected double found int32`</span> on</span>
-<span id="cb19-584"><a href="#cb19-584" aria-hidden="true" tabindex="-1"></a>  columns of whole numbers. Write doubles type-faithfully too (<span class="in">`58.0`</span>, not</span>
-<span id="cb19-585"><a href="#cb19-585" aria-hidden="true" tabindex="-1"></a>  <span class="in">`58`</span>).</span>
-<span id="cb19-586"><a href="#cb19-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-587"><a href="#cb19-587" aria-hidden="true" tabindex="-1"></a><span class="fu">### Determinism first: the Seed rule</span></span>
-<span id="cb19-588"><a href="#cb19-588" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-589"><a href="#cb19-589" aria-hidden="true" tabindex="-1"></a>A golden test is impossible if two runs differ. **Any operator using</span>
-<span id="cb19-590"><a href="#cb19-590" aria-hidden="true" tabindex="-1"></a>randomness** (permutations, sampling, clustering) **must seed the RNG**,</span>
-<span id="cb19-591"><a href="#cb19-591" aria-hidden="true" tabindex="-1"></a>best as a visible setting:</span>
-<span id="cb19-592"><a href="#cb19-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-593"><a href="#cb19-593" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb19-594"><a href="#cb19-594" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
-<span id="cb19-595"><a href="#cb19-595" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span>
-<span id="cb19-596"><a href="#cb19-596" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-597"><a href="#cb19-597" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-598"><a href="#cb19-598" aria-hidden="true" tabindex="-1"></a>with a matching <span class="in">`Seed`</span> <span class="in">`DoubleProperty`</span> (default 42; <span class="in">`-1`</span> = unseeded).</span>
-<span id="cb19-599"><a href="#cb19-599" aria-hidden="true" tabindex="-1"></a>Acceptance test: run twice, outputs byte-identical.</span>
-<span id="cb19-600"><a href="#cb19-600" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-601"><a href="#cb19-601" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generating and regenerating the expected output</span></span>
-<span id="cb19-602"><a href="#cb19-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-603"><a href="#cb19-603" aria-hidden="true" tabindex="-1"></a>The expected CSVs are **golden files from a real run of the exact code being</span>
-<span id="cb19-604"><a href="#cb19-604" aria-hidden="true" tabindex="-1"></a>released** — they cannot be hand-written. Generate them on</span>
-<span id="cb19-605"><a href="#cb19-605" aria-hidden="true" tabindex="-1"></a>**Tercen Studio** (see the appendix), never on a production instance:</span>
-<span id="cb19-606"><a href="#cb19-606" aria-hidden="true" tabindex="-1"></a>install the operator from the release branch, import the small input, run the</span>
-<span id="cb19-607"><a href="#cb19-607" aria-hidden="true" tabindex="-1"></a>step with the projection and pinned settings from <span class="in">`test.json`</span>, run it twice</span>
-<span id="cb19-608"><a href="#cb19-608" aria-hidden="true" tabindex="-1"></a>(determinism), export each output relation and its schema.</span>
+<span id="cb19-544"><a href="#cb19-544" aria-hidden="true" tabindex="-1"></a><span class="fu">### Test Configuration File</span></span>
+<span id="cb19-545"><a href="#cb19-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-546"><a href="#cb19-546" aria-hidden="true" tabindex="-1"></a>Create a <span class="in">`tests/test.json`</span> in <span class="in">`OperatorUnitTest`</span> format. This is what the</span>
+<span id="cb19-547"><a href="#cb19-547" aria-hidden="true" tabindex="-1"></a>release install-check and the library gate execute; R/<span class="in">`testthat`</span> scripts do</span>
+<span id="cb19-548"><a href="#cb19-548" aria-hidden="true" tabindex="-1"></a>not count for the gate. A complete, battle-tested reference:</span>
+<span id="cb19-549"><a href="#cb19-549" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`pamgene/cs_uka_operator/tests/`</span><span class="co">](https://github.com/pamgene/cs_uka_operator/tree/main/tests)</span>.</span>
+<span id="cb19-550"><a href="#cb19-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-551"><a href="#cb19-551" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb19-552"><a href="#cb19-552" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-553"><a href="#cb19-553" aria-hidden="true" tabindex="-1"></a>  <span class="st">"kind"</span><span class="op">:</span> <span class="st">"OperatorUnitTest"</span><span class="op">,</span></span>
+<span id="cb19-554"><a href="#cb19-554" aria-hidden="true" tabindex="-1"></a>  <span class="st">"name"</span><span class="op">:</span> <span class="st">"default_params"</span><span class="op">,</span></span>
+<span id="cb19-555"><a href="#cb19-555" aria-hidden="true" tabindex="-1"></a>  <span class="st">"namespace"</span><span class="op">:</span> <span class="st">"ds0"</span><span class="op">,</span></span>
+<span id="cb19-556"><a href="#cb19-556" aria-hidden="true" tabindex="-1"></a>  <span class="st">"inputDataUri"</span><span class="op">:</span> <span class="st">"test_in.csv"</span><span class="op">,</span></span>
+<span id="cb19-557"><a href="#cb19-557" aria-hidden="true" tabindex="-1"></a>  <span class="st">"outputDataUri"</span><span class="op">:</span> [<span class="st">"test_out_1.csv"</span><span class="op">,</span> <span class="st">"test_out_2.csv"</span>]<span class="op">,</span></span>
+<span id="cb19-558"><a href="#cb19-558" aria-hidden="true" tabindex="-1"></a>  <span class="st">"columns"</span><span class="op">:</span> [<span class="st">"Supergroup"</span>]<span class="op">,</span></span>
+<span id="cb19-559"><a href="#cb19-559" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rows"</span><span class="op">:</span> [<span class="st">"ID"</span>]<span class="op">,</span></span>
+<span id="cb19-560"><a href="#cb19-560" aria-hidden="true" tabindex="-1"></a>  <span class="st">"colors"</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb19-561"><a href="#cb19-561" aria-hidden="true" tabindex="-1"></a>  <span class="st">"labels"</span><span class="op">:</span> [<span class="st">"colSeq"</span>]<span class="op">,</span></span>
+<span id="cb19-562"><a href="#cb19-562" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yAxis"</span><span class="op">:</span> <span class="st">"value"</span><span class="op">,</span></span>
+<span id="cb19-563"><a href="#cb19-563" aria-hidden="true" tabindex="-1"></a>  <span class="st">"xAxis"</span><span class="op">:</span> <span class="st">"grp"</span><span class="op">,</span></span>
+<span id="cb19-564"><a href="#cb19-564" aria-hidden="true" tabindex="-1"></a>  <span class="st">"equalityMethod"</span><span class="op">:</span> <span class="st">"R2"</span><span class="op">,</span></span>
+<span id="cb19-565"><a href="#cb19-565" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r2"</span><span class="op">:</span> <span class="fl">0.99</span><span class="op">,</span></span>
+<span id="cb19-566"><a href="#cb19-566" aria-hidden="true" tabindex="-1"></a>  <span class="st">"propertyValues"</span><span class="op">:</span> [</span>
+<span id="cb19-567"><a href="#cb19-567" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"UkaDbVersion"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"0.6"</span>}<span class="op">,</span></span>
+<span id="cb19-568"><a href="#cb19-568" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"kind"</span><span class="op">:</span> <span class="st">"PropertyValue"</span><span class="op">,</span> <span class="st">"name"</span><span class="op">:</span> <span class="st">"Seed"</span><span class="op">,</span> <span class="st">"value"</span><span class="op">:</span> <span class="st">"42.0"</span>}</span>
+<span id="cb19-569"><a href="#cb19-569" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-570"><a href="#cb19-570" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-571"><a href="#cb19-571" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-572"><a href="#cb19-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-573"><a href="#cb19-573" aria-hidden="true" tabindex="-1"></a>Rules that each come from a real gate failure:</span>
+<span id="cb19-574"><a href="#cb19-574" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-575"><a href="#cb19-575" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin every operator property** via <span class="in">`propertyValues`</span> (a list of</span>
+<span id="cb19-576"><a href="#cb19-576" aria-hidden="true" tabindex="-1"></a>  <span class="in">`PropertyValue`</span> objects — values as strings). A fully pinned test never</span>
+<span id="cb19-577"><a href="#cb19-577" aria-hidden="true" tabindex="-1"></a>  breaks when a bundled database or a default changes; it only changes when</span>
+<span id="cb19-578"><a href="#cb19-578" aria-hidden="true" tabindex="-1"></a>  you change it. (Note: the field is <span class="in">`propertyValues`</span>, not <span class="in">`properties`</span>.)</span>
+<span id="cb19-579"><a href="#cb19-579" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`equalityMethod: "R2"` for computed floats.** The default <span class="in">`equals`</span></span>
+<span id="cb19-580"><a href="#cb19-580" aria-hidden="true" tabindex="-1"></a>  compares doubles near-exactly and fails on floating-point noise</span>
+<span id="cb19-581"><a href="#cb19-581" aria-hidden="true" tabindex="-1"></a>  (<span class="in">`task.test.operator.bad.value`</span>). Reserve <span class="in">`equals`</span> for exact</span>
+<span id="cb19-582"><a href="#cb19-582" aria-hidden="true" tabindex="-1"></a>  integer/string outputs.</span>
+<span id="cb19-583"><a href="#cb19-583" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One entry in `outputDataUri` per output relation** — a result joined to</span>
+<span id="cb19-584"><a href="#cb19-584" aria-hidden="true" tabindex="-1"></a>  the crosstab typically yields 2+ relations; a count mismatch fails with</span>
+<span id="cb19-585"><a href="#cb19-585" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.nRelations`</span>.</span>
+<span id="cb19-586"><a href="#cb19-586" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Pin column types with `.schema` sidecars**: for each expected CSV also</span>
+<span id="cb19-587"><a href="#cb19-587" aria-hidden="true" tabindex="-1"></a>  commit <span class="in">`&lt;name&gt;.csv.schema`</span> — the result relation's <span class="in">`TableSchema`</span> JSON</span>
+<span id="cb19-588"><a href="#cb19-588" aria-hidden="true" tabindex="-1"></a>  (columns with name+type, <span class="in">`id`</span>/<span class="in">`rev`</span> stripped). Without it the gate</span>
+<span id="cb19-589"><a href="#cb19-589" aria-hidden="true" tabindex="-1"></a>  re-infers types from CSV text and fails with</span>
+<span id="cb19-590"><a href="#cb19-590" aria-hidden="true" tabindex="-1"></a>  <span class="in">`task.test.operator.bad.column.type — expected double found int32`</span> on</span>
+<span id="cb19-591"><a href="#cb19-591" aria-hidden="true" tabindex="-1"></a>  columns of whole numbers. Write doubles type-faithfully too (<span class="in">`58.0`</span>, not</span>
+<span id="cb19-592"><a href="#cb19-592" aria-hidden="true" tabindex="-1"></a>  <span class="in">`58`</span>).</span>
+<span id="cb19-593"><a href="#cb19-593" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-594"><a href="#cb19-594" aria-hidden="true" tabindex="-1"></a><span class="fu">### Determinism first: the Seed rule</span></span>
+<span id="cb19-595"><a href="#cb19-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-596"><a href="#cb19-596" aria-hidden="true" tabindex="-1"></a>A golden test is impossible if two runs differ. **Any operator using</span>
+<span id="cb19-597"><a href="#cb19-597" aria-hidden="true" tabindex="-1"></a>randomness** (permutations, sampling, clustering) **must seed the RNG**,</span>
+<span id="cb19-598"><a href="#cb19-598" aria-hidden="true" tabindex="-1"></a>best as a visible setting:</span>
+<span id="cb19-599"><a href="#cb19-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-600"><a href="#cb19-600" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb19-601"><a href="#cb19-601" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> ctx<span class="sc">$</span><span class="fu">op.value</span>(<span class="st">"Seed"</span>, as.double, <span class="dv">42</span>)</span>
+<span id="cb19-602"><a href="#cb19-602" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (seed <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="fu">set.seed</span>(seed)</span>
+<span id="cb19-603"><a href="#cb19-603" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-604"><a href="#cb19-604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-605"><a href="#cb19-605" aria-hidden="true" tabindex="-1"></a>with a matching <span class="in">`Seed`</span> <span class="in">`DoubleProperty`</span> (default 42; <span class="in">`-1`</span> = unseeded).</span>
+<span id="cb19-606"><a href="#cb19-606" aria-hidden="true" tabindex="-1"></a>Acceptance test: run twice, outputs byte-identical.</span>
+<span id="cb19-607"><a href="#cb19-607" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-608"><a href="#cb19-608" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generating and regenerating the expected output</span></span>
 <span id="cb19-609"><a href="#cb19-609" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-610"><a href="#cb19-610" aria-hidden="true" tabindex="-1"></a>When a bundled database or intended behaviour changes, the release</span>
-<span id="cb19-611"><a href="#cb19-611" aria-hidden="true" tabindex="-1"></a>install-check goes **red — that is the alarm**: re-run the same input with</span>
-<span id="cb19-612"><a href="#cb19-612" aria-hidden="true" tabindex="-1"></a>the new settings, replace the expected files, update the changed</span>
-<span id="cb19-613"><a href="#cb19-613" aria-hidden="true" tabindex="-1"></a><span class="in">`propertyValues`</span>, bump the version, release. Ship this recipe in the</span>
-<span id="cb19-614"><a href="#cb19-614" aria-hidden="true" tabindex="-1"></a>operator repo itself as a <span class="in">`CLAUDE.md`</span> (the <span class="in">`create-operator`</span> skill provides</span>
-<span id="cb19-615"><a href="#cb19-615" aria-hidden="true" tabindex="-1"></a>a template), so any future maintenance session knows the drill.</span>
+<span id="cb19-610"><a href="#cb19-610" aria-hidden="true" tabindex="-1"></a>The expected CSVs are **golden files from a real run of the exact code being</span>
+<span id="cb19-611"><a href="#cb19-611" aria-hidden="true" tabindex="-1"></a>released** — they cannot be hand-written. Generate them on</span>
+<span id="cb19-612"><a href="#cb19-612" aria-hidden="true" tabindex="-1"></a>**Tercen Studio** (see the appendix), never on a production instance:</span>
+<span id="cb19-613"><a href="#cb19-613" aria-hidden="true" tabindex="-1"></a>install the operator from the release branch, import the small input, run the</span>
+<span id="cb19-614"><a href="#cb19-614" aria-hidden="true" tabindex="-1"></a>step with the projection and pinned settings from <span class="in">`test.json`</span>, run it twice</span>
+<span id="cb19-615"><a href="#cb19-615" aria-hidden="true" tabindex="-1"></a>(determinism), export each output relation and its schema.</span>
 <span id="cb19-616"><a href="#cb19-616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-617"><a href="#cb19-617" aria-hidden="true" tabindex="-1"></a>This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb19-617"><a href="#cb19-617" aria-hidden="true" tabindex="-1"></a>When a bundled database or intended behaviour changes, the release</span>
+<span id="cb19-618"><a href="#cb19-618" aria-hidden="true" tabindex="-1"></a>install-check goes **red — that is the alarm**: re-run the same input with</span>
+<span id="cb19-619"><a href="#cb19-619" aria-hidden="true" tabindex="-1"></a>the new settings, replace the expected files, update the changed</span>
+<span id="cb19-620"><a href="#cb19-620" aria-hidden="true" tabindex="-1"></a><span class="in">`propertyValues`</span>, bump the version, release. Ship this recipe in the</span>
+<span id="cb19-621"><a href="#cb19-621" aria-hidden="true" tabindex="-1"></a>operator repo itself as a <span class="in">`CLAUDE.md`</span> (the <span class="in">`create-operator`</span> skill provides</span>
+<span id="cb19-622"><a href="#cb19-622" aria-hidden="true" tabindex="-1"></a>a template), so any future maintenance session knows the drill.</span>
+<span id="cb19-623"><a href="#cb19-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-624"><a href="#cb19-624" aria-hidden="true" tabindex="-1"></a>This completes our comprehensive guide to Tercen operator development. You now have all the tools and knowledge needed to create robust, efficient, and user-friendly operators that extend Tercen's analytical capabilities!</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
