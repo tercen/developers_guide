@@ -207,8 +207,15 @@ data, different outcome.
 ### The quick fix (no release needed)
 
 On the failing workflow step, add the environment setting `ram` with the
-value in bytes (for example `2000000000` for 2 GB), reset the step and rerun.
-A user-defined value is always respected verbatim.
+size you want — `2 GB`, `512 MB`, `16 GB` — then reset the step and rerun. A
+user-defined value is always respected verbatim, so pick generously:
+over-booking only means the task waits for a bigger worker, while
+under-booking fails the run.
+
+Two things to know about the field. A value with **no unit is read as
+bytes**, so `2` books two bytes rather than 2 GB. And human units need
+tercen 1.0.23 or newer; on older instances write the byte count
+(`2000000000`).
 
 ### The durable fix: `memory_model.json`
 

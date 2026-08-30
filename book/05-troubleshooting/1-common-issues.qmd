@@ -43,8 +43,13 @@ usual exit-137 / "please increase memory resources" message never appears.
 To confirm and fix:
 
 1. Re-run the step with a generous `ram` override (step → operator settings →
-   environment → `ram`, in bytes; e.g. `16000000000`). If it now completes,
-   the diagnosis is confirmed.
+   environment → `ram`; type `16 GB`). If it now completes, the diagnosis is
+   confirmed.
+
+   The field takes human units — `16 GB`, `512 MB`, `1.5 GB`. A value with
+   **no unit is read as bytes**, so `16` means sixteen bytes, not sixteen
+   gigabytes. On instances older than tercen 1.0.23 the field is bytes only:
+   write `16000000000`.
 2. Read what it actually needed from the successful task: `stats_d_actual_ram_peak_anon`.
 3. Report that number, plus the run's data dimensions, to the operator's
    maintainer so the operator can ship or fix its `memory_model.json` — the
