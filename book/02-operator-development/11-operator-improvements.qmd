@@ -364,6 +364,37 @@ feature values. The recipe:
 `tercen/plot_operator` ships an `estimate-memory.yml` GitHub workflow that
 automates this fit — a good starting point if you want it continuous.
 
+::: {.callout-important}
+## How long a task took: `completedDate`, never `lastModifiedDate`
+
+Read a task's duration as
+
+```
+completedDate - createdDate
+```
+
+`lastModifiedDate` is not when the work finished — it is when the document was
+last written, and plenty writes to it afterwards: the GC sweep marking the task,
+a web app's teardown when the user closes it, a clone of the task, a state
+correction. Subtracting it yields a number that is silently, wildly wrong.
+
+Two real examples from the same instance, both on tasks that in fact took
+**about nine seconds**:
+
+| Task | `lastModified − created` | `completedDate − created` | What touched it |
+|---|---|---|---|
+| An image operator | **523.8 s** | **8.8 s** | GC sweep, eight minutes later |
+| A web app step | **77 983 s** | — | the app's teardown, a day later |
+
+The failure mode is the dangerous kind: the number looks plausible enough to
+report. A 523-second reading was very nearly written up as a 25× performance
+regression before the scheduler log showed the task had gone `running → done`
+nine seconds after it started.
+
+Use `completedDate` for any timing comparison — A/B tests, before-and-after
+measurements, and the runtime half of a resource model.
+:::
+
 ::: {.callout-tip}
 Failed (exit-137) runs are *censored* observations: they tell you the true
 need exceeded that run's limit, not what it was. Fit on successful runs, then
