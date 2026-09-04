@@ -8,7 +8,7 @@
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>6&nbsp; Development Environment Setup – Tercen Developer's Guide</title>
+<title>23&nbsp; Working with tercenctl – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -72,8 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../02-operator-development/4-basic-implementation.html" rel="next">
-<link href="../02-operator-development/2-repository-setup.html" rel="prev">
+<link href="../05-troubleshooting/1-common-issues.html" rel="next">
+<link href="../04-advanced-topics/4-export-operator-parameters.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-operator-development/1-design-principles.html">Operator Development</a></li><li class="breadcrumb-item"><a href="../02-operator-development/3-development-environment.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Development Environment Setup</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -214,7 +214,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../02-operator-development/3-development-environment.html" class="sidebar-item-text sidebar-link active">
+  <a href="../02-operator-development/3-development-environment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Development Environment Setup</span></span></a>
   </div>
 </li>
@@ -338,7 +338,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../04-advanced-topics/5-tercenctl.html" class="sidebar-item-text sidebar-link">
+  <a href="../04-advanced-topics/5-tercenctl.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></span></a>
   </div>
 </li>
@@ -423,28 +423,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#ide-project-setup" id="toc-ide-project-setup" class="nav-link active" data-scroll-target="#ide-project-setup"><span class="header-section-number">6.1</span> IDE Project Setup</a>
+  <li><a href="#why-not-just-use-the-update-library-button" id="toc-why-not-just-use-the-update-library-button" class="nav-link active" data-scroll-target="#why-not-just-use-the-update-library-button"><span class="header-section-number">23.1</span> Why not just use the Update library button</a></li>
+  <li><a href="#installing-it" id="toc-installing-it" class="nav-link" data-scroll-target="#installing-it"><span class="header-section-number">23.2</span> Installing it</a></li>
+  <li><a href="#connecting-it" id="toc-connecting-it" class="nav-link" data-scroll-target="#connecting-it"><span class="header-section-number">23.3</span> Connecting it</a></li>
+  <li><a href="#publishing-a-private-operator" id="toc-publishing-a-private-operator" class="nav-link" data-scroll-target="#publishing-a-private-operator"><span class="header-section-number">23.4</span> Publishing a private operator</a>
   <ul class="collapse">
-  <li><a href="#development-container-setup" id="toc-development-container-setup" class="nav-link" data-scroll-target="#development-container-setup"><span class="header-section-number">6.1.1</span> Development Container Setup</a></li>
-  <li><a href="#ide-configuration" id="toc-ide-configuration" class="nav-link" data-scroll-target="#ide-configuration"><span class="header-section-number">6.1.2</span> IDE Configuration</a></li>
+  <li><a href="#why-the-last-step-is-not-optional" id="toc-why-the-last-step-is-not-optional" class="nav-link" data-scroll-target="#why-the-last-step-is-not-optional"><span class="header-section-number">23.4.1</span> Why the last step is not optional</a></li>
   </ul></li>
-  <li><a href="#tercen-instance-setup" id="toc-tercen-instance-setup" class="nav-link" data-scroll-target="#tercen-instance-setup"><span class="header-section-number">6.2</span> Tercen Instance Setup</a></li>
-  <li><a href="#environment-validation" id="toc-environment-validation" class="nav-link" data-scroll-target="#environment-validation"><span class="header-section-number">6.3</span> Environment Validation</a>
-  <ul class="collapse">
-  <li><a href="#development-environment-checklist" id="toc-development-environment-checklist" class="nav-link" data-scroll-target="#development-environment-checklist"><span class="header-section-number">6.3.1</span> Development Environment Checklist</a></li>
-  <li><a href="#tercen-instance-checklist" id="toc-tercen-instance-checklist" class="nav-link" data-scroll-target="#tercen-instance-checklist"><span class="header-section-number">6.3.2</span> Tercen Instance Checklist</a></li>
-  <li><a href="#connection-test" id="toc-connection-test" class="nav-link" data-scroll-target="#connection-test"><span class="header-section-number">6.3.3</span> Connection Test</a></li>
-  </ul></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">6.4</span> Next Steps</a></li>
+  <li><a href="#when-something-fails" id="toc-when-something-fails" class="nav-link" data-scroll-target="#when-something-fails"><span class="header-section-number">23.5</span> When something fails</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/02-operator-development/3-development-environment.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/04-advanced-topics/5-tercenctl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../02-operator-development/1-design-principles.html">Operator Development</a></li><li class="breadcrumb-item"><a href="../02-operator-development/3-development-environment.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Development Environment Setup</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Development Environment Setup</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -461,184 +456,131 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>This chapter covers setting up your development environment for building Tercen operators. We’ll configure your IDE, set up development containers, and prepare a Tercen instance for testing your operators.</p>
+<p><code>tercenctl</code> is the Tercen command line tool. It runs on <strong>your</strong> machine with <strong>your</strong> credentials, which is what makes it the answer to a specific class of problem: anything the server cannot do on your behalf because it does not have your access.</p>
+<p>The prompts in this chapter are written for an AI coding assistant with the Tercen skills installed (see <a href="../06-ai/1-ai-operator-dev.html">Spec-Driven Development with Tercen Agents</a>). You describe the outcome; the skill carries the recipe. The install, connect and publish prompts below have been executed end-to-end against a local Tercen Studio.</p>
+<section id="why-not-just-use-the-update-library-button" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="why-not-just-use-the-update-library-button"><span class="header-section-number">23.1</span> Why not just use the Update library button</h2>
+<p>The <strong>+</strong> / <em>Update library</em> button in the Tercen UI runs on the <strong>server</strong>, using the server’s own GitHub token. That has two consequences worth internalising before you debug anything:</p>
+<ul>
+<li><p>It can only see <strong>public</strong> repositories, plus whatever private repositories the server’s token was granted. A private operator in your organisation is usually invisible to it.</p></li>
+<li><p>The sweep is <strong>all-or-nothing</strong>. One repository it cannot fetch fails the whole run, so a single private pin blocks every other operator in the manifest — with an error naming only the first casualty:</p>
+<pre><code>Failed to process library -- [Repo(https://github.com/&lt;org&gt;/&lt;repo&gt;,0.1.5)]</code></pre></li>
+</ul>
+<p><code>tercenctl</code> runs locally with your GitHub access, one operator at a time. Those are the two routes, and they fail independently.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the library button is failing on a private repository, removing that pin from the library manifest unblocks every other operator immediately. Install the private one with <code>tercenctl</code> instead. Fixing the manifest and installing the operator are separate jobs — do not wait for one to do the other.</p>
+</div>
+</div>
+</section>
+<section id="installing-it" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="installing-it"><span class="header-section-number">23.2</span> Installing it</h2>
+<p><code>tercenctl</code> is distributed as a prebuilt binary from a release repository. The source is not needed to run it.</p>
+<pre><code>I need the Tercen command line tool on this machine.</code></pre>
+<p>This works out the platform (Windows, WSL, Git Bash, Linux, macOS all differ in asset, install location and checksum command), downloads the matching binary, verifies it against <code>SHA256SUMS</code>, and puts it on the <code>PATH</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What You’ll Learn
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ul>
-<li>IDE project setup with development containers</li>
-<li>Tercen instance configuration for testing</li>
-<li>Development workflow integration</li>
-<li>Environment validation procedures</li>
-</ul>
+<p>A binary installed inside WSL is invisible to PowerShell, and vice versa. Install it in the same environment your assistant runs its commands in.</p>
 </div>
 </div>
-<section id="ide-project-setup" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="ide-project-setup"><span class="header-section-number">6.1</span> IDE Project Setup</h2>
-<p>As mentioned in the getting started section, we recommend using VS Code for operator development. While this workflow is optimized for VS Code, it can be adapted to other IDEs such as JetBrains products. Please reach out if you need support for an alternative development environment.</p>
-<section id="development-container-setup" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="development-container-setup"><span class="header-section-number">6.1.1</span> Development Container Setup</h3>
-<p>The repository templates include pre-configured development containers that provide consistent, reproducible development environments:</p>
-<ol type="1">
-<li><p><strong>Clone the repository</strong>: Clone your newly created operator repository from GitHub into a VS Code workspace</p></li>
-<li><p><strong>Open in dev container</strong>: The template includes a pre-configured development container that provides:</p>
-<ul>
-<li>Minimal Tercen runtime requirements</li>
-<li>Containerized environment for consistent dependency management</li>
-<li>Docker-based isolation ensuring reproducible builds</li>
-</ul></li>
-<li><p><strong>Verify container functionality</strong>:</p>
-<ul>
-<li>The first time you open the project, the container will need to be built (this may take several minutes)</li>
-<li>Subsequent opens will be much faster as the container is cached</li>
-<li>Test the setup by running the appropriate command for your language:
-<ul>
-<li><strong>R</strong>: <code>library(tercen)</code></li>
-<li><strong>Python</strong>: <code>import tercen</code></li>
-</ul></li>
-</ul></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
+</section>
+<section id="connecting-it" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="connecting-it"><span class="header-section-number">23.3</span> Connecting it</h2>
+<p>Generate a token from your Tercen instance at <code>https://&lt;your-tercen&gt;/_token</code>, then:</p>
+<pre><code>Connect it to https://&lt;your-tercen&gt; using this token: PASTE_TOKEN_HERE
+Name the connection &lt;a-name-you-will-recognise&gt;.</code></pre>
+<p>Naming is worth the extra line. Connections accumulate, and one called <code>local</code> pointing at production is a trap you set for yourself.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Container Benefits
+Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Using development containers ensures that your operator runs in the same environment during development and deployment, eliminating “works on my machine” issues.</p>
+<p>The instance URI is carried <strong>inside</strong> the token, in its <code>iss</code> claim — it is not taken from the URL you type. A token copied from the wrong Tercen connects you to that Tercen without complaining. This is why the next step asks which instance answered.</p>
 </div>
 </div>
+<pre><code>Check the connection actually works - which instance am I on, and who am I logged in as?</code></pre>
+<p>Expect the instance hostname, your username and the server version. A saved configuration file proves nothing on its own; this asks the server.</p>
 </section>
-<section id="ide-configuration" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="ide-configuration"><span class="header-section-number">6.1.2</span> IDE Configuration</h3>
-<p>For optimal development experience, <strong>Install recommended extensions</strong> (VS Code will prompt you): - Language-specific extensions (R or Python) - Dev Container extension for container management - Git extensions for version control</p>
-</section>
-</section>
-<section id="tercen-instance-setup" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="tercen-instance-setup"><span class="header-section-number">6.2</span> Tercen Instance Setup</h2>
-<p>Create a development project in Tercen to test your operator. You have two deployment options:</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Cloud Instance</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Local Instance</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>For quick setup and collaboration:</p>
-<ol type="1">
-<li><strong>Access Tercen Cloud</strong>: Navigate to <a href="https://tercen.com">tercen.com</a> or your organization’s instance</li>
-<li><strong>Create new project</strong>:
-<ul>
-<li>Navigate to your team workspace</li>
-<li>Click “New project”</li>
-<li>Choose a descriptive name for your development project</li>
-</ul></li>
-<li><strong>Import sample data</strong>: Use “From git” with <code>https://github.com/tercen/developers_guide_project</code></li>
-<li><strong>Open dev workflow</strong>: Navigate to “Dev workflow” → “Dev data step”</li>
-</ol>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>For complete control and offline development:</p>
-<ol type="1">
-<li><strong>Start local instance</strong>: Ensure your local Tercen instance is running at <code>http://127.0.0.1:5402/</code></li>
-<li><strong>Create new project</strong>: Click “New project” in the web interface</li>
-<li><strong>Import sample data</strong>: Use “From git” with <code>https://github.com/tercen/developers_guide_project</code></li>
-<li><strong>Open dev workflow</strong>: Navigate to “Dev workflow” → “Dev data step”</li>
-</ol>
-</div>
-</div>
-</div>
-<p>The sample project provides a pre-configured crosstab view with real data for testing your operator development.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="publishing-a-private-operator" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="publishing-a-private-operator"><span class="header-section-number">23.4</span> Publishing a private operator</h2>
+<p>The worked example: an operator in a private organisation repository, which the library button cannot reach.</p>
+<pre><code>What operators are in the library, and at which versions?</code></pre>
+<pre><code>Put &lt;repo&gt; version &lt;tag&gt; into the library. It is a private repo, so use my GitHub token -
+get it with: gh auth token</code></pre>
+<pre><code>Check &lt;repo&gt; &lt;tag&gt; is now in the library and show me the version.</code></pre>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Development Project Content
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ul>
-<li>Pre-configured data projections for testing</li>
-<li>Sample dataset</li>
-</ul>
+<p>A <strong>fine-grained</strong> <code>github_pat_…</code> token will not work. GitHub refuses those for source archive downloads. Use a classic <code>ghp_…</code> token with <code>repo</code> scope, or an OAuth <code>gho_…</code> token such as the one <code>gh auth token</code> returns. This trap is covered in more depth in <a href="../02-operator-development/9-installation.html">Installing an Operator</a>.</p>
 </div>
 </div>
-</section>
-<section id="environment-validation" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="environment-validation"><span class="header-section-number">6.3</span> Environment Validation</h2>
-<p>Before proceeding with implementation, validate your complete setup:</p>
-<section id="development-environment-checklist" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="development-environment-checklist"><span class="header-section-number">6.3.1</span> Development Environment Checklist</h3>
-<ul class="task-list">
-<li><label><input type="checkbox">Repository cloned and opened in IDE</label></li>
-<li><label><input type="checkbox">Development container built and running</label></li>
-<li><label><input type="checkbox">Language-specific dependencies available (<code>tercen</code> library accessible)</label></li>
-<li><label><input type="checkbox">Git configuration working for commits and pushes</label></li>
-</ul>
-</section>
-<section id="tercen-instance-checklist" class="level3" data-number="6.3.2">
-<h3 data-number="6.3.2" class="anchored" data-anchor-id="tercen-instance-checklist"><span class="header-section-number">6.3.2</span> Tercen Instance Checklist</h3>
-<ul class="task-list">
-<li><label><input type="checkbox">Tercen instance accessible via web browser</label></li>
-<li><label><input type="checkbox">Sample project imported successfully</label></li>
-<li><label><input type="checkbox">Dev workflow and data step accessible</label></li>
-<li><label><input type="checkbox">Data projection displaying correctly in crosstab view</label></li>
-</ul>
-</section>
-<section id="connection-test" class="level3" data-number="6.3.3">
-<h3 data-number="6.3.3" class="anchored" data-anchor-id="connection-test"><span class="header-section-number">6.3.3</span> Connection Test</h3>
-<p>Perform a basic connection test to ensure everything works:</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">R Test</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Python Test</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test basic connection (replace with your actual IDs)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tercen)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ctx <span class="ot">&lt;-</span> <span class="fu">tercenCtx</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowId =</span> <span class="st">"YOUR_WORKFLOW_ID"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">stepId =</span> <span class="st">"YOUR_STEP_ID"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">username =</span> <span class="st">"admin"</span>,        <span class="co"># for local instance</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">password =</span> <span class="st">"admin"</span>,        <span class="co"># for local instance  </span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">serviceUri =</span> <span class="st">"http://tercen:5400/"</span>  <span class="co"># for local instance</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify data access</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> ctx <span class="sc">%&gt;%</span> <span class="fu">select</span>(.y)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(data))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test basic connection (replace with your actual IDs)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    workflowId<span class="op">=</span><span class="st">"YOUR_WORKFLOW_ID"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    stepId<span class="op">=</span><span class="st">"YOUR_STEP_ID"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    username<span class="op">=</span><span class="st">"admin"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    password<span class="op">=</span><span class="st">"admin"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    serviceUri<span class="op">=</span><span class="st">"http://tercen:5400/"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify data access</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> tercenCtx.select([<span class="st">'.y'</span>])</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.head())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
+<section id="why-the-last-step-is-not-optional" class="level3" data-number="23.4.1">
+<h3 data-number="23.4.1" class="anchored" data-anchor-id="why-the-last-step-is-not-optional"><span class="header-section-number">23.4.1</span> Why the last step is not optional</h3>
+<p>An operator appears in a team’s library only when the team holds <strong>both</strong> halves: the operator document <em>and</em> a project whose URL and version match it. Library projects are named <code>&lt;repo&gt;@&lt;version&gt;</code>.</p>
+<p>Installing the operator alone reports success and lists nothing. That is the mechanism behind the most common report in this area — <em>“I published it but I cannot find it”</em> — and it is why the verification step checks the library listing rather than trusting the installer’s own summary.</p>
 </section>
 </section>
-<section id="next-steps" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">6.4</span> Next Steps</h2>
-<p>With your development environment configured and validated, you’re ready to establish a connection to Tercen’s data API and begin implementing your operator. The next chapter will cover the fundamentals of connecting to Tercen data and understanding the context system.</p>
+<section id="when-something-fails" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="when-something-fails"><span class="header-section-number">23.5</span> When something fails</h2>
+<p>Read the message, then hand it back:</p>
+<pre><code>That failed. Read the error and tell me whether it is my GitHub access, the token type, or
+something in the operator itself - and what to do about it.</code></pre>
+<p>A failed install is not destructive: the library is left as it was.</p>
+<p>The three failures that account for most of them:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>404</code> fetching the release</td>
+<td>Your GitHub account cannot see the repository</td>
+</tr>
+<tr class="even">
+<td><code>404</code> on a private zipball, with a valid token</td>
+<td>Fine-grained token — use a classic or OAuth one</td>
+</tr>
+<tr class="odd">
+<td>Installed, but absent from the library UI</td>
+<td>Operator without its matching project</td>
+</tr>
+</tbody>
+</table>
 
 
 <!-- -->
@@ -1099,171 +1041,161 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../02-operator-development/2-repository-setup.html" class="pagination-link" aria-label="Repository Setup">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Repository Setup</span></span>
+      <a href="../04-advanced-topics/4-export-operator-parameters.html" class="pagination-link" aria-label="Exporting Operator Parameters">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../02-operator-development/4-basic-implementation.html" class="pagination-link" aria-label="Basic Implementation Patterns">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Basic Implementation Patterns</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../05-troubleshooting/1-common-issues.html" class="pagination-link" aria-label="Common development issues">
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Development Environment Setup</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>This chapter covers setting up your development environment for building Tercen operators. We'll configure your IDE, set up development containers, and prepare a Tercen instance for testing your operators.</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## What You'll Learn</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>IDE project setup with development containers</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tercen instance configuration for testing</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Development workflow integration</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Environment validation procedures</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## IDE Project Setup</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>As mentioned in the getting started section, we recommend using VS Code for operator development. While this workflow is optimized for VS Code, it can be adapted to other IDEs such as JetBrains products. Please reach out if you need support for an alternative development environment.</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">### Development Container Setup</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>The repository templates include pre-configured development containers that provide consistent, reproducible development environments:</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Clone the repository**: Clone your newly created operator repository from GitHub into a VS Code workspace</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Open in dev container**: The template includes a pre-configured development container that provides:</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Minimal Tercen runtime requirements</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Containerized environment for consistent dependency management</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Docker-based isolation ensuring reproducible builds</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Verify container functionality**: </span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>The first time you open the project, the container will need to be built (this may take several minutes)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Subsequent opens will be much faster as the container is cached</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Test the setup by running the appropriate command for your language:</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>**R**: <span class="in">`library(tercen)`</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>**Python**: <span class="in">`import tercen`</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Container Benefits</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>Using development containers ensures that your operator runs in the same environment during development and deployment, eliminating "works on my machine" issues.</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### IDE Configuration</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>For optimal development experience, **Install recommended extensions** (VS Code will prompt you):</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Language-specific extensions (R or Python)</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Dev Container extension for container management</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Git extensions for version control</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tercen Instance Setup</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>Create a development project in Tercen to test your operator. You have two deployment options:</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cloud Instance</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>For quick setup and collaboration:</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Access Tercen Cloud**: Navigate to <span class="co">[</span><span class="ot">tercen.com</span><span class="co">](https://tercen.com)</span> or your organization's instance</span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Create new project**: </span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Navigate to your team workspace</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Click "New project" </span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Choose a descriptive name for your development project</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Import sample data**: Use "From git" with <span class="in">`https://github.com/tercen/developers_guide_project`</span></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Open dev workflow**: Navigate to "Dev workflow" → "Dev data step"</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### Local Instance</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>For complete control and offline development:</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Start local instance**: Ensure your local Tercen instance is running at <span class="in">`http://127.0.0.1:5402/`</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Create new project**: Click "New project" in the web interface</span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Import sample data**: Use "From git" with <span class="in">`https://github.com/tercen/developers_guide_project`</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Open dev workflow**: Navigate to "Dev workflow" → "Dev data step"</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>The sample project provides a pre-configured crosstab view with real data for testing your operator development.</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Development Project Content</span></span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pre-configured data projections for testing</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sample dataset</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Environment Validation</span></span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>Before proceeding with implementation, validate your complete setup:</span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Development Environment Checklist</span></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Repository cloned and opened in IDE</span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Development container built and running</span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Language-specific dependencies available (<span class="in">`tercen`</span> library accessible)</span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Git configuration working for commits and pushes</span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tercen Instance Checklist</span></span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Tercen instance accessible via web browser</span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Sample project imported successfully</span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Dev workflow and data step accessible</span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Data projection displaying correctly in crosstab view</span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### Connection Test</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>Perform a basic connection test to ensure everything works:</span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset}</span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### R Test</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Test basic connection (replace with your actual IDs)</span></span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tercen)</span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>ctx <span class="ot">&lt;-</span> <span class="fu">tercenCtx</span>(</span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>    <span class="at">workflowId =</span> <span class="st">"YOUR_WORKFLOW_ID"</span>,</span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>    <span class="at">stepId =</span> <span class="st">"YOUR_STEP_ID"</span>,</span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">username =</span> <span class="st">"admin"</span>,        <span class="co"># for local instance</span></span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    <span class="at">password =</span> <span class="st">"admin"</span>,        <span class="co"># for local instance  </span></span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>    <span class="at">serviceUri =</span> <span class="st">"http://tercen:5400/"</span>  <span class="co"># for local instance</span></span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify data access</span></span>
-<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> ctx <span class="sc">%&gt;%</span> <span class="fu">select</span>(.y)</span>
-<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(data))</span>
-<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### Python Test</span></span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Test basic connection (replace with your actual IDs)</span></span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tercen.client <span class="im">import</span> context <span class="im">as</span> ctx</span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>tercenCtx <span class="op">=</span> ctx.TercenContext(</span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>    workflowId<span class="op">=</span><span class="st">"YOUR_WORKFLOW_ID"</span>,</span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>    stepId<span class="op">=</span><span class="st">"YOUR_STEP_ID"</span>,</span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>    username<span class="op">=</span><span class="st">"admin"</span>,</span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>    password<span class="op">=</span><span class="st">"admin"</span>,</span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>    serviceUri<span class="op">=</span><span class="st">"http://tercen:5400/"</span></span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify data access</span></span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> tercenCtx.select([<span class="st">'.y'</span>])</span>
-<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.head())</span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next Steps</span></span>
-<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>With your development environment configured and validated, you're ready to establish a connection to Tercen's data API and begin implementing your operator. The next chapter will cover the fundamentals of connecting to Tercen data and understanding the context system.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Working with tercenctl</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="in">`tercenctl`</span> is the Tercen command line tool. It runs on **your** machine with</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>**your** credentials, which is what makes it the answer to a specific class of</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>problem: anything the server cannot do on your behalf because it does not have</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>your access.</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>The prompts in this chapter are written for an AI coding assistant with the</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Tercen skills installed (see</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Spec-Driven Development with Tercen Agents</span><span class="co">](../06-ai/1-ai-operator-dev.qmd)</span>).</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>You describe the outcome; the skill carries the recipe. The install, connect and</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>publish prompts below have been executed end-to-end against a local Tercen</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>Studio.</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why not just use the Update library button</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>The **+** / *Update library* button in the Tercen UI runs on the **server**,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>using the server's own GitHub token. That has two consequences worth</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>internalising before you debug anything:</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>It can only see **public** repositories, plus whatever private repositories</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  the server's token was granted. A private operator in your organisation is</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  usually invisible to it.</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The sweep is **all-or-nothing**. One repository it cannot fetch fails the</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  whole run, so a single private pin blocks every other operator in the</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  manifest — with an error naming only the first casualty:</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="in">```</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="in">  Failed to process library -- [Repo(https://github.com/&lt;org&gt;/&lt;repo&gt;,0.1.5)]</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="in">  ```</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="in">`tercenctl`</span> runs locally with your GitHub access, one operator at a time. Those</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>are the two routes, and they fail independently.</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>If the library button is failing on a private repository, removing that pin</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>from the library manifest unblocks every other operator immediately. Install</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>the private one with <span class="in">`tercenctl`</span> instead. Fixing the manifest and installing</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>the operator are separate jobs — do not wait for one to do the other.</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installing it</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="in">`tercenctl`</span> is distributed as a prebuilt binary from a release repository. The</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>source is not needed to run it.</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="in">I need the Tercen command line tool on this machine.</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>This works out the platform (Windows, WSL, Git Bash, Linux, macOS all differ in</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>asset, install location and checksum command), downloads the matching binary,</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>verifies it against <span class="in">`SHA256SUMS`</span>, and puts it on the <span class="in">`PATH`</span>.</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>A binary installed inside WSL is invisible to PowerShell, and vice versa.</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>Install it in the same environment your assistant runs its commands in.</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Connecting it</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>Generate a token from your Tercen instance at <span class="in">`https://&lt;your-tercen&gt;/_token`</span>,</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>then:</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="in">Connect it to https://&lt;your-tercen&gt; using this token: PASTE_TOKEN_HERE</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="in">Name the connection &lt;a-name-you-will-recognise&gt;.</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>Naming is worth the extra line. Connections accumulate, and one called <span class="in">`local`</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>pointing at production is a trap you set for yourself.</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>The instance URI is carried **inside** the token, in its <span class="in">`iss`</span> claim — it is not</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>taken from the URL you type. A token copied from the wrong Tercen connects you</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>to that Tercen without complaining. This is why the next step asks which</span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>instance answered.</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="in">Check the connection actually works - which instance am I on, and who am I logged in as?</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>Expect the instance hostname, your username and the server version. A saved</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>configuration file proves nothing on its own; this asks the server.</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## Publishing a private operator</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>The worked example: an operator in a private organisation repository, which the</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>library button cannot reach.</span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="in">What operators are in the library, and at which versions?</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="in">Put &lt;repo&gt; version &lt;tag&gt; into the library. It is a private repo, so use my GitHub token -</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a><span class="in">get it with: gh auth token</span></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="in">Check &lt;repo&gt; &lt;tag&gt; is now in the library and show me the version.</span></span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>A **fine-grained** <span class="in">`github_pat_…`</span> token will not work. GitHub refuses those for</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>source archive downloads. Use a classic <span class="in">`ghp_…`</span> token with <span class="in">`repo`</span> scope, or an</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>OAuth <span class="in">`gho_…`</span> token such as the one <span class="in">`gh auth token`</span> returns. This trap is</span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>covered in more depth in</span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Installing an Operator</span><span class="co">](../02-operator-development/9-installation.qmd)</span>.</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why the last step is not optional</span></span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>An operator appears in a team's library only when the team holds **both**</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>halves: the operator document *and* a project whose URL and version match it.</span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>Library projects are named <span class="in">`&lt;repo&gt;@&lt;version&gt;`</span>.</span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>Installing the operator alone reports success and lists nothing. That is the</span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>mechanism behind the most common report in this area — *"I published it but I</span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>cannot find it"* — and it is why the verification step checks the library</span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>listing rather than trusting the installer's own summary.</span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## When something fails</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>Read the message, then hand it back:</span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="in">That failed. Read the error and tell me whether it is my GitHub access, the token type, or</span></span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a><span class="in">something in the operator itself - and what to do about it.</span></span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>A failed install is not destructive: the library is left as it was.</span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>The three failures that account for most of them:</span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symptom <span class="pp">|</span> Cause <span class="pp">|</span></span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`404`</span> fetching the release <span class="pp">|</span> Your GitHub account cannot see the repository <span class="pp">|</span></span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`404`</span> on a private zipball, with a valid token <span class="pp">|</span> Fine-grained token — use a classic or OAuth one <span class="pp">|</span></span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Installed, but absent from the library UI <span class="pp">|</span> Operator without its matching project <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/02-operator-development/3-development-environment.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/04-advanced-topics/5-tercenctl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

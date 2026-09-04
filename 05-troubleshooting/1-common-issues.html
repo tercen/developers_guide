@@ -8,7 +8,7 @@
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>23&nbsp; Common development issues – Tercen Developer's Guide</title>
+<title>24&nbsp; Common development issues – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -73,7 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../05-troubleshooting/2-ci.html" rel="next">
-<link href="../04-advanced-topics/4-export-operator-parameters.html" rel="prev">
+<link href="../04-advanced-topics/5-tercenctl.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d4a8b15a3225db039fdc9185e4bb97cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-68b9dd30ee0342b49e3b54af51606c6f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -336,6 +336,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../04-advanced-topics/5-tercenctl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -350,13 +356,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -373,7 +379,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
       </ul>
@@ -417,20 +423,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">23.1</span> Where can I find my Tercen token?</a></li>
-  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">23.2</span> Failed to decode</a></li>
-  <li><a href="#my-operator-dies-part-way-through-with-exit-code-1" id="toc-my-operator-dies-part-way-through-with-exit-code-1" class="nav-link" data-scroll-target="#my-operator-dies-part-way-through-with-exit-code-1"><span class="header-section-number">23.3</span> My operator dies part-way through with <code>exit code = 1</code></a></li>
-  <li><a href="#my-operator-doesnt-appear-in-the-picker-library" id="toc-my-operator-doesnt-appear-in-the-picker-library" class="nav-link" data-scroll-target="#my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">23.4</span> My operator doesn’t appear in the picker / library</a></li>
-  <li><a href="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code" id="toc-i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="nav-link" data-scroll-target="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">23.5</span> I pushed a fix but the operator still runs the old code</a></li>
+  <li><a href="#where-can-i-find-my-tercen-token" id="toc-where-can-i-find-my-tercen-token" class="nav-link active" data-scroll-target="#where-can-i-find-my-tercen-token"><span class="header-section-number">24.1</span> Where can I find my Tercen token?</a></li>
+  <li><a href="#failed-to-decode" id="toc-failed-to-decode" class="nav-link" data-scroll-target="#failed-to-decode"><span class="header-section-number">24.2</span> Failed to decode</a></li>
+  <li><a href="#my-operator-dies-part-way-through-with-exit-code-1" id="toc-my-operator-dies-part-way-through-with-exit-code-1" class="nav-link" data-scroll-target="#my-operator-dies-part-way-through-with-exit-code-1"><span class="header-section-number">24.3</span> My operator dies part-way through with <code>exit code = 1</code></a></li>
+  <li><a href="#my-operator-doesnt-appear-in-the-picker-library" id="toc-my-operator-doesnt-appear-in-the-picker-library" class="nav-link" data-scroll-target="#my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">24.4</span> My operator doesn’t appear in the picker / library</a></li>
+  <li><a href="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code" id="toc-i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="nav-link" data-scroll-target="#i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">24.5</span> I pushed a fix but the operator still runs the old code</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/05-troubleshooting/1-common-issues.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html">Troubleshooting</a></li><li class="breadcrumb-item"><a href="../05-troubleshooting/1-common-issues.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -447,21 +453,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<section id="where-can-i-find-my-tercen-token" class="level2" data-number="23.1">
-<h2 data-number="23.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">23.1</span> Where can I find my Tercen token?</h2>
+<section id="where-can-i-find-my-tercen-token" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="where-can-i-find-my-tercen-token"><span class="header-section-number">24.1</span> Where can I find my Tercen token?</h2>
 <p>You can find your Tercen token by logging into your instance and navigating to:</p>
 <p><code>https://YOUR_INSTANCE_URL/_token</code></p>
 <p>For example: - If you work on tercen.com, go to: <code>https://tercen.com/_token</code> - If you work on a custom instance, replace <code>YOUR_INSTANCE_URL</code> with your actual domain</p>
 <p>The token will be displayed on this page and can be copied for use in your development environment.</p>
 </section>
-<section id="failed-to-decode" class="level2" data-number="23.2">
-<h2 data-number="23.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">23.2</span> Failed to decode</h2>
+<section id="failed-to-decode" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="failed-to-decode"><span class="header-section-number">24.2</span> Failed to decode</h2>
 <pre><code>tercen.http.HttpClientService.TercenError: unknown : failed to decode</code></pre>
 <p>When running the <code>TercenContext()</code> function in Python (or <code>tercenCtx()</code> in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run</p>
 <p>In order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.</p>
 </section>
-<section id="my-operator-dies-part-way-through-with-exit-code-1" class="level2" data-number="23.3">
-<h2 data-number="23.3" class="anchored" data-anchor-id="my-operator-dies-part-way-through-with-exit-code-1"><span class="header-section-number">23.3</span> My operator dies part-way through with <code>exit code = 1</code></h2>
+<section id="my-operator-dies-part-way-through-with-exit-code-1" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="my-operator-dies-part-way-through-with-exit-code-1"><span class="header-section-number">24.3</span> My operator dies part-way through with <code>exit code = 1</code></h2>
 <p>The step fails, and the error text is the operator’s own output cut off mid-stream — a progress bar frozen at some percentage, a half-written log — with no R/Python error, no traceback, and no mention of memory.</p>
 <p>This is almost always the memory limit, not a bug in the operator. When an operator shells out to a compiled binary (<code>system2()</code> in R, <code>subprocess</code> in Python), the kernel kills the <strong>child process</strong> at the container’s memory ceiling. The wrapper only sees “the command I ran failed” and exits 1, so the usual exit-137 / “please increase memory resources” message never appears.</p>
 <p>To confirm and fix:</p>
@@ -486,8 +492,8 @@ Note
 </div>
 <p>See <a href="../02-operator-development/11-operator-improvements.html">Memory: tell Tercen what your operator needs</a> for the model that prevents this, and why an operator whose memory follows a <em>file input</em> needs streaming rather than a bigger booking.</p>
 </section>
-<section id="my-operator-doesnt-appear-in-the-picker-library" class="level2" data-number="23.4">
-<h2 data-number="23.4" class="anchored" data-anchor-id="my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">23.4</span> My operator doesn’t appear in the picker / library</h2>
+<section id="my-operator-doesnt-appear-in-the-picker-library" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="my-operator-doesnt-appear-in-the-picker-library"><span class="header-section-number">24.4</span> My operator doesn’t appear in the picker / library</h2>
 <p>You added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.</p>
 <p>“Add from Git” only <strong>installs</strong> a searchable operator (registers the operator record the picker searches) when <em>all</em> of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:</p>
 <ol type="1">
@@ -517,8 +523,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="level2" data-number="23.5">
-<h2 data-number="23.5" class="anchored" data-anchor-id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">23.5</span> I pushed a fix but the operator still runs the old code</h2>
+<section id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="i-pushed-a-fix-but-the-operator-still-runs-the-old-code"><span class="header-section-number">24.5</span> I pushed a fix but the operator still runs the old code</h2>
 <p>You committed a fix, rebuilt, and the step behaves exactly as before — same output, same error, no sign your change took effect.</p>
 <p><strong>The usual cause is a reused version identifier.</strong> Check which of these applies:</p>
 <ol type="1">
@@ -1000,13 +1006,13 @@ Tip
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../04-advanced-topics/4-export-operator-parameters.html" class="pagination-link" aria-label="Exporting Operator Parameters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
+      <a href="../04-advanced-topics/5-tercenctl.html" class="pagination-link" aria-label="Working with tercenctl">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../05-troubleshooting/2-ci.html" class="pagination-link" aria-label="CI and Github Actions">
-        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

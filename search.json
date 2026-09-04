@@ -1580,201 +1580,267 @@
     ]
   },
   {
+    "objectID": "04-advanced-topics/5-tercenctl.html",
+    "href": "04-advanced-topics/5-tercenctl.html",
+    "title": "23  Working with tercenctl",
+    "section": "",
+    "text": "23.1 Why not just use the Update library button\ntercenctl is the Tercen command line tool. It runs on your machine with your credentials, which is what makes it the answer to a specific class of problem: anything the server cannot do on your behalf because it does not have your access.\nThe prompts in this chapter are written for an AI coding assistant with the Tercen skills installed (see Spec-Driven Development with Tercen Agents). You describe the outcome; the skill carries the recipe. The install, connect and publish prompts below have been executed end-to-end against a local Tercen Studio.\nThe + / Update library button in the Tercen UI runs on the server, using the server’s own GitHub token. That has two consequences worth internalising before you debug anything:\ntercenctl runs locally with your GitHub access, one operator at a time. Those are the two routes, and they fail independently.",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/5-tercenctl.html#why-not-just-use-the-update-library-button",
+    "href": "04-advanced-topics/5-tercenctl.html#why-not-just-use-the-update-library-button",
+    "title": "23  Working with tercenctl",
+    "section": "",
+    "text": "It can only see public repositories, plus whatever private repositories the server’s token was granted. A private operator in your organisation is usually invisible to it.\nThe sweep is all-or-nothing. One repository it cannot fetch fails the whole run, so a single private pin blocks every other operator in the manifest — with an error naming only the first casualty:\nFailed to process library -- [Repo(https://github.com/&lt;org&gt;/&lt;repo&gt;,0.1.5)]\n\n\n\n\n\n\n\n\nImportant\n\n\n\nIf the library button is failing on a private repository, removing that pin from the library manifest unblocks every other operator immediately. Install the private one with tercenctl instead. Fixing the manifest and installing the operator are separate jobs — do not wait for one to do the other.",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/5-tercenctl.html#installing-it",
+    "href": "04-advanced-topics/5-tercenctl.html#installing-it",
+    "title": "23  Working with tercenctl",
+    "section": "23.2 Installing it",
+    "text": "23.2 Installing it\ntercenctl is distributed as a prebuilt binary from a release repository. The source is not needed to run it.\nI need the Tercen command line tool on this machine.\nThis works out the platform (Windows, WSL, Git Bash, Linux, macOS all differ in asset, install location and checksum command), downloads the matching binary, verifies it against SHA256SUMS, and puts it on the PATH.\n\n\n\n\n\n\nNote\n\n\n\nA binary installed inside WSL is invisible to PowerShell, and vice versa. Install it in the same environment your assistant runs its commands in.",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/5-tercenctl.html#connecting-it",
+    "href": "04-advanced-topics/5-tercenctl.html#connecting-it",
+    "title": "23  Working with tercenctl",
+    "section": "23.3 Connecting it",
+    "text": "23.3 Connecting it\nGenerate a token from your Tercen instance at https://&lt;your-tercen&gt;/_token, then:\nConnect it to https://&lt;your-tercen&gt; using this token: PASTE_TOKEN_HERE\nName the connection &lt;a-name-you-will-recognise&gt;.\nNaming is worth the extra line. Connections accumulate, and one called local pointing at production is a trap you set for yourself.\n\n\n\n\n\n\nWarning\n\n\n\nThe instance URI is carried inside the token, in its iss claim — it is not taken from the URL you type. A token copied from the wrong Tercen connects you to that Tercen without complaining. This is why the next step asks which instance answered.\n\n\nCheck the connection actually works - which instance am I on, and who am I logged in as?\nExpect the instance hostname, your username and the server version. A saved configuration file proves nothing on its own; this asks the server.",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/5-tercenctl.html#publishing-a-private-operator",
+    "href": "04-advanced-topics/5-tercenctl.html#publishing-a-private-operator",
+    "title": "23  Working with tercenctl",
+    "section": "23.4 Publishing a private operator",
+    "text": "23.4 Publishing a private operator\nThe worked example: an operator in a private organisation repository, which the library button cannot reach.\nWhat operators are in the library, and at which versions?\nPut &lt;repo&gt; version &lt;tag&gt; into the library. It is a private repo, so use my GitHub token -\nget it with: gh auth token\nCheck &lt;repo&gt; &lt;tag&gt; is now in the library and show me the version.\n\n\n\n\n\n\nImportant\n\n\n\nA fine-grained github_pat_… token will not work. GitHub refuses those for source archive downloads. Use a classic ghp_… token with repo scope, or an OAuth gho_… token such as the one gh auth token returns. This trap is covered in more depth in Installing an Operator.\n\n\n\n23.4.1 Why the last step is not optional\nAn operator appears in a team’s library only when the team holds both halves: the operator document and a project whose URL and version match it. Library projects are named &lt;repo&gt;@&lt;version&gt;.\nInstalling the operator alone reports success and lists nothing. That is the mechanism behind the most common report in this area — “I published it but I cannot find it” — and it is why the verification step checks the library listing rather than trusting the installer’s own summary.",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
+    "objectID": "04-advanced-topics/5-tercenctl.html#when-something-fails",
+    "href": "04-advanced-topics/5-tercenctl.html#when-something-fails",
+    "title": "23  Working with tercenctl",
+    "section": "23.5 When something fails",
+    "text": "23.5 When something fails\nRead the message, then hand it back:\nThat failed. Read the error and tell me whether it is my GitHub access, the token type, or\nsomething in the operator itself - and what to do about it.\nA failed install is not destructive: the library is left as it was.\nThe three failures that account for most of them:\n\n\n\n\n\n\n\nSymptom\nCause\n\n\n\n\n404 fetching the release\nYour GitHub account cannot see the repository\n\n\n404 on a private zipball, with a valid token\nFine-grained token — use a classic or OAuth one\n\n\nInstalled, but absent from the library UI\nOperator without its matching project",
+    "crumbs": [
+      "Advanced Topics",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
+    ]
+  },
+  {
     "objectID": "05-troubleshooting/1-common-issues.html",
     "href": "05-troubleshooting/1-common-issues.html",
-    "title": "23  Common development issues",
+    "title": "24  Common development issues",
     "section": "",
-    "text": "23.1 Where can I find my Tercen token?\nYou can find your Tercen token by logging into your instance and navigating to:\nhttps://YOUR_INSTANCE_URL/_token\nFor example: - If you work on tercen.com, go to: https://tercen.com/_token - If you work on a custom instance, replace YOUR_INSTANCE_URL with your actual domain\nThe token will be displayed on this page and can be copied for use in your development environment.",
+    "text": "24.1 Where can I find my Tercen token?\nYou can find your Tercen token by logging into your instance and navigating to:\nhttps://YOUR_INSTANCE_URL/_token\nFor example: - If you work on tercen.com, go to: https://tercen.com/_token - If you work on a custom instance, replace YOUR_INSTANCE_URL with your actual domain\nThe token will be displayed on this page and can be copied for use in your development environment.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#failed-to-decode",
     "href": "05-troubleshooting/1-common-issues.html#failed-to-decode",
-    "title": "23  Common development issues",
-    "section": "23.2 Failed to decode",
-    "text": "23.2 Failed to decode\ntercen.http.HttpClientService.TercenError: unknown : failed to decode\nWhen running the TercenContext() function in Python (or tercenCtx() in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run\nIn order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.",
+    "title": "24  Common development issues",
+    "section": "24.2 Failed to decode",
+    "text": "24.2 Failed to decode\ntercen.http.HttpClientService.TercenError: unknown : failed to decode\nWhen running the TercenContext() function in Python (or tercenCtx() in R), this error happens when it is not possible to retrieve data from the specified data step. Common underlying reasons include: * Data Step has not been saved * Data Step is already run\nIn order to fix the issue: * Reset the data step, * Save - Refresh - Save the data step, * Re-run the TercenContext call.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#my-operator-dies-part-way-through-with-exit-code-1",
     "href": "05-troubleshooting/1-common-issues.html#my-operator-dies-part-way-through-with-exit-code-1",
-    "title": "23  Common development issues",
-    "section": "23.3 My operator dies part-way through with exit code = 1",
-    "text": "23.3 My operator dies part-way through with exit code = 1\nThe step fails, and the error text is the operator’s own output cut off mid-stream — a progress bar frozen at some percentage, a half-written log — with no R/Python error, no traceback, and no mention of memory.\nThis is almost always the memory limit, not a bug in the operator. When an operator shells out to a compiled binary (system2() in R, subprocess in Python), the kernel kills the child process at the container’s memory ceiling. The wrapper only sees “the command I ran failed” and exits 1, so the usual exit-137 / “please increase memory resources” message never appears.\nTo confirm and fix:\n\nRe-run the step with a generous ram override (step → operator settings → environment → ram; type 16 GB). If it now completes, the diagnosis is confirmed.\nThe field takes human units — 16 GB, 512 MB, 1.5 GB. A value with no unit is read as bytes, so 16 means sixteen bytes, not sixteen gigabytes. On instances older than tercen 1.0.23 the field is bytes only: write 16000000000.\nRead what it actually needed from the successful task: stats_d_actual_ram_peak_anon.\nReport that number, plus the run’s data dimensions, to the operator’s maintainer so the operator can ship or fix its memory_model.json — the override is a per-step workaround, not a fix for other users.\n\n\n\n\n\n\n\nNote\n\n\n\nTwo failures of the same operator on the same day need not share a cause. A memory failure (truncated output) and a packaging failure (does not exist or is not executable) look equally like “the operator is broken” in the UI. Read each error before concluding.\n\n\nSee Memory: tell Tercen what your operator needs for the model that prevents this, and why an operator whose memory follows a file input needs streaming rather than a bigger booking.",
+    "title": "24  Common development issues",
+    "section": "24.3 My operator dies part-way through with exit code = 1",
+    "text": "24.3 My operator dies part-way through with exit code = 1\nThe step fails, and the error text is the operator’s own output cut off mid-stream — a progress bar frozen at some percentage, a half-written log — with no R/Python error, no traceback, and no mention of memory.\nThis is almost always the memory limit, not a bug in the operator. When an operator shells out to a compiled binary (system2() in R, subprocess in Python), the kernel kills the child process at the container’s memory ceiling. The wrapper only sees “the command I ran failed” and exits 1, so the usual exit-137 / “please increase memory resources” message never appears.\nTo confirm and fix:\n\nRe-run the step with a generous ram override (step → operator settings → environment → ram; type 16 GB). If it now completes, the diagnosis is confirmed.\nThe field takes human units — 16 GB, 512 MB, 1.5 GB. A value with no unit is read as bytes, so 16 means sixteen bytes, not sixteen gigabytes. On instances older than tercen 1.0.23 the field is bytes only: write 16000000000.\nRead what it actually needed from the successful task: stats_d_actual_ram_peak_anon.\nReport that number, plus the run’s data dimensions, to the operator’s maintainer so the operator can ship or fix its memory_model.json — the override is a per-step workaround, not a fix for other users.\n\n\n\n\n\n\n\nNote\n\n\n\nTwo failures of the same operator on the same day need not share a cause. A memory failure (truncated output) and a packaging failure (does not exist or is not executable) look equally like “the operator is broken” in the UI. Read each error before concluding.\n\n\nSee Memory: tell Tercen what your operator needs for the model that prevents this, and why an operator whose memory follows a file input needs streaming rather than a bigger booking.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#my-operator-doesnt-appear-in-the-picker-library",
     "href": "05-troubleshooting/1-common-issues.html#my-operator-doesnt-appear-in-the-picker-library",
-    "title": "23  Common development issues",
-    "section": "23.4 My operator doesn’t appear in the picker / library",
-    "text": "23.4 My operator doesn’t appear in the picker / library\nYou added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.\n“Add from Git” only installs a searchable operator (registers the operator record the picker searches) when all of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:\n\nThe repository name ends in _operator. This is the gate that triggers operator installation. uka_analysis → not installed; uka_analysis_operator → installed. (This is the most common cause.)\nThe repository is in a trusted organization. Managed instances only trust repositories under approved GitHub organizations (commonly github.com/tercen/ and github.com/pamgene/). Repositories under a personal account or an untrusted organization fail with tercen.forbidden.untrusted.git. Ask your Tercen admin which organizations are trusted.\nAll names are lowercase. Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. My_Operator) breaks the container build/pull, so no operator is registered.\nThe operator was installed, not just cloned. Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.\n\nChecklist\n\nRepository name ends in _operator and is entirely lowercase\nRepository lives under a trusted organization\nThe container image built successfully and is pullable\nYou selected the correct source library in the picker\n\n\n\n\n\n\n\nTip\n\n\n\nTo make a fork or renamed variant installable, rename the repository to a lowercase name ending in _operator (e.g. my_variant_operator) under a trusted organization, then add it to the library again.",
+    "title": "24  Common development issues",
+    "section": "24.4 My operator doesn’t appear in the picker / library",
+    "text": "24.4 My operator doesn’t appear in the picker / library\nYou added your operator’s Git repository to a library, the clone succeeded, but the operator never shows up when you search for it in a data step’s operator picker.\n“Add from Git” only installs a searchable operator (registers the operator record the picker searches) when all of the following hold. If any fails, the repository’s files are copied but no operator is registered — usually with no obvious error:\n\nThe repository name ends in _operator. This is the gate that triggers operator installation. uka_analysis → not installed; uka_analysis_operator → installed. (This is the most common cause.)\nThe repository is in a trusted organization. Managed instances only trust repositories under approved GitHub organizations (commonly github.com/tercen/ and github.com/pamgene/). Repositories under a personal account or an untrusted organization fail with tercen.forbidden.untrusted.git. Ask your Tercen admin which organizations are trusted.\nAll names are lowercase. Docker/OCI image names must be lowercase; an uppercase repository or image name (e.g. My_Operator) breaks the container build/pull, so no operator is registered.\nThe operator was installed, not just cloned. Cloning a project copies files; it is the install step (gated by points 1–3) that creates the searchable operator record.\n\nChecklist\n\nRepository name ends in _operator and is entirely lowercase\nRepository lives under a trusted organization\nThe container image built successfully and is pullable\nYou selected the correct source library in the picker\n\n\n\n\n\n\n\nTip\n\n\n\nTo make a fork or renamed variant installable, rename the repository to a lowercase name ending in _operator (e.g. my_variant_operator) under a trusted organization, then add it to the library again.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/1-common-issues.html#i-pushed-a-fix-but-the-operator-still-runs-the-old-code",
     "href": "05-troubleshooting/1-common-issues.html#i-pushed-a-fix-but-the-operator-still-runs-the-old-code",
-    "title": "23  Common development issues",
-    "section": "23.5 I pushed a fix but the operator still runs the old code",
-    "text": "23.5 I pushed a fix but the operator still runs the old code\nYou committed a fix, rebuilt, and the step behaves exactly as before — same output, same error, no sign your change took effect.\nThe usual cause is a reused version identifier. Check which of these applies:\n\nYou moved a git tag. If you deleted and re-pushed a tag (e.g. 0.0.3) so it points at a new commit, already-installed instances will not pick up the new commit. Tercen resolves a version to a commit at first install, stores the operator in a directory named after that commit, and on later runs skips the download when that directory already exists — so the tag is never re-resolved. Fix: release a new version (0.0.4) and repoint the step at it.\nYour container points at a mutable image tag. With :main or :master, the image that gets pulled depends on what was built last, and a cached image may not be re-pulled at all. Fix: use an immutable versioned tag (:0.0.4).\nThe step is pinned to an older version than you think. Open the step’s operator settings and confirm the exact version string it references — a workflow keeps whatever version it was configured with, and does not follow later releases.\n\n\n\n\n\n\n\nNoteThis failure is silent by design\n\n\n\nThere is no error for any of the above — the operator runs successfully, just not the code you expected. If you need to confirm which commit is actually running, add a temporary log line containing the version (e.g. message(\"operator version 0.0.4\")) and release it under a new version number. If the line doesn’t appear, the old install is still being used.\n\n\nSee Pin an immutable version tag and the tagging guidance in the same chapter.",
+    "title": "24  Common development issues",
+    "section": "24.5 I pushed a fix but the operator still runs the old code",
+    "text": "24.5 I pushed a fix but the operator still runs the old code\nYou committed a fix, rebuilt, and the step behaves exactly as before — same output, same error, no sign your change took effect.\nThe usual cause is a reused version identifier. Check which of these applies:\n\nYou moved a git tag. If you deleted and re-pushed a tag (e.g. 0.0.3) so it points at a new commit, already-installed instances will not pick up the new commit. Tercen resolves a version to a commit at first install, stores the operator in a directory named after that commit, and on later runs skips the download when that directory already exists — so the tag is never re-resolved. Fix: release a new version (0.0.4) and repoint the step at it.\nYour container points at a mutable image tag. With :main or :master, the image that gets pulled depends on what was built last, and a cached image may not be re-pulled at all. Fix: use an immutable versioned tag (:0.0.4).\nThe step is pinned to an older version than you think. Open the step’s operator settings and confirm the exact version string it references — a workflow keeps whatever version it was configured with, and does not follow later releases.\n\n\n\n\n\n\n\nNoteThis failure is silent by design\n\n\n\nThere is no error for any of the above — the operator runs successfully, just not the code you expected. If you need to confirm which commit is actually running, add a temporary log line containing the version (e.g. message(\"operator version 0.0.4\")) and release it under a new version number. If the line doesn’t appear, the old install is still being used.\n\n\nSee Pin an immutable version tag and the tagging guidance in the same chapter.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Common development issues</span>"
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Common development issues</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html",
     "href": "05-troubleshooting/2-ci.html",
-    "title": "24  CI and Github Actions",
+    "title": "25  CI and Github Actions",
     "section": "",
-    "text": "24.1 Test not found\noperator.run.test.not.found\nThis error happens when none of the test, tests or workflow_tests have been found at the repository root.",
+    "text": "25.1 Test not found\noperator.run.test.not.found\nThis error happens when none of the test, tests or workflow_tests have been found at the repository root.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-relations",
     "href": "05-troubleshooting/2-ci.html#wrong-relations",
-    "title": "24  CI and Github Actions",
-    "section": "24.2 Wrong relations",
-    "text": "24.2 Wrong relations\ntask.test.operator.bad.nRelations\nThis error happens when there are not as many tables (relations) between the computed and expected outputs.",
+    "title": "25  CI and Github Actions",
+    "section": "25.2 Wrong relations",
+    "text": "25.2 Wrong relations\ntask.test.operator.bad.nRelations\nThis error happens when there are not as many tables (relations) between the computed and expected outputs.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-ncols-nrows",
     "href": "05-troubleshooting/2-ci.html#wrong-ncols-nrows",
-    "title": "24  CI and Github Actions",
-    "section": "24.3 Wrong nCols / nRows",
-    "text": "24.3 Wrong nCols / nRows\ntask.test.operator.bad.nCols task.test.operator.bad.nRows\nThis error happens when there are not as many columns or rows between the computed and expected output relations.",
+    "title": "25  CI and Github Actions",
+    "section": "25.3 Wrong nCols / nRows",
+    "text": "25.3 Wrong nCols / nRows\ntask.test.operator.bad.nCols task.test.operator.bad.nRows\nThis error happens when there are not as many columns or rows between the computed and expected output relations.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-column-names",
     "href": "05-troubleshooting/2-ci.html#wrong-column-names",
-    "title": "24  CI and Github Actions",
-    "section": "24.4 Wrong column names",
-    "text": "24.4 Wrong column names\ntask.test.operator.bad.column.names\nThis error happens when the computed and expected output relations do not have the exact same column names.\nMaybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.",
+    "title": "25  CI and Github Actions",
+    "section": "25.4 Wrong column names",
+    "text": "25.4 Wrong column names\ntask.test.operator.bad.column.names\nThis error happens when the computed and expected output relations do not have the exact same column names.\nMaybe you’ve added or renamed a column in the latest version of the operator? In that case, the reference table should be updated accordingly.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-column-type",
     "href": "05-troubleshooting/2-ci.html#wrong-column-type",
-    "title": "24  CI and Github Actions",
-    "section": "24.5 Wrong column type",
-    "text": "24.5 Wrong column type\ntask.test.operator.bad.column.type\n\nCheck that .ri and .ci factors are output as integers in your operators.\nIf another factor (for example, a cluster ID), tercen test will expect is to be a double. In that case, you need to provide a schema file. If you use tim to genenerate your test, you can use the XXX argument to the build_test_data function.",
+    "title": "25  CI and Github Actions",
+    "section": "25.5 Wrong column type",
+    "text": "25.5 Wrong column type\ntask.test.operator.bad.column.type\n\nCheck that .ri and .ci factors are output as integers in your operators.\nIf another factor (for example, a cluster ID), tercen test will expect is to be a double. In that case, you need to provide a schema file. If you use tim to genenerate your test, you can use the XXX argument to the build_test_data function.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-values",
     "href": "05-troubleshooting/2-ci.html#wrong-values",
-    "title": "24  CI and Github Actions",
-    "section": "24.6 Wrong values",
-    "text": "24.6 Wrong values\ntask.test.operator.bad.value\nThis error occurs when a value is different between the reference table and the computed table. It gives you the row number and both values to help finding the issue.",
+    "title": "25  CI and Github Actions",
+    "section": "25.6 Wrong values",
+    "text": "25.6 Wrong values\ntask.test.operator.bad.value\nThis error occurs when a value is different between the reference table and the computed table. It gives you the row number and both values to help finding the issue.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#wrong-correlation",
     "href": "05-troubleshooting/2-ci.html#wrong-correlation",
-    "title": "24  CI and Github Actions",
-    "section": "24.7 Wrong correlation",
-    "text": "24.7 Wrong correlation\ntask.test.operator.bad.correlation\nThis error occurs when the correlation between the reference table and the computed table values is not high enough.",
+    "title": "25  CI and Github Actions",
+    "section": "25.7 Wrong correlation",
+    "text": "25.7 Wrong correlation\ntask.test.operator.bad.correlation\nThis error occurs when the correlation between the reference table and the computed table values is not high enough.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "05-troubleshooting/2-ci.html#untrusted-git",
     "href": "05-troubleshooting/2-ci.html#untrusted-git",
-    "title": "24  CI and Github Actions",
-    "section": "24.8 Untrusted git",
-    "text": "24.8 Untrusted git\ntercen.forbidden.untrusted.git\nThis error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator should be added to your Tercen instance configuration file.",
+    "title": "25  CI and Github Actions",
+    "section": "25.8 Untrusted git",
+    "text": "25.8 Untrusted git\ntercen.forbidden.untrusted.git\nThis error occurs when you try to install an operator from an untrusted GitHub organisation. The organisation in which you develop your operator should be added to your Tercen instance configuration file.",
     "crumbs": [
       "Troubleshooting",
-      "<span class='chapter-number'>24</span>  <span class='chapter-title'>CI and Github Actions</span>"
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>CI and Github Actions</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html",
     "href": "06-ai/1-ai-operator-dev.html",
-    "title": "25  Spec-Driven Development with Tercen Agents",
+    "title": "26  Spec-Driven Development with Tercen Agents",
     "section": "",
-    "text": "25.1 Setting up Your Development Environment\nThis chapter provides a comprehensive tutorial on spec-driven development using Tercen Agents, an approach that leverages AI and the VSCode integrated development environment (IDE) to streamline the creation of Tercen operators.\nSpec-driven development is a methodology where the development process begins by writing detailed specifications that precisely describe the desired functionality of a software component. In the context of Tercen, these specifications guide the creation of operators.\nTercen Agents are AI-powered tools designed to automate and assist in various stages of operator development. They read the written specifications and, in conjunction with large language models (LLMs) through GitHub Copilot, help implement the operators. The core idea is that developers write down specifications, and Tercen Agents then read these specifications to implement the appropriate operators.\nA well-configured development environment is crucial for an efficient spec-driven workflow. The recommended setup integrates VS Code with Dev containers and a local Tercen instance.",
+    "text": "26.1 Setting up Your Development Environment\nThis chapter provides a comprehensive tutorial on spec-driven development using Tercen Agents, an approach that leverages AI and the VSCode integrated development environment (IDE) to streamline the creation of Tercen operators.\nSpec-driven development is a methodology where the development process begins by writing detailed specifications that precisely describe the desired functionality of a software component. In the context of Tercen, these specifications guide the creation of operators.\nTercen Agents are AI-powered tools designed to automate and assist in various stages of operator development. They read the written specifications and, in conjunction with large language models (LLMs) through GitHub Copilot, help implement the operators. The core idea is that developers write down specifications, and Tercen Agents then read these specifications to implement the appropriate operators.\nA well-configured development environment is crucial for an efficient spec-driven workflow. The recommended setup integrates VS Code with Dev containers and a local Tercen instance.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#setting-up-your-development-environment",
     "href": "06-ai/1-ai-operator-dev.html#setting-up-your-development-environment",
-    "title": "25  Spec-Driven Development with Tercen Agents",
+    "title": "26  Spec-Driven Development with Tercen Agents",
     "section": "",
-    "text": "25.1.1 Recommended Environment: VS Code with Dev Containers\n\nVS Code (Visual Studio Code): It is recommended to use VS Code installed on your computer. This IDE offers a good way to integrate R and Python development tools and interact with Tercen Agents and Docker.\nDev Containers: The principle of this workflow is to use Dev containers, which provide a consistent and isolated runtime environment. A Dev container contains the runtime environment where Tercen operators are executed.\n\nBenefits: Dev containers ensure consistency, meaning what you compute locally will be the same as what is computed in production. They help avoid issues related to installing packages and managing volumes, especially on different operating systems like Windows.\nInitial Setup: When you open a templated project, the first step is to reopen it in a container. The initial configuration of the Dev container happens only once and may take some time.\nExtensions: The Dev container setup includes recommended extensions for working with R and Python in VS Code. You can also create your own images to include custom runtime environments or packages.",
+    "text": "26.1.1 Recommended Environment: VS Code with Dev Containers\n\nVS Code (Visual Studio Code): It is recommended to use VS Code installed on your computer. This IDE offers a good way to integrate R and Python development tools and interact with Tercen Agents and Docker.\nDev Containers: The principle of this workflow is to use Dev containers, which provide a consistent and isolated runtime environment. A Dev container contains the runtime environment where Tercen operators are executed.\n\nBenefits: Dev containers ensure consistency, meaning what you compute locally will be the same as what is computed in production. They help avoid issues related to installing packages and managing volumes, especially on different operating systems like Windows.\nInitial Setup: When you open a templated project, the first step is to reopen it in a container. The initial configuration of the Dev container happens only once and may take some time.\nExtensions: The Dev container setup includes recommended extensions for working with R and Python in VS Code. You can also create your own images to include custom runtime environments or packages.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#the-spec-driven-development-workflow-with-tercen-agents",
     "href": "06-ai/1-ai-operator-dev.html#the-spec-driven-development-workflow-with-tercen-agents",
-    "title": "25  Spec-Driven Development with Tercen Agents",
-    "section": "25.2 The Spec-Driven Development Workflow with Tercen Agents",
-    "text": "25.2 The Spec-Driven Development Workflow with Tercen Agents\nThe spec-driven development process with Tercen Agents can be broken down into several phases: defining specifications, agent-assisted implementation, validation and testing, and finalization.\n\n25.2.1 Phase 1: Defining Specifications\nThe first and most critical step is to clearly define the operator’s specifications.\n\nLocation: Specifications are primarily written in the README.md file of your project.\nContent: It is important to specify the input and output of the operator, including any cross-projections, and to define the settings that the operator will use. While output specifications are often developed later, it is considered good practice to write them down beforehand. The computation itself should be described as precisely as possible.\nFlexibility: The specification file is flexible; you are free to develop further or update it based on your needs. You can include specific inputs or instructions, and add examples.\n\n\n\n25.2.2 Phase 2: Agent-Assisted Operator Implementation\nOnce specifications are in place, Tercen Agents, powered by LLMs, take over to assist in implementing the operator.\n\nIntroducing Tercen Agents:\n\nThe workflow uses two dedicated Tercen Agents: one for development and one for review.\nThese agents interact with large language models (LLMs) to understand the specifications and generate code.\nGitHub Copilot is the recommended tool due to its integration with GitHub. It offers different modes for interacting with your code, including asking questions or leveraging more advanced features.\n\nThe Implementation Process:\n\nThe agents read the specifications from the README.md file.\nThey then proceed to implement the operator based on these specifications.\nExample Output: The agents start by creating the operator.json file, defining the operator’s name, description, documentation URL, container image, and settings, along with meaningful descriptions for properties. They work based on the requirements and can even get started with specific examples provided in the instructions. The agents perform their “magic” by processing the context and instructions.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Implement the Tercen operator based on the specifications outlined in the README file.”\n\n\n\n\n25.2.3 Phase 3: Validation and Testing\nAfter the agents generate the initial operator code, a rigorous validation and testing phase is essential.\n\nStep-by-Step Validation: It is highly recommended to validate all changes step-by-step, as agents can make mistakes. Developers should check, validate, reject, or manually edit changes before committing anything.\nConnecting to Data for Testing:\n\nTo test the operator with real data, you connect to a Tercen instance, which can be local or cloud-based.\nThe tercen-agent simplifies this workflow by allowing you to connect to a specific dataset for development.\nThis connection requires a Tercen token, which must be provided manually.\nOnce connected, you can directly run the operator functions on your data.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Add a development tercenCtx() call to connect to the following data step: YOUR_DATA_STEP_URL.”\n\n\n\nAgent-Assisted Review:\n\nA dedicated Tercen review agent is used to review the developed operator.\nThis agent operates based on custom instructions that can be updated to fit specific needs.\nIt goes through a checklist, verifying the presence of required files, specific content within files (e.g., in operator.json), and adherence to guidelines.\nThe review agent provides feedback and suggestions for improvement. Examples of feedback include:\n\nIssues with the development context call.\nAdherence to file naming conventions.\nSuggestions for handling errors and data types (e.g., checking for empty or NA columns).\n\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenReviewer” mode in the chat window.\nPrompt: “Review the Tercen operator project.”\n\n\n\n\n25.2.4 Phase 4: Finalizing and Versioning\nThe final phase involves making any necessary manual adjustments and properly versioning the operator.\n\nManual Review and Edits:\n\nAfter agent review, it’s crucial to perform a final human check to review what has changed.\nVS Code provides tools for comparing and managing changes, allowing you to manually accept, reject, or edit them. The goal is not to push everything blindly but to ensure quality and correctness.\n\nCommitting and Pushing Changes:\n\nOnce satisfied, you can commit and push the changes from the command line or user-friendly git interface.\nYou can also instruct the Tercen Agents to increment the operator’s version during this stage.",
+    "title": "26  Spec-Driven Development with Tercen Agents",
+    "section": "26.2 The Spec-Driven Development Workflow with Tercen Agents",
+    "text": "26.2 The Spec-Driven Development Workflow with Tercen Agents\nThe spec-driven development process with Tercen Agents can be broken down into several phases: defining specifications, agent-assisted implementation, validation and testing, and finalization.\n\n26.2.1 Phase 1: Defining Specifications\nThe first and most critical step is to clearly define the operator’s specifications.\n\nLocation: Specifications are primarily written in the README.md file of your project.\nContent: It is important to specify the input and output of the operator, including any cross-projections, and to define the settings that the operator will use. While output specifications are often developed later, it is considered good practice to write them down beforehand. The computation itself should be described as precisely as possible.\nFlexibility: The specification file is flexible; you are free to develop further or update it based on your needs. You can include specific inputs or instructions, and add examples.\n\n\n\n26.2.2 Phase 2: Agent-Assisted Operator Implementation\nOnce specifications are in place, Tercen Agents, powered by LLMs, take over to assist in implementing the operator.\n\nIntroducing Tercen Agents:\n\nThe workflow uses two dedicated Tercen Agents: one for development and one for review.\nThese agents interact with large language models (LLMs) to understand the specifications and generate code.\nGitHub Copilot is the recommended tool due to its integration with GitHub. It offers different modes for interacting with your code, including asking questions or leveraging more advanced features.\n\nThe Implementation Process:\n\nThe agents read the specifications from the README.md file.\nThey then proceed to implement the operator based on these specifications.\nExample Output: The agents start by creating the operator.json file, defining the operator’s name, description, documentation URL, container image, and settings, along with meaningful descriptions for properties. They work based on the requirements and can even get started with specific examples provided in the instructions. The agents perform their “magic” by processing the context and instructions.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Implement the Tercen operator based on the specifications outlined in the README file.”\n\n\n\n\n26.2.3 Phase 3: Validation and Testing\nAfter the agents generate the initial operator code, a rigorous validation and testing phase is essential.\n\nStep-by-Step Validation: It is highly recommended to validate all changes step-by-step, as agents can make mistakes. Developers should check, validate, reject, or manually edit changes before committing anything.\nConnecting to Data for Testing:\n\nTo test the operator with real data, you connect to a Tercen instance, which can be local or cloud-based.\nThe tercen-agent simplifies this workflow by allowing you to connect to a specific dataset for development.\nThis connection requires a Tercen token, which must be provided manually.\nOnce connected, you can directly run the operator functions on your data.\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenDeveloper” mode in the chat window.\nPrompt: “Add a development tercenCtx() call to connect to the following data step: YOUR_DATA_STEP_URL.”\n\n\n\nAgent-Assisted Review:\n\nA dedicated Tercen review agent is used to review the developed operator.\nThis agent operates based on custom instructions that can be updated to fit specific needs.\nIt goes through a checklist, verifying the presence of required files, specific content within files (e.g., in operator.json), and adherence to guidelines.\nThe review agent provides feedback and suggestions for improvement. Examples of feedback include:\n\nIssues with the development context call.\nAdherence to file naming conventions.\nSuggestions for handling errors and data types (e.g., checking for empty or NA columns).\n\n\n\n\n\n\n\n\n\nNoteExample Prompt\n\n\n\nSelect the “TercenReviewer” mode in the chat window.\nPrompt: “Review the Tercen operator project.”\n\n\n\n\n26.2.4 Phase 4: Finalizing and Versioning\nThe final phase involves making any necessary manual adjustments and properly versioning the operator.\n\nManual Review and Edits:\n\nAfter agent review, it’s crucial to perform a final human check to review what has changed.\nVS Code provides tools for comparing and managing changes, allowing you to manually accept, reject, or edit them. The goal is not to push everything blindly but to ensure quality and correctness.\n\nCommitting and Pushing Changes:\n\nOnce satisfied, you can commit and push the changes from the command line or user-friendly git interface.\nYou can also instruct the Tercen Agents to increment the operator’s version during this stage.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#best-practices",
     "href": "06-ai/1-ai-operator-dev.html#best-practices",
-    "title": "25  Spec-Driven Development with Tercen Agents",
-    "section": "25.3 Best Practices",
-    "text": "25.3 Best Practices\n\nConsistent Environment: Always use Dev containers to ensure a consistent runtime environment across all development stages, avoiding dependency conflicts and environment-specific bugs.\nPrecise Specifications: Invest time in writing clear, detailed, and precise specifications in your README.md. The quality of the agent-generated code heavily relies on the clarity of your input.\nLeverage Examples: Include specific examples in your instructions and specifications to give the agents better context for implementation.\nStep-by-Step Validation: Do not rely solely on the agents. Validate all changes incrementally and manually review the generated code.\nRegular Agent Review: Utilize the dedicated review agent frequently to catch potential issues early and ensure adherence to best practices and guidelines.\nHuman Oversight: Always perform a manual review before committing and pushing code. Use VS Code’s version control features to manage changes effectively.\nUnderstand LLM Capabilities: Be aware of the different modes and capabilities of the LLM you are using to maximize its assistance.",
+    "title": "26  Spec-Driven Development with Tercen Agents",
+    "section": "26.3 Best Practices",
+    "text": "26.3 Best Practices\n\nConsistent Environment: Always use Dev containers to ensure a consistent runtime environment across all development stages, avoiding dependency conflicts and environment-specific bugs.\nPrecise Specifications: Invest time in writing clear, detailed, and precise specifications in your README.md. The quality of the agent-generated code heavily relies on the clarity of your input.\nLeverage Examples: Include specific examples in your instructions and specifications to give the agents better context for implementation.\nStep-by-Step Validation: Do not rely solely on the agents. Validate all changes incrementally and manually review the generated code.\nRegular Agent Review: Utilize the dedicated review agent frequently to catch potential issues early and ensure adherence to best practices and guidelines.\nHuman Oversight: Always perform a manual review before committing and pushing code. Use VS Code’s version control features to manage changes effectively.\nUnderstand LLM Capabilities: Be aware of the different modes and capabilities of the LLM you are using to maximize its assistance.",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
     "objectID": "06-ai/1-ai-operator-dev.html#conclusion",
     "href": "06-ai/1-ai-operator-dev.html#conclusion",
-    "title": "25  Spec-Driven Development with Tercen Agents",
-    "section": "25.4 Conclusion",
-    "text": "25.4 Conclusion\nAI-assisted development significantly accelerates Tercen operator creation while maintaining high quality standards. By following these practices and workflows, you can:\n\nReduce development time for standard operators\nImprove code quality through AI-powered review and testing\nEnhance documentation with comprehensive, user-friendly guides\nMinimize bugs through systematic validation and testing\n\nThe key to success is treating AI as a powerful assistant that amplifies your expertise rather than replacing careful engineering practices.\nYou should now be ready to accelerate and improve your operator development process with AI assistance!",
+    "title": "26  Spec-Driven Development with Tercen Agents",
+    "section": "26.4 Conclusion",
+    "text": "26.4 Conclusion\nAI-assisted development significantly accelerates Tercen operator creation while maintaining high quality standards. By following these practices and workflows, you can:\n\nReduce development time for standard operators\nImprove code quality through AI-powered review and testing\nEnhance documentation with comprehensive, user-friendly guides\nMinimize bugs through systematic validation and testing\n\nThe key to success is treating AI as a powerful assistant that amplifies your expertise rather than replacing careful engineering practices.\nYou should now be ready to accelerate and improve your operator development process with AI assistance!",
     "crumbs": [
       "AI-Assisted Development",
-      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
     ]
   },
   {
