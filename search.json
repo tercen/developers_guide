@@ -1584,7 +1584,7 @@
     "href": "04-advanced-topics/5-tercenctl.html",
     "title": "23  Working with tercenctl",
     "section": "",
-    "text": "23.1 Why not just use the Update library button\ntercenctl is the Tercen command line tool. It runs on your machine with your credentials, which is what makes it the answer to a specific class of problem: anything the server cannot do on your behalf because it does not have your access.\nThe prompts in this chapter are written for an AI coding assistant with the Tercen skills installed (see Spec-Driven Development with Tercen Agents). You describe the outcome; the skill carries the recipe. The install, connect and publish prompts below have been executed end-to-end against a local Tercen Studio.\nThe + / Update library button in the Tercen UI runs on the server, using the server’s own GitHub token. That has two consequences worth internalising before you debug anything:\ntercenctl runs locally with your GitHub access, one operator at a time. Those are the two routes, and they fail independently.",
+    "text": "23.1 Why not just use the Update library button\ntercenctl is the Tercen command line tool. It runs on your machine with your credentials, which is what makes it the answer to a specific class of problem: anything the server cannot do on your behalf because it does not have your access.\nThe prompts in this chapter are written for an AI coding assistant with the Tercen skills installed — see The Tercen Skills for Claude Code for how to install them and confirm the session actually has them. You describe the outcome; the skill carries the recipe. The install, connect and publish prompts below have been executed end-to-end against a local Tercen Studio.\nThe + / Update library button in the Tercen UI runs on the server, using the server’s own GitHub token. That has two consequences worth internalising before you debug anything:\ntercenctl runs locally with your GitHub access, one operator at a time. Those are the two routes, and they fail independently.",
     "crumbs": [
       "Advanced Topics",
       "<span class='chapter-number'>23</span>  <span class='chapter-title'>Working with tercenctl</span>"
@@ -1841,6 +1841,72 @@
     "crumbs": [
       "AI-Assisted Development",
       "<span class='chapter-number'>26</span>  <span class='chapter-title'>Spec-Driven Development with Tercen Agents</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html",
+    "href": "06-ai/2-tercen-skills.html",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "",
+    "text": "27.1 Getting them\nSeveral chapters in this guide are written as prompts rather than command sequences: you describe the outcome, and the assistant knows the recipe. That only works if the assistant has the Tercen skills loaded. This chapter is how you get them, check them, and keep them current.\nA skill is packaged instructions — not code, not a service. It tells the assistant how a particular Tercen job is done: which command, in which order, what the failure modes look like, and what to verify afterwards. Nothing runs on your machine that you did not run yourself.\nThe skills ship as a Claude Code plugin marketplace:\nThe same commands work as /plugin marketplace add … and /plugin install … inside a running session. There is a second plugin, tercen-science@tercen, covering scientist-facing data intake rather than operator development.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html#getting-them",
+    "href": "06-ai/2-tercen-skills.html#getting-them",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "",
+    "text": "claude plugin marketplace add tercen/skills\nclaude plugin install tercen-operator-dev@tercen\n\n\n\n\n\n\n\nImportant\n\n\n\ntercen/skills is a private repository: you need read permission on it before either command will work, and that is granted per GitHub account. Contact Tercen to be granted it.\nIf marketplace add reports that the repository cannot be found, missing read permission is almost always the reason rather than a typo. Check which account you are actually authenticated as with gh auth status first — having access under one account does not help if gh is logged in as another.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html#checking-them",
+    "href": "06-ai/2-tercen-skills.html#checking-them",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "27.2 Checking them",
+    "text": "27.2 Checking them\nThree levels, from cheapest to most convincing.\nIs the plugin installed, and at what version?\nclaude plugin list\nWhat is actually in it?\nclaude plugin details tercen-operator-dev\nDoes this session have them? The check that matters, because a plugin installed but not loaded behaves exactly like one that was never installed:\nWhich Tercen skills do you have available?\nIf the answer is vague or names nothing, you are talking to a session that started before the install. Restart it.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html#keeping-them-current",
+    "href": "06-ai/2-tercen-skills.html#keeping-them-current",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "27.3 Keeping them current",
+    "text": "27.3 Keeping them current\nclaude plugin update tercen-operator-dev\nA restart is required before an update takes effect. Skills change when the platform changes — a renamed flag, a command that no longer exists, a new failure mode — so an old copy fails in ways that look like your mistake. If something in this guide does not match what your assistant does, check the version first.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html#what-is-in-the-operator-plugin",
+    "href": "06-ai/2-tercen-skills.html#what-is-in-the-operator-plugin",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "27.4 What is in the operator plugin",
+    "text": "27.4 What is in the operator plugin\n\n\n\n\n\n\n\nTheme\nSkills\n\n\n\n\nGetting connected\ninstall-tercenctl, tercenctl-guide, tercen-studio\n\n\nBuilding an operator\nsearch-operators, create-operator, create-r-operator, validate-operator-output\n\n\nShipping it\nrelease-operator, publish-operator, deploy-tercen-library\n\n\nUsing and fixing\nload-data, file-import-pipeline, diagnose-operator-resources\n\n\n\nYou do not need to name a skill. Describe the task and the right one is chosen; naming it (/publish-operator) is available when you want to be explicit.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
+    ]
+  },
+  {
+    "objectID": "06-ai/2-tercen-skills.html#why-you-can-rely-on-them",
+    "href": "06-ai/2-tercen-skills.html#why-you-can-rely-on-them",
+    "title": "27  The Tercen Skills for Claude Code",
+    "section": "27.5 Why you can rely on them",
+    "text": "27.5 Why you can rely on them\nSkills are documentation, and documentation rots quietly — a flag gets renamed and the instructions still read perfectly well. The Tercen skills are therefore tested the way a user uses them: a scenario runs a fresh assistant session against a disposable Tercen Studio, given only the skills and a user’s own words, and the result is decided by querying the instance afterwards rather than by what the assistant reports. An assistant claiming “published successfully” while the library stayed empty is the specific failure those tests exist to catch.\n\n\n\n\n\n\nTip\n\n\n\nIf a skill cannot do something it plainly should, that is worth reporting. Each scenario in the test suite exists because something was wrong first, and the fix for a bad instruction is usually one line.",
+    "crumbs": [
+      "AI-Assisted Development",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>The Tercen Skills for Claude Code</span>"
     ]
   },
   {

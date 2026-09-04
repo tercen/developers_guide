@@ -8,7 +8,7 @@
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>17&nbsp; Continuous Integration Workflow – Tercen Developer's Guide</title>
+<title>27&nbsp; The Tercen Skills for Claude Code – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -72,8 +72,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../03-workflow-templates/3-templates-installation.html" rel="next">
-<link href="../03-workflow-templates/1-templates.html" rel="prev">
+<link href="../99-appendices/1-glossary.html" rel="next">
+<link href="../06-ai/1-ai-operator-dev.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/2-templates-ci.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06-ai/1-ai-operator-dev.html">AI-Assisted Development</a></li><li class="breadcrumb-item"><a href="../06-ai/2-tercen-skills.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -291,7 +291,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link active">
+  <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
   </div>
 </li>
@@ -384,7 +384,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../06-ai/2-tercen-skills.html" class="sidebar-item-text sidebar-link">
+  <a href="../06-ai/2-tercen-skills.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></span></a>
   </div>
 </li>
@@ -429,18 +429,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link active" data-scroll-target="#inputs"><span class="header-section-number">17.0.1</span> Inputs</a></li>
-  <li><a href="#steps" id="toc-steps" class="nav-link" data-scroll-target="#steps"><span class="header-section-number">17.0.2</span> Steps</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">17.0.3</span> Summary</a></li>
+  <li><a href="#getting-them" id="toc-getting-them" class="nav-link active" data-scroll-target="#getting-them"><span class="header-section-number">27.1</span> Getting them</a></li>
+  <li><a href="#checking-them" id="toc-checking-them" class="nav-link" data-scroll-target="#checking-them"><span class="header-section-number">27.2</span> Checking them</a></li>
+  <li><a href="#keeping-them-current" id="toc-keeping-them-current" class="nav-link" data-scroll-target="#keeping-them-current"><span class="header-section-number">27.3</span> Keeping them current</a></li>
+  <li><a href="#what-is-in-the-operator-plugin" id="toc-what-is-in-the-operator-plugin" class="nav-link" data-scroll-target="#what-is-in-the-operator-plugin"><span class="header-section-number">27.4</span> What is in the operator plugin</a></li>
+  <li><a href="#why-you-can-rely-on-them" id="toc-why-you-can-rely-on-them" class="nav-link" data-scroll-target="#why-you-can-rely-on-them"><span class="header-section-number">27.5</span> Why you can rely on them</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/03-workflow-templates/2-templates-ci.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/06-ai/2-tercen-skills.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../03-workflow-templates/1-templates.html">Workflow Template Development</a></li><li class="breadcrumb-item"><a href="../03-workflow-templates/2-templates-ci.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../06-ai/1-ai-operator-dev.html">AI-Assisted Development</a></li><li class="breadcrumb-item"><a href="../06-ai/2-tercen-skills.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -457,43 +459,95 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Here is a link to the <a href="https://github.com/tercen/actions/tree/main/workflow-CI">Workflow CI Action</a> that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.</p>
-<p>Here’s a breakdown of what each part of the workflow does:</p>
-<section id="inputs" class="level3" data-number="17.0.1">
-<h3 data-number="17.0.1" class="anchored" data-anchor-id="inputs"><span class="header-section-number">17.0.1</span> Inputs</h3>
-<p>The workflow accepts several inputs, which are parameters for the CI process:</p>
-<ul>
-<li><code>git-repository</code> (required): The GitHub repository containing the template to be tested.</li>
-<li><code>branch</code> (optional, defaults to main): The branch of the GitHub repository.</li>
-<li><code>tag</code> (optional): A commit or version tag for the GitHub repository.</li>
-<li><code>git-token</code> (required): GitHub access token used to authenticate and access the repository.</li>
-<li><code>service-uri</code> (optional): The URI of a service to which the workflow will connect.</li>
-<li><code>tercen-username</code> (optional): Tercen service username.</li>
-<li><code>tercen-password</code> (optional): Tercen service password.</li>
-</ul>
+<p>Several chapters in this guide are written as <strong>prompts</strong> rather than command sequences: you describe the outcome, and the assistant knows the recipe. That only works if the assistant has the Tercen skills loaded. This chapter is how you get them, check them, and keep them current.</p>
+<p>A skill is packaged instructions — not code, not a service. It tells the assistant how a particular Tercen job is done: which command, in which order, what the failure modes look like, and what to verify afterwards. Nothing runs on your machine that you did not run yourself.</p>
+<section id="getting-them" class="level2" data-number="27.1">
+<h2 data-number="27.1" class="anchored" data-anchor-id="getting-them"><span class="header-section-number">27.1</span> Getting them</h2>
+<p>The skills ship as a Claude Code <strong>plugin marketplace</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin marketplace add tercen/skills</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin install tercen-operator-dev@tercen</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The same commands work as <code>/plugin marketplace add …</code> and <code>/plugin install …</code> inside a running session. There is a second plugin, <code>tercen-science@tercen</code>, covering scientist-facing data intake rather than operator development.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>tercen/skills</code> is a <strong>private</strong> repository: you need <strong>read permission</strong> on it before either command will work, and that is granted per GitHub account. Contact Tercen to be granted it.</p>
+<p>If <code>marketplace add</code> reports that the repository cannot be found, missing read permission is almost always the reason rather than a typo. Check which account you are actually authenticated as with <code>gh auth status</code> first — having access under one account does not help if <code>gh</code> is logged in as another.</p>
+</div>
+</div>
 </section>
-<section id="steps" class="level3" data-number="17.0.2">
-<h3 data-number="17.0.2" class="anchored" data-anchor-id="steps"><span class="header-section-number">17.0.2</span> Steps</h3>
-<p><strong>1. Start Tercen Services</strong></p>
-<p>Action: tercen/actions/start-tercen@main Starts necessary Tercen services to facilitate the test environment.</p>
-<p><strong>2. Log in to Docker Registry</strong></p>
-<p>Action: docker/login-action@v3.3.0 Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor’s credentials and the provided GitHub access token.</p>
-<p><strong>3. Install Template Runner</strong></p>
-<p>Run: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.</p>
-<p><strong>4. Test Template</strong></p>
-<p>Run: Executes the tercen/workflow_runner_operator Docker container. Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run. The –report flag is used to generate a test report.</p>
-<p><strong>5. Copy Result File</strong></p>
-<p>Run: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.</p>
-<p><strong>6. Read Runner Results</strong></p>
-<p>Run: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.</p>
-<p><strong>7. Check Runner Results</strong></p>
-<p>Condition: If the Status field in the JSON output is not “Success,” the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.</p>
-<p><strong>8. Upload Runner Results</strong></p>
-<p>Action: actions/upload-artifact@v3 The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.</p>
+<section id="checking-them" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="checking-them"><span class="header-section-number">27.2</span> Checking them</h2>
+<p>Three levels, from cheapest to most convincing.</p>
+<p><strong>Is the plugin installed, and at what version?</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What is actually in it?</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin details tercen-operator-dev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Does this session have them?</strong> The check that matters, because a plugin installed but not loaded behaves exactly like one that was never installed:</p>
+<pre><code>Which Tercen skills do you have available?</code></pre>
+<p>If the answer is vague or names nothing, you are talking to a session that started before the install. Restart it.</p>
 </section>
-<section id="summary" class="level3" data-number="17.0.3">
-<h3 data-number="17.0.3" class="anchored" data-anchor-id="summary"><span class="header-section-number">17.0.3</span> Summary</h3>
-<p>CI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.</p>
+<section id="keeping-them-current" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="keeping-them-current"><span class="header-section-number">27.3</span> Keeping them current</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin update tercen-operator-dev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A restart is required before an update takes effect. Skills change when the platform changes — a renamed flag, a command that no longer exists, a new failure mode — so an old copy fails in ways that look like <em>your</em> mistake. If something in this guide does not match what your assistant does, check the version first.</p>
+</section>
+<section id="what-is-in-the-operator-plugin" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="what-is-in-the-operator-plugin"><span class="header-section-number">27.4</span> What is in the operator plugin</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Theme</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Getting connected</td>
+<td><code>install-tercenctl</code>, <code>tercenctl-guide</code>, <code>tercen-studio</code></td>
+</tr>
+<tr class="even">
+<td>Building an operator</td>
+<td><code>search-operators</code>, <code>create-operator</code>, <code>create-r-operator</code>, <code>validate-operator-output</code></td>
+</tr>
+<tr class="odd">
+<td>Shipping it</td>
+<td><code>release-operator</code>, <code>publish-operator</code>, <code>deploy-tercen-library</code></td>
+</tr>
+<tr class="even">
+<td>Using and fixing</td>
+<td><code>load-data</code>, <code>file-import-pipeline</code>, <code>diagnose-operator-resources</code></td>
+</tr>
+</tbody>
+</table>
+<p>You do not need to name a skill. Describe the task and the right one is chosen; naming it (<code>/publish-operator</code>) is available when you want to be explicit.</p>
+</section>
+<section id="why-you-can-rely-on-them" class="level2" data-number="27.5">
+<h2 data-number="27.5" class="anchored" data-anchor-id="why-you-can-rely-on-them"><span class="header-section-number">27.5</span> Why you can rely on them</h2>
+<p>Skills are documentation, and documentation rots quietly — a flag gets renamed and the instructions still read perfectly well. The Tercen skills are therefore tested the way a user uses them: a scenario runs a fresh assistant session against a disposable Tercen Studio, given only the skills and a user’s own words, and the result is decided by <strong>querying the instance afterwards</strong> rather than by what the assistant reports. An assistant claiming “published successfully” while the library stayed empty is the specific failure those tests exist to catch.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If a skill cannot do something it plainly should, that is worth reporting. Each scenario in the test suite exists because something was wrong first, and the fix for a bad instruction is usually one line.</p>
+</div>
+</div>
 
 
 <!-- -->
@@ -954,80 +1008,122 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../03-workflow-templates/1-templates.html" class="pagination-link" aria-label="Templates">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Templates</span></span>
+      <a href="../06-ai/1-ai-operator-dev.html" class="pagination-link" aria-label="Spec-Driven Development with Tercen Agents">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../03-workflow-templates/3-templates-installation.html" class="pagination-link" aria-label="Installing a Template">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../99-appendices/1-glossary.html" class="pagination-link" aria-label="Glossary">
+        <span class="nav-page-text">Glossary</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Continuous Integration Workflow</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Here is a link to the <span class="co">[</span><span class="ot">Workflow CI Action</span><span class="co">](https://github.com/tercen/actions/tree/main/workflow-CI)</span> that is triggered after each push. This GitHub Action is a continuous integration (CI) workflow that automates the process of testing a workflow template using the tercen/workflow_runner_operator Docker container.</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Here’s a breakdown of what each part of the workflow does:</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inputs</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>The workflow accepts several inputs, which are parameters for the CI process:</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`git-repository`</span> (required): The GitHub repository containing the template to be tested.</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`branch`</span> (optional, defaults to main): The branch of the GitHub repository.</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tag`</span> (optional): A commit or version tag for the GitHub repository.</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`git-token`</span> (required): GitHub access token used to authenticate and access the repository.</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`service-uri`</span> (optional): The URI of a service to which the workflow will connect.</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tercen-username`</span> (optional): Tercen service username.</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="in">`tercen-password`</span> (optional): Tercen service password.</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### Steps</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>__1. Start Tercen Services__</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Action: tercen/actions/start-tercen@main</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>Starts necessary Tercen services to facilitate the test environment.</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>__2. Log in to Docker Registry__ </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>Action: docker/login-action@v3.3.0</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Logs into the GitHub Container Registry (ghcr.io) using the GitHub actor's credentials and the provided GitHub access token.</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>__3. Install Template Runner__</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>Run: Pulls the tercen/workflow_runner_operator:latest Docker image to run the workflow template tests.</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>__4. Test Template__</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Run: Executes the tercen/workflow_runner_operator Docker container.</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Uses the inputs for the GitHub repository, username/password for Tercen, the service URI, and the GitHub token to execute the test run.</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>The --report flag is used to generate a test report.</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>__5. Copy Result File__</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Run: Copies the test results (a JSON file named test_results.json) from inside the Docker container (workflow_runner) to the local file system.</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>__6. Read Runner Results__</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>Run: Reads the test_results.json file and saves the contents into a GitHub output variable named JSON, removing spaces for easier processing.</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>__7. Check Runner Results__</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>Condition: If the Status field in the JSON output is not "Success," the workflow will fail with exit 1. This ensures that the test results are evaluated before proceeding.</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>__8. Upload Runner Results__</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>Action: actions/upload-artifact@v3</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>The test results (test_results.json) are uploaded as an artifact with a retention of 7 days, allowing the results to be stored and accessed later.</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### Summary</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>CI testing is done by pulling a Docker container (tercen/workflow_runner_operator), running tests based on the specified GitHub repository, and evaluating the results. If the tests pass, the results are uploaded as artifacts for later inspection. If the tests fail, the workflow exits with an error.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Tercen Skills for Claude Code</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>Several chapters in this guide are written as **prompts** rather than command</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>sequences: you describe the outcome, and the assistant knows the recipe. That</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>only works if the assistant has the Tercen skills loaded. This chapter is how</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>you get them, check them, and keep them current.</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>A skill is packaged instructions — not code, not a service. It tells the</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>assistant how a particular Tercen job is done: which command, in which order,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>what the failure modes look like, and what to verify afterwards. Nothing runs</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>on your machine that you did not run yourself.</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Getting them</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>The skills ship as a Claude Code **plugin marketplace**:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin marketplace add tercen/skills</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin install tercen-operator-dev@tercen</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>The same commands work as <span class="in">`/plugin marketplace add …`</span> and <span class="in">`/plugin install …`</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>inside a running session. There is a second plugin, <span class="in">`tercen-science@tercen`</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>covering scientist-facing data intake rather than operator development.</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="in">`tercen/skills`</span> is a **private** repository: you need **read permission** on it</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>before either command will work, and that is granted per GitHub account.</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>Contact Tercen to be granted it.</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>If <span class="in">`marketplace add`</span> reports that the repository cannot be found, missing read</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>permission is almost always the reason rather than a typo. Check which account</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>you are actually authenticated as with <span class="in">`gh auth status`</span> first — having access</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>under one account does not help if <span class="in">`gh`</span> is logged in as another.</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Checking them</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>Three levels, from cheapest to most convincing.</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>**Is the plugin installed, and at what version?**</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin list</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>**What is actually in it?**</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin details tercen-operator-dev</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>**Does this session have them?** The check that matters, because a plugin</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>installed but not loaded behaves exactly like one that was never installed:</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="in">Which Tercen skills do you have available?</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>If the answer is vague or names nothing, you are talking to a session that</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>started before the install. Restart it.</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Keeping them current</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> plugin update tercen-operator-dev</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>A restart is required before an update takes effect. Skills change when the</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>platform changes — a renamed flag, a command that no longer exists, a new</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>failure mode — so an old copy fails in ways that look like *your* mistake. If</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>something in this guide does not match what your assistant does, check the</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>version first.</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## What is in the operator plugin</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Theme <span class="pp">|</span> Skills <span class="pp">|</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Getting connected <span class="pp">|</span> <span class="in">`install-tercenctl`</span>, <span class="in">`tercenctl-guide`</span>, <span class="in">`tercen-studio`</span> <span class="pp">|</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Building an operator <span class="pp">|</span> <span class="in">`search-operators`</span>, <span class="in">`create-operator`</span>, <span class="in">`create-r-operator`</span>, <span class="in">`validate-operator-output`</span> <span class="pp">|</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Shipping it <span class="pp">|</span> <span class="in">`release-operator`</span>, <span class="in">`publish-operator`</span>, <span class="in">`deploy-tercen-library`</span> <span class="pp">|</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Using and fixing <span class="pp">|</span> <span class="in">`load-data`</span>, <span class="in">`file-import-pipeline`</span>, <span class="in">`diagnose-operator-resources`</span> <span class="pp">|</span></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>You do not need to name a skill. Describe the task and the right one is chosen;</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>naming it (<span class="in">`/publish-operator`</span>) is available when you want to be explicit.</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why you can rely on them</span></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>Skills are documentation, and documentation rots quietly — a flag gets renamed</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>and the instructions still read perfectly well. The Tercen skills are therefore</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>tested the way a user uses them: a scenario runs a fresh assistant session</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>against a disposable Tercen Studio, given only the skills and a user's own</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>words, and the result is decided by **querying the instance afterwards** rather</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>than by what the assistant reports. An assistant claiming "published</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>successfully" while the library stayed empty is the specific failure those</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>tests exist to catch.</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>If a skill cannot do something it plainly should, that is worth reporting. Each</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>scenario in the test suite exists because something was wrong first, and the</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>fix for a bad instruction is usually one line.</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/03-workflow-templates/2-templates-ci.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/06-ai/2-tercen-skills.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
