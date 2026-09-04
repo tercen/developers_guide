@@ -1,0 +1,141 @@
+# Working with tercenctl
+
+`tercenctl` is the Tercen command line tool. It runs on **your** machine with
+**your** credentials, which is what makes it the answer to a specific class of
+problem: anything the server cannot do on your behalf because it does not have
+your access.
+
+The prompts in this chapter are written for an AI coding assistant with the
+Tercen skills installed (see
+[Spec-Driven Development with Tercen Agents](../06-ai/1-ai-operator-dev.qmd)).
+You describe the outcome; the skill carries the recipe. The install, connect and
+publish prompts below have been executed end-to-end against a local Tercen
+Studio.
+
+## Why not just use the Update library button
+
+The **+** / *Update library* button in the Tercen UI runs on the **server**,
+using the server's own GitHub token. That has two consequences worth
+internalising before you debug anything:
+
+- It can only see **public** repositories, plus whatever private repositories
+  the server's token was granted. A private operator in your organisation is
+  usually invisible to it.
+- The sweep is **all-or-nothing**. One repository it cannot fetch fails the
+  whole run, so a single private pin blocks every other operator in the
+  manifest — with an error naming only the first casualty:
+
+  ```
+  Failed to process library -- [Repo(https://github.com/<org>/<repo>,0.1.5)]
+  ```
+
+`tercenctl` runs locally with your GitHub access, one operator at a time. Those
+are the two routes, and they fail independently.
+
+::: {.callout-important}
+If the library button is failing on a private repository, removing that pin
+from the library manifest unblocks every other operator immediately. Install
+the private one with `tercenctl` instead. Fixing the manifest and installing
+the operator are separate jobs — do not wait for one to do the other.
+:::
+
+## Installing it
+
+`tercenctl` is distributed as a prebuilt binary from a release repository. The
+source is not needed to run it.
+
+```
+I need the Tercen command line tool on this machine.
+```
+
+This works out the platform (Windows, WSL, Git Bash, Linux, macOS all differ in
+asset, install location and checksum command), downloads the matching binary,
+verifies it against `SHA256SUMS`, and puts it on the `PATH`.
+
+::: {.callout-note}
+A binary installed inside WSL is invisible to PowerShell, and vice versa.
+Install it in the same environment your assistant runs its commands in.
+:::
+
+## Connecting it
+
+Generate a token from your Tercen instance at `https://<your-tercen>/_token`,
+then:
+
+```
+Connect it to https://<your-tercen> using this token: PASTE_TOKEN_HERE
+Name the connection <a-name-you-will-recognise>.
+```
+
+Naming is worth the extra line. Connections accumulate, and one called `local`
+pointing at production is a trap you set for yourself.
+
+::: {.callout-warning}
+The instance URI is carried **inside** the token, in its `iss` claim — it is not
+taken from the URL you type. A token copied from the wrong Tercen connects you
+to that Tercen without complaining. This is why the next step asks which
+instance answered.
+:::
+
+```
+Check the connection actually works - which instance am I on, and who am I logged in as?
+```
+
+Expect the instance hostname, your username and the server version. A saved
+configuration file proves nothing on its own; this asks the server.
+
+## Publishing a private operator
+
+The worked example: an operator in a private organisation repository, which the
+library button cannot reach.
+
+```
+What operators are in the library, and at which versions?
+```
+
+```
+Put <repo> version <tag> into the library. It is a private repo, so use my GitHub token -
+get it with: gh auth token
+```
+
+```
+Check <repo> <tag> is now in the library and show me the version.
+```
+
+::: {.callout-important}
+A **fine-grained** `github_pat_…` token will not work. GitHub refuses those for
+source archive downloads. Use a classic `ghp_…` token with `repo` scope, or an
+OAuth `gho_…` token such as the one `gh auth token` returns. This trap is
+covered in more depth in
+[Installing an Operator](../02-operator-development/9-installation.qmd).
+:::
+
+### Why the last step is not optional
+
+An operator appears in a team's library only when the team holds **both**
+halves: the operator document *and* a project whose URL and version match it.
+Library projects are named `<repo>@<version>`.
+
+Installing the operator alone reports success and lists nothing. That is the
+mechanism behind the most common report in this area — *"I published it but I
+cannot find it"* — and it is why the verification step checks the library
+listing rather than trusting the installer's own summary.
+
+## When something fails
+
+Read the message, then hand it back:
+
+```
+That failed. Read the error and tell me whether it is my GitHub access, the token type, or
+something in the operator itself - and what to do about it.
+```
+
+A failed install is not destructive: the library is left as it was.
+
+The three failures that account for most of them:
+
+| Symptom | Cause |
+|---|---|
+| `404` fetching the release | Your GitHub account cannot see the repository |
+| `404` on a private zipball, with a valid token | Fine-grained token — use a classic or OAuth one |
+| Installed, but absent from the library UI | Operator without its matching project |

@@ -44,6 +44,7 @@ book:
         - 04-advanced-topics/2-tercen-cli.qmd
         - 04-advanced-topics/3-gpu-development.qmd
         - 04-advanced-topics/4-export-operator-parameters.qmd
+        - 04-advanced-topics/5-tercenctl.qmd
         
     - part: "Troubleshooting"
       chapters:
