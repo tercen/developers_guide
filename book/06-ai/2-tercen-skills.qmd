@@ -1,0 +1,102 @@
+# The Tercen Skills for Claude Code
+
+Several chapters in this guide are written as **prompts** rather than command
+sequences: you describe the outcome, and the assistant knows the recipe. That
+only works if the assistant has the Tercen skills loaded. This chapter is how
+you get them, check them, and keep them current.
+
+A skill is packaged instructions — not code, not a service. It tells the
+assistant how a particular Tercen job is done: which command, in which order,
+what the failure modes look like, and what to verify afterwards. Nothing runs
+on your machine that you did not run yourself.
+
+## Getting them
+
+The skills ship as a Claude Code **plugin marketplace**:
+
+```bash
+claude plugin marketplace add tercen/skills
+claude plugin install tercen-operator-dev@tercen
+```
+
+The same commands work as `/plugin marketplace add …` and `/plugin install …`
+inside a running session. There is a second plugin, `tercen-science@tercen`,
+covering scientist-facing data intake rather than operator development.
+
+::: {.callout-important}
+`tercen/skills` is a **private** repository: you need **read permission** on it
+before either command will work, and that is granted per GitHub account.
+Contact Tercen to be granted it.
+
+If `marketplace add` reports that the repository cannot be found, missing read
+permission is almost always the reason rather than a typo. Check which account
+you are actually authenticated as with `gh auth status` first — having access
+under one account does not help if `gh` is logged in as another.
+:::
+
+## Checking them
+
+Three levels, from cheapest to most convincing.
+
+**Is the plugin installed, and at what version?**
+
+```bash
+claude plugin list
+```
+
+**What is actually in it?**
+
+```bash
+claude plugin details tercen-operator-dev
+```
+
+**Does this session have them?** The check that matters, because a plugin
+installed but not loaded behaves exactly like one that was never installed:
+
+```
+Which Tercen skills do you have available?
+```
+
+If the answer is vague or names nothing, you are talking to a session that
+started before the install. Restart it.
+
+## Keeping them current
+
+```bash
+claude plugin update tercen-operator-dev
+```
+
+A restart is required before an update takes effect. Skills change when the
+platform changes — a renamed flag, a command that no longer exists, a new
+failure mode — so an old copy fails in ways that look like *your* mistake. If
+something in this guide does not match what your assistant does, check the
+version first.
+
+## What is in the operator plugin
+
+| Theme | Skills |
+|---|---|
+| Getting connected | `install-tercenctl`, `tercenctl-guide`, `tercen-studio` |
+| Building an operator | `search-operators`, `create-operator`, `create-r-operator`, `validate-operator-output` |
+| Shipping it | `release-operator`, `publish-operator`, `deploy-tercen-library` |
+| Using and fixing | `load-data`, `file-import-pipeline`, `diagnose-operator-resources` |
+
+You do not need to name a skill. Describe the task and the right one is chosen;
+naming it (`/publish-operator`) is available when you want to be explicit.
+
+## Why you can rely on them
+
+Skills are documentation, and documentation rots quietly — a flag gets renamed
+and the instructions still read perfectly well. The Tercen skills are therefore
+tested the way a user uses them: a scenario runs a fresh assistant session
+against a disposable Tercen Studio, given only the skills and a user's own
+words, and the result is decided by **querying the instance afterwards** rather
+than by what the assistant reports. An assistant claiming "published
+successfully" while the library stayed empty is the specific failure those
+tests exist to catch.
+
+::: {.callout-tip}
+If a skill cannot do something it plainly should, that is worth reporting. Each
+scenario in the test suite exists because something was wrong first, and the
+fix for a bad instruction is usually one line.
+:::

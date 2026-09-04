@@ -6,8 +6,9 @@ problem: anything the server cannot do on your behalf because it does not have
 your access.
 
 The prompts in this chapter are written for an AI coding assistant with the
-Tercen skills installed (see
-[Spec-Driven Development with Tercen Agents](../06-ai/1-ai-operator-dev.qmd)).
+Tercen skills installed — see
+[The Tercen Skills for Claude Code](../06-ai/2-tercen-skills.qmd) for how to
+install them and confirm the session actually has them.
 You describe the outcome; the skill carries the recipe. The install, connect and
 publish prompts below have been executed end-to-end against a local Tercen
 Studio.

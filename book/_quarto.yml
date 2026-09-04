@@ -54,6 +54,7 @@ book:
     - part: "AI-Assisted Development"
       chapters:
         - 06-ai/1-ai-operator-dev.qmd
+        - 06-ai/2-tercen-skills.qmd
 
     - part: "Appendices"
       chapters:
