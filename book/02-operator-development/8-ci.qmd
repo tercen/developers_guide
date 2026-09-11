@@ -271,7 +271,7 @@ env:
 
 - **The image is pulled when the operator is installed.** If the tag referenced by `operator.json`'s `container` does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. `:main`, or `:0.0.1`).
 - **Images persist independently of git.** Renaming or deleting a branch/tag does **not** rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.
-- **Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable.
+- **Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable. The pull authenticates with the **installer's own** credential — a classic PAT with `read:packages` (SSO-authorize for the org), attached at install and cleared when the install task finishes; Tercen never provisions registry credentials. See [Installing an Operator](9-installation.qmd).
 
 # Private repos: release-workflow install step & tokens
 
