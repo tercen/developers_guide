@@ -87,6 +87,19 @@ Tercen's preferred method for operator installation uses direct Git integration:
 The Auth Token is used by the **Tercen server** to download the repo's zipball from `github.com`. That endpoint accepts **classic** tokens (`ghp_...`, `repo` scope) but **rejects fine-grained tokens** (`github_pat_...`) — a fine-grained token fails with a 404 even when its permissions are correct.
 :::
 
+::: {.callout-important}
+## Private image? Bring your own registry credential
+A **private container image** needs a second credential, separate from the Auth Token above — and Tercen **never provisions one**. The user mints their own classic PAT with `read:packages` (SSO-authorize for the org) and attaches it at install — nothing Tercen-side. In detail:
+
+- **Classic token, `read:packages`** — pull access to the image's ghcr namespace. The username attached alongside it must be the token's owner.
+- **SSO authorization** — if the image's GitHub organization uses SSO, authorize the token for that org; an SSO-unauthorized token cannot pull even with correct scopes.
+- **Attached at install, task-scoped** — the credential rides the install task, is used server-side for the image pull, and is cleared when the install task finishes. Nothing is kept for reuse between installs.
+- **`ghcr.io` only** — the proven registry for private-image installs. Docker Hub credentials are a separate, not-yet-supported lane.
+- **Trust boundary unchanged** — the credential enables the pull; it does not widen it. The image must still live in a trusted registry namespace (see [the CI chapter](8-ci.qmd)).
+
+Attachment surface today: the credential, the declared registry host, and the username ride the install task's registry metadata through the install API; a dedicated field in the install dialog is tracked as follow-up work.
+:::
+
 4. **Complete Installation**
    - Review settings
    - Click "Create Project"
@@ -98,6 +111,8 @@ For **private repositories**, you'll need:
 - Personal Access Token (PAT) for GitHub
 - Appropriate repository permissions
 - Token with `repo` scope for full access
+
+For **private images**, additionally attach your own classic PAT with `read:packages` (+ org SSO) at install — see the *Private image? Bring your own registry credential* callout above.
 :::
 
 ::: {.callout-important}
