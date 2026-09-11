@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d4a8b15a3225db039fdc9185e4bb97cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-68b9dd30ee0342b49e3b54af51606c6f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -748,7 +748,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul>
 <li><strong>The image is pulled when the operator is installed.</strong> If the tag referenced by <code>operator.json</code>’s <code>container</code> does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g.&nbsp;<code>:main</code>, or <code>:0.0.1</code>).</li>
 <li><strong>Images persist independently of git.</strong> Renaming or deleting a branch/tag does <strong>not</strong> rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.</li>
-<li><strong>Private images are fine.</strong> Tercen can pull private operator images; the image does not need to be public to be installable.</li>
+<li><strong>Private images are fine.</strong> Tercen can pull private operator images; the image does not need to be public to be installable. The pull authenticates with the <strong>installer’s own</strong> credential — a classic PAT with <code>read:packages</code> (SSO-authorize for the org), attached at install and cleared when the install task finishes; Tercen never provisions registry credentials. See <a href="../02-operator-development/9-installation.html">Installing an Operator</a>.</li>
 </ul>
 </section>
 </section>
@@ -1542,7 +1542,7 @@ https://github.com/&lt;org&gt;/&lt;repo&gt;/zipball/&lt;sha&gt;</code></pre>
 <span id="cb16-271"><a href="#cb16-271" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-272"><a href="#cb16-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The image is pulled when the operator is installed.** If the tag referenced by <span class="in">`operator.json`</span>'s <span class="in">`container`</span> does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. <span class="in">`:main`</span>, or <span class="in">`:0.0.1`</span>).</span>
 <span id="cb16-273"><a href="#cb16-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Images persist independently of git.** Renaming or deleting a branch/tag does **not** rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.</span>
-<span id="cb16-274"><a href="#cb16-274" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable.</span>
+<span id="cb16-274"><a href="#cb16-274" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable. The pull authenticates with the **installer's own** credential — a classic PAT with <span class="in">`read:packages`</span> (SSO-authorize for the org), attached at install and cleared when the install task finishes; Tercen never provisions registry credentials. See <span class="co">[</span><span class="ot">Installing an Operator</span><span class="co">](9-installation.qmd)</span>.</span>
 <span id="cb16-275"><a href="#cb16-275" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-276"><a href="#cb16-276" aria-hidden="true" tabindex="-1"></a><span class="fu"># Private repos: release-workflow install step &amp; tokens</span></span>
 <span id="cb16-277"><a href="#cb16-277" aria-hidden="true" tabindex="-1"></a></span>

@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d4a8b15a3225db039fdc9185e4bb97cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-68b9dd30ee0342b49e3b54af51606c6f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -631,6 +631,27 @@ Auth Token: ghp_xxxxx (classic PAT, only if repository is private)</code></pre><
 <p>The Auth Token is used by the <strong>Tercen server</strong> to download the repo’s zipball from <code>github.com</code>. That endpoint accepts <strong>classic</strong> tokens (<code>ghp_...</code>, <code>repo</code> scope) but <strong>rejects fine-grained tokens</strong> (<code>github_pat_...</code>) — a fine-grained token fails with a 404 even when its permissions are correct.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Private image? Bring your own registry credential
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>private container image</strong> needs a second credential, separate from the Auth Token above — and Tercen <strong>never provisions one</strong>. The user mints their own classic PAT with <code>read:packages</code> (SSO-authorize for the org) and attaches it at install — nothing Tercen-side. In detail:</p>
+<ul>
+<li><strong>Classic token, <code>read:packages</code></strong> — pull access to the image’s ghcr namespace. The username attached alongside it must be the token’s owner.</li>
+<li><strong>SSO authorization</strong> — if the image’s GitHub organization uses SSO, authorize the token for that org; an SSO-unauthorized token cannot pull even with correct scopes.</li>
+<li><strong>Attached at install, task-scoped</strong> — the credential rides the install task, is used by Tercen’s worker to pull the image, and is cleared when the install task finishes. Nothing is kept for reuse between installs.</li>
+<li><strong><code>ghcr.io</code> only</strong> — the proven registry for private-image installs. Docker Hub credentials are a separate, not-yet-supported lane.</li>
+<li><strong>Trust boundary unchanged</strong> — the credential enables the pull; it does not widen it. The image must still live in a trusted registry namespace (see <a href="../02-operator-development/8-ci.html">the CI chapter</a>).</li>
+</ul>
+<p>Attachment surface today: the credential, the declared registry host, and the username ride the install task’s registry metadata through the install API; a dedicated field in the install dialog is tracked as follow-up work.</p>
+</div>
+</div>
 <ol start="4" type="1">
 <li><strong>Complete Installation</strong>
 <ul>
@@ -650,6 +671,7 @@ Auth Token: ghp_xxxxx (classic PAT, only if repository is private)</code></pre><
 </div>
 <div class="callout-body-container callout-body">
 <p>For <strong>private repositories</strong>, you’ll need: - Personal Access Token (PAT) for GitHub - Appropriate repository permissions - Token with <code>repo</code> scope for full access</p>
+<p>For <strong>private images</strong>, additionally attach your own classic PAT with <code>read:packages</code> (+ org SSO) at install — see the <em>Private image? Bring your own registry credential</em> callout above.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -1281,69 +1303,84 @@ Auth Token: ghp_xxxxx (classic PAT, only if repository is private)</code></pre><
 <span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>The Auth Token is used by the **Tercen server** to download the repo's zipball from `github.com`. That endpoint accepts **classic** tokens (`ghp_...`, `repo` scope) but **rejects fine-grained tokens** (<span class="in">`github_pat_...`</span>) — a fine-grained token fails with a 404 even when its permissions are correct.</span>
 <span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Complete Installation**</span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Review settings</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Click "Create Project"</span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Wait for repository cloning and validation</span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Authentication Requirements</span></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>For **private repositories**, you'll need:</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Personal Access Token (PAT) for GitHub</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Appropriate repository permissions</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Token with <span class="in">`repo`</span> scope for full access</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Private image? Bring your own registry credential</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>A **private container image** needs a second credential, separate from the Auth Token above — and Tercen **never provisions one**. The user mints their own classic PAT with <span class="in">`read:packages`</span> (SSO-authorize for the org) and attaches it at install — nothing Tercen-side. In detail:</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classic token, `read:packages`** — pull access to the image's ghcr namespace. The username attached alongside it must be the token's owner.</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**SSO authorization** — if the image's GitHub organization uses SSO, authorize the token for that org; an SSO-unauthorized token cannot pull even with correct scopes.</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Attached at install, task-scoped** — the credential rides the install task, is used by Tercen's worker to pull the image, and is cleared when the install task finishes. Nothing is kept for reuse between installs.</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ghcr.io` only** — the proven registry for private-image installs. Docker Hub credentials are a separate, not-yet-supported lane.</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Trust boundary unchanged** — the credential enables the pull; it does not widen it. The image must still live in a trusted registry namespace (see <span class="co">[</span><span class="ot">the CI chapter</span><span class="co">](8-ci.qmd)</span>).</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>Attachment surface today: the credential, the declared registry host, and the username ride the install task's registry metadata through the install API; a dedicated field in the install dialog is tracked as follow-up work.</span>
 <span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## Trusted Organization Requirement</span></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>On managed Tercen instances, the repository must live in a **trusted GitHub organization** (ask your Tercen admin which — commonly <span class="in">`github.com/tercen/`</span> and <span class="in">`github.com/pamgene/`</span>). Repositories under personal accounts or untrusted organizations are rejected with <span class="in">`tercen.forbidden.untrusted.git`</span>. The <span class="in">`myorg`</span> placeholder above must be a trusted organization on such instances.</span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>Note also that "From Git" only **installs** a searchable operator when the repository name ends in <span class="in">`_operator`</span>, is lowercase, and the container image is pullable. Otherwise the files are copied but the operator will not appear in the picker — see <span class="co">[</span><span class="ot">My operator doesn't appear in the picker</span><span class="co">](../05-troubleshooting/1-common-issues.qmd)</span>.</span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operator Availability and Testing</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="fu">### Verification Steps</span></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>After installation, verify your operator is working correctly:</span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check Library Listing**</span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Confirm operator appears in library</span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Verify metadata is displayed correctly</span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Test in Workflow**</span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Create a new workflow</span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Add a data step</span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Search for your operator</span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Test with sample data</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Validate Functionality**</span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Run with different input configurations</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Verify output correctness</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Check error handling</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Complete Installation**</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Review settings</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Click "Create Project"</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Wait for repository cloning and validation</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Authentication Requirements</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>For **private repositories**, you'll need:</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Personal Access Token (PAT) for GitHub</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Appropriate repository permissions</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Token with <span class="in">`repo`</span> scope for full access</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>For **private images**, additionally attach your own classic PAT with <span class="in">`read:packages`</span> (+ org SSO) at install — see the *Private image? Bring your own registry credential* callout above.</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Trusted Organization Requirement</span></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>On managed Tercen instances, the repository must live in a **trusted GitHub organization** (ask your Tercen admin which — commonly <span class="in">`github.com/tercen/`</span> and <span class="in">`github.com/pamgene/`</span>). Repositories under personal accounts or untrusted organizations are rejected with <span class="in">`tercen.forbidden.untrusted.git`</span>. The <span class="in">`myorg`</span> placeholder above must be a trusted organization on such instances.</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>Note also that "From Git" only **installs** a searchable operator when the repository name ends in <span class="in">`_operator`</span>, is lowercase, and the container image is pullable. Otherwise the files are copied but the operator will not appear in the picker — see <span class="co">[</span><span class="ot">My operator doesn't appear in the picker</span><span class="co">](../05-troubleshooting/1-common-issues.qmd)</span>.</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operator Availability and Testing</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Verification Steps</span></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>After installation, verify your operator is working correctly:</span>
 <span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## Version Management</span></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="fu">### Operator Updates</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check Library Listing**</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Confirm operator appears in library</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Verify metadata is displayed correctly</span>
 <span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>To update an installed operator:</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Push changes to Git repository**</span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Tag new version** (recommended)</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trigger library refresh** in Tercen</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Test in Workflow**</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Create a new workflow</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Add a data step</span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Search for your operator</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Test with sample data</span>
 <span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="fu">### Version Control Best Practices</span></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use semantic versioning (e.g., 1.0.1)</span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tag stable releases in Git</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Validate Functionality**</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Run with different input configurations</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Verify output correctness</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Check error handling</span>
 <span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next Steps</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Version Management</span></span>
 <span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>With your operator successfully installed and available to users, consider:</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a><span class="fu">### Operator Updates</span></span>
 <span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Monitoring usage patterns and feedback</span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Planning feature enhancements based on user needs</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Exploring advanced deployment automation</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>To update an installed operator:</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Push changes to Git repository**</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Tag new version** (recommended)</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trigger library refresh** in Tercen</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Version Control Best Practices</span></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use semantic versioning (e.g., 1.0.1)</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tag stable releases in Git</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next Steps</span></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>With your operator successfully installed and available to users, consider:</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Monitoring usage patterns and feedback</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Planning feature enhancements based on user needs</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Exploring advanced deployment automation</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
