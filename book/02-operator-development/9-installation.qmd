@@ -93,7 +93,7 @@ A **private container image** needs a second credential, separate from the Auth 
 
 - **Classic token, `read:packages`** — pull access to the image's ghcr namespace. The username attached alongside it must be the token's owner.
 - **SSO authorization** — if the image's GitHub organization uses SSO, authorize the token for that org; an SSO-unauthorized token cannot pull even with correct scopes.
-- **Attached at install, task-scoped** — the credential rides the install task, is used server-side for the image pull, and is cleared when the install task finishes. Nothing is kept for reuse between installs.
+- **Attached at install, task-scoped** — the credential rides the install task, is used by Tercen's worker to pull the image, and is cleared when the install task finishes. Nothing is kept for reuse between installs.
 - **`ghcr.io` only** — the proven registry for private-image installs. Docker Hub credentials are a separate, not-yet-supported lane.
 - **Trust boundary unchanged** — the credential enables the pull; it does not widen it. The image must still live in a trusted registry namespace (see [the CI chapter](8-ci.qmd)).
 
