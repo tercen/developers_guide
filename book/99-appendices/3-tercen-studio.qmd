@@ -64,6 +64,30 @@ You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402
 
 * _Password_: admin
 
+::: {.callout-note}
+## Reaching a studio that is not on your own machine
+
+Published ports bind to **127.0.0.1 only**. The studio has a fixed admin/admin
+login and can install operators with whatever `GITHUB_TOKEN` you gave it, so it
+should not be on the network by default.
+
+This matters most for GPU work, where the studio usually runs on a separate
+machine with the GPU rather than the one you browse from. Reaching it on that
+machine's address will simply refuse the connection.
+
+Prefer an SSH tunnel, which needs no change to the studio:
+
+```bash
+ssh -L 5402:127.0.0.1:5402 <host>   # then use http://127.0.0.1:5402 as usual
+```
+
+To expose it deliberately instead, set `BIND_ADDR`:
+
+```bash
+BIND_ADDR=0.0.0.0 docker compose up -d   # or a specific interface address
+```
+:::
+
 RStudio is **not started by default**. It is available with
 `docker compose --profile rstudio up -d`, then
 [http://127.0.0.1:8787/](http://127.0.0.1:8787/).

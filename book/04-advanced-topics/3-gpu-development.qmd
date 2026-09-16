@@ -17,6 +17,11 @@ cd tercen_studio
 docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up -d
 ```
 
+If the GPU host is not the machine you browse from, note that the studio's
+ports bind to localhost only — see
+[Reaching a studio that is not on your own machine](../99-appendices/3-tercen-studio.qmd)
+for the SSH tunnel and the `BIND_ADDR` override.
+
 That overlay (in the tercen_studio repo) reserves the GPU for the
 `tercen-worker` service and runs a boot-time setup script inside it which
 installs the NVIDIA container toolkit, generates the CDI spec, and registers
