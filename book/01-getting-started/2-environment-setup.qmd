@@ -123,8 +123,9 @@ docker compose up -d
 Most developers start with cloud development and move to local setup for advanced use cases.
 :::
 
-See the **Tercen Studio appendix** for the full details: architecture, RStudio
-(R 4.4.3, matching the operator runtime), updating pinned versions, and
+See the **Tercen Studio appendix** for the full details: architecture, updating
+pinned versions, the optional RStudio profile and why expected test output
+should be generated in the operator's own image rather than in RStudio, and
 upgrading from a pre-2026-08 studio.
 
 ### Troubleshooting Common Issues

@@ -48,11 +48,11 @@ docker compose up -d
 Since 2026-08 the studio runs the same released images and architecture as
 production: `tercen` main + a separate worker (each running podman
 internally — the main manages the `sarno` table engine, the worker executes
-operator containers), `ha-scheduler`, `redis` and `couchdb`. The bundled
-RStudio ships **R 4.4.3 — the same version as the `runtime-r44` operator base
-image**, so results computed in RStudio are trustworthy against CI. Image
-versions are pinned in `docker-compose.yaml`; to update, bump them to the
-currently deployed production versions. **Upgrading from a pre-2026-08
+operator containers), `ha-scheduler`, `redis` and `couchdb`. Image versions are
+pinned in `docker-compose.yaml`; to update, bump them to the currently deployed
+production versions — `tercen` and `ha-scheduler` are the image tags on the
+production deployments, and sarno is `tercen.sarno.image` in the `tercen-config`
+ConfigMap rather than a pod image. **Upgrading from a pre-2026-08
 studio:** the architecture changed — run `docker compose down -v` (wipes
 local data) and start fresh. For GPU operator development see the GPU chapter
 — and use [`tercen/gpu_smoke_operator`](https://github.com/tercen/gpu_smoke_operator)
@@ -64,11 +64,40 @@ You can run **Tercen** by going to [http://127.0.0.1:5402](http://127.0.0.1:5402
 
 * _Password_: admin
 
-You can run **RStudio** by going to  [http://127.0.0.1:8787/](http://127.0.0.1:8787/).
- 
+RStudio is **not started by default**. It is available with
+`docker compose --profile rstudio up -d`, then
+[http://127.0.0.1:8787/](http://127.0.0.1:8787/).
+
 * _Username_: rstudio
 
 * _Password_: tercen
+
+::: {.callout-warning}
+Do not generate expected test output in RStudio. Its R is 4.4.3 — the same
+*version* operators use — but the rest of the environment differs from the base
+images operators are built on:
+
+| | RStudio | `runtime-r44-minimal` (operator tiers 1–2) |
+|---|---|---|
+| OS / libc | Ubuntu 24.04, glibc | Alpine, **musl** |
+| BLAS/LAPACK | OpenBLAS 0.3.26 | **reference `libRlapack`** |
+| Packages | 190 | 36 |
+
+OpenBLAS and reference LAPACK do not agree bit-for-bit on `svd`, `lm`, `prcomp`
+or matrix multiplication — small differences, and exactly large enough to break
+an exact-match golden comparison. Tier 3 operators build on `rocker/r-ver`,
+which RStudio does not match either.
+
+Run `main.R` in **the operator's own image** instead, which is CI-exact by
+construction:
+
+```bash
+docker run --rm -v "$PWD:/operator" -w /operator \
+  --network tercen_studio_tercen \
+  tercen/runtime-r44-minimal:4.4.3-2 \
+  R --no-save -f main.R --args --taskId=<id> --serviceUri=http://tercen:5400/api/v1/
+```
+:::
 
 VS Code (Python development) is optional; start it with
 `docker compose --profile python up -d` and open
