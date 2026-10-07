@@ -157,11 +157,21 @@ Once you are satisfied with your operator, you can release your operator by foll
 
 ## 1. Edit the operator.json file
 
-You should first edit the __container__ field of the __operator.json__ file so that it matched the version number you would like to push (here, __0.0.1__ for example).
+Tercen installs an operator **from the git commit** a tag points to, so the `container` value that counts is the one **committed** in `operator.json` at that commit. Set it before you tag.
+
+There are two safe ways to set it:
+
+- **Untagged (recommended):** `"container": "ghcr.io/myorg/my_operator"`. Tercen appends the installed commit's short SHA and pulls `ghcr.io/myorg/my_operator:<short-sha>`. The template CI workflow pushes these SHA tags (`type=sha` in the metadata step) on every push to `main`, so every release pulls the image built from exactly its own commit, and you never have to edit the pin.
+- **Explicit version:** `"container": "ghcr.io/myorg/my_operator:0.0.1"`, matching the tag you are about to push. You must update it in a commit **before every release**.
 
 ::: {.callout-warning}
-## Pin an immutable version tag, not `:main`
-Always point the `container` field at an **immutable, versioned** image tag (e.g. `:0.0.1`) — never a mutable tag like `:main` or `:master`. A mutable tag is overwritten by every new build, so a workflow step configured for "version 0.0.1" will silently pull whatever was built most recently. This means **rolling back to an older version does not actually roll back the image**, and a step that worked yesterday can break today with no change on your side. The release workflow below rewrites `container` to the pushed tag for exactly this reason.
+## Never pin a mutable tag
+Never point `container` at a mutable tag like `:latest`, `:main` or `:master`. A mutable tag is overwritten by every new build, so a step installed as "version 0.0.1" silently runs whatever was built most recently. **Rolling back to an older version does not roll back the image**, and a step that worked yesterday can break today with no change on your side.
+:::
+
+::: {.callout-important}
+## Rewriting `operator.json` inside the workflow does not change what Tercen installs
+The template release workflow has an "Update container in operator.json" step that rewrites `container` with `jq`. That edit only exists in the runner's working copy — it is never committed — while the install step makes Tercen download the repository **at the tag's commit**. Whatever `container` value is committed there is what gets installed. Real cases: a release `2.0.1` whose committed pin still said `:2.0.0` installed the `2.0.0` image; operators whose committed pin was `:latest` run the newest `main` build under every released version.
 :::
 
 ## 2. Push your changes and tag the repository
@@ -220,8 +230,8 @@ occur. Switch back to a proper version tag before handing the operator to users.
 
 ## 3. Wait and check the results of the release workflow
 
-The same way a workflow is triggered after each commit, tagging a repository will trigger another workflow, __release.yaml__. This workflow that will build and push the Docker image, tag it with the run the unit tests. 
-Once the workflow is run, you can verify it has been successful. If that is the case, you are now ready to install your operator in a __Library__.
+The same way a workflow is triggered after each commit, tagging a repository will trigger another workflow, __release.yaml__. This workflow builds and pushes the Docker image, then installs the operator on a test instance and runs its [unit tests](13-unit-tests.qmd).
+Once the workflow is run, you can verify it has been successful. If that is the case, you are now ready to install your operator in a __Library__. If it failed, the [release failure decoder](../05-troubleshooting/2-ci.qmd) lists every stage of the install check, in order, with its error and fix.
 
 
 # GitHub Container Registry (ghcr): requirements & common pitfalls
@@ -237,7 +247,28 @@ Docker/OCI image names must be **entirely lowercase**. If your repository name c
 ## The image must live in a trusted registry namespace
 Managed Tercen instances only pull operator images from **trusted container namespaces** — commonly `ghcr.io/tercen/` and `ghcr.io/pamgene/`. An image published anywhere else is rejected at install time with `tercen.forbidden.untrusted.docker`. Make sure the `container` field in your `operator.json` points to an image under a trusted namespace (ask your admin which are configured).
 
-This means the **image organization can differ from the repository organization** — e.g. a repository under `pamgene/` typically publishes its image to `ghcr.io/tercen/`.
+This means the **image organization can differ from the repository organization** — e.g. a repository under `pamgene/` can publish its image to `ghcr.io/tercen/`. The trusted list is per instance: an image namespace trusted on prod may not be trusted on the test instance the release check uses.
+:::
+
+::: {.callout-important}
+## New ghcr packages are private — make them public after the first push
+The first push of an image creates its ghcr **package**, and the package starts **private, whatever the repository's visibility**. Public repositories with private packages are common (seen on three operators in October 2026). The release install check, and installs on managed instances, pull anonymously and fail with `reading manifest … denied` or `unable to retrieve auth token: invalid username/password: unauthorized`.
+
+There is **no REST endpoint** to change package visibility; it is a manual step:
+
+1. Organisation owners: allow public packages in the organisation's package settings (`https://github.com/organizations/<org>/settings/packages`). If this is greyed out, an enterprise policy controls it.
+2. Open `https://github.com/orgs/<org>/packages/container/<image>/settings` → **Danger Zone** → **Change visibility** → **Public**.
+3. Verify without credentials (200 = public):
+
+```bash
+IMG=<org>/<image>
+TOKEN=$(curl -s "https://ghcr.io/token?scope=repository:$IMG:pull" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")
+curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $TOKEN" \
+  "https://ghcr.io/v2/$IMG/tags/list"
+```
+
+Plan the first release with this step in mind: it cannot be scripted. GitHub does not let you make a public package private again (delete and re-publish instead).
 :::
 
 ::: {.callout-warning}
@@ -271,7 +302,7 @@ env:
 
 - **The image is pulled when the operator is installed.** If the tag referenced by `operator.json`'s `container` does not exist in ghcr, installation fails and no operator is registered. Confirm CI actually pushed the tag you reference (e.g. `:main`, or `:0.0.1`).
 - **Images persist independently of git.** Renaming or deleting a branch/tag does **not** rename or delete the corresponding image in ghcr — you must rebuild to produce a new tag. Old tags keep working until overwritten.
-- **Private images are fine.** Tercen can pull private operator images; the image does not need to be public to be installable. The pull authenticates with the **installer's own** credential — a classic PAT with `read:packages` (SSO-authorize for the org), attached at install and cleared when the install task finishes; Tercen never provisions registry credentials. See [Installing an Operator](9-installation.qmd).
+- **Private images need the installer's own credential, and that path is limited today.** Tercen never provisions registry credentials, and ghcr does not accept GitHub App tokens. A private image can only be pulled with the **installer's own** classic PAT with `read:packages` (SSO-authorised for the org), attached to the install task and cleared when it finishes. Today it can only be attached through the install API — there is no field in the install dialog and no `tercenctl` option yet — and the release workflow's install check does not attach one, so **a private image fails the release check** (stage 3 of the [release failure decoder](../05-troubleshooting/2-ci.qmd)). Prefer public images. See [Installing an Operator](9-installation.qmd).
 
 # Private repos: release-workflow install step & tokens
 
