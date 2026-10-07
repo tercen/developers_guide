@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="description" content="How to develop operators and apps for Tercen.">
 
-<title>23&nbsp; Working with tercenctl – Tercen Developer's Guide</title>
+<title>24&nbsp; Working with tercenctl – Tercen Developer's Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -80,10 +80,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-68b9dd30ee0342b49e3b54af51606c6f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b2746a89c3d897b2f18a702d262c4287.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -272,6 +272,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Web App Operators</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../02-operator-development/13-unit-tests.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Operator Unit Tests</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -286,19 +292,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/1-templates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Templates</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/2-templates-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Continuous Integration Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../03-workflow-templates/3-templates-installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Installing a Template</span></span></a>
   </div>
 </li>
       </ul>
@@ -315,31 +321,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/1-patterns-plots.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Patterns for Plot Operators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/2-tercen-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Running Tercen from the CLI</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/3-gpu-development.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">GPU Development in Tercen Studio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/4-export-operator-parameters.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../04-advanced-topics/5-tercenctl.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></span></a>
   </div>
 </li>
       </ul>
@@ -356,13 +362,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/1-common-issues.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Common development issues</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../05-troubleshooting/2-ci.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">CI and Github Actions</span></span></a>
   </div>
 </li>
       </ul>
@@ -379,13 +385,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/1-ai-operator-dev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Spec-Driven Development with Tercen Agents</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../06-ai/2-tercen-skills.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">The Tercen Skills for Claude Code</span></span></a>
   </div>
 </li>
       </ul>
@@ -429,23 +435,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-not-just-use-the-update-library-button" id="toc-why-not-just-use-the-update-library-button" class="nav-link active" data-scroll-target="#why-not-just-use-the-update-library-button"><span class="header-section-number">23.1</span> Why not just use the Update library button</a></li>
-  <li><a href="#installing-it" id="toc-installing-it" class="nav-link" data-scroll-target="#installing-it"><span class="header-section-number">23.2</span> Installing it</a></li>
-  <li><a href="#connecting-it" id="toc-connecting-it" class="nav-link" data-scroll-target="#connecting-it"><span class="header-section-number">23.3</span> Connecting it</a></li>
-  <li><a href="#publishing-a-private-operator" id="toc-publishing-a-private-operator" class="nav-link" data-scroll-target="#publishing-a-private-operator"><span class="header-section-number">23.4</span> Publishing a private operator</a>
+  <li><a href="#why-not-just-use-the-update-library-button" id="toc-why-not-just-use-the-update-library-button" class="nav-link active" data-scroll-target="#why-not-just-use-the-update-library-button"><span class="header-section-number">24.1</span> Why not just use the Update library button</a></li>
+  <li><a href="#installing-it" id="toc-installing-it" class="nav-link" data-scroll-target="#installing-it"><span class="header-section-number">24.2</span> Installing it</a></li>
+  <li><a href="#connecting-it" id="toc-connecting-it" class="nav-link" data-scroll-target="#connecting-it"><span class="header-section-number">24.3</span> Connecting it</a></li>
+  <li><a href="#publishing-a-private-operator" id="toc-publishing-a-private-operator" class="nav-link" data-scroll-target="#publishing-a-private-operator"><span class="header-section-number">24.4</span> Publishing a private operator</a>
   <ul class="collapse">
-  <li><a href="#why-the-last-step-is-not-optional" id="toc-why-the-last-step-is-not-optional" class="nav-link" data-scroll-target="#why-the-last-step-is-not-optional"><span class="header-section-number">23.4.1</span> Why the last step is not optional</a></li>
+  <li><a href="#why-the-last-step-is-not-optional" id="toc-why-the-last-step-is-not-optional" class="nav-link" data-scroll-target="#why-the-last-step-is-not-optional"><span class="header-section-number">24.4.1</span> Why the last step is not optional</a></li>
   </ul></li>
-  <li><a href="#when-something-fails" id="toc-when-something-fails" class="nav-link" data-scroll-target="#when-something-fails"><span class="header-section-number">23.5</span> When something fails</a></li>
+  <li><a href="#when-something-fails" id="toc-when-something-fails" class="nav-link" data-scroll-target="#when-something-fails"><span class="header-section-number">24.5</span> When something fails</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/tercen/developers_guide/edit/main/04-advanced-topics/5-tercenctl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/tercen/developers_guide/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../04-advanced-topics/1-patterns-plots.html">Advanced Topics</a></li><li class="breadcrumb-item"><a href="../04-advanced-topics/5-tercenctl.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Working with tercenctl</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -464,8 +470,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p><code>tercenctl</code> is the Tercen command line tool. It runs on <strong>your</strong> machine with <strong>your</strong> credentials, which is what makes it the answer to a specific class of problem: anything the server cannot do on your behalf because it does not have your access.</p>
 <p>The prompts in this chapter are written for an AI coding assistant with the Tercen skills installed — see <a href="../06-ai/2-tercen-skills.html">The Tercen Skills for Claude Code</a> for how to install them and confirm the session actually has them. You describe the outcome; the skill carries the recipe. The install, connect and publish prompts below have been executed end-to-end against a local Tercen Studio.</p>
-<section id="why-not-just-use-the-update-library-button" class="level2" data-number="23.1">
-<h2 data-number="23.1" class="anchored" data-anchor-id="why-not-just-use-the-update-library-button"><span class="header-section-number">23.1</span> Why not just use the Update library button</h2>
+<section id="why-not-just-use-the-update-library-button" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="why-not-just-use-the-update-library-button"><span class="header-section-number">24.1</span> Why not just use the Update library button</h2>
 <p>The <strong>+</strong> / <em>Update library</em> button in the Tercen UI runs on the <strong>server</strong>, using the server’s own GitHub token. That has two consequences worth internalising before you debug anything:</p>
 <ul>
 <li><p>It can only see <strong>public</strong> repositories, plus whatever private repositories the server’s token was granted. A private operator in your organisation is usually invisible to it.</p></li>
@@ -487,8 +493,8 @@ Important
 </div>
 </div>
 </section>
-<section id="installing-it" class="level2" data-number="23.2">
-<h2 data-number="23.2" class="anchored" data-anchor-id="installing-it"><span class="header-section-number">23.2</span> Installing it</h2>
+<section id="installing-it" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="installing-it"><span class="header-section-number">24.2</span> Installing it</h2>
 <p><code>tercenctl</code> is distributed as a prebuilt binary from a release repository. The source is not needed to run it.</p>
 <pre><code>I need the Tercen command line tool on this machine.</code></pre>
 <p>This works out the platform (Windows, WSL, Git Bash, Linux, macOS all differ in asset, install location and checksum command), downloads the matching binary, verifies it against <code>SHA256SUMS</code>, and puts it on the <code>PATH</code>.</p>
@@ -506,8 +512,8 @@ Note
 </div>
 </div>
 </section>
-<section id="connecting-it" class="level2" data-number="23.3">
-<h2 data-number="23.3" class="anchored" data-anchor-id="connecting-it"><span class="header-section-number">23.3</span> Connecting it</h2>
+<section id="connecting-it" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="connecting-it"><span class="header-section-number">24.3</span> Connecting it</h2>
 <p>Generate a token from your Tercen instance at <code>https://&lt;your-tercen&gt;/_token</code>, then:</p>
 <pre><code>Connect it to https://&lt;your-tercen&gt; using this token: PASTE_TOKEN_HERE
 Name the connection &lt;a-name-you-will-recognise&gt;.</code></pre>
@@ -528,8 +534,8 @@ Warning
 <pre><code>Check the connection actually works - which instance am I on, and who am I logged in as?</code></pre>
 <p>Expect the instance hostname, your username and the server version. A saved configuration file proves nothing on its own; this asks the server.</p>
 </section>
-<section id="publishing-a-private-operator" class="level2" data-number="23.4">
-<h2 data-number="23.4" class="anchored" data-anchor-id="publishing-a-private-operator"><span class="header-section-number">23.4</span> Publishing a private operator</h2>
+<section id="publishing-a-private-operator" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="publishing-a-private-operator"><span class="header-section-number">24.4</span> Publishing a private operator</h2>
 <p>The worked example: an operator in a private organisation repository, which the library button cannot reach.</p>
 <pre><code>What operators are in the library, and at which versions?</code></pre>
 <pre><code>Put &lt;repo&gt; version &lt;tag&gt; into the library. It is a private repo, so use my GitHub token -
@@ -548,14 +554,14 @@ Important
 <p>A <strong>fine-grained</strong> <code>github_pat_…</code> token will not work. GitHub refuses those for source archive downloads. Use a classic <code>ghp_…</code> token with <code>repo</code> scope, or an OAuth <code>gho_…</code> token such as the one <code>gh auth token</code> returns. This trap is covered in more depth in <a href="../02-operator-development/9-installation.html">Installing an Operator</a>.</p>
 </div>
 </div>
-<section id="why-the-last-step-is-not-optional" class="level3" data-number="23.4.1">
-<h3 data-number="23.4.1" class="anchored" data-anchor-id="why-the-last-step-is-not-optional"><span class="header-section-number">23.4.1</span> Why the last step is not optional</h3>
+<section id="why-the-last-step-is-not-optional" class="level3" data-number="24.4.1">
+<h3 data-number="24.4.1" class="anchored" data-anchor-id="why-the-last-step-is-not-optional"><span class="header-section-number">24.4.1</span> Why the last step is not optional</h3>
 <p>An operator appears in a team’s library only when the team holds <strong>both</strong> halves: the operator document <em>and</em> a project whose URL and version match it. Library projects are named <code>&lt;repo&gt;@&lt;version&gt;</code>.</p>
 <p>Installing the operator alone reports success and lists nothing. That is the mechanism behind the most common report in this area — <em>“I published it but I cannot find it”</em> — and it is why the verification step checks the library listing rather than trusting the installer’s own summary.</p>
 </section>
 </section>
-<section id="when-something-fails" class="level2" data-number="23.5">
-<h2 data-number="23.5" class="anchored" data-anchor-id="when-something-fails"><span class="header-section-number">23.5</span> When something fails</h2>
+<section id="when-something-fails" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="when-something-fails"><span class="header-section-number">24.5</span> When something fails</h2>
 <p>Read the message, then hand it back:</p>
 <pre><code>That failed. Read the error and tell me whether it is my GitHub access, the token type, or
 something in the operator itself - and what to do about it.</code></pre>
@@ -1048,12 +1054,12 @@ something in the operator itself - and what to do about it.</code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../04-advanced-topics/4-export-operator-parameters.html" class="pagination-link" aria-label="Exporting Operator Parameters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Exporting Operator Parameters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../05-troubleshooting/1-common-issues.html" class="pagination-link" aria-label="Common development issues">
-        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Common development issues</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Common development issues</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
