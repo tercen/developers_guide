@@ -1,0 +1,261 @@
+# Operator Unit Tests
+
+Every operator release is checked by running its **unit tests** on a Tercen
+instance: the release workflow's install step (`tercenctl operator install`)
+and the library gate both execute them. A release without a test does not go
+green, and an operator without one is not published to a library.
+
+The unit test is a **pinned smoke test, not a science test**. It proves that a
+release installs, starts, reads its crosstab projection and reproduces the
+output it produced when the release was cut. Keep your scientific test suite
+(R `testthat`, `pytest`) as well — it does not count for the gate.
+
+## Learning Objectives
+
+- Know exactly what the test runner checks, and in which order
+- Write a `test.json` for the common operator shapes: numeric tables,
+  stochastic operators, file inputs, plot/file outputs
+- Generate and regenerate golden outputs safely
+
+## How the test runner works
+
+The behaviour below is the implementation in `sci_api_service`
+(`operator_service.dart`, `runTest` / `runUnitTest` /
+`assertTableEquals`).
+
+**Discovery.**
+
+| Folder at the repository root | What happens |
+|---|---|
+| `tests/` | Every `*.json` file is one test. Outputs **are compared** with the expected files. |
+| `test/` (only if there is no `tests/`) | Every `*.json` file is run, but outputs are **not compared** (`TEST -- skip result`). |
+| neither | `operator.run.test.not.found` — the release install check fails. |
+
+Use `tests/`. A `test/` folder only proves that the operator does not crash.
+
+**One test run.**
+
+1. Each file listed in `inputFileUris` is uploaded as a file document, and
+   **its filename is replaced by the new document id** everywhere in the input
+   CSV — and in the expected output CSVs.
+2. The input CSV becomes a table; the projection (`columns`, `rows`, `colors`,
+   `labels`, `yAxis`, `xAxis`) is built from its column names.
+3. The operator runs with `propertyValues` as its settings and `namespace` as
+   its output namespace, with `tercen.fail.on.bad.type` enabled.
+4. If outputs are compared, the computed relations are checked against the
+   files in `outputDataUri`, in order. A `<file>.schema` sidecar next to an
+   expected CSV, when present, fixes its column types.
+
+**The comparison, in order** — the first failure stops the test:
+
+| Check | Error |
+|---|---|
+| Number of output relations = number of `outputDataUri` files | `task.test.operator.bad.nRelations` |
+| Number of columns | `task.test.operator.bad.nCols` |
+| Number of rows | `task.test.operator.bad.nRows` |
+| Every expected column name exists (columns ending in `._rids` are ignored) | `task.test.operator.bad.column.names` |
+| Every column has the expected type | `task.test.operator.bad.column.type` |
+| Values (see below) | `task.test.operator.bad.value` / `task.test.operator.bad.correlation` |
+
+**How values are compared:**
+
+- Columns listed in `skipColumns` are **left out of the value check only**.
+  They must still exist, with the same type.
+- `string` and `int32` columns must match **exactly**.
+- `double` columns:
+  - with `"equalityMethod": "R2"`, per column: non-finite values (NaN, Inf)
+    must be in the same rows, and the R² between the finite values must be at
+    least `r2`;
+  - otherwise each value is compared with `absTol` / `relTol` — both default
+    to `0.0`, so an unset `equalityMethod` is a strict comparison.
+- **Rows are compared by position.** Your operator must produce its rows in a
+  deterministic order.
+
+## `test.json` field reference
+
+| Field | Meaning |
+|---|---|
+| `kind` | Always `"OperatorUnitTest"`. |
+| `name` | Shown in the release log (`TEST -- start running <name>`). |
+| `namespace` | Output namespace of the run, e.g. `"ds0"` — output columns are prefixed with it. |
+| `inputDataUri` | The input CSV in the test folder. |
+| `inputFileUris` | Files to upload (zips, images…); their filenames in the CSVs become document ids. |
+| `outputDataUri` | One expected CSV per output relation, in output order. |
+| `columns`, `rows`, `colors`, `labels` | Input column names for each projection zone (lists, may be empty). |
+| `yAxis`, `xAxis` | Input column names for the axes; `""` = not set. |
+| `propertyValues` | The operator settings, as `{"kind": "PropertyValue", "name": …, "value": "<string>"}`. |
+| `equalityMethod` | `"R2"`, or anything else for tolerance comparison. |
+| `r2` | Minimum R² per double column when `equalityMethod` is `"R2"` (use `0.99`). |
+| `absTol`, `relTol` | Tolerances for double columns when not using `"R2"` (default `0.0`). |
+| `skipColumns` | Columns whose **values** are not compared. Use the column name as it appears in the output, e.g. `"ds0.documentId"`. |
+
+## Rules that each come from a real gate failure
+
+- **Pin every operator property** in `propertyValues` (values as strings). A
+  fully pinned test only changes when you change it, not when a default or a
+  bundled database changes. The field is `propertyValues`, not `properties`.
+- **Use `"equalityMethod": "R2"` for computed floats.** The default compares
+  doubles with zero tolerance and fails on floating-point noise.
+- **One `outputDataUri` entry per output relation.** A result joined to the
+  crosstab typically yields two or more relations.
+- **Commit a `.schema` sidecar for every expected CSV** — the output relation's
+  `TableSchema` JSON (columns with name and type, `id`/`rev` removed). Without
+  it, types are re-inferred from the CSV text and whole-number doubles fail
+  with `bad.column.type — expected double found int32`. Write doubles
+  type-faithfully (`58.0`, not `58`).
+- **Make the output order deterministic** (sort before saving if needed) —
+  rows are compared by position.
+- **Check that the test files are committed.** A `.gitignore` rule such as
+  `*.csv` silently drops them, and the test then fails to find its input.
+
+### Determinism first: the Seed rule
+
+A golden test is impossible if two runs differ. **Any operator that uses
+randomness** (permutations, sampling, clustering) **must seed its RNG**, best as
+a visible setting:
+
+```r
+seed <- ctx$op.value("Seed", as.double, 42)
+if (seed >= 0) set.seed(seed)
+```
+
+with a matching `Seed` `DoubleProperty` (default 42; `-1` = unseeded), pinned in
+`propertyValues`.
+
+## Test patterns, with real examples
+
+Pick the pattern that matches your operator's input and output.
+
+### Numeric table output
+
+The standard case: the input is a crosstab, the output is one or more tables of
+computed values. Compare everything, doubles by R².
+
+Reference: [`tercen/template-R-operator/tests`](https://github.com/tercen/template-R-operator/tree/main/tests)
+— one input, three output relations.
+
+### Stochastic operator
+
+As above, plus a pinned `Seed` and every other setting pinned.
+
+Reference: [`pamgene/cs_uka_operator/tests`](https://github.com/pamgene/cs_uka_operator/tree/main/tests)
+— 15 pinned `propertyValues` including `Seed` and the database version,
+`R2` 0.99, `.schema` sidecars.
+
+### File input (zip, images)
+
+The operator reads an uploaded file through a `documentId` column. Put the file
+in `tests/`, list it in `inputFileUris`, and write its **filename** in the input
+CSV — the runner replaces it with the document id. The id is new on every run,
+so skip the id columns.
+
+Reference: [`pamgene/ps12image_operator/tests`](https://github.com/pamgene/ps12image_operator/tree/master/tests):
+
+```json
+{
+  "kind": "OperatorUnitTest",
+  "name": "ps12_metadata_4_images",
+  "namespace": "ds0",
+  "inputFileUris": ["ps12_test_images.zip"],
+  "inputDataUri": "ps12_test_input.csv",
+  "outputDataUri": ["ps12_test_out_1.csv", "ps12_test_out_2.csv"],
+  "columns": ["documentId"],
+  "rows": [], "colors": [], "labels": [],
+  "yAxis": "", "xAxis": "",
+  "equalityMethod": "R2",
+  "r2": 0.99,
+  "skipColumns": ["ds0.documentId", "documentId"]
+}
+```
+
+with `ps12_test_input.csv`:
+
+```
+documentId
+ps12_test_images.zip
+```
+
+The same repository also carries a second test (`r_golden_pg_data.json`) whose
+expected output was produced by the previous R implementation — a parity test
+that proves a port gives the same answers.
+
+### Plot or file output
+
+An operator that saves a plot with `file_to_tercen()` outputs a relation with
+the file name, its MIME type and the file itself as base64 text in a `.content`
+column. Tests work for this, but decide what to compare:
+
+| Approach | What is checked | Notes |
+|---|---|---|
+| **Smoke test** (recommended start) | Row count, column names and types, MIME type; `.content` (and a random file name) skipped | Always stable. Proves the release installs, runs and produces one image. |
+| **Byte-exact image** | `.content` compared too | Only if two runs give identical bytes. Must be regenerated whenever the base image (fonts, plotting libraries) changes. |
+| **Plotted data** | Also output the values behind the plot as a small table, compared by R² | Catches wrong numbers, which is what matters. Needs a small code change. |
+
+Illustrative smoke test for a dot-plot operator (projection from its README;
+replace the file and column names with what your golden export contains):
+
+```json
+{
+  "kind": "OperatorUnitTest",
+  "name": "dotplot_smoke_default_settings",
+  "namespace": "ds0",
+  "inputDataUri": "dotplot_input.csv",
+  "outputDataUri": ["dotplot_out_1.csv"],
+  "rows": ["Kinase Family"],
+  "columns": ["contrast"],
+  "colors": ["Kinase Change"],
+  "labels": [],
+  "yAxis": "Specificity Score",
+  "xAxis": "Kinase Name",
+  "propertyValues": [
+    {"kind": "PropertyValue", "name": "ColorPalette", "value": "divergent_blue-red"},
+    {"kind": "PropertyValue", "name": "Layout", "value": "Horizontal"},
+    {"kind": "PropertyValue", "name": "PlotSize", "value": "12"}
+  ],
+  "equalityMethod": "R2",
+  "r2": 0.99,
+  "skipColumns": [".content", "filename"]
+}
+```
+
+Pin **all** properties in a real test — the list above is shortened. Skip
+`filename` only if it differs between two runs (e.g. a name made with
+`tempfile()`).
+
+### Table and plot
+
+An operator with a result table and a plot (e.g. a batch correction that also
+saves a PCA plot) lists **both** relations in `outputDataUri`. Compare the table
+by R²; treat the plot relation as above.
+
+## Generating and regenerating the expected output
+
+The expected CSVs are **golden files from a real run of the exact code being
+released**; they cannot be written by hand. Generate them on
+**Tercen Studio** (see the appendix), never on a production instance:
+
+1. Install the operator from the release branch in Studio.
+2. Import the test input, set the projection and the pinned settings exactly as
+   in `test.json`.
+3. **Run it twice.** Export each output relation as CSV and its schema as the
+   `.csv.schema` sidecar.
+4. Compare the two exports. **Every column that differs between the two runs
+   goes into `skipColumns`** (or the operator needs a seed or a stable order);
+   every column that is identical stays compared.
+
+When a bundled database or an intended behaviour changes, the release install
+check goes **red — that is the alarm**: re-run the same input with the new
+settings, replace the expected files, update the changed `propertyValues`, bump
+the version and release. Ship this recipe in the operator repository as a
+`CLAUDE.md` (the `create-operator` skill provides a template), so that any later
+maintenance session knows the drill.
+
+::: {.callout-important}
+## Do not weaken the gate
+Never make a failing install check pass with `continue-on-error` or `if: false`.
+Fix the test or the operator. Releases that skip the check can go green while
+installing the wrong image.
+:::
+
+See [CI and Github Actions](../05-troubleshooting/2-ci.qmd) for every error
+the install check can produce, in pipeline order.

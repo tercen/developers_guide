@@ -98,6 +98,8 @@ A **private container image** needs a second credential, separate from the Auth 
 - **Trust boundary unchanged** — the credential enables the pull; it does not widen it. The image must still live in a trusted registry namespace (see [the CI chapter](8-ci.qmd)).
 
 Attachment surface today: the credential, the declared registry host, and the username ride the install task's registry metadata through the install API; a dedicated field in the install dialog is tracked as follow-up work.
+
+In practice, **prefer public images**: the release workflow's install check does not attach a registry credential, so a private image fails it (see the [release failure decoder](../05-troubleshooting/2-ci.qmd)). New ghcr packages start private — see [the CI chapter](8-ci.qmd) for the one-time switch to public.
 :::
 
 4. **Complete Installation**

@@ -1,10 +1,51 @@
 # CI and Github Actions
 
+## Release failure decoder
+
+A release's **Install operator** step runs `tercenctl operator install` against
+a test Tercen instance, and installation fails at the **first** stage that goes
+wrong. Fixing one stage often reveals the next, so read the log of the latest
+run, find its stage below, and fix it before tagging again.
+
+On the managed setup, the release check runs on the **stage** instance
+(the `TERCEN_TEST_OPERATOR_URI` secret), as a plain test user in the default
+tenant — not as your own user or team. It can only use what is open to that
+user: trusted registries and public images.
+
+| # | Stage | Error in the log | Cause | Fix |
+|---|---|---|---|---|
+| 1 | Source check | `tercen.forbidden.untrusted.git` | The GitHub organisation is not in the instance's `tercen.trusted.git` | Ask the instance admin to add it ([below](#untrusted-git)) |
+| 2 | Image check | `tercen.forbidden.untrusted.docker` | The image's registry namespace (e.g. `ghcr.io/myorg/`) is not in the instance's `tercen.trusted.docker` | Ask the admin to add it, or publish the image to a trusted namespace |
+| 3 | Image pull | `reading manifest … denied` or `unable to retrieve auth token: invalid username/password: unauthorized` | The image is a **private** ghcr package. These are the errors ghcr returns to an anonymous request for a private package — not a bad password. | Make the package public: package page → **Package settings** → **Danger Zone** → **Change visibility** → Public. Verify with the check below. |
+| 4 | Image pull | `manifest unknown` | The tag Tercen asks for was never pushed | Check which tag `operator.json` resolves to (see [the container pin rule](../02-operator-development/8-ci.qmd)) and that CI pushed it |
+| 5 | Test discovery | `operator.run.test.not.found` | No `tests/` (or `test/`) folder with a `*.json` test | Add a unit test ([Operator Unit Tests](../02-operator-development/13-unit-tests.qmd)) |
+| 6 | Test comparison | `task.test.operator.bad.*` | Computed output differs from the expected files | See the entries below |
+
+**Check that an image is anonymously pullable** (what the test instance sees):
+
+```bash
+IMG=myorg/my_operator            # the ghcr path, without ghcr.io/ and tag
+TOKEN=$(curl -s "https://ghcr.io/token?scope=repository:$IMG:pull" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))")
+curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $TOKEN" \
+  "https://ghcr.io/v2/$IMG/tags/list"
+# 200 = public, 403 = private (or missing)
+```
+
+::: {.callout-note}
+## Seen in practice (2026-10)
+Three operators in public `pamgene/` repositories failed release after release
+for different reasons in sequence: first stage 2 (`ghcr.io/pamgene/` not yet
+trusted on stage), then stage 3 (the packages had been created private),
+then stage 5 (no `tests/` folder). Each stage only became visible after the
+previous one was fixed.
+:::
+
 ## Test not found
 
 `operator.run.test.not.found`
 
-This error happens when none of the `test`, `tests` or `workflow_tests` have been found at the repository root.
+This error happens when none of the `test`, `tests` or `workflow_tests` have been found at the repository root. For operators, use `tests/` — a `test/` folder runs the tests without comparing outputs. See [Operator Unit Tests](../02-operator-development/13-unit-tests.qmd).
 
 ## Wrong relations
 
